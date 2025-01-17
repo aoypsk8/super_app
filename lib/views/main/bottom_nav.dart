@@ -62,18 +62,23 @@ class _BottomNavState extends State<BottomNav> {
               bool isActive = _currentIndex == index;
 
               return BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  item['icon'],
-                  color: isActive ? activeColor : inactiveColor, // SVG icon color
+                icon: Column(
+                  children: [
+                    SvgPicture.asset(
+                      item['icon'],
+                      color: isActive ? activeColor : inactiveColor,
+                    ),
+                    TextFont(
+                      text: item['title'],
+                      color: isActive ? activeColor : inactiveColor,
+                    )
+                  ],
                 ),
-                label: item['title'].toString().tr,
-                tooltip: '',
+                label: '',
               );
             }).toList(),
-            selectedItemColor: activeColor, // Selected label color
-            unselectedItemColor: inactiveColor, // Unselected label color
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
+            selectedItemColor: activeColor,
+            unselectedItemColor: inactiveColor,
             type: BottomNavigationBarType.fixed,
           ),
         ],

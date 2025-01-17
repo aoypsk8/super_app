@@ -10,7 +10,7 @@ final ThemeData darkTheme = ThemeData.light().copyWith(
   colorScheme: const ColorScheme.light(
     primary: Colors.black, // Active color
   ),
-  unselectedWidgetColor: Colors.grey, // Inactive color
+  unselectedWidgetColor: Colors.grey.shade600, // Inactive color
 
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     backgroundColor: const Color(0xFFFBD021),

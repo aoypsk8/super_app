@@ -62,12 +62,10 @@ class HomeScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Select Language',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+              TextFont(
+                text: 'Select Language',
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
               SizedBox(height: 16),
               _buildLanguageOption(context, 'English', 'en', languageService),

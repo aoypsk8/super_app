@@ -1,4 +1,9 @@
 {
   "hello": "Xin chào",
-  "change_language": "Thay đổi ngôn ngữ"
+  "change_language": "Thay đổi ngôn ngữ",
+  "nav_home": "Home",
+  "nav_service": "Services",
+  "nav_myqr": "My QR",
+  "nav_history": "History",
+  "nav_setting": "Setting"
 }

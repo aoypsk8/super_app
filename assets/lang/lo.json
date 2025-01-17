@@ -1,4 +1,9 @@
 {
   "hello": "ສະບາຍດີ",
-  "change_language": "ປ່ຽນພາສາ"
+  "change_language": "ປ່ຽນພາສາ",
+  "nav_home": "ໜ້າຫຼັກ",
+  "nav_service": "ບໍລິການ",
+  "nav_myqr": "My QR",
+  "nav_history": "ປະຫວັດ",
+  "nav_setting": "ຕັ້ງຄ່າ"
 }

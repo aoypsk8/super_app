@@ -1,4 +1,9 @@
 {
   "hello": "Hello",
-  "change_language": "Change Language"
+  "change_language": "Change Language",
+  "nav_home": "Home",
+  "nav_service": "Services",
+  "nav_myqr": "My QR",
+  "nav_history": "History",
+  "nav_setting": "Setting"
 }

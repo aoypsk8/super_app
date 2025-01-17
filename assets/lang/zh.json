@@ -1,4 +1,9 @@
 {
   "hello": "你好",
-  "change_language": "更改语言"
+  "change_language": "更改语言",
+  "nav_home": "Home",
+  "nav_service": "Services",
+  "nav_myqr": "My QR",
+  "nav_history": "History",
+  "nav_setting": "Setting"
 }

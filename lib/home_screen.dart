@@ -83,7 +83,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildLanguageOption(BuildContext context, String languageName, String languageCode, LanguageService languageService) {
     return ListTile(
-      title: Text(languageName),
+      title: TextFont(text: languageName),
       trailing: languageService.locale.languageCode == languageCode ? Icon(Icons.check, color: Colors.blue) : null, // Show check mark for the active language
       onTap: () {
         languageService.changeLanguage(languageCode);

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:super_app/services/theme_service.dart';
 
 class CustomButton extends StatelessWidget {
   final String title;
@@ -21,10 +23,10 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Use Theme.of(context) to get dynamic theme colors
-    final backgroundColor = Theme.of(context).cardColor;
-    final borderColor = Theme.of(context).primaryColor;
-    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
+    final themeService = Get.find<ThemeService>();
+    final backgroundColor = themeService.isDarkMode ? Colors.black : Colors.white;
+    final borderColor = themeService.isDarkMode ? Colors.white : Colors.black;
+    final textColor = themeService.isDarkMode ? Colors.white : Colors.black;
 
     return InkWell(
       onTap: onPressed,

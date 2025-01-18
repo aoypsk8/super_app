@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/services/theme_service.dart';
 import 'package:super_app/services/language_service.dart';
+import 'package:super_app/widget/button.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,6 +12,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeService = Get.find<ThemeService>();
+
     Get.find<LanguageService>(); // Ensure we load language service
 
     return Scaffold(
@@ -35,6 +37,43 @@ class HomeScreen extends StatelessWidget {
             TextFont(text: 'hello'),
             SizedBox(height: 10),
             TextFont(text: 'change_language'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    title: 'Click Me',
+                    // svgPath: 'assets/icons/ic_home.svg', // Replace with your SVG path
+                    // backgroundColor: Colors.white,
+                    // borderColor: Colors.blue,
+                    // width: double.infinity,
+                    onPressed: () {
+                      print('objectssss');
+                    },
+                  ),
+                ),
+                SizedBox(width: 20),
+                Expanded(
+                  child: CustomButton(
+                    title: 'Click Me',
+                    svgPath: 'assets/icons/ic_home.svg', // Replace with your SVG path
+                    // backgroundColor: Colors.white,
+                    // borderColor: Colors.blue, width: Get.width / 2.5,
+                    onPressed: () {
+                      print('objectssss');
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              themeService.isDarkMode ? 'Dark Theme' : 'Light Theme',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.labelLarge?.color,
+              ),
+            )
           ],
         ),
       ),

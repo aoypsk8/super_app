@@ -12,6 +12,11 @@ class ThemeService extends GetxService {
     return isDarkMode ? ThemeMode.dark : ThemeMode.light;
   }
 
+  // Check if the current theme is dark
+  bool get isDarkMode {
+    return theme == ThemeMode.dark;
+  }
+
   // Toggle theme and save to storage
   void toggleTheme() {
     bool isDarkMode = theme == ThemeMode.dark;

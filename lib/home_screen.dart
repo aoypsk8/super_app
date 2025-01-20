@@ -45,10 +45,7 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     child: PrimaryButton(
                       title: 'Click Me',
-                      // svgPath: 'assets/icons/ic_home.svg', // Replace with your SVG path
-                      // backgroundColor: Colors.white,
-                      // borderColor: Colors.blue,
-                      // width: double.infinity,
+                      svgPath: 'assets/icons/ic_home.svg',
                       onPressed: () {
                         print('objectssss');
                       },
@@ -58,10 +55,7 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     child: SecondaryButton(
                       title: 'Click Me',
-                      svgPath: 'assets/icons/ic_home.svg', // Replace with your SVG path
-                      // backgroundColor: Colors.white,
-                      // borderColor: Colors.blue,
-                      // width: double.infinity,
+                      svgPath: 'assets/icons/ic_home.svg',
                       onPressed: () {
                         print('objectssss');
                       },

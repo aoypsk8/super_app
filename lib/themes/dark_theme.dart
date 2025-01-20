@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:super_app/utility/color.dart';
 
 final ThemeData darkTheme = ThemeData.light().copyWith(
   scaffoldBackgroundColor: const Color(0xFFFFBF7F6),
-  primaryColor: const Color(0xFFFBD021),
+  primaryColor: color_primary_dark,
   appBarTheme: AppBarTheme(
-    color: const Color(0xFFFBD021),
+    color: color_primary_dark,
     iconTheme: const IconThemeData(color: Colors.black),
   ),
 
   colorScheme: const ColorScheme.light(
-    primary: Colors.black,
+    primary: color_primary_dark,
   ),
-  unselectedWidgetColor: Colors.grey.shade600, // Inactive color
+  unselectedWidgetColor: color_7070, // Inactive color
 
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    backgroundColor: const Color(0xFFFBD021),
-    selectedItemColor: Colors.teal,
-    unselectedItemColor: Colors.grey,
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: color_primary_dark,
+      foregroundColor: color_fff,
+    ),
   ),
+  // bottomNavigationBarTheme: BottomNavigationBarThemeData(
+  //   backgroundColor: const Color(0xFFFBD021),
+  //   selectedItemColor: Colors.teal,
+  //   unselectedItemColor: Colors.grey,
+  // ),
 );

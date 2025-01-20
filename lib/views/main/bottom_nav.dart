@@ -71,6 +71,7 @@ class _BottomNavState extends State<BottomNav> {
                     TextFont(
                       text: item['title'],
                       color: isActive ? activeColor : inactiveColor,
+                      fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                     )
                   ],
                 ),

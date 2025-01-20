@@ -30,51 +30,55 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFont(text: 'hello'),
-            SizedBox(height: 10),
-            TextFont(text: 'change_language'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(
-                  child: CustomButton(
-                    title: 'Click Me',
-                    // svgPath: 'assets/icons/ic_home.svg', // Replace with your SVG path
-                    // backgroundColor: Colors.white,
-                    // borderColor: Colors.blue,
-                    // width: double.infinity,
-                    onPressed: () {
-                      print('objectssss');
-                    },
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextFont(text: 'hello'),
+              SizedBox(height: 10),
+              TextFont(text: 'change_language'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                    child: PrimaryButton(
+                      title: 'Click Me',
+                      // svgPath: 'assets/icons/ic_home.svg', // Replace with your SVG path
+                      // backgroundColor: Colors.white,
+                      // borderColor: Colors.blue,
+                      // width: double.infinity,
+                      onPressed: () {
+                        print('objectssss');
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(width: 20),
-                Expanded(
-                  child: CustomButton(
-                    title: 'Click Me',
-                    svgPath: 'assets/icons/ic_home.svg', // Replace with your SVG path
-                    // backgroundColor: Colors.white,
-                    // borderColor: Colors.blue, width: Get.width / 2.5,
-                    onPressed: () {
-                      print('objectssss');
-                    },
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: SecondaryButton(
+                      title: 'Click Me',
+                      // svgPath: 'assets/icons/ic_home.svg', // Replace with your SVG path
+                      // backgroundColor: Colors.white,
+                      // borderColor: Colors.blue,
+                      // width: double.infinity,
+                      onPressed: () {
+                        print('objectssss');
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Text(
-              themeService.isDarkMode ? 'Dark Theme' : 'Light Theme',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).textTheme.labelLarge?.color,
+                ],
               ),
-            )
-          ],
+              Text(
+                themeService.isDarkMode ? 'Dark Theme' : 'Light Theme',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).textTheme.labelLarge?.color,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

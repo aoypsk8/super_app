@@ -117,7 +117,7 @@ class SecondaryButton extends StatelessWidget {
                 svgPath,
                 width: 24.0,
                 height: 24.0,
-                color: color_fff,
+                color: borderColor,
               ),
           ],
         ),

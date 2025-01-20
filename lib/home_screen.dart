@@ -58,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     child: SecondaryButton(
                       title: 'Click Me',
-                      // svgPath: 'assets/icons/ic_home.svg', // Replace with your SVG path
+                      svgPath: 'assets/icons/ic_home.svg', // Replace with your SVG path
                       // backgroundColor: Colors.white,
                       // borderColor: Colors.blue,
                       // width: double.infinity,

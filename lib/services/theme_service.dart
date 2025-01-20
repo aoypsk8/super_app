@@ -6,21 +6,25 @@ class ThemeService extends GetxService {
   final _storage = GetStorage();
   final _key = 'isDarkMode';
 
-  // Load theme from storage or default to light theme
+  // Reactive observable for theme mode
+  RxBool _isDarkMode = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _isDarkMode.value = _storage.read<bool>(_key) ?? false;
+  }
+
   ThemeMode get theme {
     bool isDarkMode = _storage.read<bool>(_key) ?? false;
     return isDarkMode ? ThemeMode.dark : ThemeMode.light;
   }
 
-  // Check if the current theme is dark
-  bool get isDarkMode {
-    return theme == ThemeMode.dark;
-  }
+  bool get isDarkMode => _isDarkMode.value;
 
-  // Toggle theme and save to storage
   void toggleTheme() {
-    bool isDarkMode = theme == ThemeMode.dark;
-    _storage.write(_key, !isDarkMode);
-    Get.changeThemeMode(!isDarkMode ? ThemeMode.dark : ThemeMode.light);
+    _isDarkMode.value = !_isDarkMode.value;
+    _storage.write(_key, _isDarkMode.value);
+    Get.changeThemeMode(_isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
   }
 }

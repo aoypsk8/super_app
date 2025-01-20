@@ -18,6 +18,7 @@ final ThemeData darkTheme = ThemeData.light().copyWith(
     style: ElevatedButton.styleFrom(
       backgroundColor: color_primary_dark,
       foregroundColor: color_fff,
+      side: BorderSide(color: color_primary_dark, width: 1),
     ),
   ),
   // bottomNavigationBarTheme: BottomNavigationBarThemeData(

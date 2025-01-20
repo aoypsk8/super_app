@@ -18,6 +18,7 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
     style: ElevatedButton.styleFrom(
       backgroundColor: color_primary_light,
       foregroundColor: color_fff,
+      side: BorderSide(color: color_primary_light, width: 1),
     ),
   ),
 );

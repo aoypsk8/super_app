@@ -63,14 +63,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(
-                themeService.isDarkMode ? 'Dark Theme' : 'Light Theme',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.labelLarge?.color,
-                ),
-              ),
             ],
           ),
         ),

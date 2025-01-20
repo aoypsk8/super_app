@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 import 'package:super_app/services/theme_service.dart';
 import 'package:super_app/services/language_service.dart';
 import 'package:super_app/widget/button.dart';
+import 'package:super_app/widget/card.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -63,6 +64,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              PrimaryCard()
             ],
           ),
         ),

@@ -14,13 +14,14 @@ final ThemeData darkTheme = ThemeData.light().copyWith(
   ),
   unselectedWidgetColor: color_7070, // Inactive color
 
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: color_primary_dark,
-      foregroundColor: color_fff,
-      side: BorderSide(color: color_primary_dark, width: 1),
-    ),
-  ),
+  // elevatedButtonTheme: ElevatedButtonThemeData(
+  //   style: ElevatedButton.styleFrom(
+  //     backgroundColor: color_primary_dark,
+  //     foregroundColor: color_fff,
+  //     side: BorderSide(color: color_primary_dark, width: 1),
+  //   ),
+  // ),
+
   // bottomNavigationBarTheme: BottomNavigationBarThemeData(
   //   backgroundColor: const Color(0xFFFBD021),
   //   selectedItemColor: Colors.teal,

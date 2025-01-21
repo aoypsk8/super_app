@@ -13,7 +13,6 @@ import 'package:sizer/sizer.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-
   // Initialize services
   final languageService = Get.put(LanguageService());
   await languageService.init();

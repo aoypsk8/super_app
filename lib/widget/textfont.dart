@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:super_app/services/theme_service.dart';
+import 'package:super_app/utility/color.dart';
 
 class TextFont extends StatelessWidget {
   final String text;
@@ -12,6 +13,8 @@ class TextFont extends StatelessWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final int maxLines;
+  final bool underline;
+  final Color underlineColor;
 
   const TextFont({
     super.key,
@@ -23,6 +26,8 @@ class TextFont extends StatelessWidget {
     this.fontSize = 16.0,
     this.fontWeight = FontWeight.normal,
     this.maxLines = 1,
+    this.underline = false,
+    this.underlineColor = cr_7070,
   });
 
   @override
@@ -40,20 +45,30 @@ class TextFont extends StatelessWidget {
       textStyle = GoogleFonts.notoSerifLao(
         fontSize: fontSize,
         fontWeight: fontWeight,
+        decoration: underline ? TextDecoration.underline : null,
+        decorationColor: underline ? underlineColor : null,
+        decorationStyle: underline ? TextDecorationStyle.dashed : null,
       );
     } else if (languageCode == 'zh') {
       textStyle = GoogleFonts.notoSans(
         fontSize: fontSize,
         fontWeight: fontWeight,
+        decoration: underline ? TextDecoration.underline : null,
+        decorationColor: underline ? underlineColor : null,
+        decorationStyle: underline ? TextDecorationStyle.dashed : null,
       );
     } else if (languageCode == 'vi') {
       textStyle = GoogleFonts.roboto(
         fontSize: fontSize,
         fontWeight: fontWeight,
+        decoration: underline ? TextDecoration.underline : null,
+        decorationColor: underline ? underlineColor : null,
+        decorationStyle: underline ? TextDecorationStyle.dashed : null,
       );
     }
 
-    Color effectiveColor = Theme.of(context).brightness == Brightness.dark ? Colors.white : color;
+    Color effectiveColor =
+        Theme.of(context).brightness == Brightness.dark ? Colors.white : color;
 
     return Text(
       text.tr,

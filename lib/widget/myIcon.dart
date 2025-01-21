@@ -18,6 +18,8 @@ class MyIcon {
   static String bg_gradient4 = 'assets/background/bg_gradient4.png';
   static String bg_main = 'assets/background/backgroundMain.png';
   static String bg_mmoneyx = 'assets/background/mmoneyx.png';
+  static String bg_backgroundTrnasfer =
+      'assets/background/backgroundTrnasfer.png';
 
   //recurring
   static String ic_bill_link = 'assets/icons/ic_bill_link.png';

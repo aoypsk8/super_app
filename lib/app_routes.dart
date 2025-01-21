@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:super_app/home_screen.dart';
 import 'package:super_app/views/transferwallet/ConfirmTranferScreen.dart';
+import 'package:super_app/views/transferwallet/ResultTransferScreen.dart';
 import 'package:super_app/views/transferwallet/TransferScreen.dart';
 
 class AppRoutes {
@@ -18,6 +19,11 @@ class AppRoutes {
     GetPage(
       name: '/confirmTransfer',
       page: () => ConfirmTranferScreen(),
+      transition: Transition.downToUp,
+    ),
+    GetPage(
+      name: '/restultTransfer',
+      page: () => Resulttransferscreen(),
       transition: Transition.downToUp,
     ),
   ];

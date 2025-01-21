@@ -48,6 +48,16 @@ dependencies:
   # animation
   loading_animation_widget: ^1.3.0
 
+  # dot
+  dotted_line: ^3.2.3
+
+  # qr code and bill
+  # image_gallery_saver: ^2.0.3
+  saver_gallery: ^4.0.1
+  pretty_qr_code: ^3.3.0
+  screenshot: ^3.0.0
+  path_provider: ^2.1.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

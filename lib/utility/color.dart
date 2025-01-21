@@ -33,3 +33,8 @@ const cr_3b3b = Color(0xff3B3B3B);
 const cr_eae7 = Color(0xffEAE7E7);
 const cr_b692 = Color(0xffB69200);
 const cr_c20d = Color.fromARGB(255, 230, 17, 2);
+
+// box decoreaction
+const cr_fdeb = Color(0xffFDEBEA);
+const cr_b326 = Color(0xffB3261E);
+const Color color_bbb = Color(0xffBBBBBB);

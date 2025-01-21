@@ -16,7 +16,7 @@ class MyIcon {
   static String bg_gradient2 = 'assets/background/bg_gradient2.svg';
   static String bg_gradient3 = 'assets/background/bg_gradient3.png';
   static String bg_gradient4 = 'assets/background/bg_gradient4.png';
-  static String bg_main = 'assets/background/backgroundMain.png';
+  static String bg_main = 'assets/background/backgroundMain1.png';
   static String bg_mmoneyx = 'assets/background/mmoneyx.png';
 
   //recurring

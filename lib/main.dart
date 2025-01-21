@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: Get.find<ThemeService>().theme,
-        initialRoute: '/',
+        initialRoute: '/templateA',
         getPages: AppRoutes.routes,
         home: BottomNav(),
       );

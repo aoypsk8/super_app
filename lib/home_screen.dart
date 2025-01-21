@@ -75,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           Row(
                             children: [
                               Row(
+                                textBaseline: TextBaseline.ideographic,
                                 children: [
                                   TextFont(
                                     text: 'welcome',

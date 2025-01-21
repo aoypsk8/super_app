@@ -506,7 +506,7 @@ class _TransferScreenState extends State<TransferScreen> {
   }
 
   Future _paymentProcess() async {
-    Get.to("confirmTransfer");
+    Get.toNamed("confirmTransfer");
     // DialogHelper.showErrorDialogNew(description: 'account_not_found');
     // int paymentAmount = int.parse(
     //     _paymentAmount.text.trim().replaceAll(RegExp(r'[^\w\s]+'), ''));

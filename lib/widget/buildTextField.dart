@@ -896,11 +896,11 @@ class BuildTextAreaValidate extends StatelessWidget {
               hintText: hintText.tr,
               hintStyle: languageCode == 'lo'
                   ? GoogleFonts.notoSerifLao(
-                      color: cr_7070.withOpacity(0.5),
+                      color: cr_7070,
                       fontSize: 12.5.sp,
                     )
                   : GoogleFonts.poppins(
-                      color: cr_7070.withOpacity(0.5),
+                      color: cr_7070,
                       fontSize: 12.5.sp,
                     ),
               fillColor: fillcolor,

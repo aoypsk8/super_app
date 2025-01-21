@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -13,22 +14,26 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: color_fff,
+      backgroundColor: cr_fbf7,
       appBar: AppBar(
-        backgroundColor: color_red244,
+        backgroundColor: color_fff,
+        centerTitle: true,
+        iconTheme: IconThemeData(
+          color: cr_090a,
+        ),
+        elevation: 0,
         title: TextFont(
           // text: menulists.groupNameEN.toString(),
-          text: "homeController.menutitle.value",
-          color: Colors.white,
-          fontSize: 14,
+          text: "ໂອນເງິນ",
+          color: cr_2929,
+          fontSize: 11.5.sp,
         ),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment(0.00, -1.00),
-              end: Alignment(0, 1),
-              colors: [Color(0x00F14D58), Color(0xFFED1C29)],
-            ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Divider(
+            color: cr_ecec,
+            thickness: 1,
+            height: 0.8,
           ),
         ),
       ),

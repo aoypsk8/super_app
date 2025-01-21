@@ -10,15 +10,13 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
   ),
 
   colorScheme: const ColorScheme.light(
-    primary: color_primary_light, // Active color
-  ),
+      secondary: color_fff,
+      primary: color_primary_light, // Active color
+      onPrimary: cr_ef33),
   unselectedWidgetColor: color_7070, // Inactive color
 
-  // elevatedButtonTheme: ElevatedButtonThemeData(
-  //   style: ElevatedButton.styleFrom(
-  //     backgroundColor: color_primary_light,
-  //     foregroundColor: color_fff,
-  //     side: BorderSide(color: color_primary_light, width: 1),
-  //   ),
-  // ),
+  // Define textTheme for text color customization
+  textTheme: const TextTheme(
+      bodyMedium: TextStyle(color: color_fff),
+      bodySmall: TextStyle(color: cr_bf29)),
 );

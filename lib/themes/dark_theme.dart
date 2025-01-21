@@ -10,21 +10,21 @@ final ThemeData darkTheme = ThemeData.light().copyWith(
   ),
 
   colorScheme: const ColorScheme.light(
+    secondary: cr_2929,
     primary: color_primary_dark,
+    onPrimary: cr_b692,
   ),
+
   unselectedWidgetColor: color_7070, // Inactive color
 
-  // elevatedButtonTheme: ElevatedButtonThemeData(
-  //   style: ElevatedButton.styleFrom(
-  //     backgroundColor: color_primary_dark,
-  //     foregroundColor: color_fff,
-  //     side: BorderSide(color: color_primary_dark, width: 1),
-  //   ),
-  // ),
+  // Define textTheme for text color customization
+  textTheme: const TextTheme(
+    bodyMedium: TextStyle(color: cr_2929),
+    bodySmall: TextStyle(color: cr_b692),
+  ),
 
-  // bottomNavigationBarTheme: BottomNavigationBarThemeData(
-  //   backgroundColor: const Color(0xFFFBD021),
-  //   selectedItemColor: Colors.teal,
-  //   unselectedItemColor: Colors.grey,
-  // ),
+  // Optional: You can adjust the input decoration style if necessary
+  inputDecorationTheme: InputDecorationTheme(
+    hintStyle: TextStyle(color: Colors.white54), // Hint text color
+  ),
 );

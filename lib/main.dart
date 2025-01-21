@@ -8,11 +8,11 @@ import 'package:super_app/themes/dark_theme.dart';
 import 'package:super_app/themes/light_theme.dart';
 import 'package:super_app/translations.dart';
 import 'package:super_app/views/main/bottom_nav.dart';
+import 'package:sizer/sizer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-
   // Initialize services
   final languageService = Get.put(LanguageService());
   await languageService.init();
@@ -27,17 +27,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      translations: AppTranslations(),
-      locale: Get.find<LanguageService>().locale,
-      fallbackLocale: const Locale('lo'),
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: Get.find<ThemeService>().theme,
-      initialRoute: '/',
-      getPages: AppRoutes.routes,
-      home: BottomNav(),
-    );
+    return Sizer(builder: (context, orientation, eviceType) {
+      return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        translations: AppTranslations(),
+        locale: Get.find<LanguageService>().locale,
+        fallbackLocale: const Locale('lo'),
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: Get.find<ThemeService>().theme,
+        initialRoute: '/',
+        getPages: AppRoutes.routes,
+        home: BottomNav(),
+      );
+    });
   }
 }

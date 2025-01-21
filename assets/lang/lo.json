@@ -97,6 +97,7 @@
   "language": "ປ່ຽນພາສາ",
   "balance_amount": "ຍອດເງິນຂອງທ່ານ",
   "amount": "ມູນຄ່າ",
+  "amount_transfer": "ຈໍານວນເງິນ",
   "balance": "ຈຳນວນເງິນ",
   "balance_kip": "ຈຳນວນເງິນ (ກີບ)",
   "amount_kip": "ມູນຄ່າ (ກີບ)",
@@ -117,7 +118,7 @@
   "recent_account": "# ໝາຍເລກບັນຊີລ່າສຸດ",
   "recent": "ລ່າສຸດ",
   "all": "ທັ້ງໝົດ",
-  "close": "ປິດ",
+  "close": "ປິດໜ້ານີ້",
   "vertify_account": "ກວດສອບຂໍ້ມູນບັນຊີ",
   "payment_detail": "ລາຍ​ລະ​ອຽດ​ການ​ຊໍາ​ລະ​",
   "confirm_payment": "ກວດສອບການເຮັດທຸລະກຳ ",
@@ -287,5 +288,6 @@
   "my_qr": "My QR",
   "setting": "ຕັ້ງຄ່າ",
   "input_text": "ປ້ອນຂໍ້ຄວາມ",
-  "account_not_found": "ບໍພົບເບີໃນລະບົບ"
+  "account_not_found": "ບໍພົບເບີໃນລະບົບ",
+  "description":"ຂໍ້ຄວາມ"
 }

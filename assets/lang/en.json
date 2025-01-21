@@ -95,6 +95,7 @@
   "language": "Change the language",
   "balance_amount": "Your balance",
   "amount": "Amount ",
+  "amount_transfer": "Amount",
   "balance": "Balance ",
   "balance_kip": "Balance (LAK)",
   "amount_kip": "Amount (LAK)",
@@ -103,7 +104,7 @@
   "fee_kip": "Fee (LAK)",
   "message": "Message",
   "transfer_wallet": "Transfer money",
-  "transfer_success": "Successfully transferred money",
+  "transfer_success": "Successfully",
   "buy_lottery_success": "Successfully buy lottery",
   "more": "Show more",
   "less": "Show less",
@@ -285,5 +286,6 @@
   "my_qr": "My QR",
   "setting": "Setting",
   "input_text": "Input text",
-  "account_not_found": "Account number not found."
+  "account_not_found": "Account number not found.",
+  "description":"Description"
 }

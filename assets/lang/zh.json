@@ -95,6 +95,7 @@
   "language": "更改语言",
   "balance_amount": "您的余额",
   "amount": "余额",
+  "amount_transfer": "余额",
   "balance": "余额",
   "balance_kip": "余额（老挝基普）",
   "amount_kip": "余额（老挝基普）",
@@ -276,5 +277,6 @@
   "my_qr": "My QR",
   "setting": "Setting",
   "input_text": "Input text",
-  "account_not_found": "Account number not found."
+  "account_not_found": "Account number not found.",
+  "description":"Description"
 }

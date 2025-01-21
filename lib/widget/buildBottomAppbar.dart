@@ -77,3 +77,78 @@ class buildBottomAppbar extends StatelessWidget {
     );
   }
 }
+
+class buildBottomBill extends StatelessWidget {
+  const buildBottomBill({
+    super.key,
+    required this.func,
+    required this.title,
+    this.radius = 6,
+    this.high = 4,
+    this.bgColor = color_ed1,
+    this.textColor = color_ed1,
+    this.margin = const EdgeInsets.symmetric(horizontal: 20),
+    this.fontWeight = FontWeight.w500,
+    this.noto = false,
+    this.share = false,
+    this.isEnabled = true,
+    this.fontSize = 12,
+  });
+  final String title;
+  final double radius;
+  final double high;
+  final Color bgColor;
+  final Color textColor;
+  final Function() func;
+  final EdgeInsetsGeometry margin;
+  final bool? noto;
+  final bool? share;
+  final FontWeight fontWeight;
+  final bool isEnabled;
+  final int fontSize;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: margin,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            child: ElevatedButton(
+              onPressed: isEnabled ? func : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: bgColor,
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(radius),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  share == true ? const SizedBox(width: 10) : const SizedBox(),
+                  share == true
+                      ? SvgPicture.asset(
+                          MyIcon.ic_share,
+                          fit: BoxFit.cover,
+                          color: textColor,
+                        )
+                      : const SizedBox(),
+                  const SizedBox(width: 5),
+                  TextFont(
+                    text: isEnabled ? title : 'loading...',
+                    color: textColor,
+                    fontWeight: fontWeight,
+                    fontSize: fontSize.sp,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: high.h)
+        ],
+      ),
+    );
+  }
+}

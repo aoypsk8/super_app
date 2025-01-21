@@ -7,7 +7,10 @@ import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/views/transferwallet/ResultTransferScreen.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
+import 'package:super_app/widget/buildTextDetail.dart';
+import 'package:super_app/widget/buildUserDetail.dart';
 import 'package:super_app/widget/build_DotLine.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -170,7 +173,7 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
             ),
             const SizedBox(height: 10),
             TextFont(
-              text: 'ຈໍານວນເງິນ',
+              text: 'amount_transfer',
               fontWeight: FontWeight.w500,
               fontSize: 11.sp,
               color: cr_7070,
@@ -193,140 +196,19 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
             ),
             const SizedBox(height: 20),
             buildTextDetail(
-              title: "ຄ່າທຳນຽມ",
+              title: "fee",
               detail: "5000",
               money: true,
             ),
             const SizedBox(height: 20),
             buildTextDetail(
                 money: false,
-                title: "ຂໍ້ຄວາມ",
+                title: "description",
                 detail:
                     "Learn about the history, usage and variations of Lorem Ipsum, the industry's standard dummy text."),
           ],
         ),
       ),
-    );
-  }
-}
-
-class buildTextDetail extends StatelessWidget {
-  const buildTextDetail({
-    super.key,
-    required this.title,
-    required this.detail,
-    required this.money,
-  });
-  final String title;
-  final String detail;
-  final bool money;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFont(
-          text: title,
-          fontWeight: FontWeight.w500,
-          fontSize: 11.sp,
-          color: cr_7070,
-        ),
-        Wrap(
-          children: [
-            TextFont(
-              text: detail,
-              fontWeight: FontWeight.w500,
-              fontSize: 12.sp,
-              color: cr_2929,
-              maxLines: 20,
-            ),
-            money
-                ? TextFont(
-                    text: '.00 LAK',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12.sp,
-                    color: cr_2929,
-                  )
-                : const SizedBox(),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class buildUserDetail extends StatelessWidget {
-  const buildUserDetail({
-    super.key,
-    required this.from,
-    required this.name,
-    required this.msisdn,
-  });
-
-  final bool from;
-  final String name;
-  final String msisdn;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 3,
-          ),
-          decoration: BoxDecoration(
-            color: color_fff,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: TextFont(
-            text: from ? "ຈາກບັນຊີ" : "ຫາບັນຊີ",
-            color: Theme.of(context).textTheme.bodySmall?.color ?? Colors.black,
-            poppin: true,
-            fontSize: 9.sp,
-          ),
-        ),
-        Row(
-          children: [
-            Container(
-              width: 12.5.w,
-              height: 12.5.w,
-              padding: const EdgeInsets.all(1.5),
-              margin: const EdgeInsets.only(left: 4),
-              decoration: BoxDecoration(
-                color: color_fff,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(50.0),
-                child: Image.network(
-                  "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFont(
-                  text: name,
-                  color: cr_2929,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w400,
-                ),
-                TextFont(
-                  text: msisdn,
-                  color: cr_2929,
-                  fontSize: 14.sp,
-                ),
-              ],
-            )
-          ],
-        ),
-      ],
     );
   }
 }

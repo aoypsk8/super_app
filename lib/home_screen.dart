@@ -1,70 +1,168 @@
+import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
-import 'package:super_app/services/theme_service.dart';
 import 'package:super_app/services/language_service.dart';
-import 'package:super_app/widget/button.dart';
-import 'package:super_app/widget/card.dart';
+import 'package:super_app/services/theme_service.dart';
+import 'package:super_app/utility/color.dart';
+import 'package:super_app/widget/mask_msisdn.dart';
 import 'package:super_app/widget/textfont.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final themeService = Get.find<ThemeService>();
+  final storage = GetStorage();
+  bool showMsisdn = false;
+  int indexTabs = 0;
+
+  @override
   Widget build(BuildContext context) {
-    final themeService = Get.find<ThemeService>();
-
-    Get.find<LanguageService>(); // Ensure we load language service
-
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Icon(Icons.language),
-            onPressed: () {
-              _showLanguageDialog(context);
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.brightness_6),
-            onPressed: themeService.toggleTheme, // Toggle theme
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
+      backgroundColor: cr_fbf7,
+      body: DefaultTabController(
+        length: 2,
+        child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextFont(text: 'hello'),
-              SizedBox(height: 10),
-              TextFont(text: 'change_language'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(
-                    child: PrimaryButton(
-                      title: 'Click Me',
-                      svgPath: 'assets/icons/ic_home.svg',
-                      onPressed: () {
-                        print('objectssss');
-                      },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 12.w,
+                          height: 12.w,
+                          padding: const EdgeInsets.all(1.5),
+                          margin: const EdgeInsets.only(left: 4),
+                          decoration: BoxDecoration(
+                            color: color_fff,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50.0),
+                            child: Image.network(
+                              "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                TextFont(
+                                  text: 'ຍິນດີຕ້ອນຮັບ, ມາລີນາ!',
+                                  fontWeight: FontWeight.w600,
+                                  color: cr_7070,
+                                ),
+                                const SizedBox(width: 6),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 6),
+                                  decoration: ShapeDecoration(
+                                    color: color_fff,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 2.5),
+                              child: Row(
+                                children: [
+                                  TextFont(
+                                    text: maskMsisdn(
+                                      "2052768833",
+                                      showMsisdn: showMsisdn,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        showMsisdn = !showMsisdn;
+                                      });
+                                    },
+                                    child: Icon(
+                                      showMsisdn
+                                          ? Iconsax.eye
+                                          : Iconsax.eye_slash,
+                                      color: cr_7070,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(width: 20),
-                  Expanded(
-                    child: SecondaryButton(
-                      title: 'Click Me',
-                      svgPath: 'assets/icons/ic_home.svg',
-                      onPressed: () {
-                        print('objectssss');
-                      },
+                    Row(
+                      children: [
+                        InkWell(
+                          child: Icon(Iconsax.language_circle,
+                              color: cr_2929, size: 18.sp),
+                          onTap: () {
+                            _showLanguageDialog(context);
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.brightness_6),
+                          onPressed: themeService.toggleTheme,
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              PrimaryCard()
+              Expanded(
+                child: ContainedTabBarView(
+                  tabBarProperties: TabBarProperties(
+                    unselectedLabelColor: Colors.transparent,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorWeight: 2,
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+                  ),
+                  onChange: (index) => setState(() {
+                    indexTabs = index;
+                  }),
+                  tabs: [
+                    TextFont(
+                      text: 'recommend',
+                      fontWeight: FontWeight.w600,
+                      color: indexTabs == 0
+                          ? Theme.of(context).primaryColor
+                          : cr_7070,
+                    ),
+                    TextFont(
+                      text: 'telecom_service',
+                      fontWeight: FontWeight.w600,
+                      color: indexTabs == 1
+                          ? Theme.of(context).primaryColor
+                          : cr_7070,
+                    ),
+                  ],
+                  views: [
+                    Text("hi"), // HomeRecommend Component is here
+                    Text("hi1231231"), // HomeTelecom Component is here
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -97,12 +195,14 @@ class HomeScreen extends StatelessWidget {
                 text: 'Select Language',
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
+                color: cr_7070, // Follow theme color
               ),
               SizedBox(height: 16),
               _buildLanguageOption(context, 'English', 'en', languageService),
               _buildLanguageOption(context, 'Lao', 'lo', languageService),
               _buildLanguageOption(context, 'Chinese', 'zh', languageService),
-              _buildLanguageOption(context, 'Vietnamese', 'vi', languageService),
+              _buildLanguageOption(
+                  context, 'Vietnamese', 'vi', languageService),
             ],
           ),
         );
@@ -110,10 +210,16 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLanguageOption(BuildContext context, String languageName, String languageCode, LanguageService languageService) {
+  Widget _buildLanguageOption(BuildContext context, String languageName,
+      String languageCode, LanguageService languageService) {
     return ListTile(
-      title: TextFont(text: languageName),
-      trailing: languageService.locale.languageCode == languageCode ? Icon(Icons.check, color: Colors.blue) : null, // Show check mark for the active language
+      title: TextFont(
+        text: languageName,
+        color: cr_7070, // Follow theme color
+      ),
+      trailing: languageService.locale.languageCode == languageCode
+          ? Icon(Icons.check, color: Theme.of(context).primaryColor)
+          : null, // Show check mark for the active language
       onTap: () {
         languageService.changeLanguage(languageCode);
         Get.back(); // Close the bottom sheet after selecting a language

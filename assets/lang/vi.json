@@ -5,5 +5,7 @@
   "nav_service": "Services",
   "nav_myqr": "My QR",
   "nav_history": "History",
-  "nav_setting": "Setting"
+  "nav_setting": "Setting",
+    "recommend":"Recommend",
+  "telecom_service":"Telecom Services"
 }

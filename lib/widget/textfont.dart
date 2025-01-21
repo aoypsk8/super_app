@@ -34,9 +34,31 @@ class TextFont extends StatelessWidget {
   Widget build(BuildContext context) {
     String languageCode = Get.locale?.languageCode ?? 'lo';
     Get.find<ThemeService>();
-    TextStyle textStyle = GoogleFonts.poppins(); // Default to Poppins
 
-    if (languageCode == 'en') {
+    TextStyle textStyle;
+
+    // 1. If `poppin` is true, prioritize Poppins.
+    if (poppin) {
+      textStyle = GoogleFonts.poppins(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        decoration: underline ? TextDecoration.underline : null,
+        decorationColor: underline ? underlineColor : null,
+        decorationStyle: underline ? TextDecorationStyle.dashed : null,
+      );
+    }
+    // 2. If `noto` is true, prioritize Noto Sans Serif.
+    else if (noto) {
+      textStyle = GoogleFonts.notoSerifLao(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        decoration: underline ? TextDecoration.underline : null,
+        decorationColor: underline ? underlineColor : null,
+        decorationStyle: underline ? TextDecorationStyle.dashed : null,
+      );
+    }
+    // 3. Handle language-based fonts if neither `poppin` nor `noto` is true.
+    else if (languageCode == 'en') {
       textStyle = GoogleFonts.poppins(
         fontSize: fontSize,
         fontWeight: fontWeight,
@@ -65,13 +87,19 @@ class TextFont extends StatelessWidget {
         decorationColor: underline ? underlineColor : null,
         decorationStyle: underline ? TextDecorationStyle.dashed : null,
       );
+    } else {
+      // Default to Poppins if no match.
+      textStyle = GoogleFonts.poppins(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+      );
     }
 
-    Color effectiveColor =
-        Theme.of(context).brightness == Brightness.dark ? Colors.white : color;
+    // 4. Apply the theme's brightness for dynamic color handling.
+    Color effectiveColor = Theme.of(context).brightness == Brightness.dark ? Colors.white : color;
 
     return Text(
-      text.tr,
+      text.tr, // Translate text using GetX.
       textAlign: textAlign,
       style: textStyle.copyWith(color: effectiveColor),
       maxLines: maxLines,

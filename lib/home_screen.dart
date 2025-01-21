@@ -27,8 +27,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _tabController =
-        TabController(length: 2, vsync: this); // Initialize TabController
+    _tabController = TabController(length: 2, vsync: this); // Initialize TabController
   }
 
   @override
@@ -76,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           Row(
                             children: [
                               Row(
+                                textBaseline: TextBaseline.ideographic,
                                 children: [
                                   TextFont(
                                     text: 'welcome',
@@ -87,13 +87,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     text: 'ມາລີນາ!',
                                     fontWeight: FontWeight.w600,
                                     color: cr_7070,
+                                    noto: true,
                                   ),
                                 ],
                               ),
                               const SizedBox(width: 6),
                               Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 6),
+                                padding: const EdgeInsets.symmetric(horizontal: 6),
                                 decoration: ShapeDecoration(
                                   color: color_fff,
                                   shape: RoundedRectangleBorder(
@@ -121,9 +121,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     });
                                   },
                                   child: Icon(
-                                    showMsisdn
-                                        ? Iconsax.eye
-                                        : Iconsax.eye_slash,
+                                    showMsisdn ? Iconsax.eye : Iconsax.eye_slash,
                                     color: cr_7070,
                                   ),
                                 ),
@@ -137,8 +135,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   Row(
                     children: [
                       InkWell(
-                        child: Icon(Iconsax.language_circle,
-                            color: cr_2929, size: 18.sp),
+                        child: Icon(Iconsax.language_circle, color: cr_2929, size: 18.sp),
                         onTap: () {
                           _showLanguageDialog(context);
                         },
@@ -169,18 +166,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           child: TextFont(
                             text: 'recommend',
                             fontWeight: FontWeight.w600,
-                            color: indexTabs == 0
-                                ? Theme.of(context).colorScheme.onPrimary
-                                : cr_7070,
+                            color: indexTabs == 0 ? Theme.of(context).colorScheme.onPrimary : cr_7070,
                           ),
                         ),
                         Tab(
                           child: TextFont(
                             text: 'telecom_service',
                             fontWeight: FontWeight.w600,
-                            color: indexTabs == 1
-                                ? Theme.of(context).colorScheme.onPrimary
-                                : cr_7070,
+                            color: indexTabs == 1 ? Theme.of(context).colorScheme.onPrimary : cr_7070,
                           ),
                         ),
                       ],
@@ -236,8 +229,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               _buildLanguageOption(context, 'English', 'en', languageService),
               _buildLanguageOption(context, 'Lao', 'lo', languageService),
               _buildLanguageOption(context, 'Chinese', 'zh', languageService),
-              _buildLanguageOption(
-                  context, 'Vietnamese', 'vi', languageService),
+              _buildLanguageOption(context, 'Vietnamese', 'vi', languageService),
             ],
           ),
         );
@@ -245,16 +237,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildLanguageOption(BuildContext context, String languageName,
-      String languageCode, LanguageService languageService) {
+  Widget _buildLanguageOption(BuildContext context, String languageName, String languageCode, LanguageService languageService) {
     return ListTile(
       title: TextFont(
         text: languageName,
         color: cr_7070, // Follow theme color
       ),
-      trailing: languageService.locale.languageCode == languageCode
-          ? Icon(Icons.check, color: Theme.of(context).primaryColor)
-          : null, // Show check mark for the active language
+      trailing: languageService.locale.languageCode == languageCode ? Icon(Icons.check, color: Theme.of(context).primaryColor) : null, // Show check mark for the active language
       onTap: () {
         languageService.changeLanguage(languageCode);
         Get.back(); // Close the bottom sheet after selecting a language

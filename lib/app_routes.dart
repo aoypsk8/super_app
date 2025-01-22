@@ -36,7 +36,7 @@ class AppRoutes {
     GetPage(
       name: '/templateA',
       page: () => ListsProvinceTempA(),
-      transition: Transition.downToUp,
+      // transition: Transition.downToUp,
     ),
   ];
 }

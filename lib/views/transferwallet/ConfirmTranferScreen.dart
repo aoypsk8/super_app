@@ -8,6 +8,7 @@ import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/transferwallet/ResultTransferScreen.dart';
+import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/buildUserDetail.dart';
@@ -72,28 +73,7 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: AppBar(
-        backgroundColor: color_fff,
-        centerTitle: true,
-        iconTheme: IconThemeData(
-          color: cr_090a,
-        ),
-        elevation: 0,
-        title: TextFont(
-          // text: menulists.groupNameEN.toString(),
-          text: "transfer",
-          color: cr_2929,
-          fontSize: 11.5.sp,
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1),
-          child: Divider(
-            color: cr_ecec,
-            thickness: 1,
-            height: 0.8,
-          ),
-        ),
-      ),
+      appBar: BuildAppBar(title: "transfer"),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(top: 20),
         decoration: BoxDecoration(

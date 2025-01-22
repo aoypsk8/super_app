@@ -47,6 +47,9 @@ dependencies:
 
   # animation
   loading_animation_widget: ^1.3.0
+  dio: ^5.7.0
+  pretty_dio_logger: ^1.4.0
+  logger: ^2.5.0
 
 dev_dependencies:
   flutter_test:

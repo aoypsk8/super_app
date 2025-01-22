@@ -13,6 +13,7 @@ import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/transferwallet/buildFavoriteTransfer.dart';
 import 'package:super_app/views/transferwallet/buildHistoryTranserAll.dart';
 import 'package:super_app/views/transferwallet/buildHistoryTranserRecent.dart';
+import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/myIcon.dart';
@@ -74,28 +75,7 @@ class _TransferScreenState extends State<TransferScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: cr_fbf7,
-      appBar: AppBar(
-        backgroundColor: color_fff,
-        centerTitle: true,
-        iconTheme: IconThemeData(
-          color: cr_090a,
-        ),
-        elevation: 0,
-        title: TextFont(
-          // text: menulists.groupNameEN.toString(),
-          text: "transfer",
-          color: cr_2929,
-          fontSize: 11.5.sp,
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1),
-          child: Divider(
-            color: cr_ecec,
-            thickness: 1,
-            height: 0.8,
-          ),
-        ),
-      ),
+      appBar: BuildAppBar(title: "transfer"),
       body: SingleChildScrollView(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -165,7 +145,7 @@ class _TransferScreenState extends State<TransferScreen> {
             TextFont(
               text: 'transfer_wallet',
               fontWeight: FontWeight.w500,
-              fontSize: 11.sp,
+              fontSize: 12.sp,
             ),
             const SizedBox(height: 10),
             buildNumberFiledValidate(

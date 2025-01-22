@@ -21,7 +21,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
   int _current = 0;
   int _currentDropping = 0;
   int _currentLoveit = 0;
-  final CarouselSliderController carouselController = CarouselSliderController();
+  final CarouselSliderController carouselController =
+      CarouselSliderController();
 
   List<String> imageUrls = [
     "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
@@ -86,6 +87,15 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
+                    InkWell(
+                      onTap: () => Get.toNamed('/cashOut'),
+                      child: TextFont(
+                        text: "M Money X Cash Out here ",
+                        color: Theme.of(context).primaryColor,
+                        poppin: true,
+                        fontSize: 7.5.sp,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -224,7 +234,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                   ),
                   child: TextFont(
                     text: "Primary",
-                    color: Theme.of(context).textTheme.bodySmall?.color ?? Colors.black,
+                    color: Theme.of(context).textTheme.bodySmall?.color ??
+                        Colors.black,
                     poppin: true,
                     fontSize: 7.5.sp,
                   ),
@@ -232,7 +243,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                 const SizedBox(height: 5),
                 TextFont(
                   text: "Your balance",
-                  color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black,
+                  color: Theme.of(context).textTheme.bodyMedium?.color ??
+                      Colors.black,
                   fontWeight: FontWeight.w500,
                   fontSize: 10.5.sp,
                 ),
@@ -241,7 +253,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                   children: [
                     TextFont(
                       text: showAmount ? "₭ 99,950,000.00" : "₭",
-                      color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black,
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
+                          Colors.black,
                       fontWeight: FontWeight.w700,
                       fontSize: 14.5.sp,
                     ),
@@ -439,7 +452,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
             items: List.generate((loveItUrls.length / 4).ceil(), (index) {
               int start = index * 4;
               int end = start + 4;
-              List<String> sublist = loveItUrls.sublist(start, end > loveItUrls.length ? loveItUrls.length : end);
+              List<String> sublist = loveItUrls.sublist(
+                  start, end > loveItUrls.length ? loveItUrls.length : end);
               return GridView.builder(
                 padding: const EdgeInsets.all(5),
                 shrinkWrap: true,

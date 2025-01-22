@@ -18,6 +18,8 @@ class MyIcon {
   static String bg_gradient4 = 'assets/background/bg_gradient4.png';
   static String bg_main = 'assets/background/backgroundMain1.png';
   static String bg_mmoneyx = 'assets/background/mmoneyx.png';
+  static String bg_backgroundBill = 'assets/background/backgroundTrnasfer.png';
+  static String bg_ic_background = 'assets/background/bii_ic_background.png';
 
   //recurring
   static String ic_bill_link = 'assets/icons/ic_bill_link.png';
@@ -50,7 +52,8 @@ class MyIcon {
   static String ic_user = 'assets/icons/ic_user.svg';
   static String ic_heart_fill = 'assets/icons/ic_heart_fill.svg';
   static String ic_heart_unfill = 'assets/icons/ic_heart_unfill.svg';
-  // static String ic_bin = 'assets/icons/ic_bin.svg';
+  static String ic_check = 'assets/icons/ic_check.svg';
+  static String ic_logo_x = 'assets/icons/logox.png';
 
   // error
   static String ic_error_png = 'assets/icons/error.png';

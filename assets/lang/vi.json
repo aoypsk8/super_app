@@ -95,6 +95,7 @@
   "language": "Thay đổi Tiếng",
   "balance_amount": "Lượng tiền Của ban",
   "amount": "Số lượng",
+  "amount_transfer": "Số lượng",
   "balance": "Lượng tiền",
   "balance_kip": "Lượng tiền Kip",
   "amount_kip": "Số lượng Kip",
@@ -276,5 +277,7 @@
   "my_qr": "My QR",
   "setting": "Setting",
   "input_text": "Input text",
-  "account_not_found": "Account number not found."
+  "account_not_found": "Account number not found.",
+  "description":"Description",
+  "cashout":"Cash Out"
 }

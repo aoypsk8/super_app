@@ -1,120 +1,107 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, sized_box_for_whitespace, prefer_const_literals_to_create_immutables
-import 'package:contacts_service/contacts_service.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/cashout_controller.dart';
+import 'package:super_app/controllers/home_controller.dart';
+import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
-import 'package:super_app/utility/dialog_helper.dart';
-import 'package:super_app/views/transferwallet/buildFavoriteTransfer.dart';
-import 'package:super_app/views/transferwallet/buildHistoryTranserAll.dart';
-import 'package:super_app/views/transferwallet/buildHistoryTranserRecent.dart';
+import 'package:super_app/views/cashout/buildFavoriteCashOut.dart';
+import 'package:super_app/views/cashout/buildHistoryCashOutAll.dart';
+import 'package:super_app/views/cashout/buildHistoryCashOutRecent.dart';
+import 'package:super_app/views/cashout/fake.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
-import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
-class TransferScreen extends StatefulWidget {
-  const TransferScreen({super.key});
+class VerifyAccountBankScreen extends StatefulWidget {
+  const VerifyAccountBankScreen({super.key});
 
   @override
-  State<TransferScreen> createState() => _TransferScreenState();
+  State<VerifyAccountBankScreen> createState() =>
+      _VerifyAccountBankScreenState();
 }
 
-class _TransferScreenState extends State<TransferScreen> {
+class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
+  final homeController = Get.find<HomeController>();
+  final userController = Get.find<UserController>();
+  final cashOutController = Get.put(CashOutController());
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-  final TextEditingController _toWallet = TextEditingController();
-  final TextEditingController _paymentAmount = TextEditingController();
-  final TextEditingController _note = TextEditingController();
-  // final UserController userController = Get.find();
-  // final homeController = Get.put<HomeController>(HomeController());
-  // final transferController = Get.put(TransferController());
-  final storage = GetStorage();
+  final _accountNumber = TextEditingController();
+  final _paymentAmount = TextEditingController();
+  final _note = TextEditingController();
 
-  final FocusNode _amountFocusNode = FocusNode();
-  String _contactName = '';
-  int _balanceAmount = 0;
   bool isMore = false;
   bool isMoreText = false;
 
-  void _updateParentValue(String walletNo, String contactName) {
-    setState(() {
-      _toWallet.text = walletNo;
-      _contactName = contactName;
-    });
-
-    if (_toWallet.text != '') {
-      FocusScope.of(context).requestFocus(_amountFocusNode);
-    }
-  }
-
   @override
   void initState() {
-    // print(
-    //     'transferScrenn destinationMsisdn ${transferController.destinationMsisdn.value}');
-
-    // _toWallet.text = transferController.destinationMsisdn.value;
-
-    // userController.increasepage();
+    userController.increasepage();
+    cashOutController.fetchRecentBank();
     super.initState();
   }
 
   @override
   void dispose() {
-    // userController.decreasepage();
-    _toWallet.text = '';
+    userController.decreasepage();
     super.dispose();
+  }
+
+  void _updateParentValue(String AccNo, String AccName) {
+    setState(() {
+      _accountNumber.text = AccNo;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: cr_fbf7,
-      appBar: BuildAppBar(title: "transfer"),
-      body: SingleChildScrollView(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          behavior: HitTestBehavior.opaque,
-          child: FormBuilder(
-            key: _formKey,
-            child: Container(
-              child: Column(
-                children: [
-                  buildToWallet(context),
-                  const SizedBox(height: 12),
-                  buildRecentTransfer(context),
-                ],
+    return Obx(() => Scaffold(
+          backgroundColor: cr_fbf7,
+          appBar: BuildAppBar(title: "cashout"),
+          body: SingleChildScrollView(
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+              behavior: HitTestBehavior.opaque,
+              child: FormBuilder(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    buildToAccount(context),
+                    const SizedBox(height: 12),
+                    buildRecentCashOut(context),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(top: 20),
-        decoration: BoxDecoration(
-          color: color_fff,
-          border: Border.all(color: color_ddd),
-        ),
-        child: buildBottomAppbar(
-          bgColor: Theme.of(context).primaryColor,
-          title: 'next',
-          func: () {
-            _formKey.currentState!.save();
-            if (_formKey.currentState!.validate()) {
-              _paymentProcess();
-            }
-          },
-        ),
-      ),
-    );
+          bottomNavigationBar: Container(
+            padding: EdgeInsets.only(top: 20),
+            decoration: BoxDecoration(
+              color: color_fff,
+              border: Border.all(color: color_ddd),
+            ),
+            child: buildBottomAppbar(
+              title: 'next',
+              isEnabled: !cashOutController.loading.isTrue,
+              func: () {
+                _formKey.currentState!.save();
+                if (_formKey.currentState!.validate()) {
+                  cashOutController.loading.value = true;
+                  cashOutController.rxPaymentAmount.value =
+                      _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '');
+                  cashOutController.rxNote.value = _note.text;
+                  cashOutController.verifyAcc(_accountNumber.text);
+                }
+              },
+            ),
+          ),
+        ));
   }
 
-  Widget buildToWallet(BuildContext context) {
+  Widget buildToAccount(BuildContext context) {
     final List<String> amountValue = [
       '10,000',
       '25,000',
@@ -143,69 +130,19 @@ class _TransferScreenState extends State<TransferScreen> {
           children: [
             SizedBox(height: 10),
             TextFont(
-              text: 'transfer_wallet',
+              text: 'transfer_to_bank',
               fontWeight: FontWeight.w500,
               fontSize: 12.sp,
             ),
             const SizedBox(height: 10),
             buildNumberFiledValidate(
-              controller: _toWallet,
-              label: 'fill_wallet',
-              name: 'wallet',
-              hintText: '20XXXXXXXX',
-              max: 10,
+              controller: _accountNumber,
+              label: 'accountNumber',
+              name: 'accountNumber',
+              hintText: 'XXXXXXXX',
+              max: 16,
               fillcolor: color_f4f4,
               bordercolor: color_f4f4,
-              suffixIcon: Container(
-                padding: const EdgeInsets.all(10),
-                child: SvgPicture.asset(
-                  MyIcon.ic_contact,
-                ),
-              ),
-              suffixonTapFuc: () async {
-                // if (await Permission.contacts.request().isGranted) {
-                //   try {
-                //     final Contact? contact =
-                //         await ContactsService.openDeviceContactPicker();
-                //     if (contact != null) {
-                //       final Item phone = contact.phones!.first;
-                //       String phoneNO = phone.value
-                //           .toString()
-                //           .trim()
-                //           .replaceAll(' ', '')
-                //           .replaceAll('-', '');
-                //       if (phoneNO.startsWith('020')) {
-                //         setState(() {
-                //           _toWallet.text = phoneNO.replaceAll('020', '20');
-                //         });
-                //       } else if (phoneNO.startsWith('+85620')) {
-                //         setState(() {
-                //           _toWallet.text = phoneNO.replaceAll('+85620', '20');
-                //         });
-                //       } else if (phoneNO.startsWith('85620')) {
-                //         setState(() {
-                //           _toWallet.text = phoneNO.replaceAll('85620', '20');
-                //         });
-                //       } else {
-                //         setState(() {
-                //           _toWallet.text = phoneNO;
-                //         });
-                //       }
-                //     }
-                //     setState(() {
-                //       _contactName = contact!.displayName.toString();
-                //     });
-                //   } on FormOperationException catch (e) {
-                //     switch (e.errorCode) {
-                //       case FormOperationErrorCode.FORM_OPERATION_CANCELED:
-                //       case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
-                //       case FormOperationErrorCode.FORM_OPERATION_UNKNOWN_ERROR:
-                //       default:
-                //       // print(e.toString());
-                //     }
-                //   }
-                // }
-              },
             ),
             const SizedBox(height: 10),
             buildAccountingFiledVaidate(
@@ -216,7 +153,6 @@ class _TransferScreenState extends State<TransferScreen> {
               max: 11,
               fillcolor: color_f4f4,
               bordercolor: color_f4f4,
-              focus: _amountFocusNode,
               suffixWidget: true,
               suffixWidgetData: Padding(
                 padding: const EdgeInsets.only(right: 10),
@@ -277,7 +213,7 @@ class _TransferScreenState extends State<TransferScreen> {
                           InkWell(
                             onTap: () {
                               setState(() {
-                                isMore = isMore ? false : true;
+                                isMore = !isMore;
                               });
                             },
                             child: TextFont(
@@ -298,7 +234,7 @@ class _TransferScreenState extends State<TransferScreen> {
                         InkWell(
                           onTap: () {
                             setState(() {
-                              isMore = isMore ? false : true;
+                              isMore = !isMore;
                             });
                           },
                           child: TextFont(
@@ -365,7 +301,7 @@ class _TransferScreenState extends State<TransferScreen> {
                           InkWell(
                             onTap: () {
                               setState(() {
-                                isMoreText = isMoreText ? false : true;
+                                isMoreText = !isMoreText;
                               });
                             },
                             child: TextFont(
@@ -386,7 +322,7 @@ class _TransferScreenState extends State<TransferScreen> {
                         InkWell(
                           onTap: () {
                             setState(() {
-                              isMoreText = isMoreText ? false : true;
+                              isMoreText = !isMoreText;
                             });
                           },
                           child: TextFont(
@@ -407,7 +343,7 @@ class _TransferScreenState extends State<TransferScreen> {
     );
   }
 
-  Widget buildRecentTransfer(BuildContext context) {
+  Widget buildRecentCashOut(BuildContext context) {
     return Container(
       color: color_fff,
       child: Container(
@@ -466,13 +402,13 @@ class _TransferScreenState extends State<TransferScreen> {
                   ),
                 ],
                 views: [
-                  buildHistoryTransferRecent(
+                  buildHistoryCashOutRecent(
                     updateParentValue: _updateParentValue,
                   ),
-                  buildFavoriteTransfer(
+                  buildFavoriteCashOut(
                     updateParentValue: _updateParentValue,
                   ),
-                  buildHistoryTransferAll(
+                  buildHistoryCashOutAll(
                     updateParentValue: _updateParentValue,
                   ),
                 ],
@@ -484,48 +420,4 @@ class _TransferScreenState extends State<TransferScreen> {
       ),
     );
   }
-
-  Future _paymentProcess() async {
-    Get.toNamed("confirmTransfer");
-    // DialogHelper.showErrorDialogNew(description: 'account_not_found');
-    // int paymentAmount = int.parse(
-    //     _paymentAmount.text.trim().replaceAll(RegExp(r'[^\w\s]+'), ''));
-    // String toWallet = _toWallet.text;
-    // String note = _note.text;
-    // // _balanceAmount = userController.balance.value;
-    // String ownerWallet = await storage.read('msisdn') ?? '';
-    // if (paymentAmount < 1000) {
-    //   DialogHelper.showErrorDialogNew(
-    //       description: 'Minimum payment must than 1,000 Kip.');
-    // } else if (_balanceAmount < paymentAmount) {
-    //   DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
-    // } else if (ownerWallet == toWallet) {
-    //   DialogHelper.showErrorDialogNew(
-    //       description: 'Can\'t transfer to same Wallet Account.');
-    // } else {
-    //   // transferController.vertifyWallet(
-    //   //     toWallet, paymentAmount.toString(), note);
-    // }
-  }
-}
-
-class MultiplePointedEdgeClipperMod extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height);
-    var curXPos = 0.0;
-    var curYPos = size.height;
-    var increment = size.width / 40;
-    while (curXPos < size.width) {
-      curXPos += increment;
-      curYPos = curYPos == size.height ? size.height - 10 : size.height;
-      path.lineTo(curXPos, curYPos);
-    }
-    path.lineTo(size.width, 0);
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

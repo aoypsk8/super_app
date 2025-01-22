@@ -278,5 +278,6 @@
   "setting": "Setting",
   "input_text": "Input text",
   "account_not_found": "Account number not found.",
-  "description":"Description"
+  "description":"Description",
+  "cashout":"Cash Out"
 }

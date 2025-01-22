@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:super_app/app_routes.dart';
+import 'package:super_app/services/blindings/initial_blinding.dart';
 import 'package:super_app/services/language_service.dart';
 import 'package:super_app/services/theme_service.dart';
 import 'package:super_app/themes/dark_theme.dart';
@@ -13,6 +14,7 @@ import 'package:sizer/sizer.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+  InitialBindings().dependencies();
   // Initialize services
   final languageService = Get.put(LanguageService());
   await languageService.init();
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: Get.find<ThemeService>().theme,
-        initialRoute: '/templateA',
+        initialRoute: '/',
         getPages: AppRoutes.routes,
         home: BottomNav(),
       );

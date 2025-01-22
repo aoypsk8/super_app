@@ -289,5 +289,6 @@
   "setting": "ຕັ້ງຄ່າ",
   "input_text": "ປ້ອນຂໍ້ຄວາມ",
   "account_not_found": "ບໍພົບເບີໃນລະບົບ",
-  "description":"ຂໍ້ຄວາມ"
+  "description":"ຂໍ້ຄວາມ",
+  "cashout":"ຖອນເງີນ"
 }

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:super_app/home_screen.dart';
+import 'package:super_app/views/cashout/ListsProviderBankScreen.dart';
 import 'package:super_app/views/templateA/lists_province_tempA.dart';
 import 'package:super_app/views/transferwallet/ConfirmTranferScreen.dart';
 import 'package:super_app/views/transferwallet/ResultTransferScreen.dart';
@@ -25,6 +26,11 @@ class AppRoutes {
     GetPage(
       name: '/restultTransfer',
       page: () => Resulttransferscreen(),
+      transition: Transition.downToUp,
+    ),
+    GetPage(
+      name: '/cashOut',
+      page: () => ListsProviderBankScreen(),
       transition: Transition.downToUp,
     ),
     GetPage(

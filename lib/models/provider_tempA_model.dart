@@ -37,3 +37,22 @@ class Provseperate {
   List<ProviderTempAModel>? lists;
   Provseperate({this.name, this.lists});
 }
+
+class RecentTempAModel {
+  String? accNo;
+  String? accName;
+
+  RecentTempAModel({this.accNo, this.accName});
+
+  RecentTempAModel.fromJson(Map<String, dynamic> json) {
+    accNo = json['AccNo'];
+    accName = json['AccName'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['AccNo'] = accNo;
+    data['AccName'] = accName;
+    return data;
+  }
+}

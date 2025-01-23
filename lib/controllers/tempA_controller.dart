@@ -1,11 +1,15 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:super_app/models/menu_model.dart';
 import 'package:super_app/models/provider_tempA_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
 
 class TempAController extends GetxController {
   RxList<ProviderTempAModel> tempAmodel = <ProviderTempAModel>[].obs;
+  Rx<ProviderTempAModel> tempAdetail = ProviderTempAModel().obs;
   RxList<Map<String, Object?>> provsep = <Map<String, Object?>>[].obs;
+  RxList<RecentTempAModel> recentTempA = <RecentTempAModel>[].obs;
+  final storage = GetStorage();
 
   RxString rxaccnumber = ''.obs;
   RxString rxaccname = ''.obs;
@@ -30,7 +34,8 @@ class TempAController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    fetchTempAList(); // Automatically fetch data when the controller is ready
+    fetchTempAList();
+    storage.write('msisdn', '2052555999');
   }
 
   Future<void> fetchTempAList() async {
@@ -76,5 +81,15 @@ class TempAController extends GetxController {
       print("Error in fetchTempAList: $e");
       print(stackTrace);
     }
+  }
+
+  fetchrecent() async {
+    List<String> urlSplit = menudetailA.url!.split(";");
+    if (urlSplit.isEmpty || urlSplit[0].isEmpty) {
+      throw Exception("Malformed URL: Unable to extract the first URL part.");
+    }
+
+    var response = await DioClient.postEncrypt(loading: false, urlSplit[3], {"Msisdn": storage.read('msisdn'), "ProviderID": tempAdetail.value.code}, key: 'lmm');
+    recentTempA.value = response.map<RecentTempAModel>((json) => RecentTempAModel.fromJson(json)).toList();
   }
 }

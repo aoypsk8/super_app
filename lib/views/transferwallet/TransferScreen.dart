@@ -124,15 +124,39 @@ class _TransferScreenState extends State<TransferScreen> {
       '1,000,000',
     ];
     final List<String> textValue = [
-      'ເຕີມເງິນ',
-      'ຄ່າເຄື່ອງ',
-      'ຄ່າອາຫານ',
-      'ຄ່າເຄື່ອງດື່ມ',
-      'ເກັບອອມ',
-      'ໃຊ້ໜີ້',
-      'ຊ່ວຍເຫຼືອ',
-      'ການສຶກສາ',
+      "Shop",
+      "Food",
+      "Drink",
+      "Save",
+      "Debt",
+      "Help",
+      "Education",
     ];
+    final Map<String, Map<String, String>> translations = {
+      "en": {
+        "Topup": "Topup",
+        "Shop": "Shop",
+        "Food": "Food",
+        "Drink": "Drink",
+        "Save": "Save",
+        "Debt": "Debt",
+        "Help": "Help",
+        "Education": "Education",
+      },
+      "lo": {
+        "Topup": "ເຕີມເງິນ",
+        "Shop": "ຄ່າເຄື່ອງ",
+        "Food": "ຄ່າອາຫານ",
+        "Drink": "ຄ່າເຄື່ອງດື່ມ",
+        "Save": "ເກັບອອມ",
+        "Debt": "ໃຊ້ໜີ້",
+        "Help": "ຊ່ວຍເຫຼືອ",
+        "Education": "ການສຶກສາ",
+      },
+    };
+    final box = GetStorage();
+    String languageCode = box.read('language');
+
     return Container(
       color: color_fff,
       child: Container(
@@ -336,7 +360,9 @@ class _TransferScreenState extends State<TransferScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                         onTap: () {
-                          _note.text = textValue[index];
+                          _note.text = translations[languageCode]
+                                  ?[textValue[index]] ??
+                              textValue[index];
                         },
                         child: Container(
                           decoration: BoxDecoration(

@@ -12,6 +12,7 @@ import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/cashout_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
@@ -19,18 +20,20 @@ import 'package:super_app/widget/buildUserDetail.dart';
 import 'package:super_app/widget/build_DotLine.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:saver_gallery/saver_gallery.dart';
+import 'package:intl/intl.dart';
 import 'package:super_app/widget/textfont.dart';
 
-class Resulttransferscreen extends StatefulWidget {
-  const Resulttransferscreen({super.key});
+class ResultCashOutscreen extends StatefulWidget {
+  const ResultCashOutscreen({super.key});
 
   @override
-  State<Resulttransferscreen> createState() => _ResulttransferscreenState();
+  State<ResultCashOutscreen> createState() => _ResultCashOutscreenState();
 }
 
-class _ResulttransferscreenState extends State<Resulttransferscreen>
+class _ResultCashOutscreenState extends State<ResultCashOutscreen>
     with SingleTickerProviderStateMixin {
   final screenshotController = ScreenshotController();
+  final cashOutController = Get.put(CashOutController());
   final GlobalKey _globalKey = GlobalKey();
 
   final storage = GetStorage();
@@ -192,7 +195,13 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                         children: [
                                           buildTextSuccess(),
                                           TextFont(
-                                            text: '12 March 2025 12:52:23',
+                                            text:
+                                                DateFormat('dd MMM, yyyy HH:mm')
+                                                    .format(
+                                              DateTime.parse(cashOutController
+                                                  .rxTimeStamp
+                                                  .replaceAll('/', '-')),
+                                            ),
                                             fontWeight: FontWeight.w400,
                                             fontSize: 9.5.sp,
                                             color: cr_7070,
@@ -219,8 +228,9 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                                 profile:
                                                     "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
                                                 from: true,
-                                                msisdn: "2052768833",
-                                                name: "AOY PHONGSAKOUN",
+                                                msisdn: storage.read('msisdn'),
+                                                name:
+                                                    "userController.name.value",
                                               ),
                                             ),
                                             const SizedBox(height: 5),
@@ -232,11 +242,14 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                               padding:
                                                   const EdgeInsets.all(12.0),
                                               child: buildUserDetail(
-                                                profile:
+                                                profile: cashOutController
+                                                        .rxLogo.value ??
                                                     "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
                                                 from: false,
-                                                msisdn: "2052768833",
-                                                name: "AOY PHONGSAKOUN",
+                                                msisdn: cashOutController
+                                                    .rxAccName.value,
+                                                name: cashOutController
+                                                    .rxAccNo.value,
                                               ),
                                             ),
                                           ],
@@ -252,7 +265,10 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                       Row(
                                         children: [
                                           TextFont(
-                                            text: '10,000,000',
+                                            text: NumberFormat('#,###').format(
+                                                double.parse(cashOutController
+                                                    .rxPaymentAmount.value
+                                                    .toString())),
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20.sp,
                                             color: cr_b326,
@@ -268,7 +284,9 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                       const SizedBox(height: 20),
                                       buildTextDetail(
                                         title: "fee",
-                                        detail: "5,000",
+                                        detail: NumberFormat('#,###').format(
+                                            double.parse(
+                                                cashOutController.rxFee.value)),
                                         money: true,
                                       ),
                                       const SizedBox(height: 20),
@@ -294,7 +312,8 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                                     MyIcon.ic_logo_x,
                                                   ),
                                                   size: 25.w,
-                                                  data: "123",
+                                                  data: cashOutController
+                                                      .rxTransID.value,
                                                   errorCorrectLevel:
                                                       QrErrorCorrectLevel.M,
                                                   typeNumber: null,

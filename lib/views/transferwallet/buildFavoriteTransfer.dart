@@ -91,7 +91,7 @@ class _buildFavoriteTransferState extends State<buildFavoriteTransfer> {
       child: favoriteData.isEmpty
           ? Center(
               child: Text(
-                "No favorites found.",
+                "not_found",
                 style: GoogleFonts.notoSansLao(fontSize: 12.sp, color: cr_2929),
               ),
             )

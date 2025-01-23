@@ -9,11 +9,13 @@ class buildUserDetail extends StatelessWidget {
     required this.from,
     required this.name,
     required this.msisdn,
+    required this.profile,
   });
 
   final bool from;
   final String name;
   final String msisdn;
+  final String profile;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class buildUserDetail extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           child: TextFont(
-            text: from ? "ຈາກບັນຊີ" : "ຫາບັນຊີ",
+            text: from ? "from_acc" : "to_acc",
             color: Theme.of(context).textTheme.bodySmall?.color ?? Colors.black,
             poppin: true,
             fontSize: 9.sp,
@@ -50,7 +52,7 @@ class buildUserDetail extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(50.0),
                 child: Image.network(
-                  "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
+                  profile,
                 ),
               ),
             ),

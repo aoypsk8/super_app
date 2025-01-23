@@ -184,7 +184,7 @@ class DialogHelper {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  "images/logox.png",
+                  MyIcon.ic_logo_x,
                   height: 80,
                   width: 80,
                 ),
@@ -223,7 +223,7 @@ class Loading {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  "images/logox.png",
+                  MyIcon.ic_logo_x,
                   height: 80,
                   width: 80,
                 ),

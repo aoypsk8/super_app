@@ -279,5 +279,18 @@
   "input_text": "Input text",
   "account_not_found": "Account number not found.",
   "description":"Description",
-  "cashout":"Cash Out"
+  "cashout":"Cash Out",
+  "transfer_to_bank":"choose Bank",
+  "check_detail":"Check detail",
+  "Topup": "Topup",
+  "Shop": "Shop",
+  "Food": "Food",
+  "Drink": "Drink",
+  "Save": "Save",
+  "Debt": "Debt",
+  "Help": "Help",
+  "Education": "Education",
+  "not_found":"Data not found.",
+   "from_acc":"From Acc",
+  "to_acc":"To ACc"
 }

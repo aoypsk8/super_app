@@ -2,6 +2,7 @@ import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/cashout_controller.dart';
@@ -11,7 +12,6 @@ import 'package:super_app/utility/color.dart';
 import 'package:super_app/views/cashout/buildFavoriteCashOut.dart';
 import 'package:super_app/views/cashout/buildHistoryCashOutAll.dart';
 import 'package:super_app/views/cashout/buildHistoryCashOutRecent.dart';
-import 'package:super_app/views/cashout/fake.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
@@ -111,15 +111,38 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
       '1,000,000',
     ];
     final List<String> textValue = [
-      'ເຕີມເງິນ',
-      'ຄ່າເຄື່ອງ',
-      'ຄ່າອາຫານ',
-      'ຄ່າເຄື່ອງດື່ມ',
-      'ເກັບອອມ',
-      'ໃຊ້ໜີ້',
-      'ຊ່ວຍເຫຼືອ',
-      'ການສຶກສາ',
+      "Shop",
+      "Food",
+      "Drink",
+      "Save",
+      "Debt",
+      "Help",
+      "Education",
     ];
+    final Map<String, Map<String, String>> translations = {
+      "en": {
+        "Topup": "Topup",
+        "Shop": "Shop",
+        "Food": "Food",
+        "Drink": "Drink",
+        "Save": "Save",
+        "Debt": "Debt",
+        "Help": "Help",
+        "Education": "Education",
+      },
+      "lo": {
+        "Topup": "ເຕີມເງິນ",
+        "Shop": "ຄ່າເຄື່ອງ",
+        "Food": "ຄ່າອາຫານ",
+        "Drink": "ຄ່າເຄື່ອງດື່ມ",
+        "Save": "ເກັບອອມ",
+        "Debt": "ໃຊ້ໜີ້",
+        "Help": "ຊ່ວຍເຫຼືອ",
+        "Education": "ການສຶກສາ",
+      },
+    };
+    final box = GetStorage();
+    String languageCode = box.read('language');
     return Container(
       color: color_fff,
       child: Container(
@@ -137,7 +160,7 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
             const SizedBox(height: 10),
             buildNumberFiledValidate(
               controller: _accountNumber,
-              label: 'accountNumber',
+              label: 'account_number',
               name: 'accountNumber',
               hintText: 'XXXXXXXX',
               max: 16,
@@ -272,7 +295,9 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                         onTap: () {
-                          _note.text = textValue[index];
+                          _note.text = translations[languageCode]
+                                  ?[textValue[index]] ??
+                              textValue[index];
                         },
                         child: Container(
                           decoration: BoxDecoration(

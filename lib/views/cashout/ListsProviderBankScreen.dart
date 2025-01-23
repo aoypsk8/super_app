@@ -93,6 +93,10 @@ class _ListsProviderBankScreenState extends State<ListsProviderBankScreen> {
     return InkWell(
       onTap: () {
         cashOutControler.bankDetail.value = cashOutControler.bankModel[index];
+        cashOutControler.rxCodeBank.value =
+            cashOutControler.bankModel[index].code!;
+        cashOutControler.rxLogo.value = cashOutControler.bankModel[index].logo!;
+
         Get.to(() => const VerifyAccountBankScreen());
       },
       child: Container(

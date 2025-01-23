@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 const Color color_fff = Color(0xffFFFFFF);
@@ -40,3 +42,9 @@ const cr_red = Color(0xFFED1C29);
 const cr_fdeb = Color(0xffFDEBEA);
 const cr_b326 = Color(0xffB3261E);
 const Color color_bbb = Color(0xffBBBBBB);
+const Color color_red_background = Color(0xffB71C0E);
+const color_grey5e5 = Color(0xFFECE5E5);
+const Color color_2d3 = Color(0xff2D3436);
+const Color color_f63 = Color(0xffF36F63);
+const Color color_999 = Color(0xff999999);
+const color_fbd = Color(0xfffbd2d4);

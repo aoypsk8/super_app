@@ -37,24 +37,35 @@ class _buildHistoryCashOutAllState extends State<buildHistoryCashOutAll> {
   }
 
   _loadData() async {
-    if (cashOutController.recentModel.value.isNotEmpty) {
-      List<Map<String, dynamic>> data = cashOutController.recentModel.value
-          .map((model) => model.toJson())
-          .toList();
-      List<Map<String, dynamic>> sortedData =
-          List<Map<String, dynamic>>.from(data)
-            ..sort((a, b) => b['id'].compareTo(a['id']));
-      List<Map<String, dynamic>> lastFiveItems = sortedData.take(5).toList();
-      // Update state
-      setState(() {
-        historyData = lastFiveItems;
-      });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonData = prefs.getString('historyCashout');
+
+    if (jsonData != null) {
+      List<dynamic> data = json.decode(jsonData);
+      if (data.isNotEmpty) {
+        print("HistoryCashout data exists: $data");
+        // Sort data alphabetically by 'AccName'
+        List<Map<String, dynamic>> sortedData =
+            List<Map<String, dynamic>>.from(data)
+              ..sort((a, b) => a['AccName'].compareTo(b['AccName']));
+
+        var searchResult = sortedData.firstWhere(
+          (item) => item['id'] == cashOutController.rxCodeBank.value,
+          orElse: () => {}, // Return null if no match is found
+        );
+        setState(() {
+          historyData = searchResult != null ? [searchResult] : [];
+        });
+      } else {
+        print("HistoryCashout is empty.");
+      }
     } else {
-      print("No data in recentModel.");
+      print("No HistoryCashout data found in localStorage.");
     }
   }
 
-  void _savefavoriteCashout(String AccNo, String AccName) async {
+  void _savefavoriteCashout(
+      String AccNo, String AccName, String id, String logo) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? favoriteDataString = prefs.getString('favoriteCashout');
     List<Map<String, dynamic>> favoriteData = [];
@@ -91,6 +102,8 @@ class _buildHistoryCashOutAllState extends State<buildHistoryCashOutAll> {
             'AccNo': AccNo,
             'AccName': AccName,
             'timeStamp': DateTime.now().toIso8601String(),
+            'id': id,
+            'logo': logo
           });
         } else if (item['favorite'] == 0) {
           favoriteData.removeWhere((fav) => fav['AccNo'] == AccNo);
@@ -104,11 +117,15 @@ class _buildHistoryCashOutAllState extends State<buildHistoryCashOutAll> {
         'AccName': AccName,
         'timeStamp': DateTime.now().toIso8601String(),
         'favorite': 1,
+        'id': id,
+        'logo': logo
       });
       favoriteData.add({
         'AccNo': AccNo,
         'AccName': AccName,
         'timeStamp': DateTime.now().toIso8601String(),
+        'id': id,
+        'logo': logo
       });
       print(favoriteData);
     }
@@ -149,98 +166,109 @@ class _buildHistoryCashOutAllState extends State<buildHistoryCashOutAll> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
-      child: SingleChildScrollView(
-        child: Column(
-          children: List.generate(
-            historyData.length,
-            (index) {
-              return InkWell(
-                onTap: () {
-                  widget.updateParentValue(historyData[index]['AccNo'],
-                      historyData[index]['AccName']);
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 10, top: 5),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: cr_ecec),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
+      child: historyData.isNotEmpty && historyData.first.isEmpty
+          ? Center(
+              child: TextFont(
+                text: "not_found",
+                color: cr_090a,
+              ),
+            )
+          : SingleChildScrollView(
+              child: Column(
+                children: List.generate(
+                  historyData.length,
+                  (index) {
+                    return InkWell(
+                      onTap: () {
+                        widget.updateParentValue(historyData[index]['AccNo'],
+                            historyData[index]['AccName']);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 10, top: 5),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: cr_ecec),
+                          ),
+                        ),
                         child: Row(
                           children: [
-                            SvgPicture.asset(
-                              MyIcon.ic_user,
-                              fit: BoxFit.fill,
-                              width: 11.w,
-                            ),
                             Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextFont(
-                                      text: historyData[index]['AccName'],
-                                      fontSize: 9.sp,
-                                      color: cr_2929,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    TextFont(
-                                      text: maskMsisdn(historyData[index]
-                                              ['AccNo']
-                                          .toString()),
-                                      fontSize: 9.sp,
-                                      color: cr_7070,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                _savefavoriteCashout(
-                                  (historyData[index]['AccNo']),
-                                  (historyData[index]['AccName']),
-                                );
-                              },
-                              child: SizedBox(
-                                height: 30,
-                                width: 30,
-                                child: historyData[index]['favorite'] == 1
-                                    ? SvgPicture.asset(
-                                        MyIcon.ic_heart_fill,
-                                        fit: BoxFit.fill,
-                                      )
-                                    : SvgPicture.asset(
-                                        MyIcon.ic_heart_unfill,
-                                        fit: BoxFit.fill,
+                              child: Row(
+                                children: [
+                                  Image.network(
+                                    historyData[index]['logo'],
+                                    fit: BoxFit.cover,
+                                    width: 11.w,
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          TextFont(
+                                            text: historyData[index]['AccName'],
+                                            fontSize: 9.sp,
+                                            color: cr_2929,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                          TextFont(
+                                            text: maskMsisdn(historyData[index]
+                                                    ['AccNo']
+                                                .toString()),
+                                            fontSize: 9.sp,
+                                            color: cr_7070,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ],
                                       ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(width: 10),
+                            Container(
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      _savefavoriteCashout(
+                                        (historyData[index]['AccNo']),
+                                        (historyData[index]['AccName']),
+                                        (historyData[index]['id']),
+                                        (historyData[index]['logo']),
+                                      );
+                                    },
+                                    child: SizedBox(
+                                      height: 30,
+                                      width: 30,
+                                      child: historyData[index]['favorite'] == 1
+                                          ? SvgPicture.asset(
+                                              MyIcon.ic_heart_fill,
+                                              fit: BoxFit.fill,
+                                            )
+                                          : SvgPicture.asset(
+                                              MyIcon.ic_heart_unfill,
+                                              fit: BoxFit.fill,
+                                            ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ),
-      ),
+              ),
+            ),
     );
   }
 

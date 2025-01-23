@@ -54,10 +54,17 @@ class MyIcon {
   static String ic_heart_unfill = 'assets/icons/ic_heart_unfill.svg';
   static String ic_check = 'assets/icons/ic_check.svg';
   static String ic_logo_x = 'assets/icons/logox.png';
+  static String ic_box_open_bg = 'assets/icons/ic_box_open_bg.png';
 
   // error
   static String ic_error_png = 'assets/icons/error.png';
 
   // scan qr
   static String ic_scan_qr = 'assets/icons/scan_qr.svg';
+
+  // cash out
+  static String logo_ok = 'assets/icons/logo_ok.jpg';
+  static String logo_ok_png = 'assets/icons/logo_ok.png';
+
+  // fince
 }

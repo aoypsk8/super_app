@@ -12,6 +12,9 @@ import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/finance_controller.dart';
+import 'package:super_app/controllers/home_controller.dart';
+import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
@@ -20,27 +23,28 @@ import 'package:super_app/widget/build_DotLine.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:super_app/widget/textfont.dart';
+import 'package:intl/intl.dart';
 
-class Resulttransferscreen extends StatefulWidget {
-  const Resulttransferscreen({super.key});
+class ResultFinanceScreen extends StatefulWidget {
+  const ResultFinanceScreen({super.key});
 
   @override
-  State<Resulttransferscreen> createState() => _ResulttransferscreenState();
+  State<ResultFinanceScreen> createState() => _ResultFinanceScreenState();
 }
 
-class _ResulttransferscreenState extends State<Resulttransferscreen>
+class _ResultFinanceScreenState extends State<ResultFinanceScreen>
     with SingleTickerProviderStateMixin {
   final screenshotController = ScreenshotController();
   final GlobalKey _globalKey = GlobalKey();
+  final financeController = Get.put(FinanceController());
+  final homeController = Get.find<HomeController>();
+  final userController = Get.find<UserController>();
 
   final storage = GetStorage();
 
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _saveScreen();
-    // });
   }
 
   @override
@@ -192,7 +196,15 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                         children: [
                                           buildTextSuccess(),
                                           TextFont(
-                                            text: '12 March 2025 12:52:23',
+                                            text:
+                                                DateFormat('dd MMM, yyyy HH:mm')
+                                                    .format(
+                                              DateTime.parse(
+                                                  "2023-01-01 12:00:00"),
+                                              // DateTime.parse(financeController
+                                              // .rxTimeStamp
+                                              // .replaceAll('/', '-')),
+                                            ),
                                             fontWeight: FontWeight.w400,
                                             fontSize: 9.5.sp,
                                             color: cr_7070,
@@ -219,8 +231,8 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                                 profile:
                                                     "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
                                                 from: true,
-                                                msisdn: "2052768833",
-                                                name: "AOY PHONGSAKOUN",
+                                                msisdn: storage.read('msisdn'),
+                                                name: userController.name.value,
                                               ),
                                             ),
                                             const SizedBox(height: 5),
@@ -232,16 +244,21 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                               padding:
                                                   const EdgeInsets.all(12.0),
                                               child: buildUserDetail(
-                                                profile:
-                                                    "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
+                                                profile: financeController
+                                                    .financeModelDetail
+                                                    .value
+                                                    .logo!,
                                                 from: false,
-                                                msisdn: "2052768833",
-                                                name: "AOY PHONGSAKOUN",
+                                                msisdn: financeController
+                                                    .rxAccNo.value,
+                                                name: financeController
+                                                    .rxAccName.value,
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
+                                      buildNoteMessage(),
                                       const SizedBox(height: 10),
                                       TextFont(
                                         text: 'amount_transfer',
@@ -252,7 +269,10 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                       Row(
                                         children: [
                                           TextFont(
-                                            text: '10,000,000',
+                                            text: NumberFormat('#,###').format(
+                                                double.parse(financeController
+                                                    .rxPaymentAmount.value
+                                                    .toString())),
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20.sp,
                                             color: cr_b326,
@@ -268,7 +288,9 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                       const SizedBox(height: 20),
                                       buildTextDetail(
                                         title: "fee",
-                                        detail: "5,000",
+                                        detail: NumberFormat('#,###').format(
+                                            double.parse(
+                                                financeController.rxFee.value)),
                                         money: true,
                                       ),
                                       const SizedBox(height: 20),
@@ -277,13 +299,50 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                             CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
-                                            child: buildTextDetail(
-                                                money: false,
-                                                title: "description",
-                                                detail:
-                                                    "Learn about the history, usage and variations of Lorem Ipsum, the industry's standard dummy text."),
+                                            flex: 4,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const SizedBox(height: 20),
+                                                TextFont(
+                                                  text: 'ເລກໃບບິນ',
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11.sp,
+                                                  color: cr_7070,
+                                                ),
+                                                const SizedBox(height: 4),
+                                                TextFont(
+                                                  text: financeController
+                                                      .rxTransID.value,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 12.sp,
+                                                  color: cr_2929,
+                                                  maxLines: 1,
+                                                ),
+                                                const SizedBox(height: 20),
+                                                TextFont(
+                                                  text: 'ສະຖາບັນທະນາຄານ',
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11.sp,
+                                                  color: cr_7070,
+                                                ),
+                                                const SizedBox(height: 4),
+                                                TextFont(
+                                                  text: financeController
+                                                      .financeModelDetail
+                                                      .value
+                                                      .title!,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 12.sp,
+                                                  color: cr_2929,
+                                                  maxLines: 1,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                           Expanded(
+                                            flex: 2,
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.end,
@@ -294,7 +353,8 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                                     MyIcon.ic_logo_x,
                                                   ),
                                                   size: 25.w,
-                                                  data: "123",
+                                                  data: financeController
+                                                      .rxTransID.value,
                                                   errorCorrectLevel:
                                                       QrErrorCorrectLevel.M,
                                                   typeNumber: null,
@@ -331,6 +391,29 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildNoteMessage() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            TextFont(text: 'message', color: color_777),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextFont(
+                text: financeController.rxNote.value,
+                noto: true,
+                maxLines: 3,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

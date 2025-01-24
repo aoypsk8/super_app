@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/widget/button.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -116,6 +117,11 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         fontSize: 7.5.sp,
                       ),
                     ),
+                    PrimaryButton(
+                        title: 'tempA',
+                        onPressed: () {
+                          Get.toNamed('/templateA');
+                        }),
                   ],
                 ),
               ),

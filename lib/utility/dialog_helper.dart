@@ -7,21 +7,19 @@ import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/myIcon.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class DialogHelper {
-  static void showErrorDialogNew(
-      {String title = 'Umm, Sorry!!',
-      String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.'}) {
+  static void showErrorDialogNew({String title = 'Umm, Sorry!!', String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.'}) {
     Get.dialog(
       // ignore: deprecated_member_use
       WillPopScope(
         onWillPop: () async => false,
         child: Dialog(
           surfaceTintColor: color_fff,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Padding(
             padding: const EdgeInsets.all(0),
             child: Column(
@@ -41,8 +39,7 @@ class DialogHelper {
                   fontSize: 12.sp,
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                   child: Column(
                     children: [
                       Padding(
@@ -69,11 +66,7 @@ class DialogHelper {
                                 elevation: 0, // Remove shadow
                                 padding: EdgeInsets.symmetric(vertical: 10)),
                             onPressed: (() => hide()),
-                            child: TextFont(
-                                text: 'close',
-                                textAlign: TextAlign.center,
-                                color: cr_3b3b,
-                                fontWeight: FontWeight.normal),
+                            child: TextFont(text: 'close', textAlign: TextAlign.center, color: cr_3b3b, fontWeight: FontWeight.normal),
                           ),
                         ),
                       ),
@@ -100,8 +93,7 @@ class DialogHelper {
         onWillPop: () async => false,
         child: Dialog(
           surfaceTintColor: color_fff,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Padding(
             padding: const EdgeInsets.all(0),
             child: Column(
@@ -121,8 +113,7 @@ class DialogHelper {
                   fontSize: 12.sp,
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                   child: Column(
                     children: [
                       Padding(
@@ -149,11 +140,7 @@ class DialogHelper {
                                 elevation: 0, // Remove shadow
                                 padding: EdgeInsets.symmetric(vertical: 10)),
                             onPressed: onClose,
-                            child: TextFont(
-                                text: closeTitle,
-                                textAlign: TextAlign.center,
-                                color: cr_3b3b,
-                                fontWeight: FontWeight.normal),
+                            child: TextFont(text: closeTitle, textAlign: TextAlign.center, color: cr_3b3b, fontWeight: FontWeight.normal),
                           ),
                         ),
                       ),
@@ -169,22 +156,19 @@ class DialogHelper {
     );
   }
 
-  static void loading(
-      {String title = 'Uh oh.',
-      String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.'}) {
+  static void loading({String title = 'Uh oh.', String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.'}) {
     Get.dialog(
       WillPopScope(
         onWillPop: () async => false,
         child: Dialog(
           surfaceTintColor: color_fff,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  "images/logox.png",
+                  MyIconOld.logox,
                   height: 80,
                   width: 80,
                 ),
@@ -216,14 +200,13 @@ class Loading {
         onWillPop: () async => false,
         child: Dialog(
           backgroundColor: Colors.transparent,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  "images/logox.png",
+                  "assets/images/logox.png",
                   height: 80,
                   width: 80,
                 ),

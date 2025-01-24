@@ -3,6 +3,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:super_app/models/menu_model.dart';
 import 'package:super_app/models/provider_tempA_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
+import 'package:super_app/services/helper/random.dart';
+import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/views/templateA/payment_tempA.dart';
 
 class TempAController extends GetxController {
   RxList<ProviderTempAModel> tempAmodel = <ProviderTempAModel>[].obs;
@@ -25,10 +28,11 @@ class TempAController extends GetxController {
   var isLoading = false.obs;
   // menudetail.url = 'https://electricx.mmoney.la/getList;https://electricx.mmoney.la/verify;https://electricx.mmoney.la/payment;https://electricx.mmoney.la/getRecent;https://electricx.mmoney.la/history;';
 
-  Menulists menudetailA = Menulists();
+  Menulists menudetail = Menulists();
 
   TempAController() {
-    menudetailA.url = '/Electric/getList;/Electric/verify;/Electric/payment;/Electric/getRecent;/Electric/history;';
+    menudetail.url = '/Electric/getList;/Electric/verify;/Electric/payment;/Electric/getRecent;/Electric/history;';
+    menudetail.description = 'EL';
   }
 
   @override
@@ -41,12 +45,12 @@ class TempAController extends GetxController {
   Future<void> fetchTempAList() async {
     try {
       // Check if the URL is valid
-      if (menudetailA.url == null || menudetailA.url!.isEmpty) {
+      if (menudetail.url == null || menudetail.url!.isEmpty) {
         throw Exception("Invalid or empty URL in menudetail.");
       }
 
       // Split the URL
-      List<String> urlSplit = menudetailA.url!.split(";");
+      List<String> urlSplit = menudetail.url!.split(";");
       if (urlSplit.isEmpty || urlSplit[0].isEmpty) {
         throw Exception("Malformed URL: Unable to extract the first URL part.");
       }
@@ -84,12 +88,54 @@ class TempAController extends GetxController {
   }
 
   fetchrecent() async {
-    List<String> urlSplit = menudetailA.url!.split(";");
+    List<String> urlSplit = menudetail.url!.split(";");
     if (urlSplit.isEmpty || urlSplit[0].isEmpty) {
       throw Exception("Malformed URL: Unable to extract the first URL part.");
     }
 
     var response = await DioClient.postEncrypt(loading: false, urlSplit[3], {"Msisdn": storage.read('msisdn'), "ProviderID": tempAdetail.value.code}, key: 'lmm');
     recentTempA.value = response.map<RecentTempAModel>((json) => RecentTempAModel.fromJson(json)).toList();
+  }
+
+  Future<void> debitProcess(String accNumber) async {
+    try {
+      // Generate a transaction ID
+      final transactionId = "${menudetail.description!}${await randomNumber().fucRandomNumber()}";
+      rxtransid.value = transactionId;
+      print('Transaction ID: $transactionId');
+
+      // Split the URL
+      final urlSplit = menudetail.url?.split(";") ?? [];
+      if (urlSplit.length < 2) {
+        throw Exception("Invalid URL format in menu detail");
+      }
+      final apiUrl = urlSplit[1];
+
+      // Prepare the payload
+      final payload = {
+        "TransactionID": "",
+        "PhoneUser": storage.read('msisdn'),
+        "AccNo": accNumber,
+        "EWid": tempAdetail.value.eWid,
+        "Remark": "",
+      };
+
+      // Make the API request
+      final response = await DioClient.postEncrypt(apiUrl, payload, key: 'lmm');
+
+      // Handle the response
+      if (response['ResultCode'] == "200") {
+        rxaccname.value = response['AccName'] ?? "Unknown";
+        rxaccnumber.value = accNumber;
+        debit.value = response['Debit'] ?? 0.0;
+        Get.to(() => PaymentTempAScreen());
+      } else {
+        // Show error dialog with the result description
+        DialogHelper.showErrorDialogNew(description: response['ResultDesc'] ?? "Unknown error occurred");
+      }
+    } catch (e, stackTrace) {
+      print("Error in debitProcess: $e");
+      print("StackTrace: $stackTrace");
+    }
   }
 }

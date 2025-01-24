@@ -98,7 +98,7 @@
   "amount_transfer": "Số lượng",
   "balance": "Lượng tiền",
   "balance_kip": "Lượng tiền Kip",
-  "amount_kip": "Số lượng Kip",
+  "amount_kip": "Số lượng",
   "debt_kip": "Nợ Kip",
   "fee": "Phí",
   "fee_kip": "Phí_Kip",
@@ -292,5 +292,7 @@
   "Education": "Education",
   "not_found":"Data not found.",
    "from_acc":"From Acc",
-  "to_acc":"To ACc"
+  "to_acc":"To Acc",
+  "input_amount":"Input Amount",
+  "please_pay":"Please purchase"
 }

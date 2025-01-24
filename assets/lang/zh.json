@@ -98,7 +98,7 @@
   "amount_transfer": "余额",
   "balance": "余额",
   "balance_kip": "余额（老挝基普）",
-  "amount_kip": "余额（老挝基普）",
+  "amount_kip": "余额",
   "debt_kip": "债务余额（老挝基普）",
   "fee": "费用",
   "fee_kip": "费用（老挝基普）",
@@ -292,5 +292,7 @@
   "Education": "Education",
   "not_found":"Data not found.",
    "from_acc":"From Acc",
-  "to_acc":"To ACc"
+  "to_acc":"To Acc",
+  "input_amount":"Input Amount",
+  "please_pay":"Please purchase"
 }

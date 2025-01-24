@@ -66,5 +66,9 @@ class MyIcon {
   static String logo_ok = 'assets/icons/logo_ok.jpg';
   static String logo_ok_png = 'assets/icons/logo_ok.png';
 
-  // fince
+  // lao qr
+  static String ic_lao_qr = 'assets/icons/laoqr.png';
+
+  // success
+  static String ic_success = 'assets/icons/success.png';
 }

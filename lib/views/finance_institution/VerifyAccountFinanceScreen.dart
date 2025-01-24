@@ -170,7 +170,6 @@ class _VerifyAccountFinanceScreenState
           ),
           bottomNavigationBar: Container(
             padding: const EdgeInsets.only(top: 20),
-            decoration: BoxDecoration(border: Border.all(color: color_ddd)),
             child: buildBottomAppbar(
               title: 'next',
               // radius: 20,

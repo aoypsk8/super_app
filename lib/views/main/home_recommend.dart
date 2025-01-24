@@ -106,6 +106,16 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         fontSize: 7.5.sp,
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    InkWell(
+                      onTap: () => Get.toNamed('/cashInPage'),
+                      child: TextFont(
+                        text: "M Money X Cash IN  here ",
+                        color: Theme.of(context).primaryColor,
+                        poppin: true,
+                        fontSize: 7.5.sp,
+                      ),
+                    ),
                   ],
                 ),
               ),

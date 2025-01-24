@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:super_app/home_screen.dart';
+import 'package:super_app/views/cashIn/CashIn.dart';
+import 'package:super_app/views/cashIn/ConfirmCashIn.dart';
 import 'package:super_app/views/cashout/ConfirmCashOutScreen.dart';
 import 'package:super_app/views/cashout/ListsProviderBankScreen.dart';
 import 'package:super_app/views/cashout/ResultCashOutScreen.dart';
@@ -79,6 +81,18 @@ class AppRoutes {
     GetPage(
       name: '/resultFinance',
       page: () => ResultFinanceScreen(),
+      transition: Transition.downToUp,
+    ),
+
+    // cash IN
+    GetPage(
+      name: '/cashInPage',
+      page: () => CashInScreen(),
+      transition: Transition.downToUp,
+    ),
+    GetPage(
+      name: '/confirmCashIN',
+      page: () => ConfirmCashInScreen(),
       transition: Transition.downToUp,
     ),
 

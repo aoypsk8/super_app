@@ -98,7 +98,7 @@
   "amount_transfer": "Amount",
   "balance": "Balance ",
   "balance_kip": "Balance (LAK)",
-  "amount_kip": "Amount (LAK)",
+  "amount_kip": "Amount",
   "debt_kip": "Debt balance (LAK)",
   "fee": "Fee",
   "fee_kip": "Fee (LAK)",
@@ -301,6 +301,8 @@
   "Education": "Education",
   "not_found":"Data not found.",
   "from_acc":"From Acc",
-  "to_acc":"To ACc"
+  "to_acc":"To Acc",
+  "input_amount":"Input Amount",
+  "please_pay":"Please purchase"
   
 }

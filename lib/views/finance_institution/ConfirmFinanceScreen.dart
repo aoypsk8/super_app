@@ -108,7 +108,6 @@ class _ConfirmFinanceScreenState extends State<ConfirmFinanceScreen> {
       ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.only(top: 20),
-        decoration: BoxDecoration(border: Border.all(color: color_ddd)),
         child: buildBottomAppbar(
           title: 'confirm',
           func: () {

@@ -169,6 +169,59 @@ class DialogHelper {
     );
   }
 
+  static void showSuccess({
+    String title = 'Success.',
+    String closeTitle = 'close',
+    Function()? onClose,
+  }) {
+    Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false,
+        child: GestureDetector(
+          onTap: () {
+            if (onClose != null) {
+              Get.until((route) => route.isFirst);
+              onClose();
+            } else {
+              Get.until((route) => route.isFirst);
+              hide();
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 80),
+            child: Dialog(
+              surfaceTintColor: color_fff,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              child: Padding(
+                padding: const EdgeInsets.all(0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 25),
+                    Image.asset(
+                      MyIcon.ic_success,
+                      height: 100,
+                      width: 100,
+                    ),
+                    SizedBox(height: 10),
+                    TextFont(
+                      text: title,
+                      fontWeight: FontWeight.w400,
+                      color: cr_2929,
+                      fontSize: 12.sp,
+                    ),
+                    const SizedBox(height: 30),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   static void loading(
       {String title = 'Uh oh.',
       String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.'}) {

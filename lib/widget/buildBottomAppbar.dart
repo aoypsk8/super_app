@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/myIcon.dart';
@@ -14,7 +13,7 @@ class buildBottomAppbar extends StatelessWidget {
     required this.title,
     this.radius = 6,
     this.high = 4,
-    this.bgColor = color_ed1,
+    this.bgColor = cr_ef33,
     this.margin = const EdgeInsets.symmetric(horizontal: 20),
     this.fontWeight = FontWeight.w500,
     this.noto = false,

@@ -70,6 +70,8 @@ dependencies:
 
   # pin code
   pinput: ^5.0.1
+  # socket
+  socket_io_client: ^3.0.2
 
   
 

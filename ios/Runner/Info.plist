@@ -55,6 +55,10 @@
 	<string>We need access to save screenshots to your photo library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to save screenshots to your photo library</string>
+	
+	<!-- camera  -->
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access to scan QR codes</string>
 
 
 

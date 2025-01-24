@@ -21,8 +21,7 @@ class VerifyAccountBankScreen extends StatefulWidget {
   const VerifyAccountBankScreen({super.key});
 
   @override
-  State<VerifyAccountBankScreen> createState() =>
-      _VerifyAccountBankScreenState();
+  State<VerifyAccountBankScreen> createState() => _VerifyAccountBankScreenState();
 }
 
 class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
@@ -90,8 +89,7 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
                 _formKey.currentState!.save();
                 if (_formKey.currentState!.validate()) {
                   cashOutController.loading.value = true;
-                  cashOutController.rxPaymentAmount.value =
-                      _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '');
+                  cashOutController.rxPaymentAmount.value = _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '');
                   cashOutController.rxNote.value = _note.text;
                   cashOutController.verifyAcc(_accountNumber.text);
                 }
@@ -210,9 +208,7 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
                           _paymentAmount.text = amountValue[index];
                         },
                         child: Container(
-                          decoration: BoxDecoration(
-                              color: color_f5f5,
-                              borderRadius: BorderRadius.circular(6)),
+                          decoration: BoxDecoration(color: color_f5f5, borderRadius: BorderRadius.circular(6)),
                           child: Center(
                             child: TextFont(
                               text: amountValue[index],
@@ -246,8 +242,7 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
                               underline: true,
                             ),
                           ),
-                          Icon(Icons.keyboard_arrow_up_rounded,
-                              size: 15.sp, color: color_777),
+                          Icon(Icons.keyboard_arrow_up_rounded, size: 15.sp, color: color_777),
                         ],
                       ),
                     )
@@ -267,8 +262,7 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
                             underline: true,
                           ),
                         ),
-                        Icon(Icons.keyboard_arrow_down_rounded,
-                            size: 15.sp, color: color_777),
+                        Icon(Icons.keyboard_arrow_down_rounded, size: 15.sp, color: color_777),
                       ],
                     ),
             ),
@@ -336,8 +330,7 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
                               underline: true,
                             ),
                           ),
-                          Icon(Icons.keyboard_arrow_up_rounded,
-                              size: 15.sp, color: color_777),
+                          Icon(Icons.keyboard_arrow_up_rounded, size: 15.sp, color: color_777),
                         ],
                       ),
                     )
@@ -357,8 +350,7 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
                             underline: true,
                           ),
                         ),
-                        Icon(Icons.keyboard_arrow_down_rounded,
-                            size: 15.sp, color: color_777),
+                        Icon(Icons.keyboard_arrow_down_rounded, size: 15.sp, color: color_777),
                       ],
                     ),
             ),
@@ -390,8 +382,7 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Iconsax.clock,
-                          color: Theme.of(context).primaryColor),
+                      Icon(Iconsax.clock, color: Theme.of(context).primaryColor),
                       const SizedBox(width: 5),
                       TextFont(
                         text: 'recent',
@@ -403,8 +394,7 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Iconsax.heart,
-                          color: Theme.of(context).primaryColor),
+                      Icon(Iconsax.heart, color: Theme.of(context).primaryColor),
                       const SizedBox(width: 5),
                       TextFont(
                         text: 'favorite',

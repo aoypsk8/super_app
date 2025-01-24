@@ -70,7 +70,7 @@ class MyIcon {
   static String ic_lock_grey = 'images/icon/ic_lock_grey.svg';
   static String ic_coin = 'images/icon/ic_coin.svg';
   static String ic_info = 'images/icon/ic_info.png';
-  static String ic_scan = 'images/icon/ic_scan.svg';
+  static String ic_scan = 'assets/icons/ic_scan.svg';
   // static String ic_notification = 'images/icon/ic_scan.svg';
   static String ic_notification = 'images/icon/notification.svg';
   static String ic_scan1 = 'images/icon/scan.svg';

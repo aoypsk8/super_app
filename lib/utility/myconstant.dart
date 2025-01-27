@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 final fn = NumberFormat('#,###', 'en_US');
 
 class MyConstant {
+  static NumberFormat fn = NumberFormat('#,###', 'en_US');
   static String urlSocketLtcdev = 'https://socket.ltcdev.la';
 
   // static String urlAddress = 'https://rank.mmoney.la';
@@ -82,8 +83,7 @@ class MyConstant {
   static String desRoute = 'PRO';
 
   static int connectTimeout = 30000;
-  static Duration get delayTime =>
-      Duration(milliseconds: timeDilation.ceil() * 500);
+  static Duration get delayTime => Duration(milliseconds: timeDilation.ceil() * 500);
 
   static String userKYC = 'Users';
 

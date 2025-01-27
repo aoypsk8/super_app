@@ -11,6 +11,7 @@ import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildButtonBottom.dart';
 import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/build_step_process.dart';
+import 'package:super_app/widget/mounoy_textfield.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class VerifyAccountTempA extends StatefulWidget {
@@ -42,7 +43,7 @@ class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
               padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
-                  buildStepProcess(title: '2/3', desc: 'input_bill_no'),
+                  buildStepProcess(title: '2/4', desc: 'input_bill_no'),
                   SizedBox(height: 5),
                   buildForm(),
                 ],
@@ -87,9 +88,9 @@ class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
                                           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                                           margin: const EdgeInsets.symmetric(vertical: 5),
                                           decoration: BoxDecoration(
-                                            color: isSelected ? color_primary_light.withOpacity(0.1) : color_f4f4, // Change background color if selected
+                                            color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.1) : color_f4f4, // Change background color if selected
                                             border: Border.all(
-                                              color: isSelected ? color_primary_light.withOpacity(0.5) : color_f4f4,
+                                              color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.5) : color_f4f4,
                                               width: isSelected ? 2 : 1, // Change border width if selected
                                             ),
                                             borderRadius: BorderRadius.circular(8),
@@ -146,6 +147,7 @@ class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
             formKey.currentState!.save();
             if (formKey.currentState!.validate()) {
               print(accountNumber.text);
+              controller.debitProcess(accountNumber.text);
             }
           }),
     );
@@ -156,41 +158,57 @@ class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
       key: formKey,
       child: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: buildTextField(
-                  controller: accountNumber,
-                  label: 'bill_no',
-                  name: 'name',
-                  hintText: 'XXXXXXXXXX',
-                  fillcolor: color_f4f4,
-                  bordercolor: color_f4f4,
-                ),
-              ),
-              SizedBox(width: 10),
-              Container(
-                height: 54,
-                width: 54,
-                decoration: BoxDecoration(
-                  color: color_primary_light,
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: IconButton(
-                  onPressed: () async {
-                    final result = await Get.to(() => QRScannerScreen());
-                    if (result != null) {
-                      print(result);
-                    }
-                  },
-                  icon: Image.asset(
-                    'assets/icons/scan.png',
-                    // color: color_436,
-                  ),
-                ),
-              ),
-            ],
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       flex: 3,
+          //       child: buildTextField(
+          //         controller: accountNumber,
+          //         label: 'bill_no',
+          //         name: 'name',
+          //         hintText: 'XXXXXXXXXX',
+          //         fillcolor: color_f4f4,
+          //         bordercolor: color_f4f4,
+          //       ),
+          //     ),
+          //     SizedBox(width: 10),
+          //     Container(
+          //       height: 54,
+          //       width: 54,
+          //       decoration: BoxDecoration(
+          //         color: color_primary_light,
+          //         borderRadius: BorderRadius.circular(50),
+          //       ),
+          //       child: IconButton(
+          //         onPressed: () async {
+          //           final result = await Get.to(() => QRScannerScreen());
+          //           if (result != null) {
+          //             print(result);
+          //           }
+          //         },
+          //         icon: Image.asset(
+          //           'assets/icons/scan.png',
+          //           // color: color_436,
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          TextfieldWithScanButton(
+            controller: accountNumber,
+            label: "Scan QR Code",
+            name: "qr_field",
+            hintText: "Enter or scan QR code",
+            buttonText: "Scan",
+            fillcolor: color_f4f4,
+            bordercolor: color_f4f4,
+            onScanned: (scannedResult) {
+              // Update the controller with the scanned result
+              accountNumber.text = scannedResult;
+
+              // Or perform other actions with the result
+              print("Scanned QR Code: $scannedResult");
+            },
           ),
         ],
       ),

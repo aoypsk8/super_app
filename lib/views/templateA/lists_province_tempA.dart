@@ -34,7 +34,7 @@ class _ListsProvinceTempAState extends State<ListsProvinceTempA> {
       appBar: BuildAppBar(title: 'select_province'),
       body: Column(
         children: [
-          Padding(padding: const EdgeInsets.all(10), child: buildStepProcess(title: '1/3', desc: 'select_province')),
+          Padding(padding: const EdgeInsets.all(10), child: buildStepProcess(title: '1/4', desc: 'select_province')),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -46,10 +46,10 @@ class _ListsProvinceTempAState extends State<ListsProvinceTempA> {
 
                 // Show a message if no data is available
                 if (tempAcontroller.provsep.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: TextFont(
                       text: 'No data available',
-                      color: color_primary_light,
+                      color: Theme.of(context).primaryColor,
                       poppin: true,
                     ),
                   );
@@ -107,9 +107,9 @@ class _ListsProvinceTempAState extends State<ListsProvinceTempA> {
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: isSelected ? color_primary_light.withOpacity(0.1) : color_f4f4,
+                                            color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.1) : color_f4f4,
                                             border: Border.all(
-                                              color: isSelected ? color_primary_light.withOpacity(0.5) : color_f4f4,
+                                              color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.5) : color_f4f4,
                                               width: isSelected ? 2 : 1,
                                             ),
                                             borderRadius: BorderRadius.circular(8),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sizer/sizer.dart';
 import 'package:super_app/services/theme_service.dart';
 import 'package:super_app/utility/color.dart';
 
@@ -16,14 +17,14 @@ class TextFont extends StatelessWidget {
   final bool underline;
   final Color underlineColor;
 
-  const TextFont({
+  TextFont({
     super.key,
     required this.text,
     this.noto = false,
     this.poppin = false,
     this.textAlign = TextAlign.start,
     this.color = Colors.black,
-    this.fontSize = 16.0,
+    this.fontSize = 12.5,
     this.fontWeight = FontWeight.normal,
     this.maxLines = 1,
     this.underline = false,
@@ -40,7 +41,7 @@ class TextFont extends StatelessWidget {
     // 1. If `poppin` is true, prioritize Poppins.
     if (poppin) {
       textStyle = GoogleFonts.poppins(
-        fontSize: fontSize,
+        fontSize: fontSize.sp,
         fontWeight: fontWeight,
         decoration: underline ? TextDecoration.underline : null,
         decorationColor: underline ? underlineColor : null,
@@ -50,7 +51,7 @@ class TextFont extends StatelessWidget {
     // 2. If `noto` is true, prioritize Noto Sans Serif.
     else if (noto) {
       textStyle = GoogleFonts.notoSerifLao(
-        fontSize: fontSize,
+        fontSize: fontSize.sp,
         fontWeight: fontWeight,
         decoration: underline ? TextDecoration.underline : null,
         decorationColor: underline ? underlineColor : null,
@@ -60,12 +61,15 @@ class TextFont extends StatelessWidget {
     // 3. Handle language-based fonts if neither `poppin` nor `noto` is true.
     else if (languageCode == 'en') {
       textStyle = GoogleFonts.poppins(
-        fontSize: fontSize,
+        fontSize: fontSize.sp,
         fontWeight: fontWeight,
+        decoration: underline ? TextDecoration.underline : null,
+        decorationColor: underline ? underlineColor : null,
+        decorationStyle: underline ? TextDecorationStyle.dashed : null,
       );
     } else if (languageCode == 'lo') {
       textStyle = GoogleFonts.notoSerifLao(
-        fontSize: fontSize,
+        fontSize: fontSize.sp,
         fontWeight: fontWeight,
         decoration: underline ? TextDecoration.underline : null,
         decorationColor: underline ? underlineColor : null,
@@ -73,7 +77,7 @@ class TextFont extends StatelessWidget {
       );
     } else if (languageCode == 'zh') {
       textStyle = GoogleFonts.notoSans(
-        fontSize: fontSize,
+        fontSize: fontSize.sp,
         fontWeight: fontWeight,
         decoration: underline ? TextDecoration.underline : null,
         decorationColor: underline ? underlineColor : null,
@@ -81,7 +85,7 @@ class TextFont extends StatelessWidget {
       );
     } else if (languageCode == 'vi') {
       textStyle = GoogleFonts.roboto(
-        fontSize: fontSize,
+        fontSize: fontSize.sp,
         fontWeight: fontWeight,
         decoration: underline ? TextDecoration.underline : null,
         decorationColor: underline ? underlineColor : null,
@@ -90,8 +94,11 @@ class TextFont extends StatelessWidget {
     } else {
       // Default to Poppins if no match.
       textStyle = GoogleFonts.poppins(
-        fontSize: fontSize,
+        fontSize: fontSize.sp,
         fontWeight: fontWeight,
+        decoration: underline ? TextDecoration.underline : null,
+        decorationColor: underline ? underlineColor : null,
+        decorationStyle: underline ? TextDecorationStyle.dashed : null,
       );
     }
 
@@ -104,6 +111,54 @@ class TextFont extends StatelessWidget {
       style: textStyle.copyWith(color: effectiveColor),
       maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
+    );
+  }
+}
+
+class ExpandableText extends StatefulWidget {
+  final String text;
+  final int maxLines;
+
+  const ExpandableText({
+    required this.text,
+    this.maxLines = 1, // Default to 2 lines
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _ExpandableTextState createState() => _ExpandableTextState();
+}
+
+class _ExpandableTextState extends State<ExpandableText> {
+  bool isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.text,
+          maxLines: isExpanded ? null : widget.maxLines,
+          overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+          style: TextStyle(fontSize: 16, color: color_2929),
+        ),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              isExpanded = !isExpanded; // Toggle expand/collapse
+            });
+          },
+          child: Text(
+            isExpanded ? 'Show Less' : 'Show More',
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

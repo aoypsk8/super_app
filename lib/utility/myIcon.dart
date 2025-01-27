@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
-class MyIcon {
+class MyIconOld {
 //   // static String urlAddress = 'https://gateway.mmoney.la';
 //   // static String urlAddress = 'https://rank.mmoney.la';
 //   static String urlAddress = '/Menus';
@@ -17,7 +17,7 @@ class MyIcon {
   static String ic_football = 'images/icon/ic_football.svg';
 
   static String svgOTP = 'images/otp.svg';
-  static String logox = 'images/logox.png';
+  static String logox = 'assets/images/logox.png';
   static String flat_usa = 'images/icon/flag_usa.svg';
   static String flat_lao = 'images/icon/flag_lao.svg';
   static String flat_vietnames = 'images/icon/flag_vietnames.svg';

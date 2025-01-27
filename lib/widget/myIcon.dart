@@ -57,7 +57,10 @@ class MyIcon {
   static String ic_logo_x = 'assets/icons/logox.png';
   static String ic_box_open_bg = 'assets/icons/ic_box_open_bg.png';
 
-  // error
+  // load x jaidee
+  static String ic_load_xjaidee = 'assets/icons/load.svg';
+  static String ic_load_approve = 'assets/icons/approve_load.svg';
+  static String ic_load_cancel = 'assets/icons/close_load.svg';
 
   // scan qr
   static String ic_scan_qr = 'assets/icons/scan_qr.svg';

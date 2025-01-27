@@ -57,29 +57,26 @@ class _ListsProviderBankScreenState extends State<ListsProviderBankScreen> {
               ),
               const SizedBox(height: 10),
               Expanded(
-                child: AnimationLimiter(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 0.75,
-                    ),
-                    itemCount: cashOutControler.bankModel.length,
-                    itemBuilder: (context, index) {
-                      return AnimationConfiguration.staggeredGrid(
-                        position: index,
-                        duration: const Duration(milliseconds: 600),
-                        columnCount: 3,
-                        child: ScaleAnimation(
-                          child: FadeInAnimation(
-                            child: buildListProvider(index),
-                          ),
-                        ),
-                      );
-                    },
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 0.75,
                   ),
+                  itemCount: cashOutControler.bankModel.length,
+                  itemBuilder: (context, index) {
+                    return AnimationConfiguration.staggeredGrid(
+                      position: index,
+                      duration: const Duration(milliseconds: 600),
+                      columnCount: 3,
+                      child: ScaleAnimation(
+                        child: FadeInAnimation(
+                          child: buildListProvider(index),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

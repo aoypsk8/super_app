@@ -306,5 +306,6 @@
   "to_acc":"ຫາບັນຊີ",
   "input_amount":"ປ້ອນຈໍານວນເງິນ",
   "please_pay":"ກະລຸນາຈ່າຍເງິນ",
-  "choose_institution":"ເລືອກສະຖາບັນ"
+  "choose_institution":"ເລືອກສະຖາບັນ",
+  "history_load":"ປະຫວັດການຢືມສິນເຊື່ອ"
 }

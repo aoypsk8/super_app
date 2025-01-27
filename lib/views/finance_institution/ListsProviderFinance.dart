@@ -54,85 +54,94 @@ class _ListsProviderFinanceState extends State<ListsProviderFinance> {
               ),
               const SizedBox(height: 20),
               Expanded(
-                child: AnimationLimiter(
-                  child: ListView.builder(
-                    itemCount: financeController.financeModel.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          financeController.financeModelDetail.value =
-                              financeController.financeModel[index];
-                          Get.toNamed("/vertifyAccountFinace");
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: color_f4f4,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          margin: const EdgeInsets.only(bottom: 10),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 5),
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: 80,
-                                  width: 80,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 8),
-                                  child: CachedNetworkImage(
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
+                child: ListView.builder(
+                  itemCount: financeController.financeModel.length,
+                  itemBuilder: (context, index) {
+                    return AnimationConfiguration.staggeredList(
+                      position: index,
+                      duration: const Duration(milliseconds: 375),
+                      child: SlideAnimation(
+                        verticalOffset: 500.0,
+                        child: FadeInAnimation(
+                          child: InkWell(
+                            onTap: () {
+                              financeController.financeModelDetail.value =
+                                  financeController.financeModel[index];
+                              Get.toNamed("/vertifyAccountFinace");
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: color_f4f4,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              margin: const EdgeInsets.only(bottom: 10),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 5),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: 80,
+                                      width: 80,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 8),
+                                      child: CachedNetworkImage(
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                                         ),
+                                        progressIndicatorBuilder:
+                                            (context, url, progress) => Center(
+                                          child: CircularProgressIndicator(
+                                            value: progress.progress,
+                                            color: cr_red,
+                                          ),
+                                        ),
+                                        imageUrl: financeController
+                                            .financeModel[index].logo
+                                            .toString(),
                                       ),
                                     ),
-                                    progressIndicatorBuilder:
-                                        (context, url, progress) => Center(
-                                      child: CircularProgressIndicator(
-                                        value: progress.progress,
-                                        color: cr_red,
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          TextFont(
+                                            text: financeController
+                                                .financeModel[index].title!,
+                                            fontWeight: FontWeight.w500,
+                                            maxLines: 1,
+                                            fontSize: 12,
+                                          ),
+                                          TextFont(
+                                            text: 'Finance institution',
+                                            fontWeight: FontWeight.w400,
+                                            maxLines: 1,
+                                            color: cr_2929,
+                                            fontSize: 9,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    imageUrl: financeController
-                                        .financeModel[index].logo
-                                        .toString(),
-                                  ),
+                                  ],
                                 ),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      TextFont(
-                                        text: financeController
-                                            .financeModel[index].title!,
-                                        fontWeight: FontWeight.w500,
-                                        maxLines: 1,
-                                        fontSize: 12,
-                                      ),
-                                      TextFont(
-                                        text: 'Finance institution',
-                                        fontWeight: FontWeight.w400,
-                                        maxLines: 1,
-                                        color: cr_2929,
-                                        fontSize: 9,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               )
             ],

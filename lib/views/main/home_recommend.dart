@@ -122,6 +122,11 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         onPressed: () {
                           Get.toNamed('/templateA');
                         }),
+                    PrimaryButton(
+                        title: 'XJaidee',
+                        onPressed: () {
+                          Get.toNamed('/xjaidee');
+                        }),
                   ],
                 ),
               ),

@@ -154,58 +154,55 @@ class _CashInScreenState extends State<CashInScreen> {
             text: 'select_your_amount',
           ),
           SizedBox(height: 10.sp),
-          AnimationLimiter(
-            child: AlignedGridView.count(
-              crossAxisCount: 3,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              shrinkWrap: true,
-              itemCount: cashInController.prepaidAmounts.length,
-              primary: false,
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 400),
-                  child: SlideAnimation(
-                    child: FlipAnimation(
-                      child: InkWell(
-                        onTap: () {
-                          _paymentAmount.text =
-                              cashInController.prepaidAmounts[index].toString();
-                          setState(() {
-                            selectedIndex = index;
-                          });
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color:
-                                selectedIndex == index ? cr_fdeb : color_f4f4,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(
-                              color:
-                                  selectedIndex == index ? cr_ef33 : color_fff,
-                            ),
+          AlignedGridView.count(
+            crossAxisCount: 3,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            shrinkWrap: true,
+            itemCount: cashInController.prepaidAmounts.length,
+            primary: false,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) {
+              return AnimationConfiguration.staggeredGrid(
+                position: index,
+                duration: const Duration(milliseconds: 500),
+                columnCount: 3,
+                child: ScaleAnimation(
+                  child: FadeInAnimation(
+                    child: InkWell(
+                      onTap: () {
+                        _paymentAmount.text =
+                            cashInController.prepaidAmounts[index].toString();
+                        setState(() {
+                          selectedIndex = index;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: selectedIndex == index ? cr_fdeb : color_f4f4,
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: selectedIndex == index ? cr_ef33 : color_fff,
                           ),
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: TextFont(
-                                text: NumberFormat('#,###').format(int.parse(
-                                    cashInController.prepaidAmounts[index]
-                                        .toString())),
-                                color: color_blackE72,
-                                poppin: true,
-                              ),
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: TextFont(
+                              text: NumberFormat('#,###').format(int.parse(
+                                  cashInController.prepaidAmounts[index]
+                                      .toString())),
+                              color: color_blackE72,
+                              poppin: true,
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ],
       ),

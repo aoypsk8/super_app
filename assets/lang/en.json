@@ -304,6 +304,7 @@
   "to_acc":"To Acc",
   "input_amount":"Input Amount",
   "please_pay":"Please purchase",
-  "choose_institution":"Choose institution"
+  "choose_institution":"Choose institution",
+  "history_load":"Load History"
   
 }

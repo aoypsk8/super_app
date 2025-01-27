@@ -53,3 +53,6 @@ const Color color_f63 = Color(0xffF36F63);
 const Color color_999 = Color(0xff999999);
 const color_fbd = Color(0xfffbd2d4);
 const color_d5d5 = Color(0xffD5D5D5);
+
+//
+const Color color_3086 = Color(0xff308628);

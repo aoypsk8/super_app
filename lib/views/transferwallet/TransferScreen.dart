@@ -155,7 +155,7 @@ class _TransferScreenState extends State<TransferScreen> {
       },
     };
     final box = GetStorage();
-    String languageCode = box.read('language');
+    String languageCode = box.read('language') ?? 'lo';
 
     return Container(
       color: color_fff,
@@ -169,7 +169,7 @@ class _TransferScreenState extends State<TransferScreen> {
             TextFont(
               text: 'transfer_wallet',
               fontWeight: FontWeight.w500,
-              fontSize: 12.sp,
+              fontSize: 12,
             ),
             const SizedBox(height: 10),
             buildNumberFiledValidate(
@@ -250,7 +250,7 @@ class _TransferScreenState extends State<TransferScreen> {
                     TextFont(
                       text: '.00 LAK',
                       color: cr_7070,
-                      fontSize: 10.sp,
+                      fontSize: 10,
                     ),
                   ],
                 ),
@@ -307,7 +307,7 @@ class _TransferScreenState extends State<TransferScreen> {
                             child: TextFont(
                               text: 'less',
                               color: color_777,
-                              fontSize: 8.sp,
+                              fontSize: 8,
                               underline: true,
                             ),
                           ),
@@ -328,7 +328,7 @@ class _TransferScreenState extends State<TransferScreen> {
                           child: TextFont(
                             text: 'more',
                             color: color_777,
-                            fontSize: 8.sp,
+                            fontSize: 8,
                             underline: true,
                           ),
                         ),
@@ -397,7 +397,7 @@ class _TransferScreenState extends State<TransferScreen> {
                             child: TextFont(
                               text: 'less',
                               color: color_777,
-                              fontSize: 8.sp,
+                              fontSize: 8,
                               underline: true,
                             ),
                           ),
@@ -418,7 +418,7 @@ class _TransferScreenState extends State<TransferScreen> {
                           child: TextFont(
                             text: 'more',
                             color: color_777,
-                            fontSize: 8.sp,
+                            fontSize: 8,
                             underline: true,
                           ),
                         ),

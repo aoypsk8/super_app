@@ -100,7 +100,7 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
                 TextFont(
                   text: 'Transfer',
                   fontWeight: FontWeight.w500,
-                  fontSize: 11.sp,
+                  fontSize: 11,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -113,7 +113,7 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
                     const SizedBox(width: 5),
                     TextFont(
                       text: _formatTime(_remainingTime),
-                      fontSize: 14.sp,
+                      fontSize: 14,
                       color: Theme.of(context).primaryColor,
                     ),
                   ],
@@ -159,7 +159,7 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
             TextFont(
               text: 'amount_transfer',
               fontWeight: FontWeight.w500,
-              fontSize: 11.sp,
+              fontSize: 11,
               color: cr_7070,
             ),
             Row(
@@ -167,13 +167,13 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
                 TextFont(
                   text: '10,000,000',
                   fontWeight: FontWeight.w500,
-                  fontSize: 20.sp,
+                  fontSize: 20,
                   color: cr_b326,
                 ),
                 TextFont(
                   text: '.00 LAK',
                   fontWeight: FontWeight.w500,
-                  fontSize: 20.sp,
+                  fontSize: 20,
                   color: cr_b326,
                 ),
               ],

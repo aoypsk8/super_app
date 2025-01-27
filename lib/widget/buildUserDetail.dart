@@ -35,7 +35,7 @@ class buildUserDetail extends StatelessWidget {
             text: from ? "from_acc" : "to_acc",
             color: Theme.of(context).textTheme.bodySmall?.color ?? Colors.black,
             poppin: true,
-            fontSize: 9.sp,
+            fontSize: 9,
           ),
         ),
         Row(
@@ -63,13 +63,13 @@ class buildUserDetail extends StatelessWidget {
                 TextFont(
                   text: name,
                   color: cr_2929,
-                  fontSize: 12.sp,
+                  fontSize: 12,
                   fontWeight: FontWeight.w400,
                 ),
                 TextFont(
                   text: msisdn,
                   color: cr_2929,
-                  fontSize: 14.sp,
+                  fontSize: 14,
                 ),
               ],
             )

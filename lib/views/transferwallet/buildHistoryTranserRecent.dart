@@ -181,7 +181,7 @@ class _buildHistoryTransferRecentState
                                   children: [
                                     TextFont(
                                       text: historyData[index]['walletName'],
-                                      fontSize: 9.sp,
+                                      fontSize: 9,
                                       color: cr_2929,
                                       fontWeight: FontWeight.w400,
                                     ),
@@ -189,7 +189,7 @@ class _buildHistoryTransferRecentState
                                       text: maskMsisdn(historyData[index]
                                               ['walletNo']
                                           .toString()),
-                                      fontSize: 9.sp,
+                                      fontSize: 9,
                                       color: cr_7070,
                                       fontWeight: FontWeight.w400,
                                     ),

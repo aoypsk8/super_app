@@ -1,13 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/finance_controller.dart';
 import 'package:super_app/controllers/home_controller.dart';
@@ -124,9 +120,9 @@ class _VerifyAccountFinanceScreenState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               TextFont(
-                                text: 'ປ້ອນເລກບັນຊີ',
+                                text: 'account_number',
                                 fontWeight: FontWeight.w500,
-                                fontSize: 12.sp,
+                                fontSize: 12,
                               ),
                               SizedBox(height: 5.sp),
                               FormBuilder(
@@ -148,9 +144,9 @@ class _VerifyAccountFinanceScreenState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               TextFont(
-                                text: 'ປະຫວັດທັງໝົດ',
+                                text: 'history',
                                 fontWeight: FontWeight.w500,
-                                fontSize: 12.sp,
+                                fontSize: 12,
                               ),
                               SizedBox(height: 10.sp),
                               Center(

@@ -305,5 +305,6 @@
   "from_acc":"ຈາກບັນຊີ",
   "to_acc":"ຫາບັນຊີ",
   "input_amount":"ປ້ອນຈໍານວນເງິນ",
-  "please_pay":"ກະລຸນາຈ່າຍເງິນ"
+  "please_pay":"ກະລຸນາຈ່າຍເງິນ",
+  "choose_institution":"ເລືອກສະຖາບັນ"
 }

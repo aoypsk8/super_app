@@ -48,9 +48,9 @@ class _ListsProviderFinanceState extends State<ListsProviderFinance> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFont(
-                text: 'ເລືອກສະຖາບັນ',
+                text: 'choose_institution',
                 fontWeight: FontWeight.w500,
-                fontSize: 12.sp,
+                fontSize: 12,
               ),
               const SizedBox(height: 20),
               Expanded(
@@ -114,14 +114,14 @@ class _ListsProviderFinanceState extends State<ListsProviderFinance> {
                                             .financeModel[index].title!,
                                         fontWeight: FontWeight.w500,
                                         maxLines: 1,
-                                        fontSize: 12.sp,
+                                        fontSize: 12,
                                       ),
                                       TextFont(
                                         text: 'Finance institution',
                                         fontWeight: FontWeight.w400,
                                         maxLines: 1,
                                         color: cr_2929,
-                                        fontSize: 9.sp,
+                                        fontSize: 9,
                                       ),
                                     ],
                                   ),

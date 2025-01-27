@@ -222,7 +222,7 @@ class _buildHistoryCashOutRecentState extends State<buildHistoryCashOutRecent> {
                                         children: [
                                           TextFont(
                                             text: historyData[index]['AccName'],
-                                            fontSize: 9.sp,
+                                            fontSize: 9,
                                             color: cr_2929,
                                             fontWeight: FontWeight.w400,
                                           ),
@@ -230,7 +230,7 @@ class _buildHistoryCashOutRecentState extends State<buildHistoryCashOutRecent> {
                                             text: maskAccountNumber(
                                                 historyData[index]['AccNo']
                                                     .toString()),
-                                            fontSize: 9.sp,
+                                            fontSize: 9,
                                             color: cr_7070,
                                             fontWeight: FontWeight.w400,
                                           ),

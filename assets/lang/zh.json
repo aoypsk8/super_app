@@ -294,5 +294,6 @@
    "from_acc":"From Acc",
   "to_acc":"To Acc",
   "input_amount":"Input Amount",
-  "please_pay":"Please purchase"
+  "please_pay":"Please purchase",
+  "choose_institution":"Choose institution"
 }

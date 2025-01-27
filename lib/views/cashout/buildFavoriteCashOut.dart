@@ -152,7 +152,7 @@ class _buildFavoriteCashOutState extends State<buildFavoriteCashOut> {
                                           text: favoriteData[index]
                                                   ['AccName'] ??
                                               '',
-                                          fontSize: 9.sp,
+                                          fontSize: 9,
                                           color: cr_2929,
                                           fontWeight: FontWeight.w400,
                                         ),
@@ -162,7 +162,7 @@ class _buildFavoriteCashOutState extends State<buildFavoriteCashOut> {
                                             text: maskMsisdn(favoriteData[index]
                                                     ['AccNo']
                                                 .toString()),
-                                            fontSize: 9.sp,
+                                            fontSize: 9,
                                             color: cr_7070,
                                             fontWeight: FontWeight.w400,
                                           ),

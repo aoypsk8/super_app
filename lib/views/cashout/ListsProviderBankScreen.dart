@@ -53,7 +53,7 @@ class _ListsProviderBankScreenState extends State<ListsProviderBankScreen> {
               TextFont(
                 text: 'transfer_wallet',
                 fontWeight: FontWeight.w500,
-                fontSize: 12.sp,
+                fontSize: 12,
               ),
               const SizedBox(height: 10),
               Expanded(
@@ -133,7 +133,7 @@ class _ListsProviderBankScreenState extends State<ListsProviderBankScreen> {
               TextFont(
                 text: cashOutControler.bankModel[index].title!,
                 fontWeight: FontWeight.w400,
-                fontSize: 11.sp,
+                fontSize: 11,
                 maxLines: 1,
               ),
             ],

@@ -104,7 +104,7 @@ class buildBottomBill extends StatelessWidget {
   final bool? share;
   final FontWeight fontWeight;
   final bool isEnabled;
-  final int fontSize;
+  final double fontSize;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -139,7 +139,7 @@ class buildBottomBill extends StatelessWidget {
                     text: isEnabled ? title : 'loading...',
                     color: textColor,
                     fontWeight: fontWeight,
-                    fontSize: fontSize.sp,
+                    fontSize: fontSize,
                   ),
                 ],
               ),

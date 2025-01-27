@@ -84,7 +84,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         text: "M Money X Transfer ",
                         color: Theme.of(context).primaryColor,
                         poppin: true,
-                        fontSize: 7.5.sp,
+                        fontSize: 7.5,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -94,7 +94,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         text: "M Money X Cash Out here ",
                         color: Theme.of(context).primaryColor,
                         poppin: true,
-                        fontSize: 7.5.sp,
+                        fontSize: 7.5,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -104,7 +104,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         text: "M Money X finance here ",
                         color: Theme.of(context).primaryColor,
                         poppin: true,
-                        fontSize: 7.5.sp,
+                        fontSize: 7.5,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -114,7 +114,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         text: "M Money X Cash IN  here ",
                         color: Theme.of(context).primaryColor,
                         poppin: true,
-                        fontSize: 7.5.sp,
+                        fontSize: 7.5,
                       ),
                     ),
                     PrimaryButton(
@@ -139,7 +139,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                     TextFont(
                       text: "Deal for you, ມາລີນາ!",
                       color: cr_4139,
-                      fontSize: 9.5.sp,
+                      fontSize: 9.5,
                       fontWeight: FontWeight.w500,
                       noto: true,
                     ),
@@ -167,7 +167,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                     TextFont(
                       text: "Dropping Like It's Hot!",
                       color: cr_4139,
-                      fontSize: 9.5.sp,
+                      fontSize: 9.5,
                       fontWeight: FontWeight.w500,
                     ),
                     Divider(
@@ -194,7 +194,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                     TextFont(
                       text: "Dropping Like It's Hot!",
                       color: cr_4139,
-                      fontSize: 9.5.sp,
+                      fontSize: 9.5,
                       fontWeight: FontWeight.w500,
                     ),
                     Divider(
@@ -263,7 +263,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                     color: Theme.of(context).textTheme.bodySmall?.color ??
                         Colors.black,
                     poppin: true,
-                    fontSize: 7.5.sp,
+                    fontSize: 7.5,
                   ),
                 ),
                 const SizedBox(height: 5),
@@ -272,7 +272,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                   color: Theme.of(context).textTheme.bodyMedium?.color ??
                       Colors.black,
                   fontWeight: FontWeight.w500,
-                  fontSize: 10.5.sp,
+                  fontSize: 10.5,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -282,7 +282,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                       color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.black,
                       fontWeight: FontWeight.w700,
-                      fontSize: 14.5.sp,
+                      fontSize: 14.5,
                     ),
                     Container(
                       width: 35.sp,

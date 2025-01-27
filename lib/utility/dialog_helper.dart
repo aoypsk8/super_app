@@ -2,7 +2,6 @@
 
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:sizer/sizer.dart';
@@ -15,7 +14,6 @@ class DialogHelper {
       {String title = 'Umm, Sorry!!',
       String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.'}) {
     Get.dialog(
-      // ignore: deprecated_member_use
       WillPopScope(
         onWillPop: () async => false,
         child: Dialog(
@@ -29,7 +27,7 @@ class DialogHelper {
               children: [
                 SizedBox(height: 25),
                 Image.asset(
-                  MyIcon.ic_error_png,
+                  MyIcon.ic_mascot_dontknow,
                   height: 100,
                   width: 100,
                 ),
@@ -38,7 +36,7 @@ class DialogHelper {
                   text: title,
                   fontWeight: FontWeight.w400,
                   color: cr_2929,
-                  fontSize: 12.sp,
+                  fontSize: 12,
                 ),
                 Padding(
                   padding:
@@ -109,7 +107,7 @@ class DialogHelper {
               children: [
                 SizedBox(height: 25),
                 Image.asset(
-                  MyIcon.ic_error_png,
+                  MyIcon.ic_mascot_dontknow,
                   height: 100,
                   width: 100,
                 ),
@@ -118,7 +116,7 @@ class DialogHelper {
                   text: title,
                   fontWeight: FontWeight.w400,
                   color: cr_2929,
-                  fontSize: 12.sp,
+                  fontSize: 12,
                 ),
                 Padding(
                   padding:
@@ -209,7 +207,7 @@ class DialogHelper {
                       text: title,
                       fontWeight: FontWeight.w400,
                       color: cr_2929,
-                      fontSize: 12.sp,
+                      fontSize: 12,
                     ),
                     const SizedBox(height: 30),
                   ],

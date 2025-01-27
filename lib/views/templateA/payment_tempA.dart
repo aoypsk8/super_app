@@ -37,7 +37,8 @@ class PaymentTempAScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                 child: Row(
                   children: [
                     Expanded(
@@ -46,7 +47,8 @@ class PaymentTempAScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        child: CachedNetworkImage(imageUrl: controller.tempAdetail.value.logo ?? ''),
+                        child: CachedNetworkImage(
+                            imageUrl: controller.tempAdetail.value.logo ?? ''),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -60,7 +62,8 @@ class PaymentTempAScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),
-                          TextFont(text: controller.rxaccname.value, fontSize: 12),
+                          TextFont(
+                              text: controller.rxaccname.value, fontSize: 12),
                           TextFont(text: controller.rxaccnumber.value),
                           SizedBox(height: 8),
                           SizedBox(
@@ -70,7 +73,9 @@ class PaymentTempAScreen extends StatelessWidget {
                               textBaseline: TextBaseline.alphabetic,
                               children: [
                                 TextFont(
-                                  text: fn.format(int.parse(controller.debit.value)) ?? '',
+                                  text: fn.format(
+                                          int.parse(controller.debit.value)) ??
+                                      '',
                                   // text: '999,999,999,999',
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -107,11 +112,12 @@ class PaymentTempAScreen extends StatelessWidget {
                 child: TextFont(
                   text: '.00 LAK',
                   color: cr_7070,
-                  fontSize: 9.sp,
+                  fontSize: 9,
                 ),
               ),
               buttonText: 'all',
-              onButtonPressed: () => _paymentAmount.text = fn.format(int.parse(controller.debit.value)),
+              onButtonPressed: () => _paymentAmount.text =
+                  fn.format(int.parse(controller.debit.value)),
             ),
           ],
         ),

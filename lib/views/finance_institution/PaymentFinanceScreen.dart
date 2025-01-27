@@ -93,7 +93,7 @@ class _PaymentFinanceScreenState extends State<PaymentFinanceScreen> {
           TextFont(
             text: 'detail',
             fontWeight: FontWeight.w500,
-            fontSize: 12.sp,
+            fontSize: 12,
           ),
           const SizedBox(height: 14),
           Container(

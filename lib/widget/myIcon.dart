@@ -38,6 +38,7 @@ class MyIcon {
   // animation
   static String animation_loading = 'assets/animation/loading.gif';
   static String animation_cat = 'assets/animation/cat1.gif';
+  static String ic_mascot_dontknow = 'assets/animation/dontknow.gif';
 
   // bottom_nav
   static String ic_home_nav = 'assets/bottomnav/ic_home.svg';
@@ -57,7 +58,6 @@ class MyIcon {
   static String ic_box_open_bg = 'assets/icons/ic_box_open_bg.png';
 
   // error
-  static String ic_error_png = 'assets/icons/error.png';
 
   // scan qr
   static String ic_scan_qr = 'assets/icons/scan_qr.svg';

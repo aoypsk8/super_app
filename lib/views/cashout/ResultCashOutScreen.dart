@@ -203,7 +203,7 @@ class _ResultCashOutscreenState extends State<ResultCashOutscreen>
                                                   .replaceAll('/', '-')),
                                             ),
                                             fontWeight: FontWeight.w400,
-                                            fontSize: 9.5.sp,
+                                            fontSize: 9.5,
                                             color: cr_7070,
                                           ),
                                         ],
@@ -259,7 +259,7 @@ class _ResultCashOutscreenState extends State<ResultCashOutscreen>
                                       TextFont(
                                         text: 'amount_transfer',
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 11.sp,
+                                        fontSize: 11,
                                         color: cr_7070,
                                       ),
                                       Row(
@@ -270,13 +270,13 @@ class _ResultCashOutscreenState extends State<ResultCashOutscreen>
                                                     .rxPaymentAmount.value
                                                     .toString())),
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 20.sp,
+                                            fontSize: 20,
                                             color: cr_b326,
                                           ),
                                           TextFont(
                                             text: '.00 LAK',
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 20.sp,
+                                            fontSize: 20,
                                             color: cr_b326,
                                           ),
                                         ],

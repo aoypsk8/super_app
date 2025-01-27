@@ -1,15 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/finance_controller.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
-import 'package:intl/intl.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
@@ -18,7 +14,6 @@ import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/buildUserDetail.dart';
 import 'package:super_app/widget/build_DotLine.dart';
-import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class ConfirmFinanceScreen extends StatefulWidget {
@@ -129,7 +124,7 @@ class _ConfirmFinanceScreenState extends State<ConfirmFinanceScreen> {
             TextFont(
               text: 'detail',
               fontWeight: FontWeight.w500,
-              fontSize: 12.sp,
+              fontSize: 12,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -142,7 +137,7 @@ class _ConfirmFinanceScreenState extends State<ConfirmFinanceScreen> {
                 const SizedBox(width: 5),
                 TextFont(
                   text: _formatTime(_remainingTime),
-                  fontSize: 14.sp,
+                  fontSize: 14,
                   color: Theme.of(context).primaryColor,
                 ),
               ],
@@ -189,7 +184,7 @@ class _ConfirmFinanceScreenState extends State<ConfirmFinanceScreen> {
         TextFont(
           text: 'amount_transfer',
           fontWeight: FontWeight.w500,
-          fontSize: 11.sp,
+          fontSize: 11,
           color: cr_7070,
         ),
         Row(
@@ -197,13 +192,13 @@ class _ConfirmFinanceScreenState extends State<ConfirmFinanceScreen> {
             TextFont(
               text: fn.format(double.parse("10000000")),
               fontWeight: FontWeight.w500,
-              fontSize: 20.sp,
+              fontSize: 20,
               color: cr_b326,
             ),
             TextFont(
               text: '.00 LAK',
               fontWeight: FontWeight.w500,
-              fontSize: 20.sp,
+              fontSize: 20,
               color: cr_b326,
             ),
           ],
@@ -219,14 +214,14 @@ class _ConfirmFinanceScreenState extends State<ConfirmFinanceScreen> {
         TextFont(
           text: 'ເລກໃບບິນສະຖາບັນທະນາຄານ',
           fontWeight: FontWeight.w500,
-          fontSize: 11.sp,
+          fontSize: 11,
           color: cr_7070,
         ),
         const SizedBox(height: 4),
         TextFont(
           text: financeController.rxTransID.value,
           fontWeight: FontWeight.w500,
-          fontSize: 12.sp,
+          fontSize: 12,
           color: cr_2929,
           maxLines: 1,
         ),

@@ -112,7 +112,7 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
                 TextFont(
                   text: 'check_detail',
                   fontWeight: FontWeight.w500,
-                  fontSize: 11.sp,
+                  fontSize: 11,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -125,7 +125,7 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
                     const SizedBox(width: 5),
                     TextFont(
                       text: _formatTime(_remainingTime),
-                      fontSize: 14.sp,
+                      fontSize: 14,
                       color: Theme.of(context).primaryColor,
                     ),
                   ],
@@ -170,7 +170,7 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
             TextFont(
               text: 'amount_transfer',
               fontWeight: FontWeight.w500,
-              fontSize: 11.sp,
+              fontSize: 11,
               color: cr_7070,
             ),
             Row(
@@ -179,13 +179,13 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
                   text: fn.format(
                       double.parse(cashOutController.rxPaymentAmount.value)),
                   fontWeight: FontWeight.w500,
-                  fontSize: 20.sp,
+                  fontSize: 20,
                   color: cr_b326,
                 ),
                 TextFont(
                   text: '.00 LAK',
                   fontWeight: FontWeight.w500,
-                  fontSize: 20.sp,
+                  fontSize: 20,
                   color: cr_b326,
                 ),
               ],

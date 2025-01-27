@@ -206,7 +206,7 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen>
                                               // .replaceAll('/', '-')),
                                             ),
                                             fontWeight: FontWeight.w400,
-                                            fontSize: 9.5.sp,
+                                            fontSize: 9.5,
                                             color: cr_7070,
                                           ),
                                         ],
@@ -263,7 +263,7 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen>
                                       TextFont(
                                         text: 'amount_transfer',
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 11.sp,
+                                        fontSize: 11,
                                         color: cr_7070,
                                       ),
                                       Row(
@@ -274,13 +274,13 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen>
                                                     .rxPaymentAmount.value
                                                     .toString())),
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 20.sp,
+                                            fontSize: 20,
                                             color: cr_b326,
                                           ),
                                           TextFont(
                                             text: '.00 LAK',
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 20.sp,
+                                            fontSize: 20,
                                             color: cr_b326,
                                           ),
                                         ],
@@ -308,7 +308,7 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen>
                                                 TextFont(
                                                   text: 'ເລກໃບບິນ',
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 11.sp,
+                                                  fontSize: 11,
                                                   color: cr_7070,
                                                 ),
                                                 const SizedBox(height: 4),
@@ -316,7 +316,7 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen>
                                                   text: financeController
                                                       .rxTransID.value,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 12.sp,
+                                                  fontSize: 12,
                                                   color: cr_2929,
                                                   maxLines: 1,
                                                 ),
@@ -324,7 +324,7 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen>
                                                 TextFont(
                                                   text: 'ສະຖາບັນທະນາຄານ',
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 11.sp,
+                                                  fontSize: 11,
                                                   color: cr_7070,
                                                 ),
                                                 const SizedBox(height: 4),
@@ -334,7 +334,7 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen>
                                                       .value
                                                       .title!,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 12.sp,
+                                                  fontSize: 12,
                                                   color: cr_2929,
                                                   maxLines: 1,
                                                 ),

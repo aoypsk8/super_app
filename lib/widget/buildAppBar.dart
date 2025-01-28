@@ -27,6 +27,7 @@ class BuildAppBar extends StatelessWidget implements PreferredSizeWidget {
         text: title,
         color: cr_2929,
         fontSize: 11.5.sp,
+        noto: true,
       ),
       bottom: const PreferredSize(
         preferredSize: Size.fromHeight(1),

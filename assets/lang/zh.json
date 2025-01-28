@@ -198,7 +198,7 @@
   "save_to_gallery_success": "Download to gallery success.",
   "Leasing": "租赁付款",
   "Mobile": "电信服务",
-  "Electric": "电费",
+
   "Water": "水费",
   "Transfer": "划款",
   "Bank": "银行",
@@ -278,6 +278,6 @@
   "setting": "Setting",
   "input_text": "Input text",
   "account_not_found": "Account number not found.",
-  "description":"Description",
-  "cashout":"Cash Out"
+  "description": "Description",
+  "cashout": "Cash Out"
 }

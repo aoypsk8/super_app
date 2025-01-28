@@ -199,7 +199,7 @@
   "save_to_gallery_success": "Download to gallery success.",
   "Leasing": "Leasing",
   "Mobile": "Mobile",
-  "Electric": "Electric",
+
   "Water": "Water",
   "Transfer": "Transfer",
   "Bank": "Bank",
@@ -287,6 +287,6 @@
   "setting": "Setting",
   "input_text": "Input text",
   "account_not_found": "Account number not found.",
-  "description":"Description",
-  "cashout":"Cash Out"
+  "description": "Description",
+  "cashout": "Cash Out"
 }

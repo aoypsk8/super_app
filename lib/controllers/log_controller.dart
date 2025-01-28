@@ -22,8 +22,7 @@ class LogController extends GetxController {
       }
     };
     var url = "${MyConstant.urlAddress}/InsertLog";
-    var response =
-        await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
+    var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
   }
 
   insertCashOutLog(transID, msisdn, chanel, logResponse) async {
@@ -37,15 +36,12 @@ class LogController extends GetxController {
       }
     };
     var url = "${MyConstant.urlAddress}/InsertLog";
-    var response =
-        await DioClient.postEncrypt(url, data, key: 'lmm', loading: false);
+    var response = await DioClient.postEncrypt(url, data, key: 'lmm', loading: false);
   }
 
-  insertAllLog(chanel, transID, logo, provider, toAcc, accName, amount, point,
-      fee, ramark, verifyRes, paymentReq, paymentRes) async {
+  insertAllLog(chanel, transID, logo, provider, toAcc, accName, amount, point, fee, ramark, verifyRes, paymentReq, paymentRes) async {
     String date = await getDatetimeAiNou();
-    String datetime =
-        '${date.substring(0, 4)}-${date.substring(4, 6)}-${date.substring(6, 8)} '
+    String datetime = '${date.substring(0, 4)}-${date.substring(4, 6)}-${date.substring(6, 8)} '
         '${date.substring(8, 10)}:${date.substring(10, 12)}:${date.substring(12, 14)}';
 
     var data = {
@@ -57,7 +53,7 @@ class LogController extends GetxController {
         "logo": logo,
         "provider": provider,
         "from_acc": storage.read('msisdn'),
-        "from_acc_name": userController.name.value,
+        "from_acc_name": userController.profileName.value,
         "to_acc": toAcc,
         "to_acc_name": accName,
         "amount": amount,
@@ -72,8 +68,7 @@ class LogController extends GetxController {
       }
     };
     var url = "${MyConstant.urlAddress}/InsertLog";
-    var response =
-        await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
+    var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
   }
 
   insertCashOutPointLog(chanel, transID, logRequest, logResponse) async {
@@ -87,8 +82,7 @@ class LogController extends GetxController {
       }
     };
     var url = "${MyConstant.urlAddress}/InsertLog";
-    var response =
-        await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
+    var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
   }
 
   insertCashOutLogBefore(chanel, transID, logRequest) async {
@@ -101,14 +95,12 @@ class LogController extends GetxController {
       }
     };
     var url = "${MyConstant.urlAddress}/InsertLog";
-    var response =
-        await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
+    var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
   }
 
   insertCashInLog(transID, amount, fee, resCashin) async {
     String date = await getDatetimeAiNou();
-    String datetime =
-        '${date.substring(0, 4)}-${date.substring(4, 6)}-${date.substring(6, 8)} '
+    String datetime = '${date.substring(0, 4)}-${date.substring(4, 6)}-${date.substring(6, 8)} '
         '${date.substring(8, 10)}:${date.substring(10, 12)}:${date.substring(12, 14)}';
 
     var data = {
@@ -122,8 +114,7 @@ class LogController extends GetxController {
       }
     };
     var url = "${MyConstant.urlAddress}/InsertLog";
-    var response =
-        await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
+    var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
   }
 
   insertLoginLog() async {
@@ -139,7 +130,6 @@ class LogController extends GetxController {
       "appVersion": packageInfo.version
     };
     var url = "${MyConstant.urlInsertLog}/InsertLog";
-    var response =
-        await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
+    var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
   }
 }

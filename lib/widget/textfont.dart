@@ -23,7 +23,7 @@ class TextFont extends StatelessWidget {
     this.noto = false,
     this.poppin = false,
     this.textAlign = TextAlign.start,
-    this.color = Colors.black,
+    this.color = color_2929,
     this.fontSize = 12.5,
     this.fontWeight = FontWeight.normal,
     this.maxLines = 1,

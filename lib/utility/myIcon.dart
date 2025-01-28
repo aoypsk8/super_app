@@ -18,6 +18,9 @@ class MyIconOld {
 
   static String svgOTP = 'images/otp.svg';
   static String logox = 'assets/images/logox.png';
+  static String logox_jpg = 'assets/images/mmoneyx.jpg';
+  static String master_card = 'assets/images/master.png';
+  static String union_pay = 'assets/images/union_pay.png';
   static String flat_usa = 'images/icon/flag_usa.svg';
   static String flat_lao = 'images/icon/flag_lao.svg';
   static String flat_vietnames = 'images/icon/flag_vietnames.svg';

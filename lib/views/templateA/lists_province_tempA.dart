@@ -3,6 +3,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/tempA_controller.dart';
 import 'package:super_app/models/provider_tempA_model.dart';
 import 'package:super_app/utility/color.dart';
@@ -22,6 +24,8 @@ class ListsProvinceTempA extends StatefulWidget {
 class _ListsProvinceTempAState extends State<ListsProvinceTempA> {
   // Instantiate the TempAController
   final TempAController tempAcontroller = Get.put(TempAController());
+  final homeController = Get.find<HomeController>();
+  final box = GetStorage();
 
   // Variable to track selected item
   String? selectedItemCode;
@@ -31,10 +35,10 @@ class _ListsProvinceTempAState extends State<ListsProvinceTempA> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: BuildAppBar(title: 'select_province'),
+      appBar: BuildAppBar(title: homeController.getMenuTitle()),
       body: Column(
         children: [
-          Padding(padding: const EdgeInsets.all(10), child: buildStepProcess(title: '1/4', desc: 'select_province')),
+          Padding(padding: const EdgeInsets.all(10), child: buildStepProcess(title: '1/5', desc: 'select_province')),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),

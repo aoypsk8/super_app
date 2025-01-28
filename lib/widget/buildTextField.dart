@@ -332,7 +332,7 @@ class buildTextField extends StatelessWidget {
             ),
             validator: isRequire
                 ? FormBuilderValidators.compose([
-                    FormBuilderValidators.required(errorText: ''),
+                    FormBuilderValidators.required(),
                   ])
                 : null,
           ),

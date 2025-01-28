@@ -198,7 +198,7 @@
   "save_to_gallery_success": "Đã tải xuống thư viện thành công",
   "Leasing": "Dịch vụ cho thuê",
   "Mobile": "Dịch vụ Điện thoại",
-  "Electric": "Điện",
+
   "Water": "Nước",
   "Transfer": "Chuyển Tiền",
   "Bank": "Ngân hàng",
@@ -278,6 +278,6 @@
   "setting": "Setting",
   "input_text": "Input text",
   "account_not_found": "Account number not found.",
-  "description":"Description",
-  "cashout":"Cash Out"
+  "description": "Description",
+  "cashout": "Cash Out"
 }

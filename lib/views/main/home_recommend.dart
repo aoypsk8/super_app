@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/button.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -98,7 +100,12 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                     ),
                     PrimaryButton(
                         title: 'tempA',
-                        onPressed: () {
+                        onPressed: () async {
+                          UserController userController = Get.find<UserController>();
+                          storage.write('msisdn', '2052555999');
+
+                          await userController.fetchBalance();
+                          await userController.queryUserProfile();
                           Get.toNamed('/templateA');
                         }),
                   ],

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -46,7 +48,7 @@ class QRScannerScreen extends StatelessWidget {
                   height: 85.w,
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.1),
-                    border: Border.all(color: color_bf29, width: 4),
+                    border: Border.all(color: Theme.of(context).primaryColor, width: 4),
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
@@ -72,7 +74,7 @@ class QRScannerScreen extends StatelessWidget {
                             Get.snackbar(
                               'Error',
                               'No QR code found in the image.',
-                              backgroundColor: color_primary_light,
+                              backgroundColor: Theme.of(context).primaryColor,
                               colorText: color_fff,
                             );
                           }
@@ -81,7 +83,7 @@ class QRScannerScreen extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: color_primary_light,
+                          color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: Icon(Icons.image, color: color_fff, size: 30.sp),
@@ -94,7 +96,7 @@ class QRScannerScreen extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: color_bf29,
+                          color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: Icon(Icons.close, color: color_fff, size: 30.sp),

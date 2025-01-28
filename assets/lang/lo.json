@@ -201,7 +201,7 @@
   "save_to_gallery_success": "ດາວໂຫລດຮູບພາບສຳເລັດ",
   "Leasing": "ຈ່າຍສິນເຊື່ອ",
   "Mobile": "ບໍລິການໂທລະຄົມ",
-  "Electric": "ຄ່າໄຟຟ້າ",
+
   "Water": "ນ້ຳປະປາ",
   "Transfer": "ໂອນເງິນ",
   "Bank": "ທະນາຄານ",
@@ -289,6 +289,6 @@
   "setting": "ຕັ້ງຄ່າ",
   "input_text": "ປ້ອນຂໍ້ຄວາມ",
   "account_not_found": "ບໍພົບເບີໃນລະບົບ",
-  "description":"ຂໍ້ຄວາມ",
-  "cashout":"ຖອນເງີນ"
+  "description": "ຂໍ້ຄວາມ",
+  "cashout": "ຖອນເງີນ"
 }

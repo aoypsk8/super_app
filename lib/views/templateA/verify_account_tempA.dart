@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/tempA_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/views/scanqr/qr_scanner.dart';
@@ -23,6 +24,7 @@ class VerifyAccountTempA extends StatefulWidget {
 
 class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
   final controller = Get.find<TempAController>();
+  final homeController = Get.find<HomeController>();
 
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
@@ -32,7 +34,7 @@ class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BuildAppBar(title: 'verify_account'),
+      appBar: BuildAppBar(title: homeController.getMenuTitle()),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         behavior: HitTestBehavior.opaque,
@@ -43,7 +45,7 @@ class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
               padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
-                  buildStepProcess(title: '2/4', desc: 'input_bill_no'),
+                  buildStepProcess(title: '2/5', desc: 'input_bill_no'),
                   SizedBox(height: 5),
                   buildForm(),
                 ],
@@ -60,8 +62,19 @@ class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
                     children: [
                       TextFont(text: 'history'),
                       Obx(() {
-                        if (controller.recentTempA.isEmpty) {
+                        if (controller.isLoading.value) {
                           return const Center(child: CircularProgressIndicator());
+                        }
+                        if (controller.recentTempA.isEmpty) {
+                          return Expanded(
+                            child: Center(
+                              child: TextFont(
+                                text: 'No data available',
+                                color: Theme.of(context).primaryColor,
+                                poppin: true,
+                              ),
+                            ),
+                          );
                         }
                         return Expanded(
                           child: AnimationLimiter(

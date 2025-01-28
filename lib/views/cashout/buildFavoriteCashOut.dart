@@ -3,9 +3,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/cashout_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -26,6 +28,7 @@ class buildFavoriteCashOut extends StatefulWidget {
 
 class _buildFavoriteCashOutState extends State<buildFavoriteCashOut> {
   List<Map<String, dynamic>> favoriteData = [];
+  final cashOutController = Get.put(CashOutController());
 
   @override
   void initState() {
@@ -38,9 +41,19 @@ class _buildFavoriteCashOutState extends State<buildFavoriteCashOut> {
     String? jsonData = prefs.getString('favoriteCashout');
     if (jsonData != null && jsonData.isNotEmpty) {
       List<dynamic> data = json.decode(jsonData);
+      List<Map<String, dynamic>> filteredData =
+          List<Map<String, dynamic>>.from(data)
+            ..sort((a, b) => b['timeStamp'].compareTo(a['timeStamp']));
+
+      // Search for the item with matching 'id'
+      var searchResult = filteredData.firstWhere(
+        (item) => item['id'] == cashOutController.rxCodeBank.value,
+        orElse: () => {}, // Return null if no match is found
+      );
+
       setState(() {
-        favoriteData = List<Map<String, dynamic>>.from(data)
-          ..sort((a, b) => b['timeStamp'].compareTo(a['timeStamp']));
+        // If found, set the result as a single-item list; otherwise, set an empty list
+        favoriteData = searchResult != null ? [searchResult] : [];
       });
     }
   }
@@ -76,7 +89,7 @@ class _buildFavoriteCashOutState extends State<buildFavoriteCashOut> {
       CustomSnackBar.error(
         icon: const Icon(Icons.delete_forever,
             color: Color.fromARGB(161, 255, 255, 255), size: 120),
-        message: "Deleted $AccNo from favorites.",
+        message: "Deleted from favorites.",
         textStyle: GoogleFonts.notoSansLao(color: color_fff),
         textAlign: TextAlign.left,
         maxLines: 3,
@@ -89,11 +102,11 @@ class _buildFavoriteCashOutState extends State<buildFavoriteCashOut> {
     print(favoriteData);
     return Container(
       margin: const EdgeInsets.only(top: 10),
-      child: favoriteData.isEmpty
+      child: favoriteData.isNotEmpty && favoriteData.first.isEmpty
           ? Center(
-              child: Text(
-                "No favorites found.",
-                style: GoogleFonts.notoSansLao(fontSize: 12.sp, color: cr_2929),
+              child: TextFont(
+                text: "not_found",
+                color: cr_090a,
               ),
             )
           : SingleChildScrollView(
@@ -120,15 +133,17 @@ class _buildFavoriteCashOutState extends State<buildFavoriteCashOut> {
                           Expanded(
                             child: Row(
                               children: [
-                                SvgPicture.asset(
-                                  MyIcon.ic_user,
-                                  fit: BoxFit.fill,
+                                Image.network(
+                                  favoriteData[index]['logo'],
+                                  fit: BoxFit.cover,
                                   width: 11.w,
                                 ),
                                 Expanded(
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 0),
+                                      horizontal: 15,
+                                      vertical: 0,
+                                    ),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -137,19 +152,20 @@ class _buildFavoriteCashOutState extends State<buildFavoriteCashOut> {
                                           text: favoriteData[index]
                                                   ['AccName'] ??
                                               '',
-                                          fontSize: 9.sp,
+                                          fontSize: 9,
                                           color: cr_2929,
                                           fontWeight: FontWeight.w400,
                                         ),
-                                        TextFont(
-                                          text: maskMsisdn(favoriteData[index]
-                                                      ['AccNo']
-                                                  ?.toString() ??
-                                              ''),
-                                          fontSize: 9.sp,
-                                          color: cr_7070,
-                                          fontWeight: FontWeight.w400,
-                                        ),
+                                        if (favoriteData[index]['AccNo'] !=
+                                            null)
+                                          TextFont(
+                                            text: maskMsisdn(favoriteData[index]
+                                                    ['AccNo']
+                                                .toString()),
+                                            fontSize: 9,
+                                            color: cr_7070,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                       ],
                                     ),
                                   ),

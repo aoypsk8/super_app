@@ -74,6 +74,11 @@ dependencies:
   geolocator: ^13.0.2
   # logo bank
 
+  # pin code
+  pinput: ^5.0.1
+  # socket
+  socket_io_client: ^3.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

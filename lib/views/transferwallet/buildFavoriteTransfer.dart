@@ -91,7 +91,7 @@ class _buildFavoriteTransferState extends State<buildFavoriteTransfer> {
       child: favoriteData.isEmpty
           ? Center(
               child: Text(
-                "No favorites found.",
+                "not_found",
                 style: GoogleFonts.notoSansLao(fontSize: 12.sp, color: cr_2929),
               ),
             )
@@ -133,7 +133,7 @@ class _buildFavoriteTransferState extends State<buildFavoriteTransfer> {
                                         TextFont(
                                           text: favoriteData[index]
                                               ['walletName'],
-                                          fontSize: 9.sp,
+                                          fontSize: 9,
                                           color: cr_2929,
                                           fontWeight: FontWeight.w400,
                                         ),
@@ -141,7 +141,7 @@ class _buildFavoriteTransferState extends State<buildFavoriteTransfer> {
                                           text: maskMsisdn(favoriteData[index]
                                                   ['walletNo']
                                               .toString()),
-                                          fontSize: 9.sp,
+                                          fontSize: 9,
                                           color: cr_7070,
                                           fontWeight: FontWeight.w400,
                                         ),

@@ -24,7 +24,7 @@ class buildTextDetail extends StatelessWidget {
         TextFont(
           text: title,
           fontWeight: FontWeight.w500,
-          fontSize: 11.sp,
+          fontSize: 11,
           color: cr_7070,
         ),
         Wrap(
@@ -32,7 +32,7 @@ class buildTextDetail extends StatelessWidget {
             TextFont(
               text: detail,
               fontWeight: FontWeight.w500,
-              fontSize: 12.sp,
+              fontSize: 12,
               color: cr_2929,
               maxLines: maxlines,
             ),
@@ -40,7 +40,7 @@ class buildTextDetail extends StatelessWidget {
                 ? TextFont(
                     text: '.00 LAK',
                     fontWeight: FontWeight.w500,
-                    fontSize: 12.sp,
+                    fontSize: 12,
                     color: cr_2929,
                   )
                 : const SizedBox(),

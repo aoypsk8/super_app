@@ -38,6 +38,7 @@ class MyIcon {
   // animation
   static String animation_loading = 'assets/animation/loading.gif';
   static String animation_cat = 'assets/animation/cat1.gif';
+  static String ic_mascot_dontknow = 'assets/animation/dontknow.gif';
 
   // bottom_nav
   static String ic_home_nav = 'assets/bottomnav/ic_home.svg';
@@ -54,10 +55,23 @@ class MyIcon {
   static String ic_heart_unfill = 'assets/icons/ic_heart_unfill.svg';
   static String ic_check = 'assets/icons/ic_check.svg';
   static String ic_logo_x = 'assets/icons/logox.png';
+  static String ic_box_open_bg = 'assets/icons/ic_box_open_bg.png';
 
-  // error
-  static String ic_error_png = 'assets/icons/error.png';
+  // load x jaidee
+  static String ic_load_xjaidee = 'assets/icons/load.svg';
+  static String ic_load_approve = 'assets/icons/approve_load.svg';
+  static String ic_load_cancel = 'assets/icons/close_load.svg';
 
   // scan qr
   static String ic_scan_qr = 'assets/icons/scan_qr.svg';
+
+  // cash out
+  static String logo_ok = 'assets/icons/logo_ok.jpg';
+  static String logo_ok_png = 'assets/icons/logo_ok.png';
+
+  // lao qr
+  static String ic_lao_qr = 'assets/icons/laoqr.png';
+
+  // success
+  static String ic_success = 'assets/icons/success.png';
 }

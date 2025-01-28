@@ -1,13 +1,13 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/cashout_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
-import 'package:super_app/views/transferwallet/ResultTransferScreen.dart';
+import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
@@ -15,14 +15,14 @@ import 'package:super_app/widget/buildUserDetail.dart';
 import 'package:super_app/widget/build_DotLine.dart';
 import 'package:super_app/widget/textfont.dart';
 
-class ConfirmTranferScreen extends StatefulWidget {
-  const ConfirmTranferScreen({super.key});
+class ConfirmCashOutScreen extends StatefulWidget {
+  const ConfirmCashOutScreen({super.key});
 
   @override
-  State<ConfirmTranferScreen> createState() => _ConfirmTranferScreenState();
+  State<ConfirmCashOutScreen> createState() => _ConfirmCashOutScreenState();
 }
 
-class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
+class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
   int _remainingTime = 600;
   Timer? _countdownTimer;
   void _startCountdownTimer() {
@@ -69,11 +69,16 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
     return '$minutes:$secs';
   }
 
+  bool hideButton = false;
+
+  final cashOutController = Get.put(CashOutController());
+  final storage = GetStorage();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: BuildAppBar(title: "transfer"),
+      appBar: BuildAppBar(title: "confirm_payment"),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
@@ -85,7 +90,14 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
           title: 'confirm_transfer',
           func: () {
             _countdownTimer?.cancel();
-            Get.toNamed('/restultTransfer');
+            cashOutController.loading.value = true;
+            setState(() {
+              hideButton = true;
+            });
+            cashOutController.confirmPayment();
+            setState(() {
+              hideButton = false;
+            });
           },
         ),
       ),
@@ -98,7 +110,7 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextFont(
-                  text: 'Transfer',
+                  text: 'check_detail',
                   fontWeight: FontWeight.w500,
                   fontSize: 11,
                 ),
@@ -136,8 +148,8 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
                       profile:
                           "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
                       from: true,
-                      msisdn: "2052768833",
-                      name: "AOY PHONGSAKOUN",
+                      msisdn: storage.read('msisdn'),
+                      name: "userController.name.value",
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -145,11 +157,10 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: buildUserDetail(
-                      profile:
-                          "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
+                      profile: cashOutController.rxLogo.value,
                       from: false,
-                      msisdn: "2052768833",
-                      name: "AOY PHONGSAKOUN",
+                      msisdn: cashOutController.rxAccNo.toString(),
+                      name: cashOutController.rxAccName.toString(),
                     ),
                   ),
                 ],
@@ -165,7 +176,8 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
             Row(
               children: [
                 TextFont(
-                  text: '10,000,000',
+                  text: fn.format(
+                      double.parse(cashOutController.rxPaymentAmount.value)),
                   fontWeight: FontWeight.w500,
                   fontSize: 20,
                   color: cr_b326,
@@ -181,15 +193,15 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
             const SizedBox(height: 20),
             buildTextDetail(
               title: "fee",
-              detail: "5000",
+              detail: fn.format(double.parse(cashOutController.rxFee.value)),
               money: true,
             ),
             const SizedBox(height: 20),
             buildTextDetail(
-                money: false,
-                title: "description",
-                detail:
-                    "Learn about the history, usage and variations of Lorem Ipsum, the industry's standard dummy text."),
+              money: false,
+              title: "description",
+              detail: cashOutController.rxNote.value,
+            ),
           ],
         ),
       ),

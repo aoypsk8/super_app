@@ -53,33 +53,30 @@ class _ListsProviderBankScreenState extends State<ListsProviderBankScreen> {
               TextFont(
                 text: 'transfer_wallet',
                 fontWeight: FontWeight.w500,
-                fontSize: 12.sp,
+                fontSize: 12,
               ),
               const SizedBox(height: 10),
               Expanded(
-                child: AnimationLimiter(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 0.75,
-                    ),
-                    itemCount: cashOutControler.bankModel.length,
-                    itemBuilder: (context, index) {
-                      return AnimationConfiguration.staggeredGrid(
-                        position: index,
-                        duration: const Duration(milliseconds: 600),
-                        columnCount: 3,
-                        child: ScaleAnimation(
-                          child: FadeInAnimation(
-                            child: buildListProvider(index),
-                          ),
-                        ),
-                      );
-                    },
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 0.75,
                   ),
+                  itemCount: cashOutControler.bankModel.length,
+                  itemBuilder: (context, index) {
+                    return AnimationConfiguration.staggeredGrid(
+                      position: index,
+                      duration: const Duration(milliseconds: 600),
+                      columnCount: 3,
+                      child: ScaleAnimation(
+                        child: FadeInAnimation(
+                          child: buildListProvider(index),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -93,6 +90,10 @@ class _ListsProviderBankScreenState extends State<ListsProviderBankScreen> {
     return InkWell(
       onTap: () {
         cashOutControler.bankDetail.value = cashOutControler.bankModel[index];
+        cashOutControler.rxCodeBank.value =
+            cashOutControler.bankModel[index].code!;
+        cashOutControler.rxLogo.value = cashOutControler.bankModel[index].logo!;
+
         Get.to(() => const VerifyAccountBankScreen());
       },
       child: Container(
@@ -129,7 +130,7 @@ class _ListsProviderBankScreenState extends State<ListsProviderBankScreen> {
               TextFont(
                 text: cashOutControler.bankModel[index].title!,
                 fontWeight: FontWeight.w400,
-                fontSize: 11.sp,
+                fontSize: 11,
                 maxLines: 1,
               ),
             ],

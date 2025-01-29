@@ -11,11 +11,15 @@ const Color color_fdeb = Color(0xFFFDEBEA);
 
 const Color color_7070 = Color(0xFF707070);
 const Color color_red244 = Color(0xFFF15244);
+
+const Color color_toggle_dark = Color.fromARGB(255, 231, 188, 20);
+const Color color_toggle_light = Color.fromARGB(255, 230, 7, 22);
 // new
 
 const Color color_fafa = Color(0xffFAFAFA);
 const Color color_ddd = Color(0xffDDDDDD);
 const Color color_f4f4 = Color(0xffF4f4f4);
+const Color color_ecec = Color(0xffECECEC);
 const Color color_f5f5 = Color(0xffF5F5F5);
 const Color color_blackE72 = Color(0xff636E72);
 const Color color_777 = Color(0xff777777);

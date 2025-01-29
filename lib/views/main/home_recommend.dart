@@ -122,12 +122,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                     PrimaryButton(
                         title: 'tempA',
                         onPressed: () async {
-                          UserController userController = Get.find<UserController>();
-                          storage.write('msisdn', '2057935454');
-
-                          await userController.fetchBalance();
-                          await userController.queryUserProfile();
                           Get.toNamed('/templateA');
+
                           // Get.to(ReusableResultScreen(
                           //     fromAccountImage: 'https://mmoney.la/AppLite/PartnerIcon/electricLogo.png',
                           //     fromAccountName: 'fromAccountName',
@@ -141,10 +137,16 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                           //     transactionId: 'transactionId',
                           //     note: 'note',
                           //     timestamp: '2025-01-29 09:47:10'));
+
                           // Get.to(ScreenshotPage());
                         }),
                     PrimaryButton(
                         title: 'XJaidee',
+                        onPressed: () {
+                          Get.toNamed('/xjaidee');
+                        }),
+                    PrimaryButton(
+                        title: 'X-Proof',
                         onPressed: () {
                           Get.toNamed('/xjaidee');
                         }),

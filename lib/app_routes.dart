@@ -100,5 +100,9 @@ class AppRoutes {
       page: () => VerifyAccountTempA(),
       // transition: Transition.downToUp,
     ),
+    GetPage(
+      name: '/proof',
+      page: () => VerifyAccountTempA(),
+    ),
   ];
 }

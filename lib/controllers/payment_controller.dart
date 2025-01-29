@@ -23,8 +23,6 @@ class PaymentController extends GetxController {
   Rx<RequestCashoutModel> reqCashOutModel = RequestCashoutModel().obs;
 
   getTokenCashOut() async {
-    await userController.loginpincode('2057935454', '555555');
-
     rxTokenCashOut.value = '';
     var url = "${MyConstant.urlCashOut}/getToken";
     var body = {"username": userCashOut, "password": passCashOut};

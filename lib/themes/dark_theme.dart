@@ -8,23 +8,37 @@ final ThemeData darkTheme = ThemeData.light().copyWith(
     color: color_primary_dark,
     iconTheme: const IconThemeData(color: Colors.black),
   ),
-
   colorScheme: const ColorScheme.light(
     secondary: cr_2929,
     primary: color_primary_dark,
     onPrimary: cr_b692,
   ),
-
-  unselectedWidgetColor: color_7070, // Inactive color
-
-  // Define textTheme for text color customization
+  unselectedWidgetColor: color_7070,
   textTheme: const TextTheme(
     bodyMedium: TextStyle(color: cr_2929),
     bodySmall: TextStyle(color: cr_b692),
   ),
-
-  // Optional: You can adjust the input decoration style if necessary
   inputDecorationTheme: InputDecorationTheme(
-    hintStyle: TextStyle(color: Colors.white54), // Hint text color
+    hintStyle: TextStyle(color: Colors.white54),
+  ),
+  switchTheme: SwitchThemeData(
+    thumbColor: MaterialStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(MaterialState.selected)) {
+        return color_toggle_dark;
+      }
+      return color_7070;
+    }),
+    trackColor: MaterialStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(MaterialState.selected)) {
+        return color_primary_dark.withOpacity(0.3);
+      }
+      return color_7070.withOpacity(0.3);
+    }),
+    trackOutlineColor: MaterialStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(MaterialState.selected)) {
+        return color_primary_dark.withOpacity(0.3);
+      }
+      return color_7070.withOpacity(0.3);
+    }),
   ),
 );

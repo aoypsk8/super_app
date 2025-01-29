@@ -16,7 +16,26 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
   unselectedWidgetColor: color_7070, // Inactive color
 
   // Define textTheme for text color customization
-  textTheme: const TextTheme(
-      bodyMedium: TextStyle(color: color_fff),
-      bodySmall: TextStyle(color: cr_bf29)),
+  textTheme: const TextTheme(bodyMedium: TextStyle(color: color_fff), bodySmall: TextStyle(color: cr_bf29)),
+
+  switchTheme: SwitchThemeData(
+    thumbColor: MaterialStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(MaterialState.selected)) {
+        return color_toggle_light;
+      }
+      return color_7070;
+    }),
+    trackColor: MaterialStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(MaterialState.selected)) {
+        return color_primary_light.withOpacity(0.3);
+      }
+      return color_7070.withOpacity(0.3);
+    }),
+    trackOutlineColor: MaterialStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(MaterialState.selected)) {
+        return color_primary_light.withOpacity(0.3);
+      }
+      return color_7070.withOpacity(0.3);
+    }),
+  ),
 );

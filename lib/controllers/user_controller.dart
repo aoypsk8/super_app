@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -9,7 +10,7 @@ import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 
-class UserController extends GetxController {
+class UserController extends GetxController with WidgetsBindingObserver {
   final storage = GetStorage();
   RxString walletid = ''.obs;
   RxString profileName = ''.obs;
@@ -49,6 +50,15 @@ class UserController extends GetxController {
 
   Future checktoken({String? name}) async {
     getCurrentLocation();
+  }
+
+  @override
+  void onReady() async {
+    super.onReady();
+    storage.write('msisdn', '2057935454');
+    await loginpincode('2057935454', '555555');
+    await fetchBalance();
+    await queryUserProfile();
   }
 
   Future<void> loginpincode(String msisdn, String pincode) async {

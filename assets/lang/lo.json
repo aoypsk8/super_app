@@ -290,5 +290,8 @@
   "input_text": "ປ້ອນຂໍ້ຄວາມ",
   "account_not_found": "ບໍພົບເບີໃນລະບົບ",
   "description": "ຂໍ້ຄວາມ",
-  "cashout": "ຖອນເງີນ"
+  "cashout": "ຖອນເງີນ",
+  "transaction_id": "ເລກໃບບິນ",
+  "input_amount": "ປ້ອນຈຳນວນເງິນ",
+  "select_province": "ເລືອກແຂວງ"
 }

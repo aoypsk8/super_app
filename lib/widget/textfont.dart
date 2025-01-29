@@ -76,7 +76,7 @@ class TextFont extends StatelessWidget {
         decorationStyle: underline ? TextDecorationStyle.dashed : null,
       );
     } else if (languageCode == 'zh') {
-      textStyle = GoogleFonts.notoSans(
+      textStyle = GoogleFonts.notoSansSc(
         fontSize: fontSize.sp,
         fontWeight: fontWeight,
         decoration: underline ? TextDecoration.underline : null,
@@ -84,7 +84,7 @@ class TextFont extends StatelessWidget {
         decorationStyle: underline ? TextDecorationStyle.dashed : null,
       );
     } else if (languageCode == 'vi') {
-      textStyle = GoogleFonts.roboto(
+      textStyle = GoogleFonts.notoSansTaiViet(
         fontSize: fontSize.sp,
         fontWeight: fontWeight,
         decoration: underline ? TextDecoration.underline : null,
@@ -103,8 +103,7 @@ class TextFont extends StatelessWidget {
     }
 
     // 4. Apply the theme's brightness for dynamic color handling.
-    Color effectiveColor =
-        Theme.of(context).brightness == Brightness.dark ? Colors.white : color;
+    Color effectiveColor = Theme.of(context).brightness == Brightness.dark ? Colors.white : color;
 
     return Text(
       text.tr, // Translate text using GetX.

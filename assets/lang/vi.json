@@ -278,6 +278,10 @@
   "setting": "Setting",
   "input_text": "Input text",
   "account_not_found": "Account number not found.",
-  "description": "Description",
-  "cashout": "Cash Out"
+  "description": "Sự miêu tả",
+  "cashout": "Cash Out",
+  "transaction_id": "Mã giao dịch",
+  "amount_kip": "số lượng (LAK)",
+  "input_amount": "Nhập số lượng",
+  "select_province": "Chọn Tỉnh"
 }

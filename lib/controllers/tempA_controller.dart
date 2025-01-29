@@ -11,6 +11,7 @@ import 'package:super_app/models/provider_tempA_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/views/reusable_result.dart';
 import 'package:super_app/views/templateA/payment_tempA.dart';
 import 'package:super_app/views/templateA/result_tempA.dart';
 
@@ -131,7 +132,19 @@ class TempAController extends GetxController {
         if (response['ResultCode'] == '200') {
           rxtimestamp.value = response['CreateDate'];
           rxPaymentAmount.value = amount;
-          Get.to(() => ResultTempAScreen());
+          Get.to(() => ReusableResultScreen(
+              fromAccountImage: userController.userProfilemodel.value.profileImg!,
+              fromAccountName: userController.profileName.value,
+              fromAccountNumber: userController.userProfilemodel.value.msisdn!,
+              toAccountImage: tempAdetail.value.logo!,
+              toAccountName: rxaccname.value,
+              toAccountNumber: rxaccnumber.value,
+              toTitleProvider: tempAdetail.value.title!,
+              amount: rxPaymentAmount.value,
+              fee: rxFee.value,
+              transactionId: rxtransid.value,
+              note: rxNote.value,
+              timestamp: rxtimestamp.value));
         } else {
           DialogHelper.showErrorDialogNew(description: response['ResultCode']);
         }

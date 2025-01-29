@@ -67,6 +67,7 @@ class ConfirmTempAScreen extends StatelessWidget {
                 const SizedBox(height: 5),
                 TextFont(
                   text: controller.rxNote.value?.isNotEmpty ?? false ? controller.rxNote.value : 'ບໍ່ມີການຈົດບັນທຶກ.',
+                  noto: true,
                 ),
                 const SizedBox(height: 16),
                 TextFont(text: 'fee', color: color_7070),

@@ -152,9 +152,17 @@ class PaymentTempAScreen extends StatelessWidget {
                     text: controller.tempAdetail.value.title ?? '',
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
+                    noto: true,
                   ),
-                  TextFont(text: controller.rxaccname.value, fontSize: 12),
-                  TextFont(text: controller.rxaccnumber.value),
+                  TextFont(
+                    text: controller.rxaccname.value,
+                    fontSize: 12,
+                    noto: true,
+                  ),
+                  TextFont(
+                    text: controller.rxaccnumber.value,
+                    poppin: true,
+                  ),
                   SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,

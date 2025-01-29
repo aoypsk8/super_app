@@ -21,6 +21,8 @@ import 'package:super_app/widget/myIcon.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:super_app/widget/textfont.dart';
 
+import '../../widget/custom_clipper.dart';
+
 class Resulttransferscreen extends StatefulWidget {
   const Resulttransferscreen({super.key});
 
@@ -28,8 +30,7 @@ class Resulttransferscreen extends StatefulWidget {
   State<Resulttransferscreen> createState() => _ResulttransferscreenState();
 }
 
-class _ResulttransferscreenState extends State<Resulttransferscreen>
-    with SingleTickerProviderStateMixin {
+class _ResulttransferscreenState extends State<Resulttransferscreen> with SingleTickerProviderStateMixin {
   final screenshotController = ScreenshotController();
   final GlobalKey _globalKey = GlobalKey();
 
@@ -67,11 +68,9 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
     try {
       await Future.delayed(Duration(milliseconds: 100));
       if (_globalKey.currentContext != null) {
-        RenderRepaintBoundary boundary = _globalKey.currentContext!
-            .findRenderObject() as RenderRepaintBoundary;
+        RenderRepaintBoundary boundary = _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
         ui.Image image = await boundary.toImage();
-        ByteData? byteData =
-            await image.toByteData(format: ui.ImageByteFormat.png);
+        ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
         if (byteData != null) {
           String picturesPath = "${DateTime.now().millisecondsSinceEpoch}.jpg";
           final result = await SaverGallery.saveImage(
@@ -180,15 +179,12 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 20),
+                                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           buildTextSuccess(),
                                           TextFont(
@@ -200,24 +196,19 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                         ],
                                       ),
                                       Container(
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 15),
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 10),
+                                        margin: EdgeInsets.symmetric(vertical: 15),
+                                        padding: EdgeInsets.symmetric(vertical: 10),
                                         width: Get.width,
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                           color: cr_fdeb,
                                         ),
                                         child: Column(
                                           children: [
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.all(12.0),
+                                              padding: const EdgeInsets.all(12.0),
                                               child: buildUserDetail(
-                                                profile:
-                                                    "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
+                                                profile: "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
                                                 from: true,
                                                 msisdn: "2052768833",
                                                 name: "AOY PHONGSAKOUN",
@@ -229,11 +220,9 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                               dashlenght: 7,
                                             ),
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.all(12.0),
+                                              padding: const EdgeInsets.all(12.0),
                                               child: buildUserDetail(
-                                                profile:
-                                                    "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
+                                                profile: "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
                                                 from: false,
                                                 msisdn: "2052768833",
                                                 name: "AOY PHONGSAKOUN",
@@ -273,20 +262,17 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                       ),
                                       const SizedBox(height: 20),
                                       Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
                                             child: buildTextDetail(
                                                 money: false,
                                                 title: "description",
-                                                detail:
-                                                    "Learn about the history, usage and variations of Lorem Ipsum, the industry's standard dummy text."),
+                                                detail: "Learn about the history, usage and variations of Lorem Ipsum, the industry's standard dummy text."),
                                           ),
                                           Expanded(
                                             child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                              mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 // ignore: deprecated_member_use
                                                 PrettyQr(
@@ -295,8 +281,7 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
                                                   ),
                                                   size: 25.w,
                                                   data: "123",
-                                                  errorCorrectLevel:
-                                                      QrErrorCorrectLevel.M,
+                                                  errorCorrectLevel: QrErrorCorrectLevel.M,
                                                   typeNumber: null,
                                                   roundEdges: false,
                                                 ),
@@ -355,73 +340,4 @@ class _ResulttransferscreenState extends State<Resulttransferscreen>
       ),
     );
   }
-}
-
-class TriangleClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-
-    path.lineTo(0, size.height);
-    path.lineTo(size.width, size.height);
-    path.lineTo(size.width, 0);
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(TriangleClipper oldClipper) => false;
-}
-
-class MyCustomClipperTop extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    var curXPos = 0.0;
-    var curYPos = size.height;
-    var increment = size.width / 58;
-    while (curXPos < size.width) {
-      curXPos += increment;
-      curYPos = curYPos == size.height ? size.height - 10 : size.height;
-      path.lineTo(curXPos, curYPos);
-    }
-    path.lineTo(size.width, size.height);
-    path.lineTo(size.height, size.width);
-
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
-
-class MyCustomClipperButtom extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-
-    var curXPos = 0.0;
-    var curYPos = size.height;
-    var increment = size.width / 58;
-
-    path.moveTo(0, size.height);
-
-    // Create the zigzag wave
-    while (curXPos < size.width) {
-      curXPos += increment;
-      curYPos = curYPos == size.height ? size.height - 10 : size.height;
-      path.lineTo(curXPos, curYPos);
-    }
-
-    // Complete the path
-    path.lineTo(size.width, 0);
-    path.lineTo(0, 0);
-    path.close();
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

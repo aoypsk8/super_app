@@ -9,11 +9,13 @@ class buildTextDetail extends StatelessWidget {
     required this.title,
     required this.detail,
     this.maxlines = 7,
-    required this.money,
+    this.money = false,
+    this.noto = false,
   });
   final String title;
   final String detail;
   final bool money;
+  final bool noto;
   final int maxlines;
 
   @override
@@ -35,6 +37,8 @@ class buildTextDetail extends StatelessWidget {
               fontSize: 12,
               color: cr_2929,
               maxLines: maxlines,
+              poppin: noto ? false : true, // Set poppin to true if money is true
+              noto: noto ? true : false, // Set noto to true if money is false
             ),
             money
                 ? TextFont(
@@ -42,8 +46,9 @@ class buildTextDetail extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     fontSize: 12,
                     color: cr_2929,
+                    poppin: true,
                   )
-                : const SizedBox(),
+                : const SizedBox.shrink(),
           ],
         ),
       ],

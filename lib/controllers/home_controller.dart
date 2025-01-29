@@ -25,7 +25,7 @@ class HomeController extends GetxController {
 
   String getMenuTitle() {
     // Get the current language code, default to 'en'
-    String languageCode = storage.read('language');
+    String languageCode = storage.read('language') ?? 'lo';
 
     // Return the title based on the language code
     switch (languageCode) {

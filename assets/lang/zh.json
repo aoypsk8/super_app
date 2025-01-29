@@ -278,6 +278,9 @@
   "setting": "Setting",
   "input_text": "Input text",
   "account_not_found": "Account number not found.",
-  "description": "Description",
-  "cashout": "Cash Out"
+  "description": "描述",
+  "cashout": "Cash Out",
+  "transaction_id": "交易编号",
+  "input_amount": "输入金额",
+  "select_province": "选择省份"
 }

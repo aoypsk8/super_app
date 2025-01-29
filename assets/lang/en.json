@@ -288,5 +288,7 @@
   "input_text": "Input text",
   "account_not_found": "Account number not found.",
   "description": "Description",
-  "cashout": "Cash Out"
+  "cashout": "Cash Out",
+  "transaction_id": "Transaction ID",
+  "select_province": "Select Province"
 }

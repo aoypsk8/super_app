@@ -209,9 +209,9 @@ class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
           // ),
           TextfieldWithScanButton(
             controller: accountNumber,
-            label: "Scan QR Code",
+            label: "transaction_id",
             name: "qr_field",
-            hintText: "Enter or scan QR code",
+            hintText: "XXXXXXXXXX...",
             buttonText: "Scan",
             fillcolor: color_f4f4,
             bordercolor: color_f4f4,

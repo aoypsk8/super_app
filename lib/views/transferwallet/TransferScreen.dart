@@ -7,7 +7,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/transfer_controller.dart';
+import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/transferwallet/buildFavoriteTransfer.dart';
@@ -31,9 +34,9 @@ class _TransferScreenState extends State<TransferScreen> {
   final TextEditingController _toWallet = TextEditingController();
   final TextEditingController _paymentAmount = TextEditingController();
   final TextEditingController _note = TextEditingController();
-  // final UserController userController = Get.find();
+  final UserController userController = Get.find();
   // final homeController = Get.put<HomeController>(HomeController());
-  // final transferController = Get.put(TransferController());
+  final transferController = Get.put(TransferController());
   final storage = GetStorage();
 
   final FocusNode _amountFocusNode = FocusNode();
@@ -47,7 +50,6 @@ class _TransferScreenState extends State<TransferScreen> {
       _toWallet.text = walletNo;
       _contactName = contactName;
     });
-
     if (_toWallet.text != '') {
       FocusScope.of(context).requestFocus(_amountFocusNode);
     }
@@ -55,18 +57,16 @@ class _TransferScreenState extends State<TransferScreen> {
 
   @override
   void initState() {
-    // print(
-    //     'transferScrenn destinationMsisdn ${transferController.destinationMsisdn.value}');
-
-    // _toWallet.text = transferController.destinationMsisdn.value;
-
-    // userController.increasepage();
+    print(
+        'transferScrenn destinationMsisdn ${transferController.destinationMsisdn.value}');
+    _toWallet.text = transferController.destinationMsisdn.value;
+    userController.increasepage();
     super.initState();
   }
 
   @override
   void dispose() {
-    // userController.decreasepage();
+    userController.decreasepage();
     _toWallet.text = '';
     super.dispose();
   }
@@ -187,48 +187,47 @@ class _TransferScreenState extends State<TransferScreen> {
                 ),
               ),
               suffixonTapFuc: () async {
-                // if (await Permission.contacts.request().isGranted) {
-                //   try {
-                //     final Contact? contact =
-                //         await ContactsService.openDeviceContactPicker();
-                //     if (contact != null) {
-                //       final Item phone = contact.phones!.first;
-                //       String phoneNO = phone.value
-                //           .toString()
-                //           .trim()
-                //           .replaceAll(' ', '')
-                //           .replaceAll('-', '');
-                //       if (phoneNO.startsWith('020')) {
-                //         setState(() {
-                //           _toWallet.text = phoneNO.replaceAll('020', '20');
-                //         });
-                //       } else if (phoneNO.startsWith('+85620')) {
-                //         setState(() {
-                //           _toWallet.text = phoneNO.replaceAll('+85620', '20');
-                //         });
-                //       } else if (phoneNO.startsWith('85620')) {
-                //         setState(() {
-                //           _toWallet.text = phoneNO.replaceAll('85620', '20');
-                //         });
-                //       } else {
-                //         setState(() {
-                //           _toWallet.text = phoneNO;
-                //         });
-                //       }
-                //     }
-                //     setState(() {
-                //       _contactName = contact!.displayName.toString();
-                //     });
-                //   } on FormOperationException catch (e) {
-                //     switch (e.errorCode) {
-                //       case FormOperationErrorCode.FORM_OPERATION_CANCELED:
-                //       case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
-                //       case FormOperationErrorCode.FORM_OPERATION_UNKNOWN_ERROR:
-                //       default:
-                //       // print(e.toString());
-                //     }
-                //   }
-                // }
+                if (await Permission.contacts.request().isGranted) {
+                  try {
+                    final Contact? contact =
+                        await ContactsService.openDeviceContactPicker();
+                    if (contact != null) {
+                      final Item phone = contact.phones!.first;
+                      String phoneNO = phone.value
+                          .toString()
+                          .trim()
+                          .replaceAll(' ', '')
+                          .replaceAll('-', '');
+                      if (phoneNO.startsWith('020')) {
+                        setState(() {
+                          _toWallet.text = phoneNO.replaceAll('020', '20');
+                        });
+                      } else if (phoneNO.startsWith('+85620')) {
+                        setState(() {
+                          _toWallet.text = phoneNO.replaceAll('+85620', '20');
+                        });
+                      } else if (phoneNO.startsWith('85620')) {
+                        setState(() {
+                          _toWallet.text = phoneNO.replaceAll('85620', '20');
+                        });
+                      } else {
+                        setState(() {
+                          _toWallet.text = phoneNO;
+                        });
+                      }
+                    }
+                    setState(() {
+                      _contactName = contact!.displayName.toString();
+                    });
+                  } on FormOperationException catch (e) {
+                    switch (e.errorCode) {
+                      case FormOperationErrorCode.FORM_OPERATION_CANCELED:
+                      case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
+                      case FormOperationErrorCode.FORM_OPERATION_UNKNOWN_ERROR:
+                      default:
+                    }
+                  }
+                }
               },
             ),
             const SizedBox(height: 10),
@@ -512,26 +511,27 @@ class _TransferScreenState extends State<TransferScreen> {
   }
 
   Future _paymentProcess() async {
-    Get.toNamed("confirmTransfer");
-    // DialogHelper.showErrorDialogNew(description: 'account_not_found');
-    // int paymentAmount = int.parse(
-    //     _paymentAmount.text.trim().replaceAll(RegExp(r'[^\w\s]+'), ''));
-    // String toWallet = _toWallet.text;
-    // String note = _note.text;
-    // // _balanceAmount = userController.balance.value;
-    // String ownerWallet = await storage.read('msisdn') ?? '';
-    // if (paymentAmount < 1000) {
-    //   DialogHelper.showErrorDialogNew(
-    //       description: 'Minimum payment must than 1,000 Kip.');
-    // } else if (_balanceAmount < paymentAmount) {
-    //   DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
-    // } else if (ownerWallet == toWallet) {
-    //   DialogHelper.showErrorDialogNew(
-    //       description: 'Can\'t transfer to same Wallet Account.');
-    // } else {
-    //   // transferController.vertifyWallet(
-    //   //     toWallet, paymentAmount.toString(), note);
-    // }
+    int paymentAmount = int.parse(
+        _paymentAmount.text.trim().replaceAll(RegExp(r'[^\w\s]+'), ''));
+    String toWallet = _toWallet.text;
+    String note = _note.text;
+    _balanceAmount = userController.mainBalance.value;
+    String ownerWallet = await storage.read('msisdn') ?? '';
+
+    transferController.vertifyWallet(toWallet, paymentAmount.toString(), note);
+
+    if (paymentAmount < 1000) {
+      DialogHelper.showErrorDialogNew(
+          description: 'Minimum payment must than 1,000 Kip.');
+    } else if (_balanceAmount < paymentAmount) {
+      DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
+    } else if (ownerWallet == toWallet) {
+      DialogHelper.showErrorDialogNew(
+          description: 'Can\'t transfer to same Wallet Account.');
+    } else {
+      transferController.vertifyWallet(
+          toWallet, paymentAmount.toString(), note);
+    }
   }
 }
 

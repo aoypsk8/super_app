@@ -13,6 +13,8 @@ import 'package:super_app/views/finance_institution/VerifyAccountFinanceScreen.d
 import 'package:super_app/views/templateA/lists_province_tempA.dart';
 import 'package:super_app/views/templateA/verify_account_tempA.dart';
 import 'package:super_app/views/transferwallet/ConfirmTranferScreen.dart';
+import 'package:super_app/views/transferwallet/OtpTransferEmailScreen.dart';
+import 'package:super_app/views/transferwallet/OtpTransferScreen.dart';
 import 'package:super_app/views/transferwallet/ResultTransferScreen.dart';
 import 'package:super_app/views/transferwallet/TransferScreen.dart';
 import 'package:super_app/views/x-jaidee/xjaidee.dart';
@@ -30,6 +32,14 @@ class AppRoutes {
     GetPage(
       name: '/confirmTransfer',
       page: () => ConfirmTranferScreen(),
+    ),
+    GetPage(
+      name: '/otpTransferEmail',
+      page: () => OtpTransferEmailScreen(),
+    ),
+    GetPage(
+      name: '/otpTransfer',
+      page: () => OtpTransferScreen(),
     ),
     GetPage(
       name: '/restultTransfer',

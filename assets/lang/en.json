@@ -290,5 +290,7 @@
   "description": "Description",
   "cashout": "Cash Out",
   "transaction_id": "Transaction ID",
-  "select_province": "Select Province"
+  "select_province": "Select Province",
+  "from_acc":"From Account",
+  "to_acc":"To Account"
 }

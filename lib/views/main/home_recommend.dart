@@ -6,7 +6,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
-import 'package:super_app/views/reusable_result.dart';
+import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/button.dart';
 import 'package:super_app/widget/myIcon.dart';
@@ -21,11 +21,13 @@ class HomeRecommendScreen extends StatefulWidget {
 }
 
 class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
+  final userController = Get.find<UserController>();
   bool showAmount = false;
   int _current = 0;
   int _currentDropping = 0;
   int _currentLoveit = 0;
-  final CarouselSliderController carouselController = CarouselSliderController();
+  final CarouselSliderController carouselController =
+      CarouselSliderController();
 
   List<String> imageUrls = [
     "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
@@ -122,7 +124,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                     PrimaryButton(
                         title: 'tempA',
                         onPressed: () async {
-                          UserController userController = Get.find<UserController>();
+                          UserController userController =
+                              Get.find<UserController>();
                           storage.write('msisdn', '2057935454');
 
                           await userController.fetchBalance();
@@ -286,7 +289,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                   ),
                   child: TextFont(
                     text: "Primary",
-                    color: Theme.of(context).textTheme.bodySmall?.color ?? Colors.black,
+                    color: Theme.of(context).textTheme.bodySmall?.color ??
+                        Colors.black,
                     poppin: true,
                     fontSize: 7.5,
                   ),
@@ -294,18 +298,36 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                 const SizedBox(height: 5),
                 TextFont(
                   text: "Your balance",
-                  color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black,
+                  color: Theme.of(context).textTheme.bodyMedium?.color ??
+                      Colors.black,
                   fontWeight: FontWeight.w500,
                   fontSize: 10.5,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextFont(
-                      text: showAmount ? "₭ 99,950,000.00" : "₭",
-                      color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14.5,
+                    Row(
+                      children: [
+                        TextFont(
+                          text: "₭",
+                          color:
+                              Theme.of(context).textTheme.bodyMedium?.color ??
+                                  Colors.black,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14.5,
+                        ),
+                        const SizedBox(width: 5),
+                        TextFont(
+                          text: showAmount
+                              ? userController.mainBalance.value.toString()
+                              : "",
+                          color:
+                              Theme.of(context).textTheme.bodyMedium?.color ??
+                                  Colors.black,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14.5,
+                        ),
+                      ],
                     ),
                     Container(
                       width: 35.sp,
@@ -501,7 +523,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
             items: List.generate((loveItUrls.length / 4).ceil(), (index) {
               int start = index * 4;
               int end = start + 4;
-              List<String> sublist = loveItUrls.sublist(start, end > loveItUrls.length ? loveItUrls.length : end);
+              List<String> sublist = loveItUrls.sublist(
+                  start, end > loveItUrls.length ? loveItUrls.length : end);
               return GridView.builder(
                 padding: const EdgeInsets.all(5),
                 shrinkWrap: true,

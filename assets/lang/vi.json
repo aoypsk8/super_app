@@ -283,5 +283,7 @@
   "transaction_id": "Mã giao dịch",
   "amount_kip": "số lượng (LAK)",
   "input_amount": "Nhập số lượng",
-  "select_province": "Chọn Tỉnh"
+  "select_province": "Chọn Tỉnh",
+   "from_acc":"From Account",
+  "to_acc":"To Account"
 }

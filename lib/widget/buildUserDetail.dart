@@ -34,7 +34,6 @@ class buildUserDetail extends StatelessWidget {
           child: TextFont(
             text: from ? "from_acc" : "to_acc",
             color: Theme.of(context).textTheme.bodySmall?.color ?? Colors.black,
-            poppin: true,
             fontSize: 9,
           ),
         ),

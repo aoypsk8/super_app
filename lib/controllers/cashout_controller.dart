@@ -13,7 +13,6 @@ import 'package:super_app/models/model-bank/RecentBankModel.dart';
 import 'package:super_app/models/model-bank/ReqCashoutBankModel.dart';
 import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/views/cashout/OtpTransferBankScreen.dart';
-import 'package:super_app/views/cashout/ResultCashOutScreen.dart';
 import '../../../services/api/dio_client.dart';
 import '../../../utility/dialog_helper.dart';
 
@@ -46,8 +45,8 @@ class CashOutController extends GetxController {
   var logPaymentRes;
 
   fetchBankList() async {
-    // List<String> urlSplit =
-    //     homeController.menudetail.value.url.toString().split(";");
+    List<String> urlSplit =
+        homeController.menudetail.value.url.toString().split(";");
     // var url = urlSplit[0];
     var url = "/Bank/getList";
     var response =
@@ -59,6 +58,9 @@ class CashOutController extends GetxController {
 
   fetchRecentBank() async {
     try {
+      List<String> urlSplit =
+          homeController.menudetail.value.url.toString().split(";");
+      // var url = urlSplit[1];
       var url = "/Bank/getRecent";
       var response = await DioClient.postEncrypt(
         loading: false,
@@ -115,9 +117,8 @@ class CashOutController extends GetxController {
 
   verifyAcc(String accNo) async {
     rxAccNo.value = accNo;
-    // List<String> urlSplit =
-    //     homeController.menudetail.value.url.toString().split(";");
-
+    List<String> urlSplit =
+        homeController.menudetail.value.url.toString().split(";");
     // var url = urlSplit[2];
     var url = "/Bank/verify";
     rxTransID.value = await randomNumber().fucRandomNumberBank();
@@ -143,13 +144,12 @@ class CashOutController extends GetxController {
   }
 
   confirmPayment() async {
-    // userController.fetchbalance();
-    // List<String> urlSplit =
-    //     homeController.menudetail.value.url.toString().split(";");
+    userController.fetchBalance();
+    List<String> urlSplit =
+        homeController.menudetail.value.url.toString().split(";");
     // var url = urlSplit[3];
     var url = "/Bank/reqCashOut";
-    // int balance = int.parse(userController.balance.value.toString());
-    int balance = 10000000;
+    int balance = int.parse(userController.mainBalance.value.toString());
     int payment_fee = int.parse(rxPaymentAmount.value.toString()) +
         int.parse(rxFee.value.toString());
     if (balance > payment_fee) {
@@ -179,8 +179,8 @@ class CashOutController extends GetxController {
   }
 
   confirmOtpPayment(otp) async {
-    // List<String> urlSplit =
-    //     homeController.menudetail.value.url.toString().split(";");
+    List<String> urlSplit =
+        homeController.menudetail.value.url.toString().split(";");
     // var url = urlSplit[4];
     var url = "/Bank/payment";
     var data = {

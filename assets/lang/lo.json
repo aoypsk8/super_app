@@ -293,5 +293,7 @@
   "cashout": "ຖອນເງີນ",
   "transaction_id": "ເລກໃບບິນ",
   "input_amount": "ປ້ອນຈຳນວນເງິນ",
-  "select_province": "ເລືອກແຂວງ"
+  "select_province": "ເລືອກແຂວງ",
+  "from_acc":"ຈາກບັນຊີ",
+  "to_acc":"ຫາກບັນຊີ"
 }

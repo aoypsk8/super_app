@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/log_controller.dart';
+import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/model-institution/finance_account_model.dart';
 import 'package:super_app/models/model-institution/finance_model.dart';
@@ -16,8 +17,8 @@ import 'package:intl/intl.dart';
 class FinanceController extends GetxController {
   final HomeController homeController = Get.find();
   final UserController userController = Get.find();
-  // final PaymentController paymentController = Get.find(); ////////
   final logController = Get.put(LogController());
+  final paymentController = Get.put(PaymentController());
   final storage = GetStorage();
 
   RxList<FinanceModel> financeModel = <FinanceModel>[].obs;
@@ -39,21 +40,21 @@ class FinanceController extends GetxController {
   var logPaymentRes;
 
   fetchInstitution() async {
-    // List<String> urlSplit =
-    //     homeController.menudetail.value.url.toString().split(";");
-    // urlSplit[0]
-    var response = await DioClient.postEncrypt(
-        loading: false, "/Finance/getlist", key: 'backup', {});
+    List<String> urlSplit =
+        homeController.menudetail.value.url.toString().split(";");
+    var url = urlSplit[0];
+    var response =
+        await DioClient.postEncrypt(loading: false, url, key: 'backup', {});
     financeModel.value = response
         .map<FinanceModel>((json) => FinanceModel.fromJson(json))
         .toList();
   }
 
   getToken() async {
-    // List<String> urlSplit =
-    //     homeController.menudetail.value.url.toString().split(";");
-    // var url = urlSplit[1];
-    var url = "/Finance/token";
+    List<String> urlSplit =
+        homeController.menudetail.value.url.toString().split(";");
+    var url = urlSplit[1];
+    // var url = "/Finance/token";
     var body = {
       'client_id': storage.read('msisdn'),
       'client_secret': '77a6891ea6af486f90f7ccd1a6bf77d5',
@@ -72,13 +73,12 @@ class FinanceController extends GetxController {
   }
 
   verifyAccount() async {
-    // Get.toNamed("/paymentFinace");
-    rxTransID.value = "homeController.menudetail.value.description!" +
+    rxTransID.value = homeController.menudetail.value.description! +
         await randomNumber().fucRandomNumber();
-    // List<String> urlSplit =
-    //     homeController.menudetail.value.url.toString().split(";");
-    // var url = urlSplit[2];
-    var url = "/Finance/verify";
+    List<String> urlSplit =
+        homeController.menudetail.value.url.toString().split(";");
+    var url = urlSplit[2];
+    // var url = "/Finance/verify";
     var body = {
       "Id": financeModelDetail.value.id!,
       "TranID": rxTransID.value,
@@ -100,84 +100,84 @@ class FinanceController extends GetxController {
   }
 
   void paymentProcess() async {
-    Get.toNamed("/resultFinance");
-    // userController.fetchbalance();
-    // if (userController.balance.value >= int.parse(rxPaymentAmount.value)) {
-    //   var url;
-    //   var data;
-    //   var response;
-    //   rxFee.value = financeModelDetail.value.fee!;
-    //   response = await paymentController.cashoutWallet(
-    //     rxTransID.value,
-    //     rxPaymentAmount.value,
-    //     rxFee.value,
-    //     homeController.menudetail.value.groupNameEN,
-    //     financeModelDetail.value.id,
-    //     rxNote.value,
-    //     rxAccNo.value,
-    //     financeModelDetail.value.title,
-    //   );
-    //   if (response["resultCode"] == 0) {
-    //     // List<String> urlSplit =
-    //     //     homeController.menudetail.value.url.toString().split(";");
-    //     // url = urlSplit[3];
-    //     url = "/Finance/confirm";
-    //     data = {
-    //       "Id": financeModelDetail.value.id,
-    //       "TranID": rxTransID.value,
-    //       "AccNo": rxAccNo.value,
-    //       "PhoneUser": storage.read('msisdn'),
-    //       "AccName": rxAccName.value,
-    //       "Amount": rxPaymentAmount.value,
-    //       "Fee": rxFee.value,
-    //       "Remark": rxNote.value,
-    //       "token": rxAccessToken.value
-    //     };
+    // Get.toNamed("/resultFinance");
+    userController.fetchBalance();
+    if (userController.mainBalance.value >= int.parse(rxPaymentAmount.value)) {
+      var url;
+      var data;
+      var response;
+      rxFee.value = financeModelDetail.value.fee!;
+      response = await paymentController.cashoutWallet(
+        rxTransID.value,
+        rxPaymentAmount.value,
+        rxFee.value,
+        homeController.menudetail.value.groupNameEN,
+        financeModelDetail.value.id,
+        rxNote.value,
+        rxAccNo.value,
+        financeModelDetail.value.title,
+      );
+      if (response["resultCode"] == 0) {
+        List<String> urlSplit =
+            homeController.menudetail.value.url.toString().split(";");
+        url = urlSplit[3];
+        // url = "/Finance/confirm";
+        data = {
+          "Id": financeModelDetail.value.id,
+          "TranID": rxTransID.value,
+          "AccNo": rxAccNo.value,
+          "PhoneUser": storage.read('msisdn'),
+          "AccName": rxAccName.value,
+          "Amount": rxPaymentAmount.value,
+          "Fee": rxFee.value,
+          "Remark": rxNote.value,
+          "token": rxAccessToken.value
+        };
 
-    //     // //! save befor log
-    //     // logController.insertBeforePayment(
-    //     //     homeController.menudetail.value.groupNameEN, data);
+        // //! save befor log
+        // logController.insertBeforePayment(
+        //     homeController.menudetail.value.groupNameEN, data);
 
-    //     var response = await DioClient.postEncrypt(url, data,
-    //         key: 'backup', bearer: rxAccessToken.value);
-    //     //! save log
-    //     logPaymentReq = data;
-    //     logPaymentRes = response;
-    //     logController.insertAllLog(
-    //       "homeController.menudetail.value.groupNameEN.toString()",
-    //       rxTransID.value,
-    //       financeModelDetail.value.logo!,
-    //       financeModelDetail.value.title!,
-    //       rxAccNo.value,
-    //       rxAccName.value,
-    //       rxPaymentAmount.value,
-    //       0,
-    //       rxFee.value,
-    //       rxNote.value,
-    //       logVerify,
-    //       logPaymentReq,
-    //       logPaymentRes,
-    //     );
-    //     if (response['code'] == 0) {
-    //       //! save parameter to result screen
-    //       rxTimeStamp.value = response["created"];
-    //       rxPaymentAmount.value = response['amount'].toString();
-    //       saveHistoryFinnace(rxAccNo.value, rxAccName.value);
-    //       Get.toNamed("/resultFinace");
-    //     } else {
-    //       DialogHelper.showErrorWithFunctionDialog(
-    //           description: response['msg'],
-    //           onClose: () {
-    //             Get.close(userController.pageclose.value);
-    //           });
-    //     }
-    //   } else {
-    //     //! cashout fail
-    //     DialogHelper.showErrorDialogNew(description: response['resultDesc']);
-    //   }
-    // } else {
-    //   DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
-    // }
+        var response = await DioClient.postEncrypt(url, data,
+            key: 'backup', bearer: rxAccessToken.value);
+        //! save log
+        logPaymentReq = data;
+        logPaymentRes = response;
+        logController.insertAllLog(
+          "homeController.menudetail.value.groupNameEN.toString()",
+          rxTransID.value,
+          financeModelDetail.value.logo!,
+          financeModelDetail.value.title!,
+          rxAccNo.value,
+          rxAccName.value,
+          rxPaymentAmount.value,
+          0,
+          rxFee.value,
+          rxNote.value,
+          logVerify,
+          logPaymentReq,
+          logPaymentRes,
+        );
+        if (response['code'] == 0) {
+          //! save parameter to result screen
+          rxTimeStamp.value = response["created"];
+          rxPaymentAmount.value = response['amount'].toString();
+          saveHistoryFinnace(rxAccNo.value, rxAccName.value);
+          Get.toNamed("/resultFinace");
+        } else {
+          DialogHelper.showErrorWithFunctionDialog(
+              description: response['msg'],
+              onClose: () {
+                Get.close(userController.pageclose.value);
+              });
+        }
+      } else {
+        //! cashout fail
+        DialogHelper.showErrorDialogNew(description: response['resultDesc']);
+      }
+    } else {
+      DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
+    }
   }
 
   void saveHistoryFinnace(String msisdn, String fullname) async {

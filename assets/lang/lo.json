@@ -295,5 +295,6 @@
   "input_amount": "ປ້ອນຈຳນວນເງິນ",
   "select_province": "ເລືອກແຂວງ",
   "from_acc":"ຈາກບັນຊີ",
-  "to_acc":"ຫາກບັນຊີ"
+  "to_acc":"ຫາກບັນຊີ",
+  "choose_institution":"ເລືອກສະຖາບັນ"
 }

@@ -86,6 +86,7 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
         child: buildBottomAppbar(
           bgColor: Theme.of(context).primaryColor,
           title: 'confirm_transfer',
+          isEnabled: !transferController.loading.isTrue,
           func: () {
             _countdownTimer?.cancel();
             transferController.loading.value = true;

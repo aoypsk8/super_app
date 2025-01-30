@@ -29,7 +29,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
   RxInt pointBalance = 0.obs;
 
   //auth
-  RxString rxMsisdn = '2052768833'.obs;
+  RxString rxMsisdn = ''.obs;
 
   RxString rxLat = ''.obs;
   RxString rxLong = ''.obs;
@@ -55,14 +55,15 @@ class UserController extends GetxController with WidgetsBindingObserver {
   @override
   void onReady() async {
     super.onReady();
-    storage.write('msisdn', '2057935454');
-    await loginpincode('2057935454', '555555');
+    storage.write('msisdn', '2052768833');
+    await loginpincode('2052768833', '555555');
     await fetchBalance();
     await queryUserProfile();
   }
 
   Future<void> loginpincode(String msisdn, String pincode) async {
     try {
+      rxMsisdn.value = await storage.read('msisdn');
       final response = await DioClient.postEncrypt(
           '${MyConstant.urlGateway}/login', {"msisdn": msisdn, "pin": pincode});
       if (response != null && response["resultCode"] == 0) {

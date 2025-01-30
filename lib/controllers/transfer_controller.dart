@@ -111,26 +111,31 @@ class TransferController extends GetxController {
               '${MyConstant.urlGateway}/signup', otpData);
 
           if (otpResponse["resultCode"] == 0) {
+            loading.value = false;
             // OTP sent successfully
             userController.refcode.value =
                 otpResponse["data"]["ref"].toString();
             // Navigate to OtpTransferScreen
             Get.toNamed('/otpTransfer');
           } else {
+            loading.value = false;
             // Handle OTP sending failure
             DialogHelper.showErrorDialogNew(
                 description: otpResponse["resultDesc"].toString());
           }
         } else {
+          loading.value = false;
           // Balance check failed
           Get.toNamed('/confirmTransfer');
         }
       } else {
+        loading.value = false;
         // Wallet verification failed
         DialogHelper.showErrorDialogNew(
             description: response["responseMessage"]);
       }
     } catch (e) {
+      loading.value = false;
       // Handle unexpected errors
       DialogHelper.showErrorDialogNew(
           description: 'An unexpected error occurred. Please try again.');
@@ -199,7 +204,6 @@ class TransferController extends GetxController {
       */
       // var response = await DioClient.postEncrypt(urlSplit[0], data, key: "");
       var response = await DioClient.postEncrypt("/Transfer", data, key: "");
-      print(response);
       if (response["resultCode"].toString() == '0') {
         //! save log
         logPaymentReq = data;
@@ -219,9 +223,9 @@ class TransferController extends GetxController {
           logPaymentReq,
           logPaymentRes,
         );
-        print(response);
 
-        saveHistoryTransfer(destinationMsisdn.value, destinationname.value);
+        saveHistoryTransfer(destinationMsisdn.value, destinationname.value,
+            desTranferKyc.value.profileImg ?? MyConstant.profile_default);
         userController.fetchBalance();
         rxtimestamp.value =
             DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
@@ -236,12 +240,12 @@ class TransferController extends GetxController {
               desTranferKyc.value.profileImg ?? MyConstant.profile_default,
           toAccountName: destinationname.value,
           toAccountNumber: destinationMsisdn.value,
-          toTitleProvider: 'toTitleProvider',
+          toTitleProvider: '',
           amount: amount.value,
           fee: '0',
           transactionId: rxtransid.value,
           note: note.value,
-          timestamp: '2025-03-12 12:52:23',
+          timestamp: rxtimestamp.value,
         ));
       } else {
         loading.value = false;
@@ -253,7 +257,8 @@ class TransferController extends GetxController {
     }
   }
 
-  void saveHistoryTransfer(String walletno, String walletname) async {
+  void saveHistoryTransfer(
+      String walletno, String walletname, String profile_user) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? myDataString = prefs.getString('historyTransfer');
     if (myDataString == null) {
@@ -261,6 +266,7 @@ class TransferController extends GetxController {
         {
           'timeStamp': DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now()),
           'walletNo': walletno,
+          'profile_user': profile_user,
           'walletName': walletname,
           'favorite': 0,
         }
@@ -284,6 +290,7 @@ class TransferController extends GetxController {
         myData.add({
           'timeStamp': DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now()),
           'walletNo': walletno,
+          'profile_user': profile_user,
           'walletName': walletname,
           'favorite': 0,
         });

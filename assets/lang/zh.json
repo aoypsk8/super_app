@@ -284,5 +284,6 @@
   "input_amount": "输入金额",
   "select_province": "选择省份",
    "from_acc":"From Account",
-  "to_acc":"To Account"
+  "to_acc":"To Account",
+  "choose_institution":"Choose Institution"
 }

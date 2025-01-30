@@ -285,5 +285,6 @@
   "input_amount": "Nhập số lượng",
   "select_province": "Chọn Tỉnh",
    "from_acc":"From Account",
-  "to_acc":"To Account"
+  "to_acc":"To Account",
+  "choose_institution":"Choose Institution"
 }

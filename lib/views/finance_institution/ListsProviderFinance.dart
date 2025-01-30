@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/finance_controller.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
@@ -40,7 +39,7 @@ class _ListsProviderFinanceState extends State<ListsProviderFinance> {
     return Scaffold(
       backgroundColor: color_fff,
       appBar: BuildAppBar(
-          title: "homeController.menudetail.value.groupNameEN.toString()"),
+          title: homeController.menudetail.value.groupNameEN.toString()),
       body: Obx(
         () => Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
@@ -117,10 +118,13 @@ class _buildFavoriteTransferState extends State<buildFavoriteTransfer> {
                           Expanded(
                             child: Row(
                               children: [
-                                SvgPicture.asset(
-                                  MyIcon.ic_user,
-                                  fit: BoxFit.fill,
-                                  width: 11.w,
+                                ClipOval(
+                                  child: Image.network(
+                                    favoriteData[index]['profile_user'] ??
+                                        MyConstant.profile_default,
+                                    fit: BoxFit.fill,
+                                    width: 11.w,
+                                  ),
                                 ),
                                 Expanded(
                                   child: Container(

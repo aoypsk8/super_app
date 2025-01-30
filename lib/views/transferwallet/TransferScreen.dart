@@ -103,7 +103,9 @@ class _TransferScreenState extends State<TransferScreen> {
         child: buildBottomAppbar(
           bgColor: Theme.of(context).primaryColor,
           title: 'next',
+          isEnabled: !transferController.loading.isTrue,
           func: () {
+            transferController.loading.value = true;
             _formKey.currentState!.save();
             if (_formKey.currentState!.validate()) {
               _paymentProcess();
@@ -124,38 +126,15 @@ class _TransferScreenState extends State<TransferScreen> {
       '1,000,000',
     ];
     final List<String> textValue = [
-      "Shop",
-      "Food",
-      "Drink",
-      "Save",
-      "Debt",
-      "Help",
-      "Education",
+      "ເຕີມເງິນ",
+      "ຄ່າເຄື່ອງ",
+      "ຄ່າອາຫານ",
+      "ຄ່າເຄື່ອງດື່ມ",
+      "ເກັບອອມ",
+      "ໃຊ້ໜີ້",
+      "ຊ່ວຍເຫຼືອ",
+      "ການສຶກສາ"
     ];
-    final Map<String, Map<String, String>> translations = {
-      "en": {
-        "Topup": "Topup",
-        "Shop": "Shop",
-        "Food": "Food",
-        "Drink": "Drink",
-        "Save": "Save",
-        "Debt": "Debt",
-        "Help": "Help",
-        "Education": "Education",
-      },
-      "lo": {
-        "Topup": "ເຕີມເງິນ",
-        "Shop": "ຄ່າເຄື່ອງ",
-        "Food": "ຄ່າອາຫານ",
-        "Drink": "ຄ່າເຄື່ອງດື່ມ",
-        "Save": "ເກັບອອມ",
-        "Debt": "ໃຊ້ໜີ້",
-        "Help": "ຊ່ວຍເຫຼືອ",
-        "Education": "ການສຶກສາ",
-      },
-    };
-    final box = GetStorage();
-    String languageCode = box.read('language') ?? 'lo';
 
     return Container(
       color: color_fff,
@@ -359,9 +338,7 @@ class _TransferScreenState extends State<TransferScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                         onTap: () {
-                          _note.text = translations[languageCode]
-                                  ?[textValue[index]] ??
-                              textValue[index];
+                          _note.text = textValue[index];
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -517,9 +494,6 @@ class _TransferScreenState extends State<TransferScreen> {
     String note = _note.text;
     _balanceAmount = userController.mainBalance.value;
     String ownerWallet = await storage.read('msisdn') ?? '';
-
-    transferController.vertifyWallet(toWallet, paymentAmount.toString(), note);
-
     if (paymentAmount < 1000) {
       DialogHelper.showErrorDialogNew(
           description: 'Minimum payment must than 1,000 Kip.');
@@ -529,6 +503,7 @@ class _TransferScreenState extends State<TransferScreen> {
       DialogHelper.showErrorDialogNew(
           description: 'Can\'t transfer to same Wallet Account.');
     } else {
+      transferController.loading.value = true;
       transferController.vertifyWallet(
           toWallet, paymentAmount.toString(), note);
     }

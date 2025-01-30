@@ -47,8 +47,8 @@ class CashOutController extends GetxController {
   fetchBankList() async {
     List<String> urlSplit =
         homeController.menudetail.value.url.toString().split(";");
-    // var url = urlSplit[0];
-    var url = "/Bank/getList";
+    var url = urlSplit[0];
+    // var url = "/Bank/getList";
     var response =
         await DioClient.postEncrypt(loading: false, url, key: 'lmm', {});
     bankModel.value = response
@@ -60,8 +60,8 @@ class CashOutController extends GetxController {
     try {
       List<String> urlSplit =
           homeController.menudetail.value.url.toString().split(";");
-      // var url = urlSplit[1];
-      var url = "/Bank/getRecent";
+      var url = urlSplit[1];
+      // var url = "/Bank/getRecent";
       var response = await DioClient.postEncrypt(
         loading: false,
         url,
@@ -119,8 +119,8 @@ class CashOutController extends GetxController {
     rxAccNo.value = accNo;
     List<String> urlSplit =
         homeController.menudetail.value.url.toString().split(";");
-    // var url = urlSplit[2];
-    var url = "/Bank/verify";
+    var url = urlSplit[2];
+    // var url = "/Bank/verify";
     rxTransID.value = await randomNumber().fucRandomNumberBank();
     var data = {
       "transactionId": rxTransID.value,
@@ -147,8 +147,8 @@ class CashOutController extends GetxController {
     userController.fetchBalance();
     List<String> urlSplit =
         homeController.menudetail.value.url.toString().split(";");
-    // var url = urlSplit[3];
-    var url = "/Bank/reqCashOut";
+    var url = urlSplit[3];
+    // var url = "/Bank/reqCashOut";
     int balance = int.parse(userController.mainBalance.value.toString());
     int payment_fee = int.parse(rxPaymentAmount.value.toString()) +
         int.parse(rxFee.value.toString());
@@ -181,8 +181,8 @@ class CashOutController extends GetxController {
   confirmOtpPayment(otp) async {
     List<String> urlSplit =
         homeController.menudetail.value.url.toString().split(";");
-    // var url = urlSplit[4];
-    var url = "/Bank/payment";
+    var url = urlSplit[4];
+    // var url = "/Bank/payment";
     var data = {
       "bid": bankDetail.value.bID,
       "accountNo": rxAccNo.value,

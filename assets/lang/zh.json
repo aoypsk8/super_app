@@ -282,5 +282,13 @@
   "cashout": "Cash Out",
   "transaction_id": "交易编号",
   "input_amount": "输入金额",
-  "select_province": "选择省份"
+  "select_province": "选择省份",
+  "on": "开",
+  "off": "关",
+  "personal_info": "个人信息",
+  "change_password": "更改密码",
+  "verify_account": "验证账户",
+  "biometric": "Biometric",
+  "save_screenshot": "保存截图",
+  "policy_and_term": "政策和条款"
 }

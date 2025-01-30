@@ -286,12 +286,20 @@
   "morethanlimitbalance": "ວົງເງິນກະເປົ໋າເກີນກຳນົດ",
   "limit20000000": "ວົງເງິນເກີນກຳນົດ 20,000,000 ກີບ",
   "my_qr": "My QR",
-  "setting": "ຕັ້ງຄ່າ",
+  "setting": "ການຕັ້ງຄ່າ",
   "input_text": "ປ້ອນຂໍ້ຄວາມ",
   "account_not_found": "ບໍພົບເບີໃນລະບົບ",
   "description": "ຂໍ້ຄວາມ",
   "cashout": "ຖອນເງີນ",
   "transaction_id": "ເລກໃບບິນ",
   "input_amount": "ປ້ອນຈຳນວນເງິນ",
-  "select_province": "ເລືອກແຂວງ"
+  "select_province": "ເລືອກແຂວງ",
+  "on": "ເປີດ",
+  "off": "ປິດ",
+  "personal_info": "ຂໍ້ມູນສ່ວນຕົວ",
+  "change_password": "ປ່ຽນລະຫັດຜ່ານ",
+  "verify_account": "ການຢືນຢັນຕົວຕົນ",
+  "biometric": "Biometric",
+  "save_screenshot": "ບັນທຶກຮູບໃບບິນ",
+  "policy_and_term": "ກ່ຽວກັບເງື່ອນໄຂ ແລະ ນະໂບບາຍ"
 }

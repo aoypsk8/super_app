@@ -52,6 +52,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
   void onReady() async {
     super.onReady();
     storage.write('msisdn', '2057935454');
+    storage.write('msisdn', '2057935454');
+    storage.write('msisdn', '2057935454');
     await loginpincode('2057935454', '555555');
     await fetchBalance();
     await queryUserProfile();

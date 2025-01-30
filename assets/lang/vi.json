@@ -283,5 +283,13 @@
   "transaction_id": "Mã giao dịch",
   "amount_kip": "số lượng (LAK)",
   "input_amount": "Nhập số lượng",
-  "select_province": "Chọn Tỉnh"
+  "select_province": "Chọn Tỉnh",
+  "on": "Bật",
+  "off": "Tắt",
+  "personal_info": "Thông tin cá nhân",
+  "change_password": "Thay đổi mật khẩu",
+  "verify_account": "Xác minh tài khoản",
+  "biometric": "Biometric",
+  "save_screenshot": "Lưu ảnh ch",
+  "policy_and_term": "Chính sách và điều khoản"
 }

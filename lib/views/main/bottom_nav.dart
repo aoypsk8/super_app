@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:super_app/home_screen.dart';
-import 'package:super_app/views/main/setting.dart';
+import 'package:super_app/views/settings/setting.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class BottomNav extends StatefulWidget {

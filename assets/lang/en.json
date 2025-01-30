@@ -290,5 +290,13 @@
   "description": "Description",
   "cashout": "Cash Out",
   "transaction_id": "Transaction ID",
-  "select_province": "Select Province"
+  "select_province": "Select Province",
+  "on": "On",
+  "off": "Off",
+  "personal_info": "Personal Information",
+  "change_password": "Change Password",
+  "verify_account": "Verify Account",
+  "biometric": "Biometric",
+  "save_screenshot": "Save Screenshot",
+  "policy_and_term": "Policy and Terms"
 }

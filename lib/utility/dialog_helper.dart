@@ -2,8 +2,10 @@
 
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/myIcon.dart';
@@ -178,15 +180,17 @@ class DialogHelper {
         child: GestureDetector(
           onTap: () {
             if (onClose != null) {
-              Get.until((route) => route.isFirst);
               onClose();
+              Get.back();
+              hide();
             } else {
               Get.until((route) => route.isFirst);
+              Get.back();
               hide();
             }
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 80),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Dialog(
               surfaceTintColor: color_fff,
               shape: RoundedRectangleBorder(
@@ -197,11 +201,7 @@ class DialogHelper {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(height: 25),
-                    Image.asset(
-                      MyIcon.ic_success,
-                      height: 100,
-                      width: 100,
-                    ),
+                    Lottie.asset(MyIcon.animation_success),
                     SizedBox(height: 10),
                     TextFont(
                       text: title,
@@ -213,6 +213,112 @@ class DialogHelper {
                   ],
                 ),
               ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static void dialogRecurringConfirm({
+    String title = 'Uh oh.',
+    String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.',
+    String okTitle = 'confirm',
+    bool onMultiBtn = true,
+    Function()? onOk,
+  }) {
+    Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false,
+        child: Dialog(
+          surfaceTintColor: color_fff,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Padding(
+            padding: const EdgeInsets.all(0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 15),
+                Image.asset(
+                  MyIcon.ic_mascot_dontknow,
+                  height: 100,
+                  width: 100,
+                ),
+                const SizedBox(height: 10),
+                TextFont(
+                  text: title,
+                  fontWeight: FontWeight.bold,
+                  color: color_436,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: TextFont(
+                          text: description,
+                          textAlign: TextAlign.center,
+                          maxLines: 8,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xff636E72),
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        children: [
+                          if (onMultiBtn)
+                            Expanded(
+                              flex: 1,
+                              child: InkWell(
+                                onTap: () => Get.back(),
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: ShapeDecoration(
+                                    color: Color(0xFFEDF1F7),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                  ),
+                                  child: TextFont(
+                                      text: 'cancel',
+                                      textAlign: TextAlign.center,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                              ),
+                            ),
+                          if (onMultiBtn)
+                            SizedBox(
+                              width: 10,
+                            ),
+                          Expanded(
+                            flex: 1,
+                            child: InkWell(
+                              onTap: onOk,
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: ShapeDecoration(
+                                  color: Color(0xFFF15244),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30)),
+                                ),
+                                child: TextFont(
+                                    text: okTitle,
+                                    textAlign: TextAlign.center,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 15),
+              ],
             ),
           ),
         ),

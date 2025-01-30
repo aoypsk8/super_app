@@ -58,9 +58,9 @@ class _ListsProviderFinanceState extends State<ListsProviderFinance> {
                   itemBuilder: (context, index) {
                     return AnimationConfiguration.staggeredList(
                       position: index,
-                      duration: const Duration(milliseconds: 375),
+                      duration: const Duration(milliseconds: 800),
                       child: SlideAnimation(
-                        verticalOffset: 500.0,
+                        horizontalOffset: 500.0,
                         child: FadeInAnimation(
                           child: InkWell(
                             onTap: () {

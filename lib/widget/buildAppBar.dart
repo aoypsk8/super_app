@@ -4,11 +4,17 @@ import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class BuildAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title; // Add a title parameter.
+  final String title;
+  final bool hasIcon;
+  final Widget? customIcon;
+  final VoidCallback? onIconTap;
 
   const BuildAppBar({
     super.key,
-    required this.title, // Make the title required.
+    required this.title,
+    this.hasIcon = false,
+    this.customIcon,
+    this.onIconTap,
   });
 
   @override
@@ -29,6 +35,18 @@ class BuildAppBar extends StatelessWidget implements PreferredSizeWidget {
         fontSize: 11.5.sp,
         noto: true,
       ),
+      actions: hasIcon
+          ? [
+              InkWell(
+                onTap: onIconTap,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: customIcon ??
+                      const Icon(Icons.notifications, color: cr_090a),
+                ),
+              )
+            ]
+          : null,
       bottom: const PreferredSize(
         preferredSize: Size.fromHeight(1),
         child: Divider(

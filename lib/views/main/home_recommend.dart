@@ -87,6 +87,11 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                           Get.toNamed('/otpTransfer');
                         }),
                     PrimaryButton(
+                        title: 'Visa Master Card',
+                        onPressed: () {
+                          Get.toNamed('/visaMasterCard');
+                        }),
+                    PrimaryButton(
                         title: 'OTP Email',
                         onPressed: () {
                           Get.toNamed('/otpTransferEmail');

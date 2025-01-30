@@ -57,6 +57,7 @@ class MyIcon {
   static String ic_check = 'assets/icons/ic_check.svg';
   static String ic_logo_x = 'assets/icons/logox.png';
   static String ic_box_open_bg = 'assets/icons/ic_box_open_bg.png';
+  static String deault_theme = 'assets/images/theme_4_red.png';
 
   // load x jaidee
   static String ic_load_xjaidee = 'assets/icons/load.svg';

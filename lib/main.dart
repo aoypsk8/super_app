@@ -7,6 +7,7 @@ import 'package:super_app/app_routes.dart';
 import 'package:super_app/services/blindings/initial_blinding.dart';
 import 'package:super_app/services/language_service.dart';
 import 'package:super_app/services/theme_service.dart';
+import 'package:super_app/splash_screen.dart';
 import 'package:super_app/themes/dark_theme.dart';
 import 'package:super_app/themes/light_theme.dart';
 import 'package:super_app/translations.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         themeMode: Get.find<ThemeService>().theme,
         initialRoute: '/',
         getPages: AppRoutes.routes,
-        home: BottomNav(),
+        home: SplashScreen(),
       );
     });
   }

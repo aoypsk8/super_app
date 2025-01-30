@@ -291,7 +291,12 @@
   "cashout": "Cash Out",
   "transaction_id": "Transaction ID",
   "select_province": "Select Province",
-  "from_acc":"From Account",
-  "to_acc":"To Account",
-  "choose_institution":"Choose Institution"
+  "on": "On",
+  "off": "Off",
+  "personal_info": "Personal Information",
+  "change_password": "Change Password",
+  "verify_account": "Verify Account",
+  "biometric": "Biometric",
+  "save_screenshot": "Save Screenshot",
+  "policy_and_term": "Policy and Terms"
 }

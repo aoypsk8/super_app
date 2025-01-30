@@ -284,7 +284,12 @@
   "amount_kip": "số lượng (LAK)",
   "input_amount": "Nhập số lượng",
   "select_province": "Chọn Tỉnh",
-   "from_acc":"From Account",
-  "to_acc":"To Account",
-  "choose_institution":"Choose Institution"
+  "on": "Bật",
+  "off": "Tắt",
+  "personal_info": "Thông tin cá nhân",
+  "change_password": "Thay đổi mật khẩu",
+  "verify_account": "Xác minh tài khoản",
+  "biometric": "Biometric",
+  "save_screenshot": "Lưu ảnh ch",
+  "policy_and_term": "Chính sách và điều khoản"
 }

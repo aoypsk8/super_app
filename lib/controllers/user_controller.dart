@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:super_app/controllers/home_controller.dart';
+import 'package:super_app/models/appinfo_model.dart';
 import 'package:super_app/models/balance_model.dart';
 import 'package:super_app/models/user_profile_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
+import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 
 class UserController extends GetxController with WidgetsBindingObserver {
@@ -14,6 +17,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
   RxString walletid = ''.obs;
   RxString profileName = ''.obs;
   RxString birthday = ''.obs;
+  RxString rxBirthday = ''.obs;
 
   // profile
   Rx<UserProfileModel> userProfilemodel = UserProfileModel().obs;
@@ -31,6 +35,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
   RxString rxLong = ''.obs;
 
   RxString rxToken = ''.obs;
+  RxString rxEmail = ''.obs;
+  RxString refcode = ''.obs;
 
   //number page to close
   RxInt pageclose = 0.obs;
@@ -160,6 +166,41 @@ class UserController extends GetxController with WidgetsBindingObserver {
       }
     } catch (e) {
       print('Error in queryKyc: $e');
+    }
+  }
+
+  otpprocessTransfer(String otpCode) async {
+    var response = await DioClient.postEncrypt(
+      '${MyConstant.urlGateway}/confirmOTP',
+      {
+        "otp": otpCode,
+        "ref": refcode.value,
+      },
+    );
+    if (response['resultCode'] == 0) {
+      // Get.off(() => const ConfirmTranferScreen());
+    } else {
+      DialogHelper.showErrorDialogNew(description: response['resultDesc']);
+    }
+  }
+
+  resendotp() async {
+    var response = await DioClient.postEncrypt('${MyConstant.urlGateway}/OTP', {'msisdn': rxMsisdn.value});
+    print(response);
+    if (response["resultCode"] == 0) {
+      refcode.value = response["data"]["ref"].toString();
+    } else {
+      DialogHelper.showErrorDialogNew(description: 'ERRORTOTO');
+    }
+  }
+
+  resendotpforemail() async {
+    var response = await DioClient.postEncrypt('${MyConstant.urlLoginByEmail}/GetMsisdn', {'email': rxEmail.value, 'birthday': rxBirthday.value});
+    print(response);
+    if (response["resultCode"] == 0) {
+      refcode.value = response["data"]["ref"].toString();
+    } else {
+      DialogHelper.showErrorDialogNew(description: 'ERRORTOTO');
     }
   }
 }

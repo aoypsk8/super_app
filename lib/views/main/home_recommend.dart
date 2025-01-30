@@ -1,11 +1,14 @@
 // ignore_for_file: avoid_unnecessary_containers, non_constant_identifier_names
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
@@ -26,9 +29,26 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
   int _current = 0;
   int _currentDropping = 0;
   int _currentLoveit = 0;
-  final CarouselSliderController carouselController =
-      CarouselSliderController();
+  final CarouselSliderController carouselController = CarouselSliderController();
   final UserController userController = Get.find();
+  final HomeController homeController = Get.find();
+
+  final box = GetStorage();
+  File? _backgroundImage;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // chkShowAlert();
+      setState(() {
+        if (homeController.rxBgCard.value == '') {
+          _backgroundImage = null;
+        } else {
+          _backgroundImage = File(homeController.rxBgCard.value);
+        }
+      });
+    });
+  }
 
   List<String> imageUrls = [
     "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
@@ -249,13 +269,21 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
   Widget PrimaryCardComponent() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          image: NetworkImage("https://mmoney.la/Theme/cards.jpg"),
-          fit: BoxFit.cover,
-        ),
-      ),
+      decoration: _backgroundImage == null
+          ? BoxDecoration(
+              color: color_fff,
+              image: DecorationImage(
+                image: AssetImage(MyIcon.deault_theme),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.circular(20))
+          : BoxDecoration(
+              color: color_fff,
+              image: DecorationImage(
+                image: FileImage(_backgroundImage!),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 40),
         child: Column(
@@ -287,8 +315,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         color: cr_black.withOpacity(0.2),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 2, horizontal: 5),
+                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
                         child: Row(
                           children: [
                             TextFont(
@@ -299,11 +326,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                             ),
                             const SizedBox(width: 5),
                             TextFont(
-                              text: showAmount
-                                  ? fn.format(int.parse(userController
-                                      .mainBalance.value
-                                      .toString()))
-                                  : "****",
+                              text: showAmount ? fn.format(int.parse(userController.mainBalance.value.toString())) : "****",
                               color: color_fff,
                               fontWeight: FontWeight.w700,
                               fontSize: 16.5,
@@ -506,8 +529,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
             items: List.generate((loveItUrls.length / 4).ceil(), (index) {
               int start = index * 4;
               int end = start + 4;
-              List<String> sublist = loveItUrls.sublist(
-                  start, end > loveItUrls.length ? loveItUrls.length : end);
+              List<String> sublist = loveItUrls.sublist(start, end > loveItUrls.length ? loveItUrls.length : end);
               return GridView.builder(
                 padding: const EdgeInsets.all(5),
                 shrinkWrap: true,

@@ -4,12 +4,19 @@ import 'package:super_app/models/menu_model.dart';
 
 class HomeController extends GetxController {
   final storage = GetStorage();
+  RxString menutitle = ''.obs;
+  RxList<MenuModel> menumodel = <MenuModel>[].obs;
 
   RxList<Menulists> menulist = <Menulists>[].obs;
   Rx<Menulists> menudetail = Menulists().obs;
 
   HomeController() {
-    menudetail.value.url = '/Electric/getList;/Electric/verify;/Electric/payment;/Electric/getRecent;/Electric/history;';
+    // menudetail.value.url =
+    //     '/Electric/getList;/Electric/verify;/Electric/payment;/Electric/getRecent;/Electric/history;';
+    menudetail.value.url =
+        '/Bank/getList;/Bank/getRecent;/Bank/verify;/Bank/reqCashOut;/Bank/payment';
+    // menudetail.value.url =
+    //     '/Finance/getlist;/Finance/token;/Finance/verify;/Finance/confirm';
     menudetail.value.description = 'EL';
     menudetail.value.groupNameEN = 'Electric';
     menudetail.value.groupNameLA = 'ຈ່າຍຄ່າໄຟຟ້າ';

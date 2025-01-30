@@ -66,7 +66,7 @@ class _ConfirmFinanceScreenState extends State<ConfirmFinanceScreen> {
       title: 'time_out',
       description: 'try_again_later',
       onClose: () {
-        Get.close(2);
+        Get.until((route) => route.isFirst);
       },
     );
   }

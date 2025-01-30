@@ -1,4 +1,6 @@
-// ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: avoid_unnecessary_containers, non_constant_identifier_names
+import 'dart:ui';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,8 +8,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
-import 'package:super_app/views/reusable_result.dart';
-import 'package:super_app/widget/buildTextField.dart';
+import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/button.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -25,7 +26,9 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
   int _current = 0;
   int _currentDropping = 0;
   int _currentLoveit = 0;
-  final CarouselSliderController carouselController = CarouselSliderController();
+  final CarouselSliderController carouselController =
+      CarouselSliderController();
+  final UserController userController = Get.find();
 
   List<String> imageUrls = [
     "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
@@ -243,97 +246,97 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
     );
   }
 
-  // ignore: non_constant_identifier_names
   Widget PrimaryCardComponent() {
     return Container(
-      width: Get.width,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor.withOpacity(0.8),
         borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(
-          image: AssetImage(MyIcon.bg_main),
+        image: const DecorationImage(
+          image: NetworkImage("https://mmoney.la/Theme/cards.jpg"),
           fit: BoxFit.cover,
-          opacity: 0.1,
         ),
       ),
-      child: Stack(
-        children: [
-          Positioned(
-            right: 0,
-            top: 0,
-            bottom: 30,
-            child: Container(
-              width: 120,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
               decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(MyIcon.bg_mmoneyx),
-                  fit: BoxFit.contain,
-                ),
+                color: color_fff,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: TextFont(
+                text: "Your balance",
+                color: Colors.black,
+                poppin: true,
+                fontSize: 7.5,
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(22),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 3,
-                  ),
-                  decoration: BoxDecoration(
-                    color: color_fff,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: TextFont(
-                    text: "Primary",
-                    color: Theme.of(context).textTheme.bodySmall?.color ?? Colors.black,
-                    poppin: true,
-                    fontSize: 7.5,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                TextFont(
-                  text: "Your balance",
-                  color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 10.5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextFont(
-                      text: showAmount ? "₭ 99,950,000.00" : "₭",
-                      color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14.5,
-                    ),
-                    Container(
-                      width: 35.sp,
-                      padding: const EdgeInsets.all(5),
+                ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                    child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(80),
+                        borderRadius: BorderRadius.circular(6),
                         color: cr_black.withOpacity(0.2),
                       ),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            showAmount = !showAmount;
-                          });
-                        },
-                        child: Icon(
-                          showAmount ? Iconsax.eye : Iconsax.eye_slash,
-                          color: Theme.of(context).colorScheme.secondary,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 5),
+                        child: Row(
+                          children: [
+                            TextFont(
+                              text: "₭",
+                              color: color_fff,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16.5,
+                            ),
+                            const SizedBox(width: 5),
+                            TextFont(
+                              text: showAmount
+                                  ? fn.format(int.parse(userController
+                                      .mainBalance.value
+                                      .toString()))
+                                  : "****",
+                              color: color_fff,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16.5,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
+                  ),
+                ),
+                Container(
+                  width: 35.sp,
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(80),
+                    color: cr_black.withOpacity(0.2),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        showAmount = !showAmount;
+                      });
+                    },
+                    child: Icon(
+                      showAmount ? Iconsax.eye : Iconsax.eye_slash,
+                      color: color_fff,
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -503,7 +506,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
             items: List.generate((loveItUrls.length / 4).ceil(), (index) {
               int start = index * 4;
               int end = start + 4;
-              List<String> sublist = loveItUrls.sublist(start, end > loveItUrls.length ? loveItUrls.length : end);
+              List<String> sublist = loveItUrls.sublist(
+                  start, end > loveItUrls.length ? loveItUrls.length : end);
               return GridView.builder(
                 padding: const EdgeInsets.all(5),
                 shrinkWrap: true,

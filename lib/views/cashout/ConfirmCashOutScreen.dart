@@ -46,7 +46,7 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
       title: 'time_out',
       description: 'try_again_later',
       onClose: () {
-        Get.close(2);
+        Get.until((route) => route.isFirst);
       },
     );
   }

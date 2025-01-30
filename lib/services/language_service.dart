@@ -27,7 +27,8 @@ class LanguageService extends GetxService {
   // Change language method
   void changeLanguage(String languageCode) {
     // Validate if the language is supported
-    if (!supportedLocales.any((locale) => locale.languageCode == languageCode)) {
+    if (!supportedLocales
+        .any((locale) => locale.languageCode == languageCode)) {
       languageCode = 'lo';
     }
 

@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -38,6 +39,7 @@ class _buildHistoryTransferRecentState
     String? jsonData = prefs.getString('historyTransfer');
     if (jsonData != null) {
       List<dynamic> data = json.decode(jsonData);
+      print(data);
       List<Map<String, dynamic>> sortedData =
           List<Map<String, dynamic>>.from(data)
             ..sort((a, b) => b['timeStamp'].compareTo(a['timeStamp']));
@@ -48,7 +50,8 @@ class _buildHistoryTransferRecentState
     }
   }
 
-  void _saveFavoriteTransfer(String walletNo, String walletName) async {
+  void _saveFavoriteTransfer(
+      String walletNo, String walletName, String profile_user) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? favoriteDataString = prefs.getString('favoriteTransfer');
     List<Map<String, dynamic>> favoriteData = [];
@@ -84,6 +87,7 @@ class _buildHistoryTransferRecentState
         if (item['favorite'] == 1 && !existsInFavorites) {
           favoriteData.add({
             'walletNo': walletNo,
+            'profile_user': profile_user,
             'walletName': walletName,
             'timeStamp': DateTime.now().toIso8601String(),
           });
@@ -96,12 +100,14 @@ class _buildHistoryTransferRecentState
     if (!existsInHistory) {
       historyDataList.add({
         'walletNo': walletNo,
+        'profile_user': profile_user,
         'walletName': walletName,
         'timeStamp': DateTime.now().toIso8601String(),
         'favorite': 1,
       });
       favoriteData.add({
         'walletNo': walletNo,
+        'profile_user': profile_user,
         'walletName': walletName,
         'timeStamp': DateTime.now().toIso8601String(),
       });
@@ -167,10 +173,13 @@ class _buildHistoryTransferRecentState
                       Expanded(
                         child: Row(
                           children: [
-                            SvgPicture.asset(
-                              MyIcon.ic_user,
-                              fit: BoxFit.fill,
-                              width: 11.w,
+                            ClipOval(
+                              child: Image.network(
+                                historyData[index]['profile_user'] ??
+                                    MyConstant.profile_default,
+                                fit: BoxFit.cover,
+                                width: 11.w,
+                              ),
                             ),
                             Expanded(
                               child: Container(
@@ -208,6 +217,7 @@ class _buildHistoryTransferRecentState
                                 _saveFavoriteTransfer(
                                   (historyData[index]['walletNo']),
                                   (historyData[index]['walletName']),
+                                  (historyData[index]['profile_user']),
                                 );
                               },
                               child: SizedBox(

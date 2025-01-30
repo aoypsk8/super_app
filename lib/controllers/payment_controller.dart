@@ -56,10 +56,12 @@ class PaymentController extends GetxController {
       "transRefCol3": provider,
       "transRefCol4": package,
       "transId": transID,
-      "uuid": checkSum(transID, storage.read('msisdn'), '', amount.toString(), remark),
+      "uuid": checkSum(
+          transID, storage.read('msisdn'), '', amount.toString(), remark),
       "token": userController.rxToken.value
     };
-    var response = await DioClient.postEncrypt(url, body, key: 'openkey', token: rxTokenCashOut.value);
+    var response = await DioClient.postEncrypt(url, body,
+        key: 'openkey', token: rxTokenCashOut.value);
     if (response['resultCode'] == "0000") {
       reqCashOutModel.value = RequestCashoutModel.fromJson(response);
       isSuccess = true;
@@ -80,7 +82,8 @@ class PaymentController extends GetxController {
     var response;
     var url = "${MyConstant.urlCashOut}/CashOut";
     var body = jsonEncode(reqCashOutModel.value);
-    response = await DioClient.postEncrypt(url, body, key: 'openkey', token: rxTokenCashOut.value);
+    response = await DioClient.postEncrypt(url, body,
+        key: 'openkey', token: rxTokenCashOut.value);
     logController.insertCashOutLog(
       jsonDecode(body)['transID'],
       storage.read('msisdn'),
@@ -98,5 +101,24 @@ class PaymentController extends GetxController {
           });
       return isSuccess;
     }
+  }
+
+  cashoutWallet(transid, amount, fee, channel, detailChanel, remark, toAcc,
+      provider) async {
+    var data = {
+      "transID": transid,
+      "msisdn": storage.read('msisdn'),
+      "amount": amount,
+      "fee": fee,
+      "channel": channel,
+      "type": MyConstant.desRoute,
+      "remark": remark,
+      "from_acc": storage.read('msisdn'),
+      "to_acc": toAcc,
+      "provider": provider
+    };
+    var response =
+        await DioClient.postEncrypt('${MyConstant.urlGateway}/CashOut', data);
+    return response;
   }
 }

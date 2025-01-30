@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_unnecessary_containers, non_constant_identifier_names
 import 'dart:ui';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,7 +9,6 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/button.dart';
-import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class HomeRecommendScreen extends StatefulWidget {
@@ -83,45 +81,40 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                   children: [
                     PrimaryCardComponent(),
                     const SizedBox(height: 20),
-                    InkWell(
-                      onTap: () => Get.toNamed('/transfer'),
-                      child: TextFont(
-                        text: "M Money X Transfer ",
-                        color: Theme.of(context).primaryColor,
-                        poppin: true,
-                        fontSize: 7.5,
-                      ),
-                    ),
+                    PrimaryButton(
+                        title: 'OTP TESTING',
+                        onPressed: () {
+                          Get.toNamed('/otpTransfer');
+                        }),
+                    PrimaryButton(
+                        title: 'OTP Email',
+                        onPressed: () {
+                          Get.toNamed('/otpTransferEmail');
+                        }),
+                    PrimaryButton(
+                        title: 'Transfer',
+                        onPressed: () {
+                          Get.toNamed('/transfer');
+                        }),
                     const SizedBox(height: 20),
-                    InkWell(
-                      onTap: () => Get.toNamed('/cashOut'),
-                      child: TextFont(
-                        text: "M Money X Cash Out here ",
-                        color: Theme.of(context).primaryColor,
-                        poppin: true,
-                        fontSize: 7.5,
-                      ),
-                    ),
+                    PrimaryButton(
+                        title: 'Cash Out',
+                        onPressed: () {
+                          Get.toNamed('/cashOut');
+                        }),
                     const SizedBox(height: 20),
-                    InkWell(
-                      onTap: () => Get.toNamed('/finance'),
-                      child: TextFont(
-                        text: "M Money X finance here ",
-                        color: Theme.of(context).primaryColor,
-                        poppin: true,
-                        fontSize: 7.5,
-                      ),
-                    ),
+                    PrimaryButton(
+                        title: 'finance',
+                        onPressed: () {
+                          Get.toNamed('/finance');
+                        }),
                     const SizedBox(height: 20),
-                    InkWell(
-                      onTap: () => Get.toNamed('/cashInPage'),
-                      child: TextFont(
-                        text: "M Money X Cash IN  here ",
-                        color: Theme.of(context).primaryColor,
-                        poppin: true,
-                        fontSize: 7.5,
-                      ),
-                    ),
+                    PrimaryButton(
+                        title: 'Cash IN ',
+                        onPressed: () {
+                          Get.toNamed('/cashInPage');
+                        }),
+                    const SizedBox(height: 20),
                     PrimaryButton(
                         title: 'tempA',
                         onPressed: () async {
@@ -143,15 +136,17 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
 
                           // Get.to(ScreenshotPage());
                         }),
+                    const SizedBox(height: 20),
                     PrimaryButton(
                         title: 'XJaidee',
                         onPressed: () {
                           Get.toNamed('/xjaidee');
                         }),
+                    const SizedBox(height: 20),
                     PrimaryButton(
                         title: 'X-Proof',
                         onPressed: () {
-                          Get.toNamed('/xjaidee');
+                          Get.toNamed('/proof');
                         }),
                   ],
                 ),
@@ -294,6 +289,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                             TextFont(
                               text: "₭",
                               color: color_fff,
+                              poppin: true,
                               fontWeight: FontWeight.w700,
                               fontSize: 16.5,
                             ),
@@ -305,6 +301,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                       .toString()))
                                   : "****",
                               color: color_fff,
+                              poppin: true,
                               fontWeight: FontWeight.w700,
                               fontSize: 16.5,
                             ),

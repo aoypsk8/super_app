@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, unnecessary_null_comparison
 
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -174,15 +173,15 @@ class TransferController extends GetxController {
   }
 
   transfer(Menulists menulist) async {
-    // final menuWithAppId14 = homeController.menumodel.value.firstWhere(
-    //   (menu) => menu.menulists!.any((item) => item.appid == 14),
-    // );
-    // if (menuWithAppId14 != null) {
-    //   final matchedItem =
-    //       menuWithAppId14.menulists!.firstWhere((item) => item.appid == 14);
-    //   homeController.menutitle.value = matchedItem.groupNameEN!;
-    //   homeController.menudetail.value = matchedItem;
-    // }
+    final menuWithAppId14 = homeController.menumodel.value.firstWhere(
+      (menu) => menu.menulists!.any((item) => item.appid == 14),
+    );
+    if (menuWithAppId14 != null) {
+      final matchedItem =
+          menuWithAppId14.menulists!.firstWhere((item) => item.appid == 14);
+      homeController.menutitle.value = matchedItem.groupNameEN!;
+      homeController.menudetail.value = matchedItem;
+    }
     try {
       List<String> urlSplit =
           homeController.menudetail.value.url.toString().split(";");

@@ -74,4 +74,7 @@ class MyIcon {
 
   // success
   static String ic_success = 'assets/icons/success.png';
+
+  // otpAnimation
+  static String otpAnimation = 'assets/icons/otpAnimation.svg';
 }

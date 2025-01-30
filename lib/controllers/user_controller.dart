@@ -182,7 +182,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
       },
     );
     if (response['resultCode'] == 0) {
-      // Get.off(() => const ConfirmTranferScreen());
+      Get.toNamed('/confirmTransfer');
     } else {
       DialogHelper.showErrorDialogNew(description: response['resultDesc']);
     }

@@ -12,7 +12,9 @@ import 'package:super_app/models/model-bank/ProviderBankModel.dart';
 import 'package:super_app/models/model-bank/RecentBankModel.dart';
 import 'package:super_app/models/model-bank/ReqCashoutBankModel.dart';
 import 'package:super_app/services/helper/random.dart';
+import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/cashout/OtpTransferBankScreen.dart';
+import 'package:super_app/views/reusable_result.dart';
 import '../../../services/api/dio_client.dart';
 import '../../../utility/dialog_helper.dart';
 
@@ -208,7 +210,7 @@ class CashOutController extends GetxController {
     logPaymentReq = data;
     logPaymentRes = response;
     logController.insertAllLog(
-      "homeController.menudetail.value.groupNameEN.toString()",
+      homeController.menudetail.value.groupNameEN.toString(),
       rxTransID.value,
       bankDetail.value.logo,
       bankDetail.value.requesterName!,
@@ -225,7 +227,21 @@ class CashOutController extends GetxController {
     if (response["resultcode"] == "200") {
       rxTimeStamp.value = response["CreateDate"];
       loading.value = false;
-      Get.toNamed('/resultCashOut');
+      Get.to(ReusableResultScreen(
+        fromAccountImage: userController.userProfilemodel.value.profileImg ??
+            MyConstant.profile_default,
+        fromAccountName: userController.profileName.value,
+        fromAccountNumber: userController.rxMsisdn.value,
+        toAccountImage: rxLogo.value,
+        toAccountName: rxAccName.value,
+        toAccountNumber: rxAccName.value,
+        toTitleProvider: '',
+        amount: rxPaymentAmount.value,
+        fee: rxFee.value,
+        transactionId: rxTransID.value,
+        note: rxNote.value,
+        timestamp: rxTimeStamp.value,
+      ));
     } else {
       loading.value = false;
       DialogHelper.showErrorDialogNew(description: response['resultdesc']);

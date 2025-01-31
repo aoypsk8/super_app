@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +8,7 @@ import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/cashout_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/myIcon.dart';
@@ -43,88 +45,124 @@ class _OtpTransferBankScreenState extends State<OtpTransferBankScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Scaffold(
-          backgroundColor: color_fff,
-          appBar: BuildAppBar(title: "confirm_payment"),
-          body: SingleChildScrollView(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-              behavior: HitTestBehavior.opaque,
-              child: Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 26, vertical: 10),
-                child: Column(
+    return Scaffold(
+      backgroundColor: color_fff,
+      extendBodyBehindAppBar: true,
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          behavior: HitTestBehavior.opaque,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    SvgPicture.asset(
+                      MyIcon.otpAnimation,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
                             children: [
-                              TextFont(
-                                text: 'verification',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    TextFont(
+                                      text: 'verification',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                      color: cr_2929,
+                                    ),
+                                    Row(
+                                      children: [
+                                        TextFont(
+                                          text: 'otp_send',
+                                          color: color_777,
+                                          fontSize: 10,
+                                          maxLines: 2,
+                                        ),
+                                        TextFont(
+                                          text: userController
+                                              .userProfilemodel.value.msisdn
+                                              .toString(),
+                                          color: color_777,
+                                          fontSize: 10,
+                                          maxLines: 2,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                        Image.asset(
-                          MyIcon.logo_ok,
-                          width: 14.w,
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    buildOTP(),
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextFont(text: 'send_otp_desc'),
-                              const SizedBox(width: 5),
-                            ],
-                          ),
-                          TextFont(
-                            text:
-                                'Ref Code : ${cashOutController.reqcashout.value.data!.otpRefCode!}',
-                            fontSize: 10,
+                          SizedBox(height: 20),
+                          buildOTP(context),
+                          SizedBox(height: 30),
+                          TextButton(
+                            onPressed: () => userController.resendotp(),
+                            child: TextFont(
+                              text: 'send_otp_again',
+                              fontWeight: FontWeight.w400,
+                              underline: true,
+                              underlineColor: cr_ef33,
+                              color: cr_ef33,
+                              fontSize: 11.5,
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ],
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: Column(
+                    children: [
+                      buildBottomAppbar(
+                        bgColor: Theme.of(context).primaryColor,
+                        title: 'next',
+                        high: 0,
+                        func: () {
+                          Future.delayed(MyConstant.delayTime).then((_) {
+                            _otpProcess(pinController.text);
+                          });
+                        },
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: TextFont(
+                          text: 'cancel',
+                          fontWeight: FontWeight.w400,
+                          underline: true,
+                          underlineColor: cr_7070,
+                          color: cr_7070,
+                          fontSize: 11.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          bottomNavigationBar: Container(
-            padding: EdgeInsets.only(top: 20),
-            decoration: BoxDecoration(
-              color: color_fff,
-              border: Border.all(color: color_ddd),
-            ),
-            child: buildBottomAppbar(
-              bgColor: Theme.of(context).primaryColor,
-              title: 'confirm',
-              func: () {
-                cashOutController.loading.value = true;
-                // cashOutController.confirmOtpPayment(pinController.text);
-                Get.toNamed('/resultCashOut');
-                // cashOutController.confirmOtpPayment(pinController.text);
-              },
-            ),
-          )),
+        ),
+      ),
     );
   }
 
-  Container buildOTP() {
+  Widget buildOTP(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Pinput(
@@ -132,42 +170,44 @@ class _OtpTransferBankScreenState extends State<OtpTransferBankScreen> {
         pinAnimationType: PinAnimationType.slide,
         controller: pinController,
         onCompleted: (pin) {
-          cashOutController.loading.value = true;
-          cashOutController.confirmOtpPayment(pin);
+          Future.delayed(MyConstant.delayTime).then((_) {
+            _otpProcess(pin);
+          });
         },
         focusNode: focusNode,
         defaultPinTheme: PinTheme(
-            width: 80,
-            height: 80,
-            textStyle: GoogleFonts.poppins(
-                fontSize: 22.sp,
-                color: color_red_background,
-                fontWeight: FontWeight.w500),
-            decoration: const BoxDecoration()),
-        showCursor: true,
-        cursor: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              height: 2,
-              decoration: BoxDecoration(
-                  color: color_red_background,
-                  borderRadius: BorderRadius.circular(10)),
-            ),
-          ],
+          width: 56,
+          height: 56,
+          textStyle: TextStyle(
+              fontSize: 20,
+              color: Color.fromRGBO(30, 60, 87, 1),
+              fontWeight: FontWeight.w500),
+          decoration: BoxDecoration(
+            border: Border.all(color: Color.fromRGBO(234, 239, 243, 1)),
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
-        preFilledWidget: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              height: 2,
-              decoration: BoxDecoration(
-                  color: color_grey5e5,
-                  borderRadius: BorderRadius.circular(10)),
-            ),
-          ],
+        showCursor: true,
+        focusedPinTheme: PinTheme(
+          width: 56,
+          height: 56,
+          textStyle: const TextStyle(
+            fontSize: 20,
+            color: Color.fromRGBO(30, 60, 87, 1),
+            fontWeight: FontWeight.w500,
+          ),
+          decoration: BoxDecoration(
+            border:
+                Border.all(color: cr_ef33), // Focus color change when typing
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
       ),
     );
+  }
+
+  Future _otpProcess(String otp) async {
+    cashOutController.loading.value = true;
+    cashOutController.confirmOtpPayment(pinController.text);
   }
 }

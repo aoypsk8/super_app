@@ -65,7 +65,7 @@
   "done": "ສຳເລັດ",
   "vertify_otp": "ຢືນຢັນຕົວຕົນຜ່ານ OTP",
   "verification": "ຢືນຢັນຕົວຕົນ",
-  "otp_send": "ລະຫັດ OTP ສົ່ງໄປຫາໝາຍເລກ {}",
+  "otp_send": "ລະຫັດ OTP ສົ່ງໄປຫາໝາຍເລກ :",
   "otp_sendEmail": "ລະຫັດ OTP ສົ່ງໄປຫາເມວ {}",
   "wallet_account": "ໝາຍເລກກະເປົ໋າເງິນ",
   "swap_account": "ປ່ຽນໝາຍເລກໃຫມ່",
@@ -166,7 +166,7 @@
   "version": "ເວີຊັນ",
   "addressdesc": "ສູນໃຫຍ່ ລາວໂທລະຄົມ, ຖະໜົນສາຍລົມ, ນະຄອນຫລວງວຽງຈັນ, ລາວ",
   "callcenter": "Call Center",
-  "devby": "2023 Lao Mobile Money Sole Company Limited (LMM). All rights reserved.",
+  "devby": "2025 @ Lao Mobile Money Sole Company Limited (LMM). All rights reserved.",
   "VTE": "ນະຄອນຫຼວງ",
   "VTP": "ວຽງຈັນ",
   "BKX": "ບໍລິຄຳໄຊ",
@@ -301,5 +301,8 @@
   "verify_account": "ການຢືນຢັນຕົວຕົນ",
   "biometric": "Biometric",
   "save_screenshot": "ບັນທຶກຮູບໃບບິນ",
-  "policy_and_term": "ກ່ຽວກັບເງື່ອນໄຂ ແລະ ນະໂບບາຍ"
+  "policy_and_term": "ກ່ຽວກັບເງື່ອນໄຂ ແລະ ນະໂບບາຍ",
+  "save_pic_success":"ບັນທືກ QR ສຳເລັດ",
+  "from_acc":"ຈາກບັນຊີ",
+  "to_acc":"ຫາບັນຊີ"
 }

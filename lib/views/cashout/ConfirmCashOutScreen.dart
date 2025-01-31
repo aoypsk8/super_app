@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/cashout_controller.dart';
+import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
@@ -23,6 +24,7 @@ class ConfirmCashOutScreen extends StatefulWidget {
 }
 
 class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
+  final userController = Get.find<UserController>();
   int _remainingTime = 600;
   Timer? _countdownTimer;
   void _startCountdownTimer() {
@@ -70,7 +72,6 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
   }
 
   bool hideButton = false;
-
   final cashOutController = Get.put(CashOutController());
   final storage = GetStorage();
 
@@ -145,12 +146,14 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: buildUserDetail(
-                      profile:
-                          "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
-                      from: true,
-                      msisdn: storage.read('msisdn'),
-                      name: "userController.name.value",
-                    ),
+                        profile:
+                            userController.userProfilemodel.value.profileImg ??
+                                MyConstant.profile_default,
+                        from: true,
+                        msisdn: userController.userProfilemodel.value.msisdn
+                            .toString(),
+                        name:
+                            '${userController.userProfilemodel.value.name.toString()} ${userController.userProfilemodel.value.surname.toString()}'),
                   ),
                   const SizedBox(height: 5),
                   const buildDotLine(color: cr_ef33, dashlenght: 7),

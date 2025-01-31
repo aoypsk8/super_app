@@ -117,6 +117,7 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
                   max: 18,
                   fillcolor: color_f4f4,
                   bordercolor: color_f4f4,
+                  textType: TextInputType.text,
                 ),
                 const SizedBox(height: 20),
                 buildNumberFiledValidate(

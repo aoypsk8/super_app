@@ -38,6 +38,9 @@ class UserController extends GetxController with WidgetsBindingObserver {
   RxString rxEmail = ''.obs;
   RxString refcode = ''.obs;
 
+  //login
+  RxBool isLogin = false.obs;
+
   //number page to close
   RxInt pageclose = 0.obs;
   increasepage() {
@@ -51,6 +54,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
   }
 
   Future checktoken({String? name}) async {
+    isLogin.value = true;
     getCurrentLocation();
   }
 
@@ -59,15 +63,16 @@ class UserController extends GetxController with WidgetsBindingObserver {
     super.onReady();
     storage.write('msisdn', '2057935454');
     storage.write('msisdn', '2057935454');
-    storage.write('msisdn', '2057935454');
-    await loginpincode('2057935454', '555555');
+    storage.write('msisdn', '2052768833');
+    await loginpincode('2052768833', '555555');
     await fetchBalance();
     await queryUserProfile();
   }
 
   Future<void> loginpincode(String msisdn, String pincode) async {
     try {
-      final response = await DioClient.postEncrypt('${MyConstant.urlGateway}/login', {"msisdn": msisdn, "pin": pincode});
+      final response = await DioClient.postEncrypt(
+          '${MyConstant.urlGateway}/login', {"msisdn": msisdn, "pin": pincode});
       if (response != null && response["resultCode"] == 0) {
         final token = response['token'];
         if (token != null) {
@@ -76,7 +81,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
           print('Token: $token');
         }
       } else {
-        print('Error: Login failed with resultCode ${response?["resultCode"] ?? "unknown"}');
+        print(
+            'Error: Login failed with resultCode ${response?["resultCode"] ?? "unknown"}');
       }
     } catch (e) {
       print('Error during login: $e');
@@ -94,7 +100,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
         }
       }
       if (permission == LocationPermission.deniedForever) {
-        print("Location permission permanently denied. Please enable it in settings.");
+        print(
+            "Location permission permanently denied. Please enable it in settings.");
         return;
       }
       Position currentPosition = await Geolocator.getCurrentPosition(
@@ -123,7 +130,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
       var url = '${MyConstant.urlConsumerInfo}/UserProfile';
       var data = {"msisdn": msisdn};
 
-      var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm-key');
+      var response = await DioClient.postEncrypt(
+          loading: false, url, data, key: 'lmm-key');
 
       if (response["resultCode"] == 0) {
         balanceModel.value = BalanceModel.fromJson(response);
@@ -135,10 +143,12 @@ class UserController extends GetxController with WidgetsBindingObserver {
           totalBalance.value = result.amount ?? 0;
           mainBalance.value = result.fiat ?? 0;
           pointBalance.value = result.point ?? 0;
-          profileName.value = '${result.firstname ?? ''} ${result.lastname ?? ''}'.trim();
+          profileName.value =
+              '${result.firstname ?? ''} ${result.lastname ?? ''}'.trim();
         }
       } else {
-        print('Error: ${response["resultMessage"] ?? "Unknown error occurred"}');
+        print(
+            'Error: ${response["resultMessage"] ?? "Unknown error occurred"}');
       }
     } catch (e) {
       print('Error in fetchBalance: $e');
@@ -158,7 +168,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
       }
       var url = '${MyConstant.urlUser}/query';
       var data = {"msisdn": msisdn};
-      var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
+      var response =
+          await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
       if (response != null) {
         userProfilemodel.value = UserProfileModel.fromJson(response);
       } else {
@@ -185,7 +196,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
   }
 
   resendotp() async {
-    var response = await DioClient.postEncrypt('${MyConstant.urlGateway}/OTP', {'msisdn': rxMsisdn.value});
+    var response = await DioClient.postEncrypt(
+        '${MyConstant.urlGateway}/OTP', {'msisdn': rxMsisdn.value});
     print(response);
     if (response["resultCode"] == 0) {
       refcode.value = response["data"]["ref"].toString();
@@ -195,7 +207,9 @@ class UserController extends GetxController with WidgetsBindingObserver {
   }
 
   resendotpforemail() async {
-    var response = await DioClient.postEncrypt('${MyConstant.urlLoginByEmail}/GetMsisdn', {'email': rxEmail.value, 'birthday': rxBirthday.value});
+    var response = await DioClient.postEncrypt(
+        '${MyConstant.urlLoginByEmail}/GetMsisdn',
+        {'email': rxEmail.value, 'birthday': rxBirthday.value});
     print(response);
     if (response["resultCode"] == 0) {
       refcode.value = response["data"]["ref"].toString();

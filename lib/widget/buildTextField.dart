@@ -424,6 +424,7 @@ class buildNumberFiledValidate extends StatelessWidget {
     this.suffixonTapFuc,
     this.fillcolor = color_fafa,
     this.bordercolor = color_ddd,
+    this.textType = TextInputType.number,
   });
 
   final TextEditingController controller;
@@ -435,6 +436,7 @@ class buildNumberFiledValidate extends StatelessWidget {
   final Color fillcolor;
   final Color bordercolor;
   final Widget? suffixIcon;
+  final TextInputType? textType;
   final Function()? suffixonTapFuc;
 
   @override
@@ -459,7 +461,7 @@ class buildNumberFiledValidate extends StatelessWidget {
           FormBuilderTextField(
             name: name,
             controller: controller,
-            keyboardType: TextInputType.number,
+            keyboardType: textType,
             maxLength: max == null ? null : max,
             style: languageCode == 'lo'
                 ? GoogleFonts.notoSerifLao(

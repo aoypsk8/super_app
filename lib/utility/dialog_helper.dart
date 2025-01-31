@@ -172,6 +172,7 @@ class DialogHelper {
   static void showSuccess({
     String title = 'Success.',
     String closeTitle = 'close',
+    bool autoClose = false,
     Function()? onClose,
   }) {
     Get.dialog(
@@ -200,8 +201,17 @@ class DialogHelper {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(height: 25),
-                    Lottie.asset(MyIcon.animation_success),
+                    Lottie.asset(
+                      MyIcon.animation_success,
+                      repeat: autoClose ? false : true,
+                      onLoaded: (composition) {
+                        autoClose
+                            ? Future.delayed(composition.duration * 2, () {
+                                Get.back();
+                              })
+                            : null;
+                      },
+                    ),
                     SizedBox(height: 10),
                     TextFont(
                       text: title,
@@ -209,7 +219,7 @@ class DialogHelper {
                       color: cr_2929,
                       fontSize: 12,
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),

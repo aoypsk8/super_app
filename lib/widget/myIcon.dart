@@ -73,6 +73,9 @@ class MyIcon {
 
   // lao qr
   static String ic_lao_qr = 'assets/icons/laoqr.png';
+  static String ic_save_qr = 'assets/icons/saveIc.svg';
+  static String ic_share_qr = 'assets/icons/shareIc.svg';
+  static String ic_edit_qr = 'assets/icons/editIc.svg';
 
   // success
   static String ic_success = 'assets/icons/success.png';

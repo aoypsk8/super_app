@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:intl/intl.dart';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -15,8 +14,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/utility/shareResult.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/myIcon.dart';
 
@@ -64,20 +63,6 @@ class ReusableResultScreen extends StatefulWidget {
 class _ReusableResultScreenState extends State<ReusableResultScreen> {
   final ScreenshotController _screenshotController = ScreenshotController();
   GlobalKey _repaintBoundaryKey = GlobalKey();
-
-  Future<void> _takeScreenshotAndShare() async {
-    try {
-      final image = await _screenshotController.capture();
-      if (image != null) {
-        final directory = await getApplicationDocumentsDirectory();
-        final imagePath = File('${directory.path}/screenshot.png');
-        await imagePath.writeAsBytes(image);
-        await Share.shareXFiles([XFile(imagePath.path)]);
-      }
-    } catch (e) {
-      print("Error taking screenshot: $e");
-    }
-  }
 
   @override
   void initState() {
@@ -135,195 +120,201 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RepaintBoundary(
-        key: _repaintBoundaryKey,
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Opacity(
-                opacity: 0.9,
-                child: Image.asset(MyIcon.bg_backgroundBill, fit: BoxFit.cover),
+      body: Screenshot(
+        controller: _screenshotController,
+        child: RepaintBoundary(
+          key: _repaintBoundaryKey,
+          child: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Opacity(
+                  opacity: 0.9,
+                  child:
+                      Image.asset(MyIcon.bg_backgroundBill, fit: BoxFit.cover),
+                ),
               ),
-            ),
-            FooterLayout(
-              footer: Row(
-                children: [
-                  Expanded(
-                    child: buildBottomBill(
-                      title: 'share',
-                      bgColor: cr_fdeb,
-                      func: () async {
-                        // _takeScreenshot();
-                      },
-                      share: true,
+              FooterLayout(
+                footer: Row(
+                  children: [
+                    Expanded(
+                      child: buildBottomBill(
+                        title: 'share',
+                        bgColor: cr_fdeb,
+                        func: () async {
+                          sharedScreenshot(_screenshotController);
+                        },
+                        share: true,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: buildBottomBill(
-                      title: 'close',
-                      bgColor: cr_b326,
-                      textColor: color_fff,
-                      func: () async {
-                        Get.until((route) => route.isFirst);
-                      },
+                    Expanded(
+                      child: buildBottomBill(
+                        title: 'close',
+                        bgColor: cr_b326,
+                        textColor: color_fff,
+                        func: () async {
+                          Get.until((route) => route.isFirst);
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      SizedBox(height: 10.h),
-                      buildTopClippath(),
-                      ClipPath(
-                        clipper: TriangleClipper(),
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 17),
-                          decoration: BoxDecoration(
-                            color: color_fff,
-                          ),
-                          width: Get.width,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              backgroudDetailBill(),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 15, right: 15, top: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    buildTextSuccess(),
-                                    SizedBox(height: 10),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: cr_fdeb,
-                                        borderRadius: BorderRadius.circular(8),
+                  ],
+                ),
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        SizedBox(height: 10.h),
+                        buildTopClippath(),
+                        ClipPath(
+                          clipper: TriangleClipper(),
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 17),
+                            decoration: BoxDecoration(
+                              color: color_fff,
+                            ),
+                            width: Get.width,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                backgroudDetailBill(),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15, right: 15, top: 15),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      buildTextSuccess(),
+                                      SizedBox(height: 10),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: cr_fdeb,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            //! from - to account
+                                            buildAccountDetails(
+                                              context: context,
+                                              imageUrl: widget.fromAccountImage,
+                                              type: 'from',
+                                              accName: widget.fromAccountName,
+                                              accNo: widget.fromAccountNumber,
+                                            ),
+                                            buildDotLine(
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                            buildAccountDetails(
+                                              context: context,
+                                              imageUrl: widget.toAccountImage,
+                                              type: 'to',
+                                              accName: widget.toAccountName,
+                                              accNo: widget.toAccountNumber,
+                                              titleProvider:
+                                                  widget.toTitleProvider,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      child: Column(
+                                      const SizedBox(height: 10),
+                                      TextFont(
+                                        text: 'amount_transfer',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11,
+                                        color: cr_7070,
+                                      ),
+                                      Row(
                                         children: [
-                                          //! from - to account
-                                          buildAccountDetails(
-                                            context: context,
-                                            imageUrl: widget.fromAccountImage,
-                                            type: 'from',
-                                            accName: widget.fromAccountName,
-                                            accNo: widget.fromAccountNumber,
+                                          TextFont(
+                                            text: widget.amount,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 20,
+                                            color: cr_b326,
+                                            poppin: true,
                                           ),
-                                          buildDotLine(
-                                              color: Theme.of(context)
-                                                  .primaryColor),
-                                          buildAccountDetails(
-                                            context: context,
-                                            imageUrl: widget.toAccountImage,
-                                            type: 'to',
-                                            accName: widget.toAccountName,
-                                            accNo: widget.toAccountNumber,
-                                            titleProvider:
-                                                widget.toTitleProvider,
+                                          TextFont(
+                                            text: '.00 LAK',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 20,
+                                            color: cr_b326,
+                                            poppin: true,
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    TextFont(
-                                      text: 'amount_transfer',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 11,
-                                      color: cr_7070,
-                                    ),
-                                    Row(
-                                      children: [
-                                        TextFont(
-                                          text: widget.amount,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 20,
-                                          color: cr_b326,
-                                          poppin: true,
-                                        ),
-                                        TextFont(
-                                          text: '.00 LAK',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 20,
-                                          color: cr_b326,
-                                          poppin: true,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    buildTextDetail(
-                                        title: "fee",
-                                        detail: widget.fee,
-                                        money: true),
-                                    const SizedBox(height: 5),
-                                    buildTextDetail(
-                                        title: "transaction_id",
-                                        detail: widget.transactionId),
-                                    const SizedBox(height: 5),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                            child: buildTextDetail(
-                                          money: false,
-                                          title: "description",
-                                          detail: widget.note,
-                                          noto: true,
-                                        )),
-                                        Expanded(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              PrettyQr(
-                                                image: AssetImage(
-                                                  MyIcon.ic_logo_x,
+                                      const SizedBox(height: 10),
+                                      buildTextDetail(
+                                          title: "fee",
+                                          detail: widget.fee,
+                                          money: true),
+                                      const SizedBox(height: 5),
+                                      buildTextDetail(
+                                          title: "transaction_id",
+                                          detail: widget.transactionId),
+                                      const SizedBox(height: 5),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                              child: buildTextDetail(
+                                            money: false,
+                                            title: "description",
+                                            detail: widget.note,
+                                            noto: true,
+                                          )),
+                                          Expanded(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                PrettyQr(
+                                                  image: AssetImage(
+                                                    MyIcon.ic_logo_x,
+                                                  ),
+                                                  size: 35.w,
+                                                  data: widget.transactionId,
+                                                  errorCorrectLevel:
+                                                      QrErrorCorrectLevel.H,
+                                                  typeNumber: null,
+                                                  roundEdges: false,
                                                 ),
-                                                size: 35.w,
-                                                data: widget.transactionId,
-                                                errorCorrectLevel:
-                                                    QrErrorCorrectLevel.H,
-                                                typeNumber: null,
-                                                roundEdges: false,
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      ClipPath(
-                        clipper: MyCustomClipperButtom(),
-                        child: Container(
-                          width: Get.width,
-                          height: 30,
-                          margin: EdgeInsets.symmetric(horizontal: 17),
-                          decoration: BoxDecoration(
-                            color: color_fff,
+                        ClipPath(
+                          clipper: MyCustomClipperButtom(),
+                          child: Container(
+                            width: Get.width,
+                            height: 30,
+                            margin: EdgeInsets.symmetric(horizontal: 17),
+                            decoration: BoxDecoration(
+                              color: color_fff,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

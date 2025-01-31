@@ -4,7 +4,6 @@ import 'package:super_app/views/cashIn/CashIn.dart';
 import 'package:super_app/views/cashIn/ConfirmCashIn.dart';
 import 'package:super_app/views/cashout/ConfirmCashOutScreen.dart';
 import 'package:super_app/views/cashout/ListsProviderBankScreen.dart';
-import 'package:super_app/views/cashout/ResultCashOutScreen.dart';
 import 'package:super_app/views/finance_institution/ConfirmFinanceScreen.dart';
 import 'package:super_app/views/finance_institution/ListsProviderFinance.dart';
 import 'package:super_app/views/finance_institution/PaymentFinanceScreen.dart';
@@ -50,10 +49,6 @@ class AppRoutes {
     GetPage(
       name: '/cashOutConfirm',
       page: () => ConfirmCashOutScreen(),
-    ),
-    GetPage(
-      name: '/resultCashOut',
-      page: () => ResultCashOutscreen(),
     ),
 
     // Institution

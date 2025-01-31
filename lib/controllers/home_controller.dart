@@ -13,6 +13,7 @@ class HomeController extends GetxController {
   final box = GetStorage();
   RxString rxBgCard = ''.obs;
   RxString rxBgBill = ''.obs;
+  RxString urlwebview = ''.obs;
 
   RxString menutitle = ''.obs;
   RxList<MenuModel> menumodel = <MenuModel>[].obs;

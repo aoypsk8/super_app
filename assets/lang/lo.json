@@ -304,5 +304,7 @@
   "policy_and_term": "ກ່ຽວກັບເງື່ອນໄຂ ແລະ ນະໂບບາຍ",
   "save_pic_success":"ບັນທືກ QR ສຳເລັດ",
   "from_acc":"ຈາກບັນຊີ",
-  "to_acc":"ຫາບັນຊີ"
+  "to_acc":"ຫາບັນຊີ",
+  "change_primary_success":"ປ່ຽນບັນຊີສຳເລັດ!",
+  "TermsPolicy":"Terms and Conditions of Use and Privacy Notice"
 }

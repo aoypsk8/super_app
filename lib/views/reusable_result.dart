@@ -15,6 +15,7 @@ import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/utility/shareResult.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/myIcon.dart';
@@ -233,7 +234,8 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                                       Row(
                                         children: [
                                           TextFont(
-                                            text: widget.amount,
+                                            text: fn.format(
+                                                int.parse(widget.amount)),
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20,
                                             color: cr_b326,

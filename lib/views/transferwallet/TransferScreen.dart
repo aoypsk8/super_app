@@ -57,6 +57,9 @@ class _TransferScreenState extends State<TransferScreen> {
 
   @override
   void initState() {
+    _toWallet.text = '';
+    transferController.destinationMsisdn.value = '';
+    _balanceAmount = 0;
     print(
         'transferScrenn destinationMsisdn ${transferController.destinationMsisdn.value}');
     _toWallet.text = transferController.destinationMsisdn.value;

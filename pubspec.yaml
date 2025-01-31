@@ -84,6 +84,9 @@ dependencies:
   u_credit_card: ^1.4.0
   # dropdown
   dropdown_button2: ^2.3.9
+  # web view
+  url_launcher: ^6.3.1
+  webview_flutter: ^4.10.0
   
 
 dev_dependencies:

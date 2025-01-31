@@ -20,6 +20,7 @@ class MyIcon {
   static String bg_mmoneyx = 'assets/background/mmoneyx.png';
   static String bg_backgroundBill = 'assets/background/backgroundTrnasfer.png';
   static String bg_ic_background = 'assets/background/bii_ic_background.png';
+  static String bgOfCard = 'assets/background/bgOfCard.svg';
 
   //recurring
   static String ic_bill_link = 'assets/icons/ic_bill_link.png';
@@ -39,6 +40,7 @@ class MyIcon {
   static String animation_loading = 'assets/animation/loading.gif';
   static String animation_cat = 'assets/animation/cat1.gif';
   static String ic_mascot_dontknow = 'assets/animation/dontknow.gif';
+  static String ic_mascot_good = 'assets/animation/good.gif';
   static String animation_success = 'assets/animation/success.json';
 
   // bottom_nav
@@ -82,4 +84,12 @@ class MyIcon {
 
   // otpAnimation
   static String otpAnimation = 'assets/icons/otpAnimation.svg';
+
+  // delete
+  static String ic_trash = 'assets/icons/trash.svg';
+  static String ic_problem = 'assets/icons/problem.png';
+  static String ic_deleteX = 'assets/icons/deleteX.svg';
+  static String ic_addCard = 'assets/icons/addCard.png';
+  // security
+  static String ic_security_check = 'assets/icons/securityCheck.svg';
 }

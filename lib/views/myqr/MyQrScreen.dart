@@ -11,7 +11,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/qr_controller.dart';
@@ -85,6 +84,7 @@ class _MyQrScreenState extends State<MyQrScreen> {
   @override
   void dispose() {
     qrController.rxQrDynamicAmout.value = '';
+    _note.text = '';
     super.dispose();
   }
 
@@ -197,6 +197,15 @@ class _MyQrScreenState extends State<MyQrScreen> {
                           fontWeight: FontWeight.w700,
                         ),
                       ],
+                    ),
+              const SizedBox(height: 5),
+              qrController.rxNote.value == ''
+                  ? const SizedBox()
+                  : TextFont(
+                      text: qrController.rxNote.value,
+                      poppin: true,
+                      color: cr_ef33,
+                      fontWeight: FontWeight.w700,
                     ),
               const SizedBox(height: 5),
               Row(
@@ -497,6 +506,7 @@ class _MyQrScreenState extends State<MyQrScreen> {
                         name: 'note',
                         iconColor: color_f4f4,
                         hintText: 'input_text',
+                        Isvalidate: true,
                       ),
                       SizedBox(height: 20),
                       buildBottomAppbar(

@@ -85,7 +85,9 @@ class QrController extends GetxController {
     };
     var response =
         await DioClient.postEncrypt(url, data, key: 'lmmkey', loading: false);
+
     if (response["resultCode"] == "200") {
+      rxNote.value = remark;
       generateQrModel.value = GenerateQrModel.fromJson(response);
     }
   }

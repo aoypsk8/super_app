@@ -294,5 +294,7 @@
   "policy_and_term": "Chính sách và điều khoản",
   "save_pic_success":"Save QR success",
   "from_acc":"From Account",
-  "to_acc":"To Account"
+  "to_acc":"To Account",
+  "change_primary_success":"Change Success!",
+  "TermsPolicy":"Terms and Conditions of Use and Privacy Notice"
 }

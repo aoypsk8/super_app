@@ -87,17 +87,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   textBaseline: TextBaseline.ideographic,
                                   children: [
                                     TextFont(
-                                      text: 'welcome',
+                                      text: 'ຍິນດີຕ້ອນຮັບ,',
                                       fontWeight: FontWeight.w600,
                                       color: cr_7070,
                                     ),
-                                    const SizedBox(width: 5),
+                                    const SizedBox(width: 3),
                                     TextFont(
                                       text:
-                                          "${userController.userProfilemodel.value.name ?? ''} ${userController.userProfilemodel.value.surname ?? ''}",
+                                          "${userController.userProfilemodel.value.name ?? ''}!",
                                       fontWeight: FontWeight.w600,
                                       color: cr_7070,
-                                    ),
+                                    )
                                   ],
                                 ),
                                 const SizedBox(width: 6),

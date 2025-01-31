@@ -29,7 +29,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
   RxInt pointBalance = 0.obs;
 
   //auth
-  RxString rxMsisdn = '2052768833'.obs;
+  RxString rxMsisdn = ''.obs;
 
   RxString rxLat = ''.obs;
   RxString rxLong = ''.obs;
@@ -64,7 +64,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
     storage.write('msisdn', '2057935454');
     storage.write('msisdn', '2057935454');
     storage.write('msisdn', '2052768833');
-    await loginpincode('2052768833', '555555');
+    storage.write('msisdn', '2078877529');
+    await loginpincode('2078877529', '010824');
     await fetchBalance();
     await queryUserProfile();
   }
@@ -77,6 +78,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
         final token = response['token'];
         if (token != null) {
           await storage.write('token', token);
+          rxMsisdn.value = msisdn;
           rxToken.value = token;
           print('Token: $token');
         }

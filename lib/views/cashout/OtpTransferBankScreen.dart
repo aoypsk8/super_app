@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
-import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/cashout_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
-import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -82,7 +79,7 @@ class _OtpTransferBankScreenState extends State<OtpTransferBankScreen> {
                                       fontSize: 18,
                                       color: cr_2929,
                                     ),
-                                    Row(
+                                    Wrap(
                                       children: [
                                         TextFont(
                                           text: 'otp_send',
@@ -140,7 +137,7 @@ class _OtpTransferBankScreenState extends State<OtpTransferBankScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Get.back();
+                          Get.close(userController.pageclose.value);
                         },
                         child: TextFont(
                           text: 'cancel',

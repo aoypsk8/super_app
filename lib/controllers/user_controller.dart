@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:super_app/controllers/home_controller.dart';
-import 'package:super_app/models/appinfo_model.dart';
 import 'package:super_app/models/balance_model.dart';
 import 'package:super_app/models/user_profile_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
@@ -64,8 +62,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
     storage.write('msisdn', '2057935454');
     storage.write('msisdn', '2057935454');
     storage.write('msisdn', '2052768833');
-    storage.write('msisdn', '2078877529');
-    await loginpincode('2078877529', '010824');
+    storage.write('msisdn', '2052768833');
+    await loginpincode('2052768833', '555555');
     await fetchBalance();
     await queryUserProfile();
   }

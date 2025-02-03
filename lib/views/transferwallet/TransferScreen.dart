@@ -19,6 +19,7 @@ import 'package:super_app/views/transferwallet/buildHistoryTranserRecent.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
+import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -148,11 +149,12 @@ class _TransferScreenState extends State<TransferScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10),
-            TextFont(
-              text: 'transfer_wallet',
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
-            ),
+            // TextFont(
+            //   text: 'transfer_wallet',
+            //   fontWeight: FontWeight.w500,
+            //   fontSize: 12,
+            // ),
+            buildStepProcess(title: "1/3", desc: "transfer_wallet"),
             const SizedBox(height: 10),
             buildNumberFiledValidate(
               controller: _toWallet,

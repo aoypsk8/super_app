@@ -15,6 +15,7 @@ import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
+import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class CashInScreen extends StatefulWidget {
@@ -66,11 +67,12 @@ class _CashInScreenState extends State<CashInScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextFont(
-                    text: 'input_amount',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12.sp,
-                  ),
+                  // TextFont(
+                  //   text: 'input_amount',
+                  //   fontWeight: FontWeight.w500,
+                  //   fontSize: 12.sp,
+                  // ),
+                  buildStepProcess(title: "1/2", desc: "input_amount"),
                   const SizedBox(height: 10),
                   buildAccountingFiledVaidate(
                     controller: _paymentAmount,
@@ -109,7 +111,6 @@ class _CashInScreenState extends State<CashInScreen> {
             title: 'next',
             isEnabled: !cashInController.loading.isTrue,
             func: () async {
-              Get.toNamed("/confirmCashIN");
               String requestValue = await randomNumber().fucRandomNumber();
               // cashInController.requestId.value = "LQR$requestValue";
               cashInController.requestId.value = "LQRIN$requestValue";
@@ -123,17 +124,19 @@ class _CashInScreenState extends State<CashInScreen> {
                 } else if (int.parse(sanitizedAmount) > 20000000) {
                   DialogHelper.showErrorDialogNew(description: "limit20000000");
                 } else {
-                  // await userController.getBalance();
-                  // final limitBalance = int.parse(userController
-                  //     .balancemodel.value.data!.limitBalance
-                  //     .toString());
-                  // final amount = int.parse(sanitizedAmount.toString());
-                  // if (userController.balance.value + amount <= limitBalance) {
-                  //   cashInController.generateDynamicQR();
-                  // } else {
-                  //   DialogHelper.showErrorDialogNew(
-                  //       description: "morethanlimitbalance");
-                  // }
+                  // Get.toNamed("/confirmCashIN");
+                  await userController.fetchBalance();
+                  final limitBalance = int.parse(userController
+                      .balanceModel.value.data!.limitBalance
+                      .toString());
+                  final amount = int.parse(sanitizedAmount.toString());
+                  if (userController.mainBalance.value + amount <=
+                      limitBalance) {
+                    cashInController.generateDynamicQR();
+                  } else {
+                    DialogHelper.showErrorDialogNew(
+                        description: "morethanlimitbalance");
+                  }
                 }
               }
             },

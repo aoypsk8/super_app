@@ -220,15 +220,26 @@ class _MyQrScreenState extends State<MyQrScreen> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(9.0),
-                        child: PrettyQr(
-                          image: AssetImage(MyIcon.ic_lao_qr),
-                          size: 70.w,
-                          data:
-                              qrController.generateQrModel.value.qrstr ?? "N/A",
-                          errorCorrectLevel: QrErrorCorrectLevel.H,
-                          typeNumber: null,
-                          roundEdges: false,
-                        ),
+                        child: qrController.generateQrModel.value.qrstr != null
+                            ? PrettyQr(
+                                image: AssetImage(MyIcon.ic_lao_qr),
+                                size: 70.w,
+                                data:
+                                    qrController.generateQrModel.value.qrstr ??
+                                        "N/A",
+                                errorCorrectLevel: QrErrorCorrectLevel.H,
+                                typeNumber: null,
+                                roundEdges: false,
+                              )
+                            : Container(
+                                height: 70.w,
+                                width: 70.w,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: cr_red,
+                                  ),
+                                ),
+                              ),
                       ),
                     ),
                   ),

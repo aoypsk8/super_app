@@ -14,7 +14,7 @@ import 'package:super_app/models/model-bank/ReqCashoutBankModel.dart';
 import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/cashout/OtpTransferBankScreen.dart';
-import 'package:super_app/views/reusable_result.dart';
+import 'package:super_app/views/reusable_template/reusable_result.dart';
 import '../../../services/api/dio_client.dart';
 import '../../../utility/dialog_helper.dart';
 

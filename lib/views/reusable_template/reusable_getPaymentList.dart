@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -9,14 +8,23 @@ import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/tempA_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myIcon.dart';
-import 'package:super_app/views/templateA/confirm_tempA.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/build_step_process.dart';
-import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
-class ListsPaymentTempAScreen extends StatelessWidget {
-  ListsPaymentTempAScreen({super.key});
+class ListsPaymentScreen extends StatelessWidget {
+  final Widget Function() onSelectedPayment;
+  final String stepBuild;
+  final String description;
+  final String title;
+
+  ListsPaymentScreen(
+      {super.key,
+      required this.onSelectedPayment,
+      required this.stepBuild,
+      required this.description,
+      required this.title});
+
   final homeController = Get.find<HomeController>();
   final paymentController = Get.put(PaymentController());
   final controller = Get.put(TempAController());
@@ -58,20 +66,20 @@ class ListsPaymentTempAScreen extends StatelessWidget {
       },
     ];
     return Scaffold(
-      appBar: BuildAppBar(title: homeController.getMenuTitle()),
+      backgroundColor: color_fff,
+      appBar: BuildAppBar(title: title),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Column(
           children: [
-            buildStepProcess(title: '4/5', desc: 'select_payment'),
+            buildStepProcess(title: stepBuild, desc: description),
             Expanded(
               child: AnimationLimiter(
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8.0),
-                  itemCount: data.length, // Use the data length
+                  itemCount: data.length,
                   itemBuilder: (context, index) {
-                    final account =
-                        data[index]; // Access the current item in data
+                    final account = data[index];
 
                     return AnimationConfiguration.staggeredList(
                       position: index,
@@ -80,33 +88,16 @@ class ListsPaymentTempAScreen extends StatelessWidget {
                         verticalOffset: 50.0,
                         child: FadeInAnimation(
                           child: GestureDetector(
-                            onTap: () {
-                              // Add your onTap logic here
-                              paymentController
-                                  .reqCashOut(
-                                      transID: controller.rxtransid.value,
-                                      amount: controller.rxPaymentAmount.value,
-                                      toAcc: controller.rxaccnumber.value,
-                                      chanel: homeController
-                                          .menudetail.value.groupNameEN,
-                                      provider:
-                                          controller.tempAdetail.value.code,
-                                      remark: controller.rxNote.value)
-                                  .then((value) => {
-                                        if (value)
-                                          {Get.to(() => ConfirmTempAScreen())}
-                                      });
-                            },
+                            onTap: onSelectedPayment,
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 20, horizontal: 10),
                               margin: const EdgeInsets.symmetric(vertical: 5),
                               decoration: BoxDecoration(
-                                color: Colors.grey
-                                    .shade200, // Change background color if selected
+                                color: Colors.grey.shade200,
                                 border: Border.all(
                                   color: Colors.grey.shade300,
-                                  width: 1, // Change border width if selected
+                                  width: 1,
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -147,8 +138,7 @@ class ListsPaymentTempAScreen extends StatelessWidget {
                                       children: [
                                         account['order'] == 1
                                             ? TextFont(
-                                                text:
-                                                    'Primary', // Use data title
+                                                text: 'Primary',
                                                 poppin: true,
                                                 color: color_primary_light,
                                                 fontSize: 10,
@@ -156,14 +146,14 @@ class ListsPaymentTempAScreen extends StatelessWidget {
                                             : SizedBox.shrink(),
                                         TextFont(
                                           text: account['title'].toString() ??
-                                              "No Name", // Use data title
+                                              "No Name",
                                           poppin: true,
                                           fontWeight: FontWeight.w500,
                                         ),
                                         TextFont(
                                           text: account['description']
                                                   .toString() ??
-                                              "N/A", // Use data description
+                                              "N/A",
                                           poppin: true,
                                           color: Colors.grey.shade600,
                                         ),

@@ -14,6 +14,7 @@ import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/buildUserDetail.dart';
 import 'package:super_app/widget/build_DotLine.dart';
+import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class ConfirmCashOutScreen extends StatefulWidget {
@@ -110,11 +111,12 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextFont(
-                  text: 'check_detail',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 11,
-                ),
+                // TextFont(
+                //   text: 'check_detail',
+                //   fontWeight: FontWeight.w500,
+                //   fontSize: 11,
+                // ),
+                buildStepProcess(title: '3/3', desc: 'check_detail'),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,

@@ -13,6 +13,7 @@ import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/buildUserDetail.dart';
 import 'package:super_app/widget/build_DotLine.dart';
+import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class ConfirmTranferScreen extends StatefulWidget {
@@ -102,11 +103,12 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextFont(
-                  text: 'Transfer',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 11,
-                ),
+                // TextFont(
+                //   text: 'Transfer',
+                //   fontWeight: FontWeight.w500,
+                //   fontSize: 11,
+                // ),
+                buildStepProcess(title: "3/3", desc: "transfer_wallet"),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,

@@ -8,9 +8,13 @@ import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
+import 'package:super_app/controllers/payment_controller.dart';
+import 'package:super_app/controllers/tempA_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
+import 'package:super_app/views/templateA/confirm_tempA.dart';
 import 'package:super_app/widget/button.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -32,6 +36,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
       CarouselSliderController();
   final UserController userController = Get.find();
   final HomeController homeController = Get.find();
+  final paymentController = Get.put(PaymentController());
+  final controller = Get.put(TempAController());
 
   final box = GetStorage();
   File? _backgroundImage;
@@ -108,16 +114,48 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         onPressed: () {
                           Get.toNamed('/otpTransfer');
                         }),
+                    const SizedBox(height: 20),
+                    // PrimaryButton(
+                    //     title: 'Get Payment List',
+                    //     onPressed: () {
+                    //       Get.to(ListsPaymentScreen(
+                    //         description: 'select_payment',
+                    //         stepBuild: '4/5',
+                    //         title: homeController.getMenuTitle(),
+                    //         onSelectedPayment: () {
+                    //           paymentController
+                    //               .reqCashOut(
+                    //                   transID: controller.rxtransid.value,
+                    //                   amount: controller.rxPaymentAmount.value,
+                    //                   toAcc: controller.rxaccnumber.value,
+                    //                   chanel: homeController
+                    //                       .menudetail.value.groupNameEN,
+                    //                   provider:
+                    //                       controller.tempAdetail.value.code,
+                    //                   remark: controller.rxNote.value)
+                    //               .then(
+                    //                 (value) => {
+                    //                   if (value)
+                    //                     {Get.to(() => ConfirmTempAScreen())}
+                    //                 },
+                    //               );
+                    //           return Container();
+                    //         },
+                    //       ));
+                    //     }),
+                    // const SizedBox(height: 20),
                     PrimaryButton(
                         title: 'Visa Master Card',
                         onPressed: () {
                           Get.toNamed('/visaMasterCard');
                         }),
+                    const SizedBox(height: 20),
                     PrimaryButton(
                         title: 'OTP Email',
                         onPressed: () {
                           Get.toNamed('/otpTransferEmail');
                         }),
+                    const SizedBox(height: 20),
                     PrimaryButton(
                         title: 'Transfer',
                         onPressed: () {

@@ -20,11 +20,11 @@ import 'package:super_app/utility/shareResult.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/myIcon.dart';
 
-import '../../utility/color.dart';
-import '../../widget/custom_clipper.dart';
-import '../../widget/buildBottomAppbar.dart';
-import '../../widget/build_DotLine.dart';
-import '../../widget/textfont.dart';
+import '../../../utility/color.dart';
+import '../../../widget/custom_clipper.dart';
+import '../../../widget/buildBottomAppbar.dart';
+import '../../../widget/build_DotLine.dart';
+import '../../../widget/textfont.dart';
 
 class ReusableResultScreen extends StatefulWidget {
   final String fromAccountImage;

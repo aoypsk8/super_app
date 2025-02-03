@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, depend_on_referenced_packages
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, depend_on_referenced_packages, unnecessary_null_comparison
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -11,14 +11,15 @@ import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:sizer/sizer.dart';
-import 'package:intl/intl.dart';
 import 'package:super_app/controllers/cashIn_controller.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
+import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/socket_service.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -128,6 +129,8 @@ class _ConfirmCashInScreenState extends State<ConfirmCashInScreen>
             skipIfExists: false,
           );
           print(result.toString());
+          DialogHelper.showSuccess(
+              title: 'save_pic_success', autoClose: true, onClose: () {});
         }
       }
     } catch (e) {
@@ -138,59 +141,63 @@ class _ConfirmCashInScreenState extends State<ConfirmCashInScreen>
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Screenshot(
-        controller: screenshotController,
-        child: RepaintBoundary(
-          key: _globalKey,
-          child: Scaffold(
-            backgroundColor: color_fff,
-            appBar: BuildAppBar(title: "cash_in"),
-            body: Container(
-              color: color_fff,
-              margin: const EdgeInsets.symmetric(horizontal: 26, vertical: 10),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextFont(
-                        text: 'please_pay',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 11.sp,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Iconsax.clock,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          const SizedBox(width: 5),
-                          TextFont(
-                            text: _formatTime(_remainingTime),
-                            fontSize: 14.sp,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  bodyQR(),
-                  const SizedBox(height: 10),
-                ],
+      () => Scaffold(
+        backgroundColor: color_fff,
+        appBar: BuildAppBar(title: "cash_in"),
+        body: Container(
+          color: color_fff,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 26, right: 26, top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // TextFont(
+                    //   text: 'please_pay',
+                    //   fontWeight: FontWeight.w500,
+                    //   fontSize: 11.sp,
+                    // ),
+                    buildStepProcess(title: "2/2", desc: "please_pay"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Iconsax.clock,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        const SizedBox(width: 5),
+                        TextFont(
+                          text: _formatTime(_remainingTime),
+                          fontSize: 14.sp,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            bottomNavigationBar: Container(
-              padding: EdgeInsets.only(top: 20),
-              child: buildBottomAppbar(
-                title: 'save_pic',
-                func: () {
-                  _saveScreenshot();
-                },
+              const SizedBox(height: 20),
+              RepaintBoundary(
+                key: _globalKey,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 26, vertical: 10),
+                  child: bodyQR(),
+                ),
               ),
-            ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        ),
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.only(top: 20),
+          child: buildBottomAppbar(
+            title: 'save_pic',
+            func: () {
+              _saveScreenshot();
+            },
           ),
         ),
       ),
@@ -232,8 +239,8 @@ class _ConfirmCashInScreenState extends State<ConfirmCashInScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFont(
-                    text: NumberFormat('#,###').format(int.parse(
-                        cashInController.txnAmount.value.replaceAll(',', ''))),
+                    text: fn.format(
+                        int.tryParse(cashInController.txnAmount.value) ?? 0),
                     fontWeight: FontWeight.w600,
                     fontSize: 20.sp,
                     color: cr_ef33,
@@ -251,7 +258,14 @@ class _ConfirmCashInScreenState extends State<ConfirmCashInScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFont(
-                    text: 'fee_kip',
+                    text: '+',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12.sp,
+                    color: cr_2929,
+                  ),
+                  const SizedBox(width: 2),
+                  TextFont(
+                    text: 'fee',
                     fontWeight: FontWeight.w400,
                     fontSize: 12.sp,
                     color: cr_2929,
@@ -284,14 +298,32 @@ class _ConfirmCashInScreenState extends State<ConfirmCashInScreen>
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(13.0),
-                        child: PrettyQr(
-                          image: AssetImage(MyIcon.ic_lao_qr),
-                          size: 70.w,
-                          data: cashInController.emvCode.value,
-                          errorCorrectLevel: QrErrorCorrectLevel.M,
-                          typeNumber: null,
-                          roundEdges: true,
-                        ),
+                        child: cashInController.emvCode.value != null
+                            ? PrettyQr(
+                                image: AssetImage(MyIcon.ic_lao_qr),
+                                size: 70.w,
+                                data: cashInController.emvCode.value,
+                                errorCorrectLevel: QrErrorCorrectLevel.H,
+                                typeNumber: null,
+                                roundEdges: false,
+                              )
+                            : Container(
+                                height: 70.w,
+                                width: 70.w,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: cr_red,
+                                  ),
+                                ),
+                              ),
+                        // child: PrettyQr(
+                        //   image: AssetImage(MyIcon.ic_lao_qr),
+                        //   size: 70.w,
+                        //   data: cashInController.emvCode.value,
+                        //   errorCorrectLevel: QrErrorCorrectLevel.M,
+                        //   typeNumber: null,
+                        //   roundEdges: true,
+                        // ),
                       ),
                     ),
                   ),

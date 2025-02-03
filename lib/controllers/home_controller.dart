@@ -24,10 +24,10 @@ class HomeController extends GetxController {
   HomeController() {
     // menudetail.value.url =
     //     '/Electric/getList;/Electric/verify;/Electric/payment;/Electric/getRecent;/Electric/history;';
-    menudetail.value.url =
-        '/Bank/getList;/Bank/getRecent;/Bank/verify;/Bank/reqCashOut;/Bank/payment';
     // menudetail.value.url =
-    //     '/Finance/getlist;/Finance/token;/Finance/verify;/Finance/confirm';
+    //     '/Bank/getList;/Bank/getRecent;/Bank/verify;/Bank/reqCashOut;/Bank/payment';
+    menudetail.value.url =
+        '/Finance/getlist;/Finance/token;/Finance/verify;/Finance/confirm';
     menudetail.value.description = 'EL';
     menudetail.value.groupNameEN = 'Electric';
     menudetail.value.groupNameLA = 'ຈ່າຍຄ່າໄຟຟ້າ';

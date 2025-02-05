@@ -5,6 +5,7 @@ import 'package:super_app/controllers/qr_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/home_screen.dart';
 import 'package:super_app/views/myqr/MyQrScreen.dart';
+import 'package:super_app/views/service/service.dart';
 import 'package:super_app/views/settings/setting.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -27,7 +28,7 @@ class _BottomNavState extends State<BottomNav> {
 
   final List<Widget> _pages = [
     HomeScreen(),
-    Center(child: TextFont(text: 'nav_service')),
+    ServicePage(),
     MyQrScreen(),
     Center(child: TextFont(text: 'nav_history')),
     SettingsScreen(),

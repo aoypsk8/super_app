@@ -92,4 +92,6 @@ class MyIcon {
   static String ic_addCard = 'assets/icons/addCard.png';
   // security
   static String ic_security_check = 'assets/icons/securityCheck.svg';
+
+  static String ic_more = 'assets/icons/more.svg';
 }

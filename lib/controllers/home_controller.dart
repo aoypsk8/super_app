@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -7,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:super_app/models/appinfo_model.dart';
 import 'package:super_app/models/menu_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
+import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 
 class HomeController extends GetxController {
@@ -16,24 +19,28 @@ class HomeController extends GetxController {
   RxString urlwebview = ''.obs;
 
   RxString menutitle = ''.obs;
-  RxList<MenuModel> menumodel = <MenuModel>[].obs;
+  RxList<MenuModel> menuModel = <MenuModel>[].obs; // Model of menuModel
+  RxList<Menulists> menulist = <Menulists>[].obs; // List of menu items
+  Rx<Menulists> menudetail = Menulists().obs; // Selected menu item
 
-  RxList<Menulists> menulist = <Menulists>[].obs;
-  Rx<Menulists> menudetail = Menulists().obs;
-
-  HomeController() {
-    menudetail.value.url =
-        '/Electric/getList;/Electric/verify;/Electric/payment;/Electric/getRecent;/Electric/history;';
-    // menudetail.value.url =
-    //     '/Bank/getList;/Bank/getRecent;/Bank/verify;/Bank/reqCashOut;/Bank/payment';
-    // menudetail.value.url =
-    //     '/Finance/getlist;/Finance/token;/Finance/verify;/Finance/confirm';
-    menudetail.value.description = 'EL';
-    menudetail.value.groupNameEN = 'Electric';
-    menudetail.value.groupNameLA = 'ຈ່າຍຄ່າໄຟຟ້າ';
-    menudetail.value.groupNameVT = 'Trả tiền điện';
-    menudetail.value.groupNameCH = '电费';
+//! clear data
+  clear() async {
+    menutitle = ''.obs;
+    menudetail = Menulists().obs;
   }
+  // HomeController() {
+  //   // menudetail.value.url =
+  //   //     '/Electric/getList;/Electric/verify;/Electric/payment;/Electric/getRecent;/Electric/history;';
+  //   // menudetail.value.url =
+  //   //     '/Bank/getList;/Bank/getRecent;/Bank/verify;/Bank/reqCashOut;/Bank/payment';
+  //   // menudetail.value.url =
+  //   //     '/Finance/getlist;/Finance/token;/Finance/verify;/Finance/confirm';
+  //   // menudetail.value.description = 'EL';
+  //   // menudetail.value.groupNameEN = 'Electric';
+  //   // menudetail.value.groupNameLA = 'ຈ່າຍຄ່າໄຟຟ້າ';
+  //   // menudetail.value.groupNameVT = 'Trả tiền điện';
+  //   // menudetail.value.groupNameCH = '电费';
+  // }
 
   @override
   void onReady() async {
@@ -41,6 +48,7 @@ class HomeController extends GetxController {
     // storage.write('msisdn', "2052768833");
 
     await checkAppUpdate();
+    await fetchServicesmMenu();
   }
 
   String getMenuTitle() {
@@ -99,6 +107,29 @@ class HomeController extends GetxController {
     } catch (e) {
       print("❌ Failed to download image: $e");
       return null;
+    }
+  }
+
+  fetchServicesmMenu() async {
+    try {
+      var response = await DioClient.postEncrypt(
+          loading: false, '/SuperApi/Info/Menus', {});
+      if (response != null && response is List) {
+        List<MenuModel> fetchedMenuModel = response
+            .map<MenuModel>((json) => MenuModel.fromJson(json))
+            .toList();
+        menuModel.assignAll(fetchedMenuModel);
+        if (fetchedMenuModel.isNotEmpty &&
+            fetchedMenuModel[0].menulists != null &&
+            fetchedMenuModel[0].menulists!.isNotEmpty) {
+          menulist.assignAll(fetchedMenuModel[0].menulists!);
+        }
+      } else {
+        print('Unexpected response structure');
+      }
+    } catch (e) {
+      print("Error: $e");
+      DialogHelper.showErrorDialogNew(description: e.toString());
     }
   }
 }

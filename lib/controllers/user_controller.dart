@@ -28,6 +28,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
 
   //auth
   RxString rxMsisdn = ''.obs;
+  RxBool isCheckToken = false.obs;
 
   RxString rxLat = ''.obs;
   RxString rxLong = ''.obs;

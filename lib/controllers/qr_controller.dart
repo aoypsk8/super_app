@@ -91,4 +91,19 @@ class QrController extends GetxController {
       generateQrModel.value = GenerateQrModel.fromJson(response);
     }
   }
+
+  fetchProofLists() async {
+    var response = await dbHelper.queryAll();
+    proofLists.value = response;
+  }
+
+  insertProof(HistoryDetailModel detail) async {
+    var response = await dbHelper.insert(detail);
+    fetchProofLists();
+  }
+
+  deleteProof(colName, val) async {
+    var response = await dbHelper.deleteDataByCondition(colName, val);
+    fetchProofLists();
+  }
 }

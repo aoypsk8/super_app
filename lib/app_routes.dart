@@ -43,7 +43,7 @@ class AppRoutes {
 
     // Cash out here
     GetPage(
-      name: '/cashOut',
+      name: '/bank',
       page: () => ListsProviderBankScreen(),
     ),
     GetPage(
@@ -77,7 +77,7 @@ class AppRoutes {
 
     // cash IN
     GetPage(
-      name: '/cashInPage',
+      name: '/refill',
       page: () => CashInScreen(),
     ),
     GetPage(

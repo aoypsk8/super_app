@@ -30,20 +30,6 @@ class _ServicePageState extends State<ServicePage> {
 
   @override
   Widget build(BuildContext context) {
-    homeController.menuModel.forEach((menu) {
-      print('Menu Title: ${menu.title}');
-      if (menu.menulists != null && menu.menulists!.isNotEmpty) {
-        print('Menulists for ${menu.title}:');
-        menu.menulists!.forEach((menulist) {
-          print(
-              ' - AppID: ${menulist.appid}, GroupName_EN: ${menulist.groupNameEN}');
-        });
-      } else {
-        print('No menulists found for ${menu.title}');
-      }
-    });
-
-    // Assign the fetched data to the reactive list
     return Obx(
       () => Scaffold(
         appBar: BuildAppBar(title: "service_nav"),

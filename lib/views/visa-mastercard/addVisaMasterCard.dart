@@ -122,7 +122,7 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
                   bottomRightColor: const Color.fromARGB(255, 73, 73, 73),
                   doesSupportNfc: true,
                   cardProviderLogoPosition: CardProviderLogoPosition.right,
-                  enableFlipping: true,
+                  // enableFlipping: true,
                   placeNfcIconAtTheEnd: true,
                   cvvNumber: _cvvController.text.isEmpty
                       ? '* * *'

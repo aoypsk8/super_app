@@ -1,7 +1,10 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 import 'package:super_app/controllers/cashout_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
@@ -87,6 +90,7 @@ class _OtpTransferBankScreenState extends State<OtpTransferBankScreen> {
                                           fontSize: 10,
                                           maxLines: 2,
                                         ),
+                                        const SizedBox(width: 5),
                                         TextFont(
                                           text: userController
                                               .userProfilemodel.value.msisdn
@@ -94,6 +98,7 @@ class _OtpTransferBankScreenState extends State<OtpTransferBankScreen> {
                                           color: color_777,
                                           fontSize: 10,
                                           maxLines: 2,
+                                          poppin: true,
                                         ),
                                       ],
                                     ),
@@ -175,7 +180,7 @@ class _OtpTransferBankScreenState extends State<OtpTransferBankScreen> {
         defaultPinTheme: PinTheme(
           width: 56,
           height: 56,
-          textStyle: TextStyle(
+          textStyle: GoogleFonts.poppins(
               fontSize: 20,
               color: Color.fromRGBO(30, 60, 87, 1),
               fontWeight: FontWeight.w500),
@@ -188,14 +193,13 @@ class _OtpTransferBankScreenState extends State<OtpTransferBankScreen> {
         focusedPinTheme: PinTheme(
           width: 56,
           height: 56,
-          textStyle: const TextStyle(
+          textStyle: GoogleFonts.poppins(
             fontSize: 20,
             color: Color.fromRGBO(30, 60, 87, 1),
             fontWeight: FontWeight.w500,
           ),
           decoration: BoxDecoration(
-            border:
-                Border.all(color: cr_ef33), // Focus color change when typing
+            border: Border.all(color: cr_ef33),
             borderRadius: BorderRadius.circular(8),
           ),
         ),

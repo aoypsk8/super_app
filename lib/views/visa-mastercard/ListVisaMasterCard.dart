@@ -1,11 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
-import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/visa-mastercard/addVisaMasterCard.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/mask_msisdn.dart';
@@ -20,231 +22,243 @@ class VisaMasterCard extends StatefulWidget {
 }
 
 class _VisaMasterCardState extends State<VisaMasterCard> {
-  List<Map<String, String>> cardList = [
-    {
-      'cardHolder': 'AOY PHONGSAKORN',
-      'cardNumber': '2052768833',
-      'type': 'MmoneyX',
-      'mainCard': '0'
-    },
-    {
-      'cardHolder': 'JOHN DOE',
-      'cardNumber': '9876543212345678',
-      'type': 'Credit/Debit card',
-      'mainCard': '0'
-    },
-    {
-      'cardHolder': 'JANE SMITH',
-      'cardNumber': '1122334455667788',
-      'type': 'Credit/Debit card',
-      'mainCard': '0'
-    },
-  ];
+  final paymentController = Get.put(PaymentController());
+
+  @override
+  void initState() {
+    super.initState();
+    paymentController.getPaymentMethods();
+  }
 
   int? selectedCardIndex = 0;
 
-  void deleteCard(int index) {
-    setState(() {
-      cardList.removeAt(index);
-      if (selectedCardIndex == index) {
-        selectedCardIndex = null;
-      } else if (selectedCardIndex != null && selectedCardIndex! > index) {
-        selectedCardIndex = selectedCardIndex! - 1;
-      }
-    });
-  }
-
-  void confirmDelete(int index) {
+  void confirmDelete(String owner, String paymentType) {
     DialogHelper.showErrorWithFunctionDialog(
       closeTitle: "ລົບ",
       title: "ຕ້ອງການລົບບັນຊີນີ້ບໍ່",
       description: "ການກະທຳນີ້ຈະບໍ່ສາມາດກູຄືນໄດ້!",
       withCancel: true,
-      onClose: () {
-        setState(() {
-          deleteCard(index);
-        });
+      onClose: () async {
+        var deleteData =
+            await paymentController.deletePaymentMethod(owner, paymentType);
         Get.back();
-        DialogHelper.showSuccessWithMascot(
-          onClose: () => {},
-          title: 'ລົບສຳເລັດ!',
-        );
+        if (deleteData) {
+          DialogHelper.showSuccessWithMascot(
+            onClose: () => {},
+            title: 'ລົບສຳເລັດ!',
+          );
+        } else {
+          DialogHelper.showErrorDialogNew(
+            title: 'cannot_delete!',
+            description: "please_change_main_card",
+          );
+        }
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: color_fff,
-      appBar: BuildAppBar(
-        title: "Visa Master Card",
-        // hasIcon: true,
-        // customIcon: Icon(Iconsax.card_add),
-        // onIconTap: () {
-        //   Get.to(AddVisaMasterCard());
-        // },
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: color_f4f4,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextFont(text: "All Cards"),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(AddVisaMasterCard());
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 7,
+    return Obx(
+      () => Scaffold(
+        backgroundColor: color_fff,
+        appBar: BuildAppBar(title: "Visa Master Card"),
+        body: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: color_f4f4,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFont(text: "All Cards"),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(AddVisaMasterCard());
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor,
+                                    borderRadius: BorderRadius.circular(100),
                                   ),
-                                  child: TextFont(
-                                    color: color_fff,
-                                    text: "+ Add",
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 2),
-                        Divider(color: color_b6b6),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: cardList.length,
-                          itemBuilder: (context, index) {
-                            final card = cardList[index];
-                            bool isSelected = selectedCardIndex == index;
-                            return GestureDetector(
-                              onTap: () async {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  },
-                                );
-                                await Future.delayed(Duration(seconds: 2), () {
-                                  setState(() {
-                                    selectedCardIndex = index;
-                                  });
-                                  Get.back();
-                                });
-                                DialogHelper.showSuccessWithMascot(
-                                  onClose: () => {},
-                                  title: 'change_primary_success',
-                                );
-                              },
-                              child: AnimationConfiguration.staggeredList(
-                                position: index,
-                                duration: const Duration(milliseconds: 800),
-                                child: SlideAnimation(
-                                  horizontalOffset: 500.0,
-                                  child: FadeInAnimation(
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    border: Border.all(
-                                                      color: isSelected
-                                                          ? cr_ef33
-                                                          : color_9f9,
-                                                      width: 2,
-                                                    ),
-                                                  ),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                      2.5,
-                                                    ),
-                                                    child: Container(
-                                                      width: 10,
-                                                      height: 10,
-                                                      decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        color: isSelected
-                                                            ? cr_ef33
-                                                            : null,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 10),
-                                                TextFont(
-                                                  text: "Primary account",
-                                                  poppin: true,
-                                                ),
-                                              ],
-                                            ),
-                                            InkWell(
-                                              onTap: card['type']! == "MmoneyX"
-                                                  ? null
-                                                  : () => confirmDelete(index),
-                                              child: card['type']! == "MmoneyX"
-                                                  ? SizedBox.shrink()
-                                                  : SvgPicture.asset(
-                                                      MyIcon.ic_trash,
-                                                      color: cr_ef33,
-                                                    ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        MoneyCardWidget(
-                                          cardHolderName: card['cardHolder']!,
-                                          accountNumber: card['cardNumber']!,
-                                          mainCard: card['mainCard']!,
-                                          type: card['type']!,
-                                          selected: isSelected,
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Divider(color: color_b6b6),
-                                        const SizedBox(height: 20),
-                                      ],
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 7,
+                                    ),
+                                    child: TextFont(
+                                      color: color_fff,
+                                      text: "+ Add",
                                     ),
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      ],
+                            ],
+                          ),
+                          const SizedBox(height: 2),
+                          Divider(color: color_b6b6),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: paymentController.paymentMethods.length,
+                            itemBuilder: (context, index) {
+                              bool isSelected = selectedCardIndex == index;
+                              return GestureDetector(
+                                onTap: () async {
+                                  paymentController.loading.value = true;
+                                  await paymentController.updatePaymentMethod(
+                                    paymentController
+                                        .paymentMethods[index].owner,
+                                    paymentController
+                                        .paymentMethods[index].paymentType,
+                                  );
+                                  if (paymentController.loading.value) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    setState(() {
+                                      selectedCardIndex = index;
+                                    });
+                                    DialogHelper.showSuccessWithMascot(
+                                      onClose: () => {},
+                                      title: 'change_primary_success',
+                                    );
+                                  }
+                                },
+                                child: AnimationConfiguration.staggeredList(
+                                  position: index,
+                                  duration: const Duration(milliseconds: 800),
+                                  child: SlideAnimation(
+                                    horizontalOffset: 500.0,
+                                    child: FadeInAnimation(
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color: paymentController
+                                                                .paymentMethods[
+                                                                    index]
+                                                                .maincard
+                                                            ? cr_ef33
+                                                            : color_9f9,
+                                                        width: 2,
+                                                      ),
+                                                    ),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.5),
+                                                      child: Container(
+                                                        width: 10,
+                                                        height: 10,
+                                                        decoration: BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            color: paymentController
+                                                                    .paymentMethods[
+                                                                        index]
+                                                                    .maincard
+                                                                ? cr_ef33
+                                                                : null),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 10),
+                                                  TextFont(
+                                                    text: "Primary account",
+                                                    poppin: true,
+                                                  ),
+                                                ],
+                                              ),
+                                              InkWell(
+                                                onTap: paymentController
+                                                            .paymentMethods[
+                                                                index]
+                                                            .title ==
+                                                        "MMoneyX"
+                                                    ? null
+                                                    : () => confirmDelete(
+                                                        paymentController
+                                                            .paymentMethods[
+                                                                index]
+                                                            .owner,
+                                                        paymentController
+                                                            .paymentMethods[
+                                                                index]
+                                                            .paymentType),
+                                                child: paymentController
+                                                            .paymentMethods[
+                                                                index]
+                                                            .paymentType ==
+                                                        "Wallet"
+                                                    ? SizedBox.shrink()
+                                                    : SvgPicture.asset(
+                                                        MyIcon.ic_trash,
+                                                        color: cr_ef33,
+                                                      ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          MoneyCardWidget(
+                                            cardHolderName: paymentController
+                                                .paymentMethods[index].accname,
+                                            logo: paymentController
+                                                .paymentMethods[index].logo,
+                                            accountNumber: paymentController
+                                                .paymentMethods[index]
+                                                .description,
+                                            mainCard: paymentController
+                                                .paymentMethods[index].maincard,
+                                            type: paymentController
+                                                .paymentMethods[index]
+                                                .paymentType,
+                                            selected: isSelected,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Divider(color: color_b6b6),
+                                          const SizedBox(height: 20),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -254,7 +268,8 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
 class MoneyCardWidget extends StatelessWidget {
   final String cardHolderName;
   final String accountNumber;
-  final String mainCard;
+  final String logo;
+  final bool mainCard;
   final String type;
   final bool selected;
 
@@ -263,6 +278,7 @@ class MoneyCardWidget extends StatelessWidget {
     required this.accountNumber,
     required this.mainCard,
     required this.type,
+    required this.logo,
     required this.selected,
   });
 
@@ -271,7 +287,7 @@ class MoneyCardWidget extends StatelessWidget {
     return Container(
       width: Get.width,
       decoration: BoxDecoration(
-        color: selected ? color_ec1c : color_8e94,
+        color: mainCard ? color_ec1c : color_8e94,
         borderRadius: BorderRadius.circular(15),
       ),
       child: ClipRRect(
@@ -282,7 +298,7 @@ class MoneyCardWidget extends StatelessWidget {
             children: [
               SvgPicture.asset(
                 MyIcon.bgOfCard,
-                color: selected ? cr_ef33 : color_989,
+                color: mainCard ? cr_ef33 : color_989,
               ),
               SizedBox(
                 height: Get.height,
@@ -312,7 +328,8 @@ class MoneyCardWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            width: 11.w,
+                            width: 12.w,
+                            height: 12.w,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: color_fff,
@@ -322,8 +339,8 @@ class MoneyCardWidget extends StatelessWidget {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
                                 child: Image.network(
-                                  MyConstant.profile_default,
-                                  fit: BoxFit.cover,
+                                  logo,
+                                  fit: BoxFit.contain,
                                 ),
                               ),
                             ),

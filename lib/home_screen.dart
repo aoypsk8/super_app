@@ -86,10 +86,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 Row(
                                   textBaseline: TextBaseline.ideographic,
                                   children: [
-                                    TextFont(
-                                      text: 'ຍິນດີຕ້ອນຮັບ,',
-                                      fontWeight: FontWeight.w600,
-                                      color: cr_7070,
+                                    Row(
+                                      children: [
+                                        TextFont(
+                                          text: 'welcome_first_screen',
+                                          fontWeight: FontWeight.w600,
+                                          color: cr_7070,
+                                        ),
+                                        TextFont(
+                                          text: ',',
+                                          fontWeight: FontWeight.w600,
+                                          color: cr_7070,
+                                        ),
+                                      ],
                                     ),
                                     const SizedBox(width: 3),
                                     TextFont(
@@ -97,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           "${userController.userProfilemodel.value.name ?? ''}!",
                                       fontWeight: FontWeight.w600,
                                       color: cr_7070,
+                                      noto: true,
                                     )
                                   ],
                                 ),
@@ -124,6 +134,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           '2000000',
                                       showMsisdn: showMsisdn,
                                     ),
+                                    poppin: true,
                                   ),
                                   const SizedBox(width: 5),
                                   GestureDetector(

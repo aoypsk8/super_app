@@ -46,7 +46,8 @@ class DioClient {
     try {
       final url = '${MyConstant.urlLtcdev}$path';
       print(url);
-      final headers = _generateEncryptedHeaders(path, image == false ? body : {});
+      final headers =
+          _generateEncryptedHeaders(path, image == false ? body : {});
       dio.options.headers.addAll(headers);
       print(headers);
       // Handle custom headers based on the key
@@ -87,7 +88,8 @@ class DioClient {
   ╚═════════════════════════════════════════════════════════════════════════════════════.✵.═╝
  */
 
-  static Map<String, String> _generateEncryptedHeaders(String path, dynamic body) {
+  static Map<String, String> _generateEncryptedHeaders(
+      String path, dynamic body) {
     // Convert body to Map if it's a JSON string, handle null as an empty map
     Map<String, dynamic> bodyMap = {};
     if (body != null) {
@@ -107,14 +109,17 @@ class DioClient {
     final uuid = const Uuid().v4();
     const algorithm = 'hmac-sha256';
 
-    final dateFormat = DateFormat('EEE, dd MMM yyyy HH:mm:ss \'GMT\'', 'en_US').format(DateTime.now().toUtc());
+    final dateFormat = DateFormat('EEE, dd MMM yyyy HH:mm:ss \'GMT\'', 'en_US')
+        .format(DateTime.now().toUtc());
     final digestBody = sha256.convert(utf8.encode(jsonEncode(bodyMap))).bytes;
     final digestBodyHeader = 'SHA-256=' + base64.encode(digestBody);
-    final signingString = 'x-date: $dateFormat\nPOST $path HTTP/1.1\nx-uuid: $uuid\ndigest: $digestBodyHeader';
+    final signingString =
+        'x-date: $dateFormat\nPOST $path HTTP/1.1\nx-uuid: $uuid\ndigest: $digestBodyHeader';
     final hmac = Hmac(sha256, utf8.encode(secret));
     final signature = hmac.convert(utf8.encode(signingString)).bytes;
     final signatureBase64 = base64.encode(signature);
-    final authorizationHeader = 'hmac username="$username", algorithm="$algorithm", headers="x-date request-line x-uuid digest", signature="$signatureBase64"';
+    final authorizationHeader =
+        'hmac username="$username", algorithm="$algorithm", headers="x-date request-line x-uuid digest", signature="$signatureBase64"';
 
     return {
       'Authorization': authorizationHeader,
@@ -132,7 +137,8 @@ class DioClient {
 »»————————————————————————————————⚠️ Add key and header ⚠️—————————————————————————————————————————««
   ╚═════════════════════════════════════════════════════════════════════════════════════.✵.═╝
  */
-  static void _setCustomHeaders(String key, String bearer, String msisdn, String token) {
+  static void _setCustomHeaders(
+      String key, String bearer, String msisdn, String token) {
     final customHeaders = <String, String>{};
     switch (key) {
       case 'appkey':
@@ -172,22 +178,30 @@ class DioClient {
         customHeaders['lmmkey'] = MyKey.keyBackup;
         break;
       case 'form':
-        customHeaders.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
+        customHeaders
+            .addAll({'Content-Type': 'application/x-www-form-urlencoded'});
         break;
       case 'visa-form':
-        customHeaders.addAll({'lmmkey': MyKey.keyVisa, 'Content-Type': 'application/x-www-form-urlencoded'});
+        customHeaders.addAll({
+          'lmmkey': MyKey.keyVisa,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        });
         break;
       case 'savedevice':
-        customHeaders.addAll({"Authorization": "Basic bm90aWZpY2F0aW9uOiNMdGMxcWF6MndzeEBOT1RJ"});
+        customHeaders.addAll({
+          "Authorization": "Basic bm90aWZpY2F0aW9uOiNMdGMxcWF6MndzeEBOT1RJ"
+        });
         break;
       default:
-        customHeaders['lmm-token'] = MyKey.desRoute == "UAT" ? MyKey.lmmTokenUAT : MyKey.lmmTokenPRO;
+        customHeaders['lmm-token'] =
+            MyKey.desRoute == "UAT" ? MyKey.lmmTokenUAT : MyKey.lmmTokenPRO;
         break;
     }
     dio.options.headers.addAll(customHeaders);
   }
 
-  static String mlitekeys = 'gUkXp2r5u8x/A?D(G+KbPeShVmYq3t6v9y\$B&E)H@McQfTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z\$C&F)H@McQfTjWnZr4u7x!A%D*G';
+  static String mlitekeys =
+      'gUkXp2r5u8x/A?D(G+KbPeShVmYq3t6v9y\$B&E)H@McQfTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z\$C&F)H@McQfTjWnZr4u7x!A%D*G';
   static String appkey = 'i4hFTaScLmWKaIfuPgXHYDmjcbz5K5a';
   static Future<dynamic> getNoLoading(String url, {String key = 'lite'}) async {
     // final storage = GetStorage();
@@ -195,7 +209,8 @@ class DioClient {
     dio.options.headers.clear();
     try {
       if (key == 'redeem') {
-        dio.options.headers.addAll({'Authorization': 'Basic bG1tYXBpOmxtbXhAMjAyNCE='});
+        dio.options.headers
+            .addAll({'Authorization': 'Basic bG1tYXBpOmxtbXhAMjAyNCE='});
       }
       if (key == 'appkey') {
         dio.options.headers.addAll({"appkey": appkey});
@@ -223,7 +238,11 @@ class DioClient {
       } else if (key == 'nokey') {
         //Todo
       } else {
-        dio.options.headers.addAll({"lmm-token": MyConstant.desRoute == "UAT" ? AppUrl.lmmTokenUAT : AppUrl.lmmTokenPRO});
+        dio.options.headers.addAll({
+          "lmm-token": MyConstant.desRoute == "UAT"
+              ? AppUrl.lmmTokenUAT
+              : AppUrl.lmmTokenPRO
+        });
       }
 
       // logger.d('dioClient req GET === $url');

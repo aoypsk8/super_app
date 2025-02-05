@@ -13,8 +13,6 @@ import 'package:super_app/controllers/tempA_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
-import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
-import 'package:super_app/views/templateA/confirm_tempA.dart';
 import 'package:super_app/widget/button.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';

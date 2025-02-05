@@ -252,9 +252,12 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                                       ),
                                       const SizedBox(height: 10),
                                       buildTextDetail(
-                                          title: "fee",
-                                          detail: widget.fee,
-                                          money: true),
+                                        title: "fee",
+                                        detail: fn.format(
+                                          int.parse(widget.fee),
+                                        ),
+                                        money: true,
+                                      ),
                                       const SizedBox(height: 5),
                                       buildTextDetail(
                                           title: "transaction_id",

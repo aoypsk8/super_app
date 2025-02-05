@@ -17,6 +17,7 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/scanqr/qr_scanner.dart';
 import 'package:super_app/views/web/openWebView.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -88,13 +89,28 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
   @override
   Widget build(BuildContext context) {
     var menuModelItem = homeController.menuModel.first;
+
     return Scaffold(
       backgroundColor: cr_fbf7,
       floatingActionButton: SizedBox(
         width: 14.w,
         height: 14.w,
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            qrController.clear();
+            if (!userController.isCheckToken.value) {
+              userController.isCheckToken.value = true;
+              userController.checktoken(name: 'menu').then((value) async {
+                if (userController.isLogin.value) {
+                  final result = await Get.to(() => QRScannerScreen());
+                  if (result != null) {
+                    print(result);
+                  }
+                }
+              });
+              userController.isCheckToken.value = false;
+            }
+          },
           backgroundColor: Theme.of(context).primaryColor,
           shape: CircleBorder(),
           child: Icon(

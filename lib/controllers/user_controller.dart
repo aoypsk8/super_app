@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,8 @@ import 'package:super_app/models/user_profile_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:intl/intl.dart';
+import 'package:dio/dio.dart' as dio;
 
 class UserController extends GetxController with WidgetsBindingObserver {
   final storage = GetStorage();
@@ -57,10 +61,12 @@ class UserController extends GetxController with WidgetsBindingObserver {
   @override
   void onReady() async {
     super.onReady();
-    storage.write('msisdn', '2057935454');
-    storage.write('msisdn', '2057935454');
-    storage.write('msisdn', '2057935454');
-    await loginpincode('2057935454', '555555');
+    String wallet = '2052555999';
+    storage.write('msisdn', wallet);
+    storage.write('msisdn', wallet);
+    storage.write('msisdn', wallet);
+    rxMsisdn.value = storage.read('msisdn');
+    await loginpincode(wallet, '555555');
     await fetchBalance();
     await queryUserProfile();
   }
@@ -135,7 +141,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
           totalBalance.value = result.amount ?? 0;
           mainBalance.value = result.fiat ?? 0;
           pointBalance.value = result.point ?? 0;
-          profileName.value = '${result.firstname ?? ''} ${result.lastname ?? ''}'.trim();
+          // profileName.value = '${result.firstname ?? ''} ${result.lastname ?? ''}'.trim();
         }
       } else {
         print('Error: ${response["resultMessage"] ?? "Unknown error occurred"}');
@@ -147,11 +153,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
 
   queryUserProfile() async {
     try {
-      // Retrieve the token from storage
       var token = await storage.read('token');
       var msisdn = await storage.read('msisdn');
-
-      // Check if token and msisdn are valid
       if (token == null || msisdn == null) {
         print('Error: Missing token or msisdn');
         return;
@@ -161,6 +164,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
       var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
       if (response != null) {
         userProfilemodel.value = UserProfileModel.fromJson(response);
+        profileName.value = '${userProfilemodel.value.name} ${userProfilemodel.value.surname}';
       } else {
         print('Error: Response is null');
       }
@@ -202,5 +206,147 @@ class UserController extends GetxController with WidgetsBindingObserver {
     } else {
       DialogHelper.showErrorDialogNew(description: 'ERRORTOTO');
     }
+  }
+
+  uploadImgProfile(File imgFile, String imgType) async {
+    String fileName = imgFile.path.split('/').last;
+    var formData = dio.FormData.fromMap({
+      "id": userProfilemodel.value.msisdn,
+      'image': await dio.MultipartFile.fromFile(
+        '.${imgFile.path}',
+        filename: fileName,
+      ),
+    });
+
+    var responseUpload = await DioClient.postEncrypt('${MyConstant.urlProfileUpload}/upload', formData, image: true);
+    var dataUpdate = {
+      "msisdn": userProfilemodel.value.msisdn,
+      "gender": userProfilemodel.value.gender,
+      "name": userProfilemodel.value.name,
+      "surname": userProfilemodel.value.surname,
+      "birthdate": userProfilemodel.value.birthdate,
+      "provinceCode": userProfilemodel.value.provinceCode,
+      "provinceDesc": userProfilemodel.value.provinceDesc,
+      "district": userProfilemodel.value.district,
+      "village": userProfilemodel.value.village,
+      "card_id": userProfilemodel.value.cardId,
+      "verify": userProfilemodel.value.verify,
+      "type": userProfilemodel.value.type,
+      "doc_img": userProfilemodel.value.docImg,
+      "verify_img": userProfilemodel.value.verifyImg,
+      "profile_img": responseUpload["newurl"],
+      "created": userProfilemodel.value.created,
+      "updated": DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now()),
+      "status": userProfilemodel.value.status
+    };
+    var url = '${MyConstant.urlUser}/requpdate';
+    await DioClient.postEncrypt(url, dataUpdate, key: 'lmm');
+    // querykyc();
+    // userProfilemodel.value.profileImg = responseUpload["newurl"];
+    queryUserProfile();
+  }
+
+  uploadDocImg(File imgFile, String imgType) async {
+    String fileName = imgFile.path.split('/').last;
+    var formData = dio.FormData.fromMap({
+      "id": userProfilemodel.value.msisdn,
+      'image': await dio.MultipartFile.fromFile('.${imgFile.path}', filename: fileName),
+    });
+    var responseUpload = await DioClient.postEncrypt(
+      '${MyConstant.urlProfileUpload}/upload',
+      formData,
+      image: true,
+    );
+    var dataUpdate = {
+      "msisdn": userProfilemodel.value.msisdn,
+      "gender": userProfilemodel.value.gender,
+      "name": userProfilemodel.value.name,
+      "surname": userProfilemodel.value.surname,
+      "birthdate": userProfilemodel.value.birthdate,
+      "provinceCode": userProfilemodel.value.provinceCode,
+      "provinceDesc": userProfilemodel.value.provinceDesc,
+      "district": userProfilemodel.value.district,
+      "village": userProfilemodel.value.village,
+      "card_id": userProfilemodel.value.cardId,
+      "verify": userProfilemodel.value.verify,
+      "type": userProfilemodel.value.type,
+      "doc_img": responseUpload["newurl"],
+      "verify_img": userProfilemodel.value.verifyImg,
+      "profile_img": userProfilemodel.value.profileImg,
+      "created": userProfilemodel.value.created,
+      "updated": DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now()),
+      "status": userProfilemodel.value.status
+    };
+    var url = '${MyConstant.urlUser}/requpdate';
+    await DioClient.postEncrypt(url, dataUpdate, key: 'lmm');
+    //   querykyc();
+    // userProfilemodel.value.docImg = responseUpload["newurl"];
+    queryUserProfile();
+  }
+
+  uploadVerifyImg(File imgFile, String imgType) async {
+    String fileName = imgFile.path.split('/').last;
+    var formData = dio.FormData.fromMap({
+      "id": userProfilemodel.value.msisdn,
+      'image': await dio.MultipartFile.fromFile('.${imgFile.path}', filename: fileName),
+    });
+    var responseUpload = await DioClient.postEncrypt(
+      '${MyConstant.urlProfileUpload}/upload',
+      formData,
+      image: true,
+    );
+    var dataUpdate = {
+      "msisdn": userProfilemodel.value.msisdn,
+      "gender": userProfilemodel.value.gender,
+      "name": userProfilemodel.value.name,
+      "surname": userProfilemodel.value.surname,
+      "birthdate": userProfilemodel.value.birthdate,
+      "provinceCode": userProfilemodel.value.provinceCode,
+      "provinceDesc": userProfilemodel.value.provinceDesc,
+      "district": userProfilemodel.value.district,
+      "village": userProfilemodel.value.village,
+      "card_id": userProfilemodel.value.cardId,
+      "verify": userProfilemodel.value.verify,
+      "type": userProfilemodel.value.type,
+      "doc_img": userProfilemodel.value.docImg,
+      "verify_img": responseUpload["newurl"],
+      "profile_img": userProfilemodel.value.profileImg,
+      "created": userProfilemodel.value.created,
+      "updated": DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now()),
+      "status": userProfilemodel.value.status
+    };
+    var url = '${MyConstant.urlUser}/requpdate';
+    await DioClient.postEncrypt(loading: false, url, dataUpdate, key: 'lmm');
+    // querykyc();
+    // userProfilemodel.value.verifyImg = responseUpload["newurl"];
+    queryUserProfile();
+  }
+
+  verificationRegister(gender, name, surname, bd, provincecode, province, dist, village, identify) async {
+    var dataUpdate = {
+      "msisdn": userProfilemodel.value.msisdn,
+      "gender": gender,
+      "name": name,
+      "surname": surname,
+      "birthdate": bd,
+      "provinceCode": provincecode,
+      "provinceDesc": province,
+      "district": dist,
+      "village": village,
+      "card_id": identify,
+      "verify": 'Pending',
+      "type": userProfilemodel.value.type,
+      "doc_img": userProfilemodel.value.docImg,
+      "verify_img": userProfilemodel.value.verifyImg,
+      "profile_img": userProfilemodel.value.profileImg,
+      "created": userProfilemodel.value.created,
+      "updated": DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now()),
+      "status": userProfilemodel.value.status
+    };
+    var url = '${MyConstant.urlUser}/requpdate';
+    await DioClient.postEncrypt(loading: false, url, dataUpdate, key: 'lmm');
+    queryUserProfile();
+    // DialogHelper.showSuccess();
+    Get.back();
   }
 }

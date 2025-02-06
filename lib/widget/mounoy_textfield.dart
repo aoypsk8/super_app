@@ -404,3 +404,102 @@ class LongTextField extends StatelessWidget {
     );
   }
 }
+
+class BuildDropDown extends StatelessWidget {
+  const BuildDropDown({
+    super.key,
+    required this.controller,
+    required this.label,
+    required this.name,
+    required this.hintText,
+    this.icons,
+    required this.dataObject,
+    required this.colName,
+    required this.valName,
+    required this.onChanged,
+    this.initValue,
+    this.isEditable = true,
+    this.bordercolor = const Color(0xFFF2F2F2),
+    this.errorBorderColor = Colors.red,
+    this.fillcolor = const Color(0xFFF2F2F2),
+  });
+
+  final TextEditingController controller;
+  final String name;
+  final String label;
+  final String hintText;
+  final IconData? icons;
+  final List<Map<String, Object>> dataObject;
+  final String colName;
+  final String valName;
+  final String? initValue;
+  final Function(String?) onChanged;
+  final bool isEditable;
+  final Color bordercolor;
+  final Color errorBorderColor;
+  final Color fillcolor;
+
+  @override
+  Widget build(BuildContext context) {
+    final defaultBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(
+        color: bordercolor,
+        width: 1.5,
+      ),
+    );
+
+    final errorBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(
+        color: errorBorderColor,
+        width: 1.5,
+      ),
+    );
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFont(text: label),
+          const SizedBox(height: 4),
+          FormBuilderDropdown(
+            name: name,
+            initialValue: initValue,
+            enabled: isEditable, // Disable dropdown when false
+            decoration: InputDecoration(
+              hintText: hintText,
+              prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
+
+              fillColor: fillcolor,
+              filled: true,
+              enabledBorder: defaultBorder,
+              focusedBorder: defaultBorder,
+              errorBorder: errorBorder, // Custom disabled border
+              errorStyle: GoogleFonts.notoSansLao(color: Colors.red),
+              focusedErrorBorder: defaultBorder,
+            ),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(),
+            ]),
+            items: dataObject.map((dataProvice) {
+              String? value = dataProvice[valName]?.toString();
+              String? displayText = dataProvice[colName]?.toString();
+
+              return DropdownMenuItem(
+                value: value != null && displayText != null ? '$value-$displayText' : null,
+                child: TextFont(
+                  text: displayText ?? 'N/A',
+                  color: isEditable ? Colors.black : Colors.grey,
+                  noto: true,
+                ),
+              );
+            }).toList(),
+            onChanged: isEditable ? onChanged : null, // Prevent changes when disabled
+          ),
+        ],
+      ),
+    );
+  }
+}

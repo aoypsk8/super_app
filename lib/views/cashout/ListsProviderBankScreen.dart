@@ -9,6 +9,7 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/views/cashout/VerifyAccountBankScreen.dart';
 import 'package:super_app/widget/buildAppBar.dart';
+import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
 // import 'package:mmoney_lite/screens/bank/controller/bank_controller.dart';
 
@@ -50,11 +51,12 @@ class _ListsProviderBankScreenState extends State<ListsProviderBankScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 10),
-              TextFont(
-                text: 'transfer_wallet',
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-              ),
+              // TextFont(
+              //   text: 'transfer_wallet',
+              //   fontWeight: FontWeight.w500,
+              //   fontSize: 12,
+              // ),
+              buildStepProcess(title: '1/3', desc: 'transfer_wallet'),
               const SizedBox(height: 10),
               Expanded(
                 child: GridView.builder(

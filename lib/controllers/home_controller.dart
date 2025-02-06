@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -7,31 +9,38 @@ import 'package:path_provider/path_provider.dart';
 import 'package:super_app/models/appinfo_model.dart';
 import 'package:super_app/models/menu_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
+import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 
 class HomeController extends GetxController {
   final box = GetStorage();
   RxString rxBgCard = ''.obs;
   RxString rxBgBill = ''.obs;
+  RxString urlwebview = ''.obs;
 
   RxString menutitle = ''.obs;
-  RxList<MenuModel> menumodel = <MenuModel>[].obs;
+  RxList<MenuModel> menuModel = <MenuModel>[].obs; // Model of menuModel
+  RxList<Menulists> menulist = <Menulists>[].obs; // List of menu items
+  Rx<Menulists> menudetail = Menulists().obs; // Selected menu item
 
-  RxList<Menulists> menulist = <Menulists>[].obs;
-  Rx<Menulists> menudetail = Menulists().obs;
-
-  HomeController() {
-    // menudetail.value.url =
-    //     '/Electric/getList;/Electric/verify;/Electric/payment;/Electric/getRecent;/Electric/history;';
-    menudetail.value.url = '/Bank/getList;/Bank/getRecent;/Bank/verify;/Bank/reqCashOut;/Bank/payment';
-    // menudetail.value.url =
-    //     '/Finance/getlist;/Finance/token;/Finance/verify;/Finance/confirm';
-    menudetail.value.description = 'EL';
-    menudetail.value.groupNameEN = 'Electric';
-    menudetail.value.groupNameLA = 'ຈ່າຍຄ່າໄຟຟ້າ';
-    menudetail.value.groupNameVT = 'Trả tiền điện';
-    menudetail.value.groupNameCH = '电费';
+//! clear data
+  clear() async {
+    menutitle = ''.obs;
+    menudetail = Menulists().obs;
   }
+  // HomeController() {
+  //   // menudetail.value.url =
+  //   //     '/Electric/getList;/Electric/verify;/Electric/payment;/Electric/getRecent;/Electric/history;';
+  //   // menudetail.value.url =
+  //   //     '/Bank/getList;/Bank/getRecent;/Bank/verify;/Bank/reqCashOut;/Bank/payment';
+  //   // menudetail.value.url =
+  //   //     '/Finance/getlist;/Finance/token;/Finance/verify;/Finance/confirm';
+  //   // menudetail.value.description = 'EL';
+  //   // menudetail.value.groupNameEN = 'Electric';
+  //   // menudetail.value.groupNameLA = 'ຈ່າຍຄ່າໄຟຟ້າ';
+  //   // menudetail.value.groupNameVT = 'Trả tiền điện';
+  //   // menudetail.value.groupNameCH = '电费';
+  // }
 
   @override
   void onReady() async {
@@ -39,6 +48,7 @@ class HomeController extends GetxController {
     // storage.write('msisdn', "2052768833");
 
     await checkAppUpdate();
+    await fetchServicesmMenu();
   }
 
   String getMenuTitle() {
@@ -64,10 +74,12 @@ class HomeController extends GetxController {
     var res = await DioClient.getNoLoading(url);
     rxAppinfo.value = AppInfoModel.fromJson(res);
 
-    final imageCardFile = await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_card');
+    final imageCardFile =
+        await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_card');
     if (imageCardFile != null) rxBgCard.value = imageCardFile.path;
 
-    final imageBillFile = await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_bill');
+    final imageBillFile =
+        await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_bill');
     if (imageBillFile != null) rxBgBill.value = imageBillFile.path;
   }
 
@@ -75,7 +87,8 @@ class HomeController extends GetxController {
     final dio = Dio();
     final String? storedImageUrl = box.read(type);
     final documentDirectory = await getApplicationDocumentsDirectory();
-    final filePath = '${documentDirectory.path}/$type.png'; // Fixed file name to avoid duplicates
+    final filePath =
+        '${documentDirectory.path}/$type.png'; // Fixed file name to avoid duplicates
     File file = File(filePath);
     if (storedImageUrl == imageUrl && file.existsSync()) {
       print("✅ Image already exists and URL is the same. No need to download.");
@@ -85,7 +98,8 @@ class HomeController extends GetxController {
       if (file.existsSync()) {
         file.deleteSync();
       }
-      final response = await dio.get(imageUrl, options: Options(responseType: ResponseType.bytes));
+      final response = await dio.get(imageUrl,
+          options: Options(responseType: ResponseType.bytes));
       await file.writeAsBytes(response.data);
       box.write(type, imageUrl);
       print("✅ New image downloaded and saved.");
@@ -93,6 +107,29 @@ class HomeController extends GetxController {
     } catch (e) {
       print("❌ Failed to download image: $e");
       return null;
+    }
+  }
+
+  fetchServicesmMenu() async {
+    try {
+      var response = await DioClient.postEncrypt(
+          loading: false, '/SuperApi/Info/Menus', {});
+      if (response != null && response is List) {
+        List<MenuModel> fetchedMenuModel = response
+            .map<MenuModel>((json) => MenuModel.fromJson(json))
+            .toList();
+        menuModel.assignAll(fetchedMenuModel);
+        if (fetchedMenuModel.isNotEmpty &&
+            fetchedMenuModel[0].menulists != null &&
+            fetchedMenuModel[0].menulists!.isNotEmpty) {
+          menulist.assignAll(fetchedMenuModel[0].menulists!);
+        }
+      } else {
+        print('Unexpected response structure');
+      }
+    } catch (e) {
+      print("Error: $e");
+      DialogHelper.showErrorDialogNew(description: e.toString());
     }
   }
 }

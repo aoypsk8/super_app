@@ -1,0 +1,47 @@
+post https://gateway.ltcdev.la/SuperApi/Info/Menus
+Content-Type: application/json
+
+####
+Post https://gateway.ltcdev.la/SuperApi/Info/PaymentList
+Content-Type: application/json
+
+{
+    "owner":"2052768833"
+}
+
+
+####
+
+Post https://gateway.ltcdev.la/SuperApi/Info/UpdatePaymentList
+Content-Type: application/json
+
+{
+    "owner":"2052768833",
+    "payment_type":"Union"
+}
+
+####
+
+Post https://gateway.ltcdev.la/SuperApi/Info/DeletePaymentList
+Content-Type: application/json
+
+{
+    "owner":"2052768833",
+    "payment_type":"UnionPay"
+}
+
+###
+
+Post https://gateway.ltcdev.la/SuperApi/Info/AddPayment
+Content-Type: application/json
+
+{
+  "payment_type": "MasterCard",
+  "logo": "https://mmoney.la/Payment/unionpay.png",
+  "title": "Credit/Debit card",
+  "description": "2246588469785743",
+  "account": "2246588469785746",
+  "owner": "2052768833",
+  "accountname": "Aoy Phongsakoun",
+  "maincard": true
+}

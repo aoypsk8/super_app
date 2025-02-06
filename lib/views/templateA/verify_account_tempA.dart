@@ -23,7 +23,7 @@ class VerifyAccountTempA extends StatefulWidget {
 }
 
 class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
-  final controller = Get.find<TempAController>();
+  final controller = Get.put(TempAController());
   final homeController = Get.find<HomeController>();
 
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
@@ -63,7 +63,8 @@ class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
                       TextFont(text: 'history'),
                       Obx(() {
                         if (controller.isLoading.value) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
                         if (controller.recentTempA.isEmpty) {
                           return Expanded(
@@ -93,20 +94,36 @@ class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
                                       child: GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            selectedIndex = index; // Set the selected index
-                                            accountNumber.text = account.accNo ?? ''; // Set the account number in the text field
+                                            selectedIndex =
+                                                index; // Set the selected index
+                                            accountNumber.text = account
+                                                    .accNo ??
+                                                ''; // Set the account number in the text field
                                           });
                                         },
                                         child: Container(
-                                          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                                          margin: const EdgeInsets.symmetric(vertical: 5),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 20, horizontal: 10),
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 5),
                                           decoration: BoxDecoration(
-                                            color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.1) : color_f4f4, // Change background color if selected
+                                            color: isSelected
+                                                ? Theme.of(context)
+                                                    .primaryColor
+                                                    .withOpacity(0.1)
+                                                : color_f4f4, // Change background color if selected
                                             border: Border.all(
-                                              color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.5) : color_f4f4,
-                                              width: isSelected ? 2 : 1, // Change border width if selected
+                                              color: isSelected
+                                                  ? Theme.of(context)
+                                                      .primaryColor
+                                                      .withOpacity(0.5)
+                                                  : color_f4f4,
+                                              width: isSelected
+                                                  ? 2
+                                                  : 1, // Change border width if selected
                                             ),
-                                            borderRadius: BorderRadius.circular(8),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
                                           child: Row(
                                             children: [
@@ -114,21 +131,30 @@ class _VerifyAccountTempAState extends State<VerifyAccountTempA> {
                                                 height: 54,
                                                 width: 54,
                                                 decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(50),
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
                                                 ),
-                                                child: CachedNetworkImage(imageUrl: controller.tempAdetail.value.logo ?? ''),
+                                                child: CachedNetworkImage(
+                                                    imageUrl: controller
+                                                            .tempAdetail
+                                                            .value
+                                                            .logo ??
+                                                        ''),
                                               ),
                                               SizedBox(width: 10),
                                               Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   TextFont(
-                                                    text: account.accName ?? "No Name",
+                                                    text: account.accName ??
+                                                        "No Name",
                                                     noto: true,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                   TextFont(
-                                                    text: account.accNo ?? "N/A",
+                                                    text:
+                                                        account.accNo ?? "N/A",
                                                     poppin: true,
                                                     color: color_777,
                                                   ),

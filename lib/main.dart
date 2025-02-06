@@ -18,7 +18,6 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-  InitialBindings().dependencies();
   // Initialize services
   final languageService = Get.put(LanguageService());
   await languageService.init();
@@ -36,6 +35,7 @@ class MyApp extends StatelessWidget {
     return Sizer(builder: (context, orientation, eviceType) {
       return GetMaterialApp(
         debugShowCheckedModeBanner: false,
+        initialBinding: InitialBindings(),
         translations: AppTranslations(),
         locale: Get.find<LanguageService>().locale,
         fallbackLocale: const Locale('lo'),
@@ -53,6 +53,8 @@ class MyApp extends StatelessWidget {
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

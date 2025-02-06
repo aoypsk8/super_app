@@ -70,7 +70,8 @@ class ListsPaymentTempAScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   itemCount: data.length, // Use the data length
                   itemBuilder: (context, index) {
-                    final account = data[index]; // Access the current item in data
+                    final account =
+                        data[index]; // Access the current item in data
 
                     return AnimationConfiguration.staggeredList(
                       position: index,
@@ -86,18 +87,23 @@ class ListsPaymentTempAScreen extends StatelessWidget {
                                       transID: controller.rxtransid.value,
                                       amount: controller.rxPaymentAmount.value,
                                       toAcc: controller.rxaccnumber.value,
-                                      chanel: homeController.menudetail.value.groupNameEN,
-                                      provider: controller.tempAdetail.value.code,
+                                      chanel: homeController
+                                          .menudetail.value.groupNameEN,
+                                      provider:
+                                          controller.tempAdetail.value.code,
                                       remark: controller.rxNote.value)
                                   .then((value) => {
-                                        if (value) {Get.to(() => ConfirmTempAScreen())}
+                                        if (value)
+                                          {Get.to(() => ConfirmTempAScreen())}
                                       });
                             },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 10),
                               margin: const EdgeInsets.symmetric(vertical: 5),
                               decoration: BoxDecoration(
-                                color: Colors.grey.shade200, // Change background color if selected
+                                color: Colors.grey
+                                    .shade200, // Change background color if selected
                                 border: Border.all(
                                   color: Colors.grey.shade300,
                                   width: 1, // Change border width if selected
@@ -110,37 +116,54 @@ class ListsPaymentTempAScreen extends StatelessWidget {
                                     radius: 27.sp,
                                     backgroundColor: Colors.transparent,
                                     backgroundImage: account['logo'] != ''
-                                        ? CachedNetworkImageProvider(account['logo'].toString())
+                                        ? CachedNetworkImageProvider(
+                                            account['logo'].toString())
                                         : account['payment_type'] == 'mmoney'
                                             ? AssetImage(MyIconOld.logox_jpg)
-                                            : account['payment_type'] == 'master_card'
-                                                ? AssetImage(MyIconOld.master_card)
-                                                : account['payment_type'] == 'union_pay'
-                                                    ? AssetImage(MyIconOld.union_pay)
-                                                    : AssetImage(MyIconOld.logox_jpg),
-                                    child: (account['logo'] == '') && account['payment_type'] != 'mmoney' && account['payment_type'] != 'master_card'
-                                        ? Icon(Icons.error, color: color_primary_light)
+                                            : account['payment_type'] ==
+                                                    'master_card'
+                                                ? AssetImage(
+                                                    MyIconOld.master_card)
+                                                : account['payment_type'] ==
+                                                        'union_pay'
+                                                    ? AssetImage(
+                                                        MyIconOld.union_pay)
+                                                    : AssetImage(
+                                                        MyIconOld.logox_jpg),
+                                    child: (account['logo'] == '') &&
+                                            account['payment_type'] !=
+                                                'mmoney' &&
+                                            account['payment_type'] !=
+                                                'master_card'
+                                        ? Icon(Icons.error,
+                                            color: color_primary_light)
                                         : null,
                                   ),
                                   SizedBox(width: 10),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         account['order'] == 1
                                             ? TextFont(
-                                                text: 'Primary', // Use data title
-                                                poppin: true, color: color_primary_light,
+                                                text:
+                                                    'Primary', // Use data title
+                                                poppin: true,
+                                                color: color_primary_light,
                                                 fontSize: 10,
                                               )
                                             : SizedBox.shrink(),
                                         TextFont(
-                                          text: account['title'].toString() ?? "No Name", // Use data title
+                                          text: account['title'].toString() ??
+                                              "No Name", // Use data title
                                           poppin: true,
                                           fontWeight: FontWeight.w500,
                                         ),
                                         TextFont(
-                                          text: account['description'].toString() ?? "N/A", // Use data description
+                                          text: account['description']
+                                                  .toString() ??
+                                              "N/A", // Use data description
                                           poppin: true,
                                           color: Colors.grey.shade600,
                                         ),

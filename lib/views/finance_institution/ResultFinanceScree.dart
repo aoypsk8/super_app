@@ -16,6 +16,7 @@ import 'package:super_app/controllers/finance_controller.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/shareResult.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/buildUserDetail.dart';
@@ -32,7 +33,8 @@ class ResultFinanceScreen extends StatefulWidget {
   State<ResultFinanceScreen> createState() => _ResultFinanceScreenState();
 }
 
-class _ResultFinanceScreenState extends State<ResultFinanceScreen> with SingleTickerProviderStateMixin {
+class _ResultFinanceScreenState extends State<ResultFinanceScreen>
+    with SingleTickerProviderStateMixin {
   final screenshotController = ScreenshotController();
   final GlobalKey _globalKey = GlobalKey();
   final financeController = Get.put(FinanceController());
@@ -70,9 +72,11 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen> with SingleTi
     try {
       await Future.delayed(Duration(milliseconds: 100));
       if (_globalKey.currentContext != null) {
-        RenderRepaintBoundary boundary = _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+        RenderRepaintBoundary boundary = _globalKey.currentContext!
+            .findRenderObject() as RenderRepaintBoundary;
         ui.Image image = await boundary.toImage();
-        ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+        ByteData? byteData =
+            await image.toByteData(format: ui.ImageByteFormat.png);
         if (byteData != null) {
           String picturesPath = "${DateTime.now().millisecondsSinceEpoch}.jpg";
           final result = await SaverGallery.saveImage(
@@ -118,7 +122,7 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen> with SingleTi
                         title: 'share',
                         bgColor: cr_fdeb,
                         func: () async {
-                          _takeScreenshot();
+                          sharedScreenshot(screenshotController);
                         },
                         share: true,
                       ),
@@ -181,17 +185,23 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen> with SingleTi
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 20),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           buildTextSuccess(),
                                           TextFont(
-                                            text: DateFormat('dd MMM, yyyy HH:mm').format(
-                                              DateTime.parse("2023-01-01 12:00:00"),
+                                            text:
+                                                DateFormat('dd MMM, yyyy HH:mm')
+                                                    .format(
+                                              DateTime.parse(
+                                                  "2023-01-01 12:00:00"),
                                               // DateTime.parse(financeController
                                               // .rxTimeStamp
                                               // .replaceAll('/', '-')),
@@ -203,22 +213,28 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen> with SingleTi
                                         ],
                                       ),
                                       Container(
-                                        margin: EdgeInsets.symmetric(vertical: 15),
-                                        padding: EdgeInsets.symmetric(vertical: 10),
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 15),
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 10),
                                         width: Get.width,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                           color: cr_fdeb,
                                         ),
                                         child: Column(
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.all(12.0),
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
                                               child: buildUserDetail(
-                                                profile: "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
+                                                profile:
+                                                    "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
                                                 from: true,
                                                 msisdn: storage.read('msisdn'),
-                                                name: userController.profileName.value,
+                                                name: userController
+                                                    .profileName.value,
                                               ),
                                             ),
                                             const SizedBox(height: 5),
@@ -227,12 +243,18 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen> with SingleTi
                                               dashlenght: 7,
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.all(12.0),
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
                                               child: buildUserDetail(
-                                                profile: financeController.financeModelDetail.value.logo!,
+                                                profile: financeController
+                                                    .financeModelDetail
+                                                    .value
+                                                    .logo!,
                                                 from: false,
-                                                msisdn: financeController.rxAccNo.value,
-                                                name: financeController.rxAccName.value,
+                                                msisdn: financeController
+                                                    .rxAccNo.value,
+                                                name: financeController
+                                                    .rxAccName.value,
                                               ),
                                             ),
                                           ],
@@ -249,7 +271,10 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen> with SingleTi
                                       Row(
                                         children: [
                                           TextFont(
-                                            text: NumberFormat('#,###').format(double.parse(financeController.rxPaymentAmount.value.toString())),
+                                            text: NumberFormat('#,###').format(
+                                                double.parse(financeController
+                                                    .rxPaymentAmount.value
+                                                    .toString())),
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20,
                                             color: cr_b326,
@@ -265,17 +290,21 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen> with SingleTi
                                       const SizedBox(height: 20),
                                       buildTextDetail(
                                         title: "fee",
-                                        detail: NumberFormat('#,###').format(double.parse(financeController.rxFee.value)),
+                                        detail: NumberFormat('#,###').format(
+                                            double.parse(
+                                                financeController.rxFee.value)),
                                         money: true,
                                       ),
                                       const SizedBox(height: 20),
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
                                             flex: 4,
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 const SizedBox(height: 20),
                                                 TextFont(
@@ -286,7 +315,8 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen> with SingleTi
                                                 ),
                                                 const SizedBox(height: 4),
                                                 TextFont(
-                                                  text: financeController.rxTransID.value,
+                                                  text: financeController
+                                                      .rxTransID.value,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 12,
                                                   color: cr_2929,
@@ -301,7 +331,10 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen> with SingleTi
                                                 ),
                                                 const SizedBox(height: 4),
                                                 TextFont(
-                                                  text: financeController.financeModelDetail.value.title!,
+                                                  text: financeController
+                                                      .financeModelDetail
+                                                      .value
+                                                      .title!,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 12,
                                                   color: cr_2929,
@@ -313,7 +346,8 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen> with SingleTi
                                           Expanded(
                                             flex: 2,
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
                                               children: [
                                                 // ignore: deprecated_member_use
                                                 PrettyQr(
@@ -321,8 +355,10 @@ class _ResultFinanceScreenState extends State<ResultFinanceScreen> with SingleTi
                                                     MyIcon.ic_logo_x,
                                                   ),
                                                   size: 25.w,
-                                                  data: financeController.rxTransID.value,
-                                                  errorCorrectLevel: QrErrorCorrectLevel.M,
+                                                  data: financeController
+                                                      .rxTransID.value,
+                                                  errorCorrectLevel:
+                                                      QrErrorCorrectLevel.M,
                                                   typeNumber: null,
                                                   roundEdges: false,
                                                 ),

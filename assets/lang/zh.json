@@ -63,7 +63,7 @@
   "done": "成功",
   "vertify_otp": "使用 OTP 验证身份",
   "verification": "验证身份",
-  "otp_send": "OTP 代码已发送至号码 {}",
+  "otp_send": "OTP 代码已发送至号码 :",
   "otp_sendEmail": "OTP 代码已发送至邮件 {}",
   "wallet_account": "钱包号码",
   "swap_account": "使用新号码登录",
@@ -290,5 +290,11 @@
   "verify_account": "验证账户",
   "biometric": "Biometric",
   "save_screenshot": "保存截图",
-  "policy_and_term": "政策和条款"
+  "policy_and_term": "政策和条款",
+  "save_pic_success":"Save QR success",
+  "from_acc":"From Account",
+  "to_acc":"To Account",
+  "change_primary_success":"Change Success!",
+  "TermsPolicy":"Terms and Conditions of Use and Privacy Notice",
+  "welcome_first_screen":"Welcome"
 }

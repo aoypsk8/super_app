@@ -37,8 +37,6 @@ class buildTextDetail extends StatelessWidget {
               fontSize: 12,
               color: cr_2929,
               maxLines: maxlines,
-              poppin: noto ? false : true, // Set poppin to true if money is true
-              noto: noto ? true : false, // Set noto to true if money is false
             ),
             money
                 ? TextFont(

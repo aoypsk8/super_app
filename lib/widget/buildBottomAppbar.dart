@@ -7,7 +7,7 @@ import 'package:super_app/widget/textfont.dart';
 
 // ignore: camel_case_types
 class buildBottomAppbar extends StatelessWidget {
-  const buildBottomAppbar({
+  buildBottomAppbar({
     super.key,
     required this.func,
     required this.title,
@@ -19,6 +19,7 @@ class buildBottomAppbar extends StatelessWidget {
     this.noto = false,
     this.share = false,
     this.isEnabled = true,
+    this.paddingbottom = 0,
   });
   final String title;
   final double radius;
@@ -30,8 +31,11 @@ class buildBottomAppbar extends StatelessWidget {
   final bool? share;
   final FontWeight fontWeight;
   final bool isEnabled;
+  double? paddingbottom;
+
   @override
   Widget build(BuildContext context) {
+    paddingbottom = high.h;
     return Container(
       margin: margin,
       child: Column(
@@ -70,7 +74,7 @@ class buildBottomAppbar extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: high.h)
+          SizedBox(height: paddingbottom)
         ],
       ),
     );

@@ -61,3 +61,10 @@ const color_d5d5 = Color(0xffD5D5D5);
 
 //
 const Color color_3086 = Color(0xff308628);
+const Color color_b6b6 = Color(0xffB6B6B6);
+const Color color_9f9 = Color(0xff9F9F9F);
+const Color color_ec1c = Color(0xffEC1C29);
+const Color color_989 = Color(0xff989FA5);
+const Color color_8e94 = Color(0xff8E9498);
+const color_1a1 = Color(0xff1A1A1A);
+const Color color_f15 = Color(0xffF15244);

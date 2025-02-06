@@ -11,7 +11,7 @@ import 'package:super_app/models/provider_tempA_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/dialog_helper.dart';
-import 'package:super_app/views/reusable_result.dart';
+import 'package:super_app/views/reusable_template/reusable_result.dart';
 import 'package:super_app/views/templateA/payment_tempA.dart';
 import 'package:super_app/views/templateA/result_tempA.dart';
 
@@ -52,14 +52,20 @@ class TempAController extends GetxController {
         throw Exception("Malformed URL: Unable to extract the first URL part.");
       }
       var url = urlSplit[0];
-      var response = await DioClient.postEncrypt(loading: false, url, key: 'lmm', {});
+      var response =
+          await DioClient.postEncrypt(loading: false, url, key: 'lmm', {});
       if (response == null || response.isEmpty) {
         throw Exception("Empty or invalid response received from API.");
       }
-      tempAmodel.value = response.map<ProviderTempAModel>((json) => ProviderTempAModel.fromJson(json)).toList();
+      tempAmodel.value = response
+          .map<ProviderTempAModel>((json) => ProviderTempAModel.fromJson(json))
+          .toList();
       final part = tempAmodel.map((e) => e.part).toSet().toList();
       provsep.value = part.map((e) {
-        return {"partid": e, "data": tempAmodel.where((res) => res.part == e).toList()};
+        return {
+          "partid": e,
+          "data": tempAmodel.where((res) => res.part == e).toList()
+        };
       }).toList();
     } catch (e, stackTrace) {
       print("Error in fetchTempAList: $e");
@@ -72,13 +78,23 @@ class TempAController extends GetxController {
     if (urlSplit.isEmpty || urlSplit[0].isEmpty) {
       throw Exception("Malformed URL: Unable to extract the first URL part.");
     }
-    var response = await DioClient.postEncrypt(loading: false, urlSplit[3], {"Msisdn": storage.read('msisdn'), "ProviderID": tempAdetail.value.code}, key: 'lmm');
-    recentTempA.value = response.map<RecentTempAModel>((json) => RecentTempAModel.fromJson(json)).toList();
+    var response = await DioClient.postEncrypt(
+        loading: false,
+        urlSplit[3],
+        {
+          "Msisdn": storage.read('msisdn'),
+          "ProviderID": tempAdetail.value.code
+        },
+        key: 'lmm');
+    recentTempA.value = response
+        .map<RecentTempAModel>((json) => RecentTempAModel.fromJson(json))
+        .toList();
   }
 
   Future<void> debitProcess(String accNumber) async {
     try {
-      rxtransid.value = "${homeController.menudetail.value.description!}${await randomNumber().fucRandomNumber()}";
+      rxtransid.value =
+          "${homeController.menudetail.value.description!}${await randomNumber().fucRandomNumber()}";
       final urlSplit = homeController.menudetail.value.url?.split(";") ?? [];
       final apiUrl = urlSplit[1];
       final payload = {
@@ -97,7 +113,8 @@ class TempAController extends GetxController {
         Get.to(() => PaymentTempAScreen());
       } else {
         // Show error dialog with the result description
-        DialogHelper.showErrorDialogNew(description: response['ResultDesc'] ?? "Unknown error occurred");
+        DialogHelper.showErrorDialogNew(
+            description: response['ResultDesc'] ?? "Unknown error occurred");
       }
     } catch (e, stackTrace) {
       print("Error in debitProcess: $e");
@@ -112,7 +129,8 @@ class TempAController extends GetxController {
       var url;
       var response;
       if (await paymentController.confirmCashOut()) {
-        List<String> urlSplit = homeController.menudetail.value.url?.split(";") ?? [];
+        List<String> urlSplit =
+            homeController.menudetail.value.url?.split(";") ?? [];
         url = urlSplit[2];
         data = {
           "AccName": rxaccname.value,
@@ -133,7 +151,8 @@ class TempAController extends GetxController {
           rxtimestamp.value = response['CreateDate'];
           rxPaymentAmount.value = amount;
           Get.to(() => ReusableResultScreen(
-              fromAccountImage: userController.userProfilemodel.value.profileImg!,
+              fromAccountImage:
+                  userController.userProfilemodel.value.profileImg!,
               fromAccountName: userController.profileName.value,
               fromAccountNumber: userController.userProfilemodel.value.msisdn!,
               toAccountImage: tempAdetail.value.logo!,
@@ -154,7 +173,8 @@ class TempAController extends GetxController {
     }
   }
 
-  Future<void> saveLogTempA(Map<String, dynamic> data, response, String amount) async {
+  Future<void> saveLogTempA(
+      Map<String, dynamic> data, response, String amount) async {
     final logController = Get.put(LogController());
     logPaymentReq = data;
     logPaymentRes = response;

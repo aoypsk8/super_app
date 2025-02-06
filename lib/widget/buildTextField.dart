@@ -426,6 +426,7 @@ class buildNumberFiledValidate extends StatelessWidget {
     this.suffixonTapFuc,
     this.fillcolor = color_fafa,
     this.bordercolor = color_ddd,
+    this.textType = TextInputType.number,
   });
 
   final TextEditingController controller;
@@ -437,6 +438,7 @@ class buildNumberFiledValidate extends StatelessWidget {
   final Color fillcolor;
   final Color bordercolor;
   final Widget? suffixIcon;
+  final TextInputType? textType;
   final Function()? suffixonTapFuc;
 
   @override
@@ -461,7 +463,7 @@ class buildNumberFiledValidate extends StatelessWidget {
           FormBuilderTextField(
             name: name,
             controller: controller,
-            keyboardType: TextInputType.number,
+            keyboardType: textType,
             maxLength: max == null ? null : max,
             style: languageCode == 'lo'
                 ? GoogleFonts.notoSerifLao(
@@ -853,6 +855,7 @@ class BuildTextAreaValidate extends StatelessWidget {
     this.suffixonTapFuc,
     this.fillcolor = color_f2f2,
     this.inputHeight = 50.0,
+    this.Isvalidate = false,
   });
 
   final TextEditingController controller;
@@ -866,6 +869,7 @@ class BuildTextAreaValidate extends StatelessWidget {
   final Widget? suffixIcon;
   final Function()? suffixonTapFuc;
   final double inputHeight;
+  final bool Isvalidate;
 
   final storage = GetStorage();
 
@@ -936,9 +940,11 @@ class BuildTextAreaValidate extends StatelessWidget {
               focusedErrorBorder: border,
               errorBorder: border,
             ),
-            // validator: FormBuilderValidators.compose([
-            //   FormBuilderValidators.required(),
-            // ]),
+            validator: Isvalidate
+                ? FormBuilderValidators.compose([
+                    FormBuilderValidators.required(),
+                  ])
+                : null,
           ),
         ],
       ),

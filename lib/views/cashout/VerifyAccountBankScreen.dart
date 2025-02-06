@@ -15,6 +15,7 @@ import 'package:super_app/views/cashout/buildHistoryCashOutRecent.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
+import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class VerifyAccountBankScreen extends StatefulWidget {
@@ -129,11 +130,12 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10),
-            TextFont(
-              text: 'transfer_to_bank',
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
-            ),
+            // TextFont(
+            //   text: 'transfer_to_bank',
+            //   fontWeight: FontWeight.w500,
+            //   fontSize: 12,
+            // ),
+            buildStepProcess(title: '2/3', desc: 'transfer_to_bank'),
             const SizedBox(height: 10),
             buildNumberFiledValidate(
               controller: _accountNumber,

@@ -1,17 +1,15 @@
 // ignore_for_file: use_build_context_synchronously, prefer_const_constructors
-
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
-import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
-import 'package:super_app/widget/buildAppbarHeader.dart';
+import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
-import '../../utility/myIcon.dart';
 import '../../utility/myconstant.dart';
 
 class OtpTransferScreen extends StatefulWidget {
@@ -45,91 +43,120 @@ class _OtpTransferScreenState extends State<OtpTransferScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: color_grey_background,
+      backgroundColor: color_fff,
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20, top: 16),
-            child: IconButton(
-              icon: const Icon(
-                Icons.close,
-                color: color_fff,
-                size: 28,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          const buildAppbarHeader(title: '', desc: ''),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 30),
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          behavior: HitTestBehavior.opaque,
+          child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
+                    SvgPicture.asset(
+                      MyIcon.otpAnimation,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 30),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TextFont(
-                            text: 'verification',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                          SizedBox(
+                            height: 20,
                           ),
-                          TextFont(
-                            text: 'otp_send',
-                            color: color_777,
-                            fontSize: 10,
-                            maxLines: 2,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    TextFont(
+                                      text: 'verification',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                      color: cr_2929,
+                                    ),
+                                    Wrap(
+                                      children: [
+                                        TextFont(
+                                          text: 'otp_send',
+                                          color: color_777,
+                                          fontSize: 10,
+                                          maxLines: 2,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        TextFont(
+                                          text: userController
+                                              .userProfilemodel.value.msisdn
+                                              .toString(),
+                                          color: color_777,
+                                          fontSize: 10,
+                                          maxLines: 2,
+                                          poppin: true,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          // TextFont(text: userController.rxMsisdnReg.value),
+                          SizedBox(height: 20),
+                          buildOTP(context),
+                          SizedBox(height: 30),
+                          TextButton(
+                            onPressed: () => userController.resendotp(),
+                            child: TextFont(
+                              text: 'send_otp_again',
+                              fontWeight: FontWeight.w400,
+                              underline: true,
+                              underlineColor: cr_ef33,
+                              color: cr_ef33,
+                              fontSize: 11.5,
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    Image.asset(
-                      MyIcon.logo_ok,
-                      width: 14.w,
-                    )
                   ],
                 ),
-                SizedBox(height: 20),
-                buildOTP(context),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFont(text: 'send_otp_desc'),
-                    const SizedBox(width: 5),
-                  ],
-                ),
-                TextButton(
-                  onPressed: () => userController.resendotp(),
-                  child: TextFont(
-                    text: 'send_otp_again',
-                    fontWeight: FontWeight.w700,
-                    color: color_red_background,
+                Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: Column(
+                    children: [
+                      buildBottomAppbar(
+                        bgColor: Theme.of(context).primaryColor,
+                        title: 'next',
+                        high: 0,
+                        func: () {
+                          Future.delayed(MyConstant.delayTime).then((_) {
+                            _otpProcess(pinController.text);
+                          });
+                        },
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: TextFont(
+                          text: 'cancel',
+                          fontWeight: FontWeight.w400,
+                          underline: true,
+                          underlineColor: cr_7070,
+                          color: cr_7070,
+                          fontSize: 11.5,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Obx(() => TextFont(
-                      text: 'Ref Code : ${userController.refcode}',
-                      fontSize: 10,
-                      poppin: true,
-                    )),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -148,35 +175,31 @@ class _OtpTransferScreenState extends State<OtpTransferScreen> {
         },
         focusNode: focusNode,
         defaultPinTheme: PinTheme(
-            width: 80,
-            height: 80,
-            textStyle: GoogleFonts.poppins(
-                fontSize: 22.sp,
-                color: color_red_background,
-                fontWeight: FontWeight.w500),
-            decoration: const BoxDecoration()),
-        showCursor: true,
-        cursor: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              height: 2,
-              decoration: BoxDecoration(
-                  color: color_red_background,
-                  borderRadius: BorderRadius.circular(10)),
-            ),
-          ],
+          width: 56,
+          height: 56,
+          textStyle: GoogleFonts.poppins(
+              fontSize: 20,
+              color: Color.fromRGBO(30, 60, 87, 1),
+              fontWeight: FontWeight.w500),
+          decoration: BoxDecoration(
+            border: Border.all(color: Color.fromRGBO(234, 239, 243, 1)),
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
-        preFilledWidget: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              height: 2,
-              decoration: BoxDecoration(
-                  color: color_grey5e5,
-                  borderRadius: BorderRadius.circular(10)),
-            ),
-          ],
+        showCursor: true,
+        focusedPinTheme: PinTheme(
+          width: 56,
+          height: 56,
+          textStyle: GoogleFonts.poppins(
+            fontSize: 20,
+            color: Color.fromRGBO(30, 60, 87, 1),
+            fontWeight: FontWeight.w500,
+          ),
+          decoration: BoxDecoration(
+            border:
+                Border.all(color: cr_ef33), // Focus color change when typing
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
       ),
     );

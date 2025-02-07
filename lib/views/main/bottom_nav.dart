@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:super_app/controllers/qr_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/home_screen.dart';
+import 'package:super_app/views/history/history.dart';
 import 'package:super_app/views/myqr/MyQrScreen.dart';
 import 'package:super_app/views/service/service.dart';
 import 'package:super_app/views/settings/setting.dart';
@@ -30,7 +31,7 @@ class _BottomNavState extends State<BottomNav> {
     HomeScreen(),
     ServicePage(),
     MyQrScreen(),
-    Center(child: TextFont(text: 'nav_history')),
+    HistoryScreen(),
     SettingsScreen(),
   ];
 
@@ -38,8 +39,7 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     // Get theme colors
     final activeColor = Theme.of(context).colorScheme.primary; // Active color
-    final inactiveColor =
-        Theme.of(context).unselectedWidgetColor; // Inactive color
+    final inactiveColor = Theme.of(context).unselectedWidgetColor; // Inactive color
 
     return Scaffold(
       body: _pages[_currentIndex],
@@ -48,11 +48,8 @@ class _BottomNavState extends State<BottomNav> {
         children: [
           // Active Indicator Positioned Above the BottomNavigationBar
           Positioned(
-            top:
-                -5, // Position the active indicator 5px above the BottomNavigationBar
-            left: MediaQuery.of(context).size.width /
-                _menuItems.length *
-                _currentIndex,
+            top: -5, // Position the active indicator 5px above the BottomNavigationBar
+            left: MediaQuery.of(context).size.width / _menuItems.length * _currentIndex,
             width: MediaQuery.of(context).size.width / _menuItems.length,
             child: Container(
               height: 5,
@@ -88,8 +85,7 @@ class _BottomNavState extends State<BottomNav> {
                       fontSize: 10.5,
                       text: item['title'],
                       color: isActive ? activeColor : inactiveColor,
-                      fontWeight:
-                          isActive ? FontWeight.bold : FontWeight.normal,
+                      fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                     )
                   ],
                 ),

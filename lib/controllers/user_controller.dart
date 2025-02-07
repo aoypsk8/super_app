@@ -16,6 +16,8 @@ import 'package:super_app/utility/myconstant.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart' as dio;
 
+import '../models/model-history/history_model.dart';
+
 class UserController extends GetxController with WidgetsBindingObserver {
   final storage = GetStorage();
   RxString walletid = ''.obs;
@@ -31,6 +33,9 @@ class UserController extends GetxController with WidgetsBindingObserver {
   RxInt totalBalance = 0.obs;
   RxInt mainBalance = 0.obs;
   RxInt pointBalance = 0.obs;
+
+  RxBool isLogin = false.obs;
+  RxBool isCheckToken = false.obs;
 
   //auth
   RxString rxMsisdn = '2052768833'.obs;
@@ -63,8 +68,6 @@ class UserController extends GetxController with WidgetsBindingObserver {
     super.onReady();
     String wallet = '2052555999';
     storage.write('msisdn', wallet);
-    storage.write('msisdn', wallet);
-    storage.write('msisdn', wallet);
     rxMsisdn.value = storage.read('msisdn');
     await loginpincode(wallet, '555555');
     await fetchBalance();
@@ -78,6 +81,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
         final token = response['token'];
         if (token != null) {
           await storage.write('token', token);
+          isLogin.value = true;
           rxToken.value = token;
           print('Token: $token');
         }
@@ -348,5 +352,28 @@ class UserController extends GetxController with WidgetsBindingObserver {
     queryUserProfile();
     // DialogHelper.showSuccess();
     Get.back();
+  }
+
+  RxList<HistoryModel> historylists = <HistoryModel>[].obs;
+  RxMap<String, List<HistoryModel>> groupedHistory = <String, List<HistoryModel>>{}.obs;
+  fetchHistory() async {
+    var msisdn = await storage.read('msisdn');
+    var token = await storage.read('token');
+    if (token != null && msisdn != null) {
+      var url = '${MyConstant.urlHistory}/history';
+      var data = {"wallet_id": walletid.value, "msisdn": await storage.read('msisdn')};
+      var res = await DioClient.postEncrypt(url, loading: false, data);
+      List<HistoryModel> historyList = res.map<HistoryModel>((json) => HistoryModel.fromJson(json)).toList();
+      groupedHistory.clear();
+      for (var item in historyList) {
+        String key = item.created != null ? item.created!.substring(0, 7) : 'Unknown'; // Format: YYYY-MM
+        if (!groupedHistory.containsKey(key)) {
+          groupedHistory[key] = [];
+        }
+        groupedHistory[key]!.add(item);
+      }
+    } else {
+      groupedHistory.clear();
+    }
   }
 }

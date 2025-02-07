@@ -79,7 +79,7 @@ dependencies:
   pinput: ^5.0.1
   # socket
   socket_io_client: ^3.0.2
-  
+
   # credit card
   u_credit_card: ^1.4.0
   # dropdown
@@ -87,7 +87,10 @@ dependencies:
   # web view
   url_launcher: ^6.3.1
   webview_flutter: ^4.10.0
-  
+  photo_view: ^0.15.0
+  image: ^4.5.2
+  image_cropper: ^9.0.0
+  pull_to_refresh: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -106,6 +109,7 @@ flutter:
     - assets/background/
     - assets/boarding/
     - assets/images/
+    - assets/history/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

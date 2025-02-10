@@ -8,8 +8,11 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/services/language_service.dart';
+import 'package:super_app/services/theme_service.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myIcon.dart';
+import 'package:super_app/views/settings/account_profile.dart';
+import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -21,6 +24,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final box = GetStorage();
   final userController = Get.find<UserController>();
+  final themeService = Get.find<ThemeService>();
 
   @override
   void initState() {
@@ -49,7 +53,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SizedBox(height: 10.sp),
             buildInfomation(),
             SizedBox(height: 5.h),
-            GestureDetector(
+            InkWell(
               onTap: () {},
               child: Container(
                 width: 50.w,
@@ -104,7 +108,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               fontWeight: FontWeight.w500,
                             ),
                             const SizedBox(width: 8),
-                            GestureDetector(
+                            InkWell(
                               onTap: () {
                                 setState(() {
                                   isHidden = !isHidden; // Toggle visibility
@@ -132,7 +136,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     ),
                               SizedBox(width: 5),
                               TextFont(
-                                text: userController.userProfilemodel.value.verify ?? '',
+                                text: userController.userProfilemodel.value.verify == 'Pending' ? '...Watting' : userController.userProfilemodel.value.verify!,
                                 fontSize: 10,
                                 poppin: true,
                               ),
@@ -211,7 +215,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: GestureDetector(
+            child: InkWell(
               onTap: () {},
               child: Row(
                 children: [
@@ -225,7 +229,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Divider(color: color_ecec),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: GestureDetector(
+            child: InkWell(
               onTap: () {},
               child: Row(
                 children: [
@@ -239,7 +243,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Divider(color: color_ecec),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: GestureDetector(
+            child: InkWell(
               onTap: () {
                 _showLanguageDialog(context);
               },
@@ -249,6 +253,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Spacer(),
                   Icon(Icons.arrow_forward_ios, color: color_7070, size: 15.sp),
                 ],
+              ),
+            ),
+          ),
+          Divider(color: color_ecec),
+          Container(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: InkWell(
+                onTap: () {
+                  themeService.toggleTheme();
+                },
+                child: Row(
+                  children: [
+                    TextFont(text: "change_theme"),
+                    Spacer(),
+                    Icon(Icons.arrow_forward_ios, color: color_7070, size: 15.sp),
+                  ],
+                ),
               ),
             ),
           ),
@@ -266,8 +288,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: GestureDetector(
-              onTap: () {},
+            child: InkWell(
+              onTap: () {
+                Get.to(AccountProfileScreen());
+              },
               child: Row(
                 children: [
                   TextFont(text: "personal_info"),
@@ -280,7 +304,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Divider(color: color_ecec),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: GestureDetector(
+            child: InkWell(
               onTap: () {},
               child: Row(
                 children: [
@@ -292,20 +316,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           Divider(color: color_ecec),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: GestureDetector(
-              onTap: () {},
-              child: Row(
-                children: [
-                  TextFont(text: "verify_account"),
-                  Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: color_7070, size: 15.sp),
-                ],
-              ),
-            ),
-          ),
-          Divider(color: color_ecec),
+          userController.userProfilemodel.value.verify == "Approved" || userController.userProfilemodel.value.verify == "Pending"
+              ? SizedBox.shrink()
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: InkWell(
+                        onTap: () {
+                          Get.to(VerifyAccountScreen());
+                        },
+                        child: Row(
+                          children: [
+                            TextFont(text: "verify_account"),
+                            Spacer(),
+                            Icon(Icons.arrow_forward_ios, color: color_7070, size: 15.sp),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Divider(color: color_ecec),
+                  ],
+                ),
           Row(
             children: [
               TextFont(text: "biometric"),
@@ -368,13 +400,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 text: 'Select Language',
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
-                color: cr_7070, // Follow theme color
+                color: cr_7070,
+                poppin: true,
               ),
               SizedBox(height: 16),
               _buildLanguageOption(context, 'English', 'en', languageService),
               _buildLanguageOption(context, 'Lao', 'lo', languageService),
               _buildLanguageOption(context, 'Chinese', 'zh', languageService),
               _buildLanguageOption(context, 'Vietnamese', 'vi', languageService),
+              SizedBox(height: 5.h),
             ],
           ),
         );

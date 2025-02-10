@@ -104,4 +104,22 @@ class MyIcon {
   static String ic_readNotify = 'assets/icons/readNoti.png';
   static String ic_speaker = 'assets/icons/ic_speaker.svg';
   static String bgg_nopic = 'assets/icons/bgg_nopic.svg';
+  //! history screen
+  static String ic_bank = 'assets/history/ic_bank.svg';
+  static String ic_cashout = 'assets/history/ic_cashout.svg';
+  static String ic_digitaltv = 'assets/history/ic_digitaltv.svg';
+  static String ic_electric = 'assets/history/ic_electric.svg';
+  static String ic_internet = 'assets/history/ic_internet.svg';
+  static String ic_leasing = 'assets/history/ic_leasing.svg';
+  static String ic_package_postpaid = 'assets/history/ic_package_postpaid.svg';
+  static String ic_package = 'assets/history/ic_package.svg';
+  static String ic_roaming = 'assets/history/ic_roaming.svg';
+  static String ic_telecom = 'assets/history/ic_telecom.svg';
+  static String ic_ticket = 'assets/history/ic_ticket.svg';
+  static String ic_topup_internet = 'assets/history/ic_topup_internet.svg';
+  static String ic_topup_prepaid = 'assets/history/ic_topup_prepaid.svg';
+  static String ic_transfer = 'assets/history/ic_transfer.svg';
+  static String ic_water = 'assets/history/ic_water.svg';
+  static String ic_wetv = 'assets/history/ic_wetv.svg';
+  static String ic_topup_pstn = 'assets/history/topup_pstn.svg';
 }

@@ -16,6 +16,7 @@ const Color color_toggle_dark = Color.fromARGB(255, 231, 188, 20);
 const Color color_toggle_light = Color.fromARGB(255, 230, 7, 22);
 // new
 
+const Color color_fac0 = Color(0xffFAC0BC);
 const Color color_fafa = Color(0xffFAFAFA);
 const Color color_ddd = Color(0xffDDDDDD);
 const Color color_f4f4 = Color(0xffF4f4f4);

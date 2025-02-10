@@ -6,20 +6,21 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
-import 'package:super_app/controllers/tempA_controller.dart';
+import 'package:super_app/controllers/temp_b_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myIcon.dart';
-import 'package:super_app/views/templateA/confirm_tempA.dart';
+import 'package:super_app/views/templateB/confirm_tempB.dart';
+import 'package:super_app/views/weTV/confirm_weTV.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
-class ListsPaymentTempAScreen extends StatelessWidget {
-  ListsPaymentTempAScreen({super.key});
+class ListsPaymentTempBScreen extends StatelessWidget {
+  ListsPaymentTempBScreen({super.key});
   final homeController = Get.find<HomeController>();
   final paymentController = Get.put(PaymentController());
-  final controller = Get.put(TempAController());
+  final controller = Get.put(TempBController());
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +59,9 @@ class ListsPaymentTempAScreen extends StatelessWidget {
       },
     ];
     return Scaffold(
-      appBar: BuildAppBar(title: homeController.getMenuTitle()),
+      appBar: BuildAppBar(title: "GG"),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: const EdgeInsets.all(10),
         child: Column(
           children: [
             buildStepProcess(title: '4/5', desc: 'select_payment'),
@@ -84,17 +85,17 @@ class ListsPaymentTempAScreen extends StatelessWidget {
                               // Add your onTap logic here
                               paymentController
                                   .reqCashOut(
-                                      transID: controller.rxtransid.value,
+                                      transID: controller.rxTransID.value,
                                       amount: controller.rxPaymentAmount.value,
-                                      toAcc: controller.rxaccnumber.value,
+                                      toAcc: controller.rxAccNo.value,
                                       chanel: homeController
                                           .menudetail.value.groupNameEN,
-                                      provider:
-                                          controller.tempAdetail.value.code,
+                                      provider: controller
+                                          .tempBdetail.value.providerID,
                                       remark: controller.rxNote.value)
                                   .then((value) => {
                                         if (value)
-                                          {Get.to(() => ConfirmTempAScreen())}
+                                          {Get.to(() => ConfirmTempBScreen())}
                                       });
                             },
                             child: Container(

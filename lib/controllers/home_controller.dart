@@ -23,11 +23,16 @@ class HomeController extends GetxController {
   HomeController() {
     // menudetail.value.url =
     //     '/Electric/getList;/Electric/verify;/Electric/payment;/Electric/getRecent;/Electric/history;';
-    menudetail.value.url = '/Bank/getList;/Bank/getRecent;/Bank/verify;/Bank/reqCashOut;/Bank/payment';
+    // menudetail.value.url = '/Wetv/getList;/Wetv/payment;/Wetv/history;';
+    menudetail.value.url =
+        '/Leasing/getList;/Leasing/verify;/Leasing/payment;/Leasing/getRecent;/Leasing/history';
+    // menudetail.value.url = '/Bank/getList;/Bank/getRecent;/Bank/verify;/Bank/reqCashOut;/Bank/payment';
+    // menudetail.value.url =
+    //     '/Digitaltv/getList;/Digitaltv/verify;/Digitaltv/payment;/Digitaltv/getRecent;/Digitaltv/history;';
     // menudetail.value.url =
     //     '/Finance/getlist;/Finance/token;/Finance/verify;/Finance/confirm';
-    menudetail.value.description = 'EL';
-    menudetail.value.groupNameEN = 'Electric';
+    menudetail.value.description = 'LS';
+    menudetail.value.groupNameEN = 'Leasing';
     menudetail.value.groupNameLA = 'ຈ່າຍຄ່າໄຟຟ້າ';
     menudetail.value.groupNameVT = 'Trả tiền điện';
     menudetail.value.groupNameCH = '电费';
@@ -64,10 +69,12 @@ class HomeController extends GetxController {
     var res = await DioClient.getNoLoading(url);
     rxAppinfo.value = AppInfoModel.fromJson(res);
 
-    final imageCardFile = await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_card');
+    final imageCardFile =
+        await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_card');
     if (imageCardFile != null) rxBgCard.value = imageCardFile.path;
 
-    final imageBillFile = await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_bill');
+    final imageBillFile =
+        await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_bill');
     if (imageBillFile != null) rxBgBill.value = imageBillFile.path;
   }
 
@@ -75,7 +82,8 @@ class HomeController extends GetxController {
     final dio = Dio();
     final String? storedImageUrl = box.read(type);
     final documentDirectory = await getApplicationDocumentsDirectory();
-    final filePath = '${documentDirectory.path}/$type.png'; // Fixed file name to avoid duplicates
+    final filePath =
+        '${documentDirectory.path}/$type.png'; // Fixed file name to avoid duplicates
     File file = File(filePath);
     if (storedImageUrl == imageUrl && file.existsSync()) {
       print("✅ Image already exists and URL is the same. No need to download.");
@@ -85,7 +93,8 @@ class HomeController extends GetxController {
       if (file.existsSync()) {
         file.deleteSync();
       }
-      final response = await dio.get(imageUrl, options: Options(responseType: ResponseType.bytes));
+      final response = await dio.get(imageUrl,
+          options: Options(responseType: ResponseType.bytes));
       await file.writeAsBytes(response.data);
       box.write(type, imageUrl);
       print("✅ New image downloaded and saved.");

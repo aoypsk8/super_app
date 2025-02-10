@@ -84,6 +84,10 @@ dependencies:
   u_credit_card: ^1.4.0
   # dropdown
   dropdown_button2: ^2.3.9
+
+  #digital TV
+  video_player: ^2.7.0 
+  chewie: ^1.4.0  
   
 
 dev_dependencies:

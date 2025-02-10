@@ -14,6 +14,8 @@ import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/button.dart';
 import 'package:super_app/widget/textfont.dart';
 
+import '../../widget/myIcon.dart';
+
 class HomeRecommendScreen extends StatefulWidget {
   const HomeRecommendScreen({super.key});
 
@@ -27,7 +29,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
   int _current = 0;
   int _currentDropping = 0;
   int _currentLoveit = 0;
-  final CarouselSliderController carouselController = CarouselSliderController();
+  final CarouselSliderController carouselController =
+      CarouselSliderController();
   final UserController userController = Get.find();
   final HomeController homeController = Get.find();
 
@@ -173,6 +176,24 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         onPressed: () {
                           Get.toNamed('/proof');
                         }),
+                    const SizedBox(height: 20),
+                    PrimaryButton(
+                        title: 'DigitalTV',
+                        onPressed: () {
+                          Get.toNamed('/digitalTV');
+                        }),
+                    const SizedBox(height: 20),
+                    PrimaryButton(
+                        title: 'WeTV',
+                        onPressed: () {
+                          Get.toNamed('/weTV');
+                        }),
+                    const SizedBox(height: 20),
+                    PrimaryButton(
+                        title: 'Leasing',
+                        onPressed: () {
+                          Get.toNamed('/leasing');
+                        }),
                   ],
                 ),
               ),
@@ -315,7 +336,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         color: cr_black.withOpacity(0.2),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 5),
                         child: Row(
                           children: [
                             TextFont(
@@ -327,7 +349,11 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                             ),
                             const SizedBox(width: 5),
                             TextFont(
-                              text: showAmount ? fn.format(int.parse(userController.mainBalance.value.toString())) : "****",
+                              text: showAmount
+                                  ? fn.format(int.parse(userController
+                                      .mainBalance.value
+                                      .toString()))
+                                  : "****",
                               color: color_fff,
                               poppin: true,
                               fontWeight: FontWeight.w700,
@@ -531,7 +557,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
             items: List.generate((loveItUrls.length / 4).ceil(), (index) {
               int start = index * 4;
               int end = start + 4;
-              List<String> sublist = loveItUrls.sublist(start, end > loveItUrls.length ? loveItUrls.length : end);
+              List<String> sublist = loveItUrls.sublist(
+                  start, end > loveItUrls.length ? loveItUrls.length : end);
               return GridView.builder(
                 padding: const EdgeInsets.all(5),
                 shrinkWrap: true,

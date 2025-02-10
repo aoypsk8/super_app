@@ -11,6 +11,7 @@ import 'package:super_app/views/finance_institution/ResultFinanceScree.dart';
 import 'package:super_app/views/finance_institution/VerifyAccountFinanceScreen.dart';
 import 'package:super_app/views/templateA/lists_province_tempA.dart';
 import 'package:super_app/views/templateA/verify_account_tempA.dart';
+import 'package:super_app/views/ticket/ListsTicketScreen.dart';
 import 'package:super_app/views/transferwallet/ConfirmTranferScreen.dart';
 import 'package:super_app/views/transferwallet/OtpTransferEmailScreen.dart';
 import 'package:super_app/views/transferwallet/OtpTransferScreen.dart';
@@ -110,6 +111,12 @@ class AppRoutes {
     GetPage(
       name: '/visaMasterCard',
       page: () => VisaMasterCard(),
+    ),
+
+    // Visa Master Card
+    GetPage(
+      name: '/ticket',
+      page: () => ListsTicketScreen(),
     ),
   ];
 }

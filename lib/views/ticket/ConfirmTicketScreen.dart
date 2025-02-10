@@ -1,9 +1,14 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
-import 'package:super_app/controllers/transfer_controller.dart';
+import 'package:super_app/controllers/payment_controller.dart';
+import 'package:super_app/controllers/ticket_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
@@ -15,18 +20,22 @@ import 'package:super_app/widget/buildUserDetail.dart';
 import 'package:super_app/widget/build_DotLine.dart';
 import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
+import 'package:intl/intl.dart';
 
-class ConfirmTranferScreen extends StatefulWidget {
-  const ConfirmTranferScreen({super.key});
+class ConfirmTicketScreen extends StatefulWidget {
+  const ConfirmTicketScreen({super.key});
 
   @override
-  State<ConfirmTranferScreen> createState() => _ConfirmTranferScreenState();
+  State<ConfirmTicketScreen> createState() => _ConfirmTicketScreenState();
 }
 
-class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
-  final userController = Get.find<UserController>();
-  final transferController = Get.put(TransferController());
+class _ConfirmTicketScreenState extends State<ConfirmTicketScreen> {
   final homeController = Get.find<HomeController>();
+  final userController = Get.find<UserController>();
+  final ticketController = Get.put(TicketController());
+  final paymentController = Get.put(PaymentController());
+  final storage = GetStorage();
+
   int _remainingTime = 600;
   Timer? _countdownTimer;
   void _startCountdownTimer() {
@@ -58,6 +67,7 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
   @override
   void initState() {
     super.initState();
+    userController.increasepage();
     _startCountdownTimer();
   }
 
@@ -65,6 +75,7 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
   void dispose() {
     _countdownTimer?.cancel();
     super.dispose();
+    userController.decreasepage();
   }
 
   String _formatTime(int seconds) {
@@ -77,7 +88,7 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: BuildAppBar(title: "transfer"),
+      appBar: BuildAppBar(title: "confirm_payment"),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
@@ -86,12 +97,9 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
         ),
         child: buildBottomAppbar(
           bgColor: Theme.of(context).primaryColor,
-          title: 'confirm_transfer',
-          isEnabled: !transferController.loading.isTrue,
+          title: 'confirm',
           func: () {
-            _countdownTimer?.cancel();
-            transferController.loading.value = true;
-            transferController.transfer(homeController.menudetail.value);
+            // ticketController.paymentProcess();
           },
         ),
       ),
@@ -103,7 +111,7 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildStepProcess(title: "3/3", desc: "transfer_wallet"),
+                buildStepProcess(title: "3/3", desc: "detail"),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -148,12 +156,12 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: buildUserDetail(
-                      profile:
-                          transferController.desTranferKyc.value.profileImg ??
-                              MyConstant.profile_default,
+                      profile: ticketController.ticketDetail.value.logo ??
+                          MyConstant.profile_default,
                       from: false,
-                      msisdn: transferController.destinationMsisdn.value,
-                      name: transferController.destinationname.value,
+                      msisdn: ticketController.ticketDetail.value.description
+                          .toString(),
+                      name: ticketController.ticketDetail.value.title!,
                     ),
                   ),
                 ],
@@ -169,7 +177,8 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
             Row(
               children: [
                 TextFont(
-                  text: fn.format(int.parse(transferController.amount.value)),
+                  text: fn.format(int.parse(
+                      ticketController.ticketDetail.value.price.toString())),
                   fontWeight: FontWeight.w500,
                   fontSize: 20,
                   color: cr_b326,
@@ -189,11 +198,6 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
               money: true,
             ),
             const SizedBox(height: 20),
-            buildTextDetail(
-              money: false,
-              title: "description",
-              detail: transferController.note.value,
-            ),
           ],
         ),
       ),

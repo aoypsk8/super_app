@@ -59,7 +59,7 @@ class ListsPaymentTempBScreen extends StatelessWidget {
       },
     ];
     return Scaffold(
-      appBar: BuildAppBar(title: "GG"),
+      appBar: BuildAppBar(title: homeController.getMenuTitle()),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(

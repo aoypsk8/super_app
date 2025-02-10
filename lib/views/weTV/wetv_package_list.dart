@@ -169,9 +169,8 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                                     CircleAvatar(
                                       backgroundColor:
                                           Colors.red.withOpacity(0.1),
-                                      child: Icon(
-                                        Icons.money,
-                                        color: Colors.red,
+                                      backgroundImage: NetworkImage(
+                                        "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
                                       ),
                                     ),
                                     SizedBox(width: 12),
@@ -182,7 +181,7 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                                         children: [
                                           TextFont(
                                             text:
-                                                'Lao Mobile Money Sole Company...',
+                                                'Lao Mobile Money Sole Company',
                                             fontSize: 12,
                                           ),
                                           SizedBox(height: 4),

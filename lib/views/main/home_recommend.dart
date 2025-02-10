@@ -36,7 +36,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
   final paymentController = Get.put(PaymentController());
   final qrController = Get.put(QrController());
   final controller = Get.put(TempAController());
-  final CarouselSliderController carouselController = CarouselSliderController();
+  final CarouselSliderController carouselController =
+      CarouselSliderController();
 
   bool showAmount = false;
   int _current = 0;
@@ -191,22 +192,33 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                     if (!userController.isCheckToken.value) {
                                       userController.isCheckToken.value = true;
                                       if (result.template == "proof") {
-                                        homeController.menutitle.value = result.groupNameEN!;
-                                        homeController.menudetail.value = result;
+                                        homeController.menutitle.value =
+                                            result.groupNameEN!;
+                                        homeController.menudetail.value =
+                                            result;
                                         qrController.fetchProofLists();
                                         Get.toNamed('/${result.template}');
                                       } else {
-                                        userController.checktoken(name: 'menu').then((value) {
+                                        userController
+                                            .checktoken(name: 'menu')
+                                            .then((value) {
                                           if (userController.isLogin.value) {
                                             if (result.template != '/') {
-                                              homeController.menutitle.value = result.groupNameEN!;
-                                              homeController.menudetail.value = result;
-                                              if (result.template == "webview") {
+                                              homeController.menutitle.value =
+                                                  result.groupNameEN!;
+                                              homeController.menudetail.value =
+                                                  result;
+                                              if (result.template ==
+                                                  "webview") {
                                                 Get.to(
-                                                  OpenWebView(url: homeController.menudetail.value.url.toString()),
+                                                  OpenWebView(
+                                                      url: homeController
+                                                          .menudetail.value.url
+                                                          .toString()),
                                                 );
                                               } else {
-                                                Get.toNamed('/${result.template}');
+                                                Get.toNamed(
+                                                    '/${result.template}');
                                               }
                                             } else {
                                               DialogHelper.showErrorDialogNew(
@@ -225,9 +237,11 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                       SizedBox(height: 6),
                                       SvgPicture.network(
                                         updatedUrl,
-                                        placeholderBuilder: (BuildContext context) => Container(
+                                        placeholderBuilder:
+                                            (BuildContext context) => Container(
                                           padding: const EdgeInsets.all(5.0),
-                                          child: const CircularProgressIndicator(),
+                                          child:
+                                              const CircularProgressIndicator(),
                                         ),
                                         width: 8.5.w,
                                         height: 8.5.w,
@@ -496,7 +510,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         color: cr_black.withOpacity(0.2),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 5),
                         child: Row(
                           children: [
                             TextFont(
@@ -508,7 +523,11 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                             ),
                             const SizedBox(width: 5),
                             TextFont(
-                              text: showAmount ? fn.format(int.parse(userController.mainBalance.value.toString())) : "****",
+                              text: showAmount
+                                  ? fn.format(int.parse(userController
+                                      .mainBalance.value
+                                      .toString()))
+                                  : "****",
                               color: color_fff,
                               poppin: true,
                               fontWeight: FontWeight.w700,
@@ -711,7 +730,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
             items: List.generate((loveItUrls.length / 4).ceil(), (index) {
               int start = index * 4;
               int end = start + 4;
-              List<String> sublist = loveItUrls.sublist(start, end > loveItUrls.length ? loveItUrls.length : end);
+              List<String> sublist = loveItUrls.sublist(
+                  start, end > loveItUrls.length ? loveItUrls.length : end);
               return GridView.builder(
                 padding: const EdgeInsets.all(5),
                 shrinkWrap: true,

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/temp_b_controller.dart';
@@ -43,7 +44,7 @@ class _ListProviderTempBScreenState extends State<ListProviderTempBScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: BuildAppBar(title: 'Digital TV'),
+      appBar: BuildAppBar(title: homeController.getMenuTitle()),
       body: Column(
         children: [
           Padding(
@@ -99,6 +100,7 @@ class _ListProviderTempBScreenState extends State<ListProviderTempBScreen> {
     return InkWell(
       onTap: () {
         tempBcontroler.tempBdetail.value = tempBcontroler.tampBmodel[index];
+        tempBcontroler.fetchrecent(homeController.menudetail.value);
         Get.to(() => VerifyAccountTempB());
       },
       child: Container(

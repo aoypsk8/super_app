@@ -66,17 +66,18 @@ class UserController extends GetxController with WidgetsBindingObserver {
   @override
   void onReady() async {
     super.onReady();
-    String wallet = '2052555999';
+    String wallet = '2054042200';
     storage.write('msisdn', wallet);
     rxMsisdn.value = storage.read('msisdn');
-    await loginpincode(wallet, '555555');
+    await loginpincode(wallet, '010824');
     await fetchBalance();
     await queryUserProfile();
   }
 
   Future<void> loginpincode(String msisdn, String pincode) async {
     try {
-      final response = await DioClient.postEncrypt('${MyConstant.urlGateway}/login', {"msisdn": msisdn, "pin": pincode});
+      final response = await DioClient.postEncrypt(
+          '${MyConstant.urlGateway}/login', {"msisdn": msisdn, "pin": pincode});
       if (response != null && response["resultCode"] == 0) {
         final token = response['token'];
         if (token != null) {
@@ -86,7 +87,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
           print('Token: $token');
         }
       } else {
-        print('Error: Login failed with resultCode ${response?["resultCode"] ?? "unknown"}');
+        print(
+            'Error: Login failed with resultCode ${response?["resultCode"] ?? "unknown"}');
       }
     } catch (e) {
       print('Error during login: $e');
@@ -104,7 +106,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
         }
       }
       if (permission == LocationPermission.deniedForever) {
-        print("Location permission permanently denied. Please enable it in settings.");
+        print(
+            "Location permission permanently denied. Please enable it in settings.");
         return;
       }
       Position currentPosition = await Geolocator.getCurrentPosition(
@@ -133,7 +136,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
       var url = '${MyConstant.urlConsumerInfo}/UserProfile';
       var data = {"msisdn": msisdn};
 
-      var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm-key');
+      var response = await DioClient.postEncrypt(
+          loading: false, url, data, key: 'lmm-key');
 
       if (response["resultCode"] == 0) {
         balanceModel.value = BalanceModel.fromJson(response);
@@ -148,7 +152,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
           // profileName.value = '${result.firstname ?? ''} ${result.lastname ?? ''}'.trim();
         }
       } else {
-        print('Error: ${response["resultMessage"] ?? "Unknown error occurred"}');
+        print(
+            'Error: ${response["resultMessage"] ?? "Unknown error occurred"}');
       }
     } catch (e) {
       print('Error in fetchBalance: $e');
@@ -165,10 +170,12 @@ class UserController extends GetxController with WidgetsBindingObserver {
       }
       var url = '${MyConstant.urlUser}/query';
       var data = {"msisdn": msisdn};
-      var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
+      var response =
+          await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
       if (response != null) {
         userProfilemodel.value = UserProfileModel.fromJson(response);
-        profileName.value = '${userProfilemodel.value.name} ${userProfilemodel.value.surname}';
+        profileName.value =
+            '${userProfilemodel.value.name} ${userProfilemodel.value.surname}';
       } else {
         print('Error: Response is null');
       }
@@ -193,7 +200,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
   }
 
   resendotp() async {
-    var response = await DioClient.postEncrypt('${MyConstant.urlGateway}/OTP', {'msisdn': rxMsisdn.value});
+    var response = await DioClient.postEncrypt(
+        '${MyConstant.urlGateway}/OTP', {'msisdn': rxMsisdn.value});
     print(response);
     if (response["resultCode"] == 0) {
       refcode.value = response["data"]["ref"].toString();
@@ -203,7 +211,9 @@ class UserController extends GetxController with WidgetsBindingObserver {
   }
 
   resendotpforemail() async {
-    var response = await DioClient.postEncrypt('${MyConstant.urlLoginByEmail}/GetMsisdn', {'email': rxEmail.value, 'birthday': rxBirthday.value});
+    var response = await DioClient.postEncrypt(
+        '${MyConstant.urlLoginByEmail}/GetMsisdn',
+        {'email': rxEmail.value, 'birthday': rxBirthday.value});
     print(response);
     if (response["resultCode"] == 0) {
       refcode.value = response["data"]["ref"].toString();
@@ -222,7 +232,9 @@ class UserController extends GetxController with WidgetsBindingObserver {
       ),
     });
 
-    var responseUpload = await DioClient.postEncrypt('${MyConstant.urlProfileUpload}/upload', formData, image: true);
+    var responseUpload = await DioClient.postEncrypt(
+        '${MyConstant.urlProfileUpload}/upload', formData,
+        image: true);
     var dataUpdate = {
       "msisdn": userProfilemodel.value.msisdn,
       "gender": userProfilemodel.value.gender,
@@ -254,7 +266,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
     String fileName = imgFile.path.split('/').last;
     var formData = dio.FormData.fromMap({
       "id": userProfilemodel.value.msisdn,
-      'image': await dio.MultipartFile.fromFile('.${imgFile.path}', filename: fileName),
+      'image': await dio.MultipartFile.fromFile('.${imgFile.path}',
+          filename: fileName),
     });
     var responseUpload = await DioClient.postEncrypt(
       '${MyConstant.urlProfileUpload}/upload',
@@ -292,7 +305,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
     String fileName = imgFile.path.split('/').last;
     var formData = dio.FormData.fromMap({
       "id": userProfilemodel.value.msisdn,
-      'image': await dio.MultipartFile.fromFile('.${imgFile.path}', filename: fileName),
+      'image': await dio.MultipartFile.fromFile('.${imgFile.path}',
+          filename: fileName),
     });
     var responseUpload = await DioClient.postEncrypt(
       '${MyConstant.urlProfileUpload}/upload',
@@ -326,7 +340,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
     queryUserProfile();
   }
 
-  verificationRegister(gender, name, surname, bd, provincecode, province, dist, village, identify) async {
+  verificationRegister(gender, name, surname, bd, provincecode, province, dist,
+      village, identify) async {
     var dataUpdate = {
       "msisdn": userProfilemodel.value.msisdn,
       "gender": gender,
@@ -355,18 +370,25 @@ class UserController extends GetxController with WidgetsBindingObserver {
   }
 
   RxList<HistoryModel> historylists = <HistoryModel>[].obs;
-  RxMap<String, List<HistoryModel>> groupedHistory = <String, List<HistoryModel>>{}.obs;
+  RxMap<String, List<HistoryModel>> groupedHistory =
+      <String, List<HistoryModel>>{}.obs;
   fetchHistory() async {
     var msisdn = await storage.read('msisdn');
     var token = await storage.read('token');
     if (token != null && msisdn != null) {
       var url = '${MyConstant.urlHistory}/history';
-      var data = {"wallet_id": walletid.value, "msisdn": await storage.read('msisdn')};
+      var data = {
+        "wallet_id": walletid.value,
+        "msisdn": await storage.read('msisdn')
+      };
       var res = await DioClient.postEncrypt(url, loading: false, data);
-      List<HistoryModel> historyList = res.map<HistoryModel>((json) => HistoryModel.fromJson(json)).toList();
+      List<HistoryModel> historyList =
+          res.map<HistoryModel>((json) => HistoryModel.fromJson(json)).toList();
       groupedHistory.clear();
       for (var item in historyList) {
-        String key = item.created != null ? item.created!.substring(0, 7) : 'Unknown'; // Format: YYYY-MM
+        String key = item.created != null
+            ? item.created!.substring(0, 7)
+            : 'Unknown'; // Format: YYYY-MM
         if (!groupedHistory.containsKey(key)) {
           groupedHistory[key] = [];
         }

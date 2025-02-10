@@ -85,7 +85,7 @@ class TextfieldAccountingWithButton extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   maxLength: max,
                   style: languageCode == 'lo'
-                      ? GoogleFonts.notoSerifLao(
+                      ? GoogleFonts.notoSansLao(
                           color: const Color(0xFF292929), // Example text color
                           fontSize: 12.5.sp,
                         )
@@ -97,7 +97,7 @@ class TextfieldAccountingWithButton extends StatelessWidget {
                     contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                     hintText: hintText.tr,
                     hintStyle: languageCode == 'lo'
-                        ? GoogleFonts.notoSerifLao(
+                        ? GoogleFonts.notoSansLao(
                             color: const Color(0xFF707070).withOpacity(0.8),
                             fontSize: 12.5.sp,
                           )
@@ -240,11 +240,11 @@ class TextfieldWithScanButton extends StatelessWidget {
                   controller: controller,
                   focusNode: focus,
                   maxLength: max,
-                  style: languageCode == 'lo' ? GoogleFonts.notoSerifLao(color: color_2929, fontSize: 12.5.sp) : GoogleFonts.poppins(color: color_2929, fontSize: 12.5.sp),
+                  style: languageCode == 'lo' ? GoogleFonts.notoSansLao(color: color_2929, fontSize: 12.5.sp) : GoogleFonts.poppins(color: color_2929, fontSize: 12.5.sp),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                     hintText: hintText.tr,
-                    hintStyle: languageCode == 'lo' ? GoogleFonts.notoSerifLao(color: cr_7070, fontSize: 12.5.sp) : GoogleFonts.poppins(color: cr_7070, fontSize: 12.5.sp),
+                    hintStyle: languageCode == 'lo' ? GoogleFonts.notoSansLao(color: cr_7070, fontSize: 12.5.sp) : GoogleFonts.poppins(color: cr_7070, fontSize: 12.5.sp),
                     fillColor: fillcolor,
                     filled: true,
                     enabledBorder: border,
@@ -370,7 +370,7 @@ class LongTextField extends StatelessWidget {
               contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: hintText.tr,
               hintStyle: languageCode == 'lo'
-                  ? GoogleFonts.notoSerifLao(
+                  ? GoogleFonts.notoSansLao(
                       color: cr_7070.withOpacity(0.8),
                       fontSize: 12.5.sp,
                     )

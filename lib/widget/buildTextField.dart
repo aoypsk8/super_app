@@ -316,14 +316,8 @@ class buildTextField extends StatelessWidget {
               contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: hintText.tr,
               hintStyle: languageCode == 'lo'
-                  ? GoogleFonts.notoSerifLao(
-                      color: cr_7070.withOpacity(0.8),
-                      fontSize: 12.5.sp,
-                    )
-                  : GoogleFonts.poppins(
-                      color: cr_7070.withOpacity(0.8),
-                      fontSize: 12.5.sp,
-                    ),
+                  ? GoogleFonts.notoSansLao(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp)
+                  : GoogleFonts.poppins(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp),
               fillColor: fillcolor,
               filled: true,
               prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
@@ -466,7 +460,7 @@ class buildNumberFiledValidate extends StatelessWidget {
             keyboardType: textType,
             maxLength: max == null ? null : max,
             style: languageCode == 'lo'
-                ? GoogleFonts.notoSerifLao(
+                ? GoogleFonts.notoSansLao(
                     color: cr_7070,
                     fontSize: 12.5.sp,
                   )
@@ -478,7 +472,7 @@ class buildNumberFiledValidate extends StatelessWidget {
               contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: hintText.tr,
               hintStyle: languageCode == 'lo'
-                  ? GoogleFonts.notoSerifLao(
+                  ? GoogleFonts.notoSansLao(
                       color: cr_7070.withOpacity(0.8),
                       fontSize: 12.5.sp,
                     )
@@ -569,7 +563,7 @@ class buildAccountingFiledVaidate extends StatelessWidget {
             keyboardType: TextInputType.number,
             maxLength: max == null ? null : max,
             style: languageCode == 'lo'
-                ? GoogleFonts.notoSerifLao(
+                ? GoogleFonts.notoSansLao(
                     color: cr_7070,
                     fontSize: 12.5.sp,
                   )
@@ -582,7 +576,7 @@ class buildAccountingFiledVaidate extends StatelessWidget {
               hintText: hintText.tr,
               fillColor: fillcolor,
               hintStyle: languageCode == 'lo'
-                  ? GoogleFonts.notoSerifLao(
+                  ? GoogleFonts.notoSansLao(
                       color: cr_7070.withOpacity(0.8),
                       fontSize: 12.5.sp,
                     )
@@ -899,7 +893,7 @@ class BuildTextAreaValidate extends StatelessWidget {
             maxLines: 3,
             maxLength: max == null ? null : max,
             style: languageCode == 'lo'
-                ? GoogleFonts.notoSerifLao(
+                ? GoogleFonts.notoSansLao(
                     color: cr_7070,
                     fontSize: 12.5.sp,
                   )
@@ -911,7 +905,7 @@ class BuildTextAreaValidate extends StatelessWidget {
               contentPadding: const EdgeInsets.all(12),
               hintText: hintText.tr,
               hintStyle: languageCode == 'lo'
-                  ? GoogleFonts.notoSerifLao(
+                  ? GoogleFonts.notoSansLao(
                       color: cr_7070,
                       fontSize: 12.5.sp,
                     )

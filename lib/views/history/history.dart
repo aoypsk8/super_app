@@ -88,39 +88,43 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               itemCount: transactions.length,
                               itemBuilder: (context, subIndex) {
                                 final data = transactions[subIndex];
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                  margin: const EdgeInsets.symmetric(vertical: 5),
-                                  decoration: BoxDecoration(
-                                    color: color_f4f4,
-                                    border: Border.all(color: color_f4f4, width: 1),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      buildDetail(data),
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        textBaseline: TextBaseline.alphabetic,
-                                        children: [
-                                          TextFont(
-                                            text: '${data.type == 'OUT' ? '-' : '+'}${fn.format(double.parse('${data.amount}'))}',
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18,
-                                            color: data.type == 'OUT' ? cr_b326 : Colors.green,
-                                            poppin: true,
-                                          ),
-                                          TextFont(
-                                            text: '.00LAK',
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14,
-                                            color: data.type == 'OUT' ? cr_b326 : Colors.green,
-                                            poppin: true,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                return InkWell(
+                                  onTap: () {
+                                    userController.fetchHistoryDetail(data.tranID);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                    margin: const EdgeInsets.symmetric(vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: color_f4f4,
+                                      border: Border.all(color: color_f4f4, width: 1),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        buildDetail(data),
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          textBaseline: TextBaseline.alphabetic,
+                                          children: [
+                                            TextFont(
+                                              text: '${data.type == 'OUT' ? '-' : '+'}${fn.format(double.parse('${data.amount}'))}',
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16,
+                                              color: data.type == 'OUT' ? cr_b326 : Colors.green,
+                                              poppin: true,
+                                            ),
+                                            TextFont(
+                                              text: '.00LAK',
+                                              fontWeight: FontWeight.w500,
+                                              color: data.type == 'OUT' ? cr_b326 : Colors.green,
+                                              poppin: true,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
                               },

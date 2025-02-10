@@ -77,7 +77,7 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
         if (widget.fromHistory) {
           print('from history');
         } else {
-          var chkDownload = box.read('save_screenshot') ?? false;
+          bool chkDownload = box.read('save_screenshot') ?? false;
           if (chkDownload) _captureScreenshot();
         }
       });

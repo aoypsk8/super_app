@@ -7,6 +7,7 @@ import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/log_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/cashout_model.dart';
+import 'package:super_app/models/payment_method_mode.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/utility/checksum_util.dart';
 import 'package:super_app/utility/dialog_helper.dart';
@@ -21,6 +22,51 @@ class PaymentController extends GetxController {
   String passCashOut = "a97e51d90b254deaa5c1271436d42397";
   RxString rxTokenCashOut = ''.obs;
   Rx<RequestCashoutModel> reqCashOutModel = RequestCashoutModel().obs;
+  RxList<PaymentMethod> paymentMethods = <PaymentMethod>[].obs;
+
+  RxBool loading = false.obs;
+
+  getPaymentMethods() async {
+    var url = "/SuperApi/Info/PaymentList";
+    var body = {"owner": "2052768833"};
+    var response = await DioClient.postEncrypt(loading: false, url, body);
+    if (response != null && response is List) {
+      paymentMethods.value = response
+          .map((data) => PaymentMethod.fromJson(data as Map<String, dynamic>))
+          .toList();
+    } else {
+      DialogHelper.showErrorDialogNew(description: response['resultDesc']);
+    }
+  }
+
+  updatePaymentMethod(String owner, String payment_type) async {
+    var url = "/SuperApi/Info/UpdatePaymentList";
+    var body = {"owner": owner, "payment_type": payment_type};
+    var response = await DioClient.postEncrypt(loading: true, url, body);
+    if (response['code'] == "0") {
+      loading.value = false;
+      getPaymentMethods();
+      return true;
+    } else {
+      DialogHelper.showErrorDialogNew(description: response['resultDesc']);
+      loading.value = false;
+      return false;
+    }
+  }
+
+  deletePaymentMethod(String owner, String payment_type) async {
+    var url = "/SuperApi/Info/DeletePaymentList";
+    var body = {"owner": owner, "payment_type": payment_type};
+    var response = await DioClient.postEncrypt(loading: true, url, body);
+    if (response['code'] == "0") {
+      loading.value = false;
+      getPaymentMethods();
+      return true;
+    } else {
+      loading.value = false;
+      return false;
+    }
+  }
 
   getTokenCashOut() async {
     rxTokenCashOut.value = '';

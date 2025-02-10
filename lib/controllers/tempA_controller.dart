@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, prefer_typing_uninitialized_variables
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:super_app/controllers/home_controller.dart';
@@ -11,7 +12,7 @@ import 'package:super_app/models/provider_tempA_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/dialog_helper.dart';
-import 'package:super_app/views/reusable_result.dart';
+import 'package:super_app/views/reusable_template/reusable_result.dart';
 import 'package:super_app/views/templateA/payment_tempA.dart';
 import 'package:super_app/views/templateA/result_tempA.dart';
 
@@ -38,12 +39,6 @@ class TempAController extends GetxController {
 
   var isLoading = false.obs;
   // menudetail.url = 'https://electricx.mmoney.la/getList;https://electricx.mmoney.la/verify;https://electricx.mmoney.la/payment;https://electricx.mmoney.la/getRecent;https://electricx.mmoney.la/history;';
-
-  @override
-  void onReady() {
-    super.onReady();
-    fetchTempAList();
-  }
 
   Future<void> fetchTempAList() async {
     try {

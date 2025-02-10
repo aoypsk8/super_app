@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
@@ -78,11 +79,25 @@ class _OtpTransferScreenState extends State<OtpTransferScreen> {
                                       fontSize: 18,
                                       color: cr_2929,
                                     ),
-                                    TextFont(
-                                      text: 'otp_send',
-                                      color: color_777,
-                                      fontSize: 10,
-                                      maxLines: 2,
+                                    Wrap(
+                                      children: [
+                                        TextFont(
+                                          text: 'otp_send',
+                                          color: color_777,
+                                          fontSize: 10,
+                                          maxLines: 2,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        TextFont(
+                                          text: userController
+                                              .userProfilemodel.value.msisdn
+                                              .toString(),
+                                          color: color_777,
+                                          fontSize: 10,
+                                          maxLines: 2,
+                                          poppin: true,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -162,7 +177,7 @@ class _OtpTransferScreenState extends State<OtpTransferScreen> {
         defaultPinTheme: PinTheme(
           width: 56,
           height: 56,
-          textStyle: TextStyle(
+          textStyle: GoogleFonts.poppins(
               fontSize: 20,
               color: Color.fromRGBO(30, 60, 87, 1),
               fontWeight: FontWeight.w500),
@@ -175,7 +190,7 @@ class _OtpTransferScreenState extends State<OtpTransferScreen> {
         focusedPinTheme: PinTheme(
           width: 56,
           height: 56,
-          textStyle: const TextStyle(
+          textStyle: GoogleFonts.poppins(
             fontSize: 20,
             color: Color.fromRGBO(30, 60, 87, 1),
             fontWeight: FontWeight.w500,

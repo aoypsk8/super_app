@@ -9,6 +9,7 @@ import 'package:super_app/controllers/tempA_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/views/templateA/confirm_tempA.dart';
 import 'package:super_app/views/templateA/list_payment_tempA.dart';
 import 'package:super_app/widget/buildAppBar.dart';
@@ -59,12 +60,38 @@ class PaymentTempAScreen extends StatelessWidget {
         func: () {
           _formKey.currentState!.save();
           if (_formKey.currentState!.validate()) {
-            if (int.parse(_paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '')) < 1000) {
-              DialogHelper.showErrorDialogNew(description: 'Minimum payment must than 1,000 Kip.');
+            if (int.parse(
+                    _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '')) <
+                1000) {
+              DialogHelper.showErrorDialogNew(
+                  description: 'Minimum payment must than 1,000 Kip.');
             } else {
               controller.rxNote.value = _note.text;
-              controller.rxPaymentAmount.value = _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '');
-              Get.to(() => ListsPaymentTempAScreen());
+              controller.rxPaymentAmount.value =
+                  _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '');
+              // Get.to(() => ListsPaymentTempAScreen());
+              Get.to(ListsPaymentScreen(
+                description: 'select_payment',
+                stepBuild: '4/5',
+                title: homeController.getMenuTitle(),
+                onSelectedPayment: () {
+                  paymentController
+                      .reqCashOut(
+                          transID: controller.rxtransid.value,
+                          amount: controller.rxPaymentAmount.value,
+                          toAcc: controller.rxaccnumber.value,
+                          chanel: homeController.menudetail.value.groupNameEN,
+                          provider: controller.tempAdetail.value.code,
+                          remark: controller.rxNote.value)
+                      .then(
+                        (value) => {
+                          if (value) {Get.to(() => ConfirmTempAScreen())}
+                        },
+                      );
+                  return Container();
+                },
+              ));
+
               // paymentController
               //     .reqCashOut(
               //         transID: controller.rxtransid.value,
@@ -108,7 +135,8 @@ class PaymentTempAScreen extends StatelessWidget {
               ),
             ),
             buttonText: 'all',
-            onButtonPressed: () => _paymentAmount.text = fn.format(int.parse(controller.debit.value)),
+            onButtonPressed: () => _paymentAmount.text =
+                fn.format(int.parse(controller.debit.value)),
           ),
           const SizedBox(height: 8),
           LongTextField(
@@ -139,7 +167,8 @@ class PaymentTempAScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
                 ),
-                child: CachedNetworkImage(imageUrl: controller.tempAdetail.value.logo ?? ''),
+                child: CachedNetworkImage(
+                    imageUrl: controller.tempAdetail.value.logo ?? ''),
               ),
             ),
             const SizedBox(width: 12),
@@ -171,7 +200,8 @@ class PaymentTempAScreen extends StatelessWidget {
                       textBaseline: TextBaseline.alphabetic,
                       children: [
                         TextFont(
-                          text: fn.format(int.parse(controller.debit.value)) ?? '',
+                          text: fn.format(int.parse(controller.debit.value)) ??
+                              '',
                           // text: '999,999,999,999',
                           fontWeight: FontWeight.bold,
                           fontSize: 16,

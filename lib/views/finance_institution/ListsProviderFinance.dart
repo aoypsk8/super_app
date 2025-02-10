@@ -7,6 +7,7 @@ import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/buildAppBar.dart';
+import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class ListsProviderFinance extends StatefulWidget {
@@ -46,11 +47,12 @@ class _ListsProviderFinanceState extends State<ListsProviderFinance> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFont(
-                text: 'choose_institution',
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-              ),
+              // TextFont(
+              //   text: 'choose_institution',
+              //   fontWeight: FontWeight.w500,
+              //   fontSize: 12,
+              // ),
+              buildStepProcess(title: "1/4", desc: "choose_institution"),
               const SizedBox(height: 20),
               Expanded(
                 child: ListView.builder(

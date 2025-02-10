@@ -4,8 +4,6 @@ import 'package:super_app/views/cashIn/CashIn.dart';
 import 'package:super_app/views/cashIn/ConfirmCashIn.dart';
 import 'package:super_app/views/cashout/ConfirmCashOutScreen.dart';
 import 'package:super_app/views/cashout/ListsProviderBankScreen.dart';
-import 'package:super_app/views/cashout/ResultCashOutScreen.dart';
-import 'package:super_app/views/templateB/ListsProviderTempBScreen.dart';
 import 'package:super_app/views/finance_institution/ConfirmFinanceScreen.dart';
 import 'package:super_app/views/finance_institution/ListsProviderFinance.dart';
 import 'package:super_app/views/finance_institution/PaymentFinanceScreen.dart';
@@ -18,7 +16,6 @@ import 'package:super_app/views/transferwallet/OtpTransferEmailScreen.dart';
 import 'package:super_app/views/transferwallet/OtpTransferScreen.dart';
 import 'package:super_app/views/transferwallet/TransferScreen.dart';
 import 'package:super_app/views/visa-mastercard/ListVisaMasterCard.dart';
-import 'package:super_app/views/weTV/wetv_package_list.dart';
 import 'package:super_app/views/x-jaidee/xjaidee.dart';
 
 class AppRoutes {
@@ -46,16 +43,12 @@ class AppRoutes {
 
     // Cash out here
     GetPage(
-      name: '/cashOut',
+      name: '/bank',
       page: () => ListsProviderBankScreen(),
     ),
     GetPage(
       name: '/cashOutConfirm',
       page: () => ConfirmCashOutScreen(),
-    ),
-    GetPage(
-      name: '/resultCashOut',
-      page: () => ResultCashOutscreen(),
     ),
 
     // Institution
@@ -84,7 +77,7 @@ class AppRoutes {
 
     // cash IN
     GetPage(
-      name: '/cashInPage',
+      name: '/refill',
       page: () => CashInScreen(),
     ),
     GetPage(
@@ -99,7 +92,7 @@ class AppRoutes {
     ),
 
     GetPage(
-      name: '/templateA',
+      name: '/A',
       page: () => ListsProvinceTempA(),
       // transition: Transition.downToUp,
     ),
@@ -117,21 +110,6 @@ class AppRoutes {
     GetPage(
       name: '/visaMasterCard',
       page: () => VisaMasterCard(),
-    ),
-
-    GetPage(
-      name: '/digitalTV',
-      page: () => ListProviderTempBScreen(),
-    ),
-
-    GetPage(
-      name: '/weTV',
-      page: () => WeTvPackageList(),
-    ),
-
-    GetPage(
-      name: '/leasing',
-      page: () => ListProviderTempBScreen(),
     ),
   ];
 }

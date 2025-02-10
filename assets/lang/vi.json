@@ -63,7 +63,7 @@
   "done": "Xong, Thành Công, Hoàn thành",
   "vertify_otp": "Xác minh qua OTP",
   "verification": "Xác nhận danh tính",
-  "otp_send": "Mã số OTP gửi cho Số {}",
+  "otp_send": "Mã số OTP gửi cho Số :",
   "otp_sendEmail": "Mã số OTP gửi đến thư điện {}",
   "wallet_account": "Tài khoản cái ví",
   "swap_account": "Thay đổi Sồ mới",
@@ -291,5 +291,11 @@
   "verify_account": "Xác minh tài khoản",
   "biometric": "Biometric",
   "save_screenshot": "Lưu ảnh ch",
-  "policy_and_term": "Chính sách và điều khoản"
+  "policy_and_term": "Chính sách và điều khoản",
+  "save_pic_success":"Save QR success",
+  "from_acc":"From Account",
+  "to_acc":"To Account",
+  "change_primary_success":"Change Success!",
+  "TermsPolicy":"Terms and Conditions of Use and Privacy Notice",
+  "welcome_first_screen":"Welcome"
 }

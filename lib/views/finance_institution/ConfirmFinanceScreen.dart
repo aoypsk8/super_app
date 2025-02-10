@@ -14,6 +14,7 @@ import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/buildUserDetail.dart';
 import 'package:super_app/widget/build_DotLine.dart';
+import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class ConfirmFinanceScreen extends StatefulWidget {
@@ -121,11 +122,12 @@ class _ConfirmFinanceScreenState extends State<ConfirmFinanceScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextFont(
-              text: 'detail',
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
-            ),
+            // TextFont(
+            //   text: 'detail',
+            //   fontWeight: FontWeight.w500,
+            //   fontSize: 12,
+            // ),
+            buildStepProcess(title: "4/4", desc: "detail"),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,

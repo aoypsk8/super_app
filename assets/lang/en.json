@@ -63,7 +63,7 @@
   "done": "Success",
   "vertify_otp": "Verify identity with OTP",
   "verification": "Verify identity",
-  "otp_send": "The OTP code has been sent to the number {}",
+  "otp_send": "The OTP code has been sent to the number :",
   "otp_sendEmail": "The OTP code has been sent to the email {}",
   "wallet_account": "Wallet number",
   "swap_account": "Login with new number",
@@ -164,7 +164,7 @@
   "version": "Version",
   "addressdesc": "Saylom Road, Saylom Village, Chanthaburi District, Vientiane Capital, 3rd floor B Building of Lao Telecom.",
   "callcenter": "Call center",
-  "devby": "2023 Lao Mobile Money Sole Company Limited (LMM). All rights reserved.",
+  "devby": "2025 @ Lao Mobile Money Sole Company Limited (LMM). All rights reserved.",
   "VTE": "Vientiane Capital",
   "VTP": "Vientiane",
   "BKX": "Bolikhamxai",
@@ -298,5 +298,11 @@
   "verify_account": "Verify Account",
   "biometric": "Biometric",
   "save_screenshot": "Save Screenshot",
-  "policy_and_term": "Policy and Terms"
+  "policy_and_term": "Policy and Terms",
+  "save_pic_success":"Save QR success",
+  "from_acc":"From Account",
+  "to_acc":"To Account",
+  "change_primary_success":"Change Success!",
+  "TermsPolicy":"Terms and Conditions of Use and Privacy Notice",
+  "welcome_first_screen":"Welcome"
 }

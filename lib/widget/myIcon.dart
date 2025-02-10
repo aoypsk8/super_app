@@ -20,6 +20,7 @@ class MyIcon {
   static String bg_mmoneyx = 'assets/background/mmoneyx.png';
   static String bg_backgroundBill = 'assets/background/backgroundTrnasfer.png';
   static String bg_ic_background = 'assets/background/bii_ic_background.png';
+  static String bgOfCard = 'assets/background/bgOfCard.svg';
 
   //recurring
   static String ic_bill_link = 'assets/icons/ic_bill_link.png';
@@ -39,6 +40,7 @@ class MyIcon {
   static String animation_loading = 'assets/animation/loading.gif';
   static String animation_cat = 'assets/animation/cat1.gif';
   static String ic_mascot_dontknow = 'assets/animation/dontknow.gif';
+  static String ic_mascot_good = 'assets/animation/good.gif';
   static String animation_success = 'assets/animation/success.json';
 
   // bottom_nav
@@ -73,10 +75,42 @@ class MyIcon {
 
   // lao qr
   static String ic_lao_qr = 'assets/icons/laoqr.png';
+  static String ic_save_qr = 'assets/icons/saveIc.svg';
+  static String ic_share_qr = 'assets/icons/shareIc.svg';
+  static String ic_edit_qr = 'assets/icons/editIc.svg';
 
   // success
   static String ic_success = 'assets/icons/success.png';
 
   // otpAnimation
   static String otpAnimation = 'assets/icons/otpAnimation.svg';
+
+  // delete
+  static String ic_trash = 'assets/icons/trash.svg';
+  static String ic_problem = 'assets/icons/problem.png';
+  static String ic_deleteX = 'assets/icons/deleteX.svg';
+  static String ic_addCard = 'assets/icons/addCard.png';
+  // security
+  static String ic_security_check = 'assets/icons/securityCheck.svg';
+
+  static String ic_more = 'assets/icons/more.svg';
+
+  //! history screen
+  static String ic_bank = 'assets/history/ic_bank.svg';
+  static String ic_cashout = 'assets/history/ic_cashout.svg';
+  static String ic_digitaltv = 'assets/history/ic_digitaltv.svg';
+  static String ic_electric = 'assets/history/ic_electric.svg';
+  static String ic_internet = 'assets/history/ic_internet.svg';
+  static String ic_leasing = 'assets/history/ic_leasing.svg';
+  static String ic_package_postpaid = 'assets/history/ic_package_postpaid.svg';
+  static String ic_package = 'assets/history/ic_package.svg';
+  static String ic_roaming = 'assets/history/ic_roaming.svg';
+  static String ic_telecom = 'assets/history/ic_telecom.svg';
+  static String ic_ticket = 'assets/history/ic_ticket.svg';
+  static String ic_topup_internet = 'assets/history/ic_topup_internet.svg';
+  static String ic_topup_prepaid = 'assets/history/ic_topup_prepaid.svg';
+  static String ic_transfer = 'assets/history/ic_transfer.svg';
+  static String ic_water = 'assets/history/ic_water.svg';
+  static String ic_wetv = 'assets/history/ic_wetv.svg';
+  static String ic_topup_pstn = 'assets/history/topup_pstn.svg';
 }

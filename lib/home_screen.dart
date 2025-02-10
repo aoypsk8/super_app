@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
@@ -9,7 +10,9 @@ import 'package:super_app/services/theme_service.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/main/home_recommend.dart';
+import 'package:super_app/views/notification/notification_box.dart';
 import 'package:super_app/widget/mask_msisdn.dart';
+import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -82,45 +85,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
+                              textBaseline: TextBaseline.ideographic,
                               children: [
-                                Row(
-                                  textBaseline: TextBaseline.ideographic,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        TextFont(
-                                          text: 'welcome_first_screen',
-                                          fontWeight: FontWeight.w600,
-                                          color: cr_7070,
-                                        ),
-                                        TextFont(
-                                          text: ',',
-                                          fontWeight: FontWeight.w600,
-                                          color: cr_7070,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(width: 3),
-                                    TextFont(
-                                      text:
-                                          "${userController.userProfilemodel.value.name ?? ''}!",
-                                      fontWeight: FontWeight.w600,
-                                      color: cr_7070,
-                                      noto: true,
-                                    )
-                                  ],
+                                TextFont(
+                                  text: 'welcome_first_screen',
+                                  fontWeight: FontWeight.w600,
+                                  color: cr_7070,
                                 ),
-                                const SizedBox(width: 6),
-                                Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 6),
-                                  decoration: ShapeDecoration(
-                                    color: color_fff,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                ),
+                                const SizedBox(width: 3),
+                                TextFont(
+                                  text:
+                                      "${userController.userProfilemodel.value.name ?? ''}!",
+                                  fontWeight: FontWeight.w600,
+                                  color: cr_7070,
+                                )
                               ],
                             ),
                             Padding(
@@ -134,9 +112,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           '2000000',
                                       showMsisdn: showMsisdn,
                                     ),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: cr_2929,
                                     poppin: true,
                                   ),
-                                  const SizedBox(width: 5),
+                                  const SizedBox(width: 10),
                                   GestureDetector(
                                     onTap: () {
                                       setState(() {
@@ -144,6 +125,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       });
                                     },
                                     child: Icon(
+                                      size: 16.sp,
                                       showMsisdn
                                           ? Iconsax.eye
                                           : Iconsax.eye_slash,
@@ -157,18 +139,40 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         ),
                       ],
                     ),
+                    // InkWell(
+                    //   child: Icon(Iconsax.language_circle,
+                    //       color: cr_2929, size: 18.sp),
+                    //   onTap: () {
+                    //     _showLanguageDialog(context);
+                    //   },
+                    // ),
+                    //onPressed: themeService.toggleTheme,
                     Row(
                       children: [
-                        InkWell(
-                          child: Icon(Iconsax.language_circle,
-                              color: cr_2929, size: 18.sp),
-                          onTap: () {
-                            _showLanguageDialog(context);
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.brightness_6),
-                          onPressed: themeService.toggleTheme,
+                        Stack(
+                          children: [
+                            IconButton(
+                              icon: Icon(Iconsax.notification),
+                              onPressed: () {
+                                Get.to(() => NotificationBox());
+                              },
+                            ),
+                            Positioned(
+                              right: 13,
+                              top: 13,
+                              child: Container(
+                                padding: EdgeInsets.all(1),
+                                decoration: BoxDecoration(
+                                  color: cr_ef33,
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                constraints: BoxConstraints(
+                                  minWidth: 10,
+                                  minHeight: 10,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

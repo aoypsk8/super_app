@@ -94,4 +94,11 @@ class MyIcon {
   static String ic_security_check = 'assets/icons/securityCheck.svg';
 
   static String ic_more = 'assets/icons/more.svg';
+
+  // notify
+  static String notice_box_empty = 'assets/icons/notice_box_empty.svg';
+  static String notice_animation_empty = 'assets/icons/emtybox.png';
+  static String inbox_read = 'assets/icons/inbox_read.svg';
+  static String inbox_new = 'assets/icons/inbox_new.svg';
+  static String ic_notification = 'assets/icons/notification.svg';
 }

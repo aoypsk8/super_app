@@ -1,13 +1,12 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
+import 'package:super_app/models/notification_model.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/views/notification/notification_detail.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -74,7 +73,7 @@ class _NotificationBoxState extends State<NotificationBox>
             },
             builder: (c, m) {
               return Container(
-                decoration: BoxDecoration(color: Colors.grey[200]),
+                decoration: BoxDecoration(color: color_fff),
                 child: FadeTransition(
                   opacity: _scaleController!,
                   child: ScaleTransition(
@@ -161,104 +160,118 @@ class _NotificationBoxState extends State<NotificationBox>
 
   Widget messages() {
     double widthSizePKList = MediaQuery.of(context).size.width - 108;
+    // Group messages by date
+    Map<String, List<MessageList>> groupedMessages = {};
+    for (var e in homeController.messageList) {
+      String dateKey =
+          DateFormat("dd MMM yyyy").format(DateTime.parse(e.createAt!));
+      if (!groupedMessages.containsKey(dateKey)) {
+        groupedMessages[dateKey] = [];
+      }
+      groupedMessages[dateKey]!.add(e);
+    }
+
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.only(left: 12, right: 12, top: 14),
-        child: ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              var e = homeController.messageList[index];
-              var date = DateTime.parse(e.createAt!);
-              return InkWell(
-                  onTap: () {
-                    homeController.messageListDetail.value = e;
-                    if (!e.isRead!) {
-                      homeController.updateMessageStatus(e.id!);
-                    }
-                    // Get.to(() => NotificationDetail());
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    decoration: BoxDecoration(
-                        color: e.isRead! ? color_f4f4 : Color(0x19f14d58),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                            color: Colors.grey[300]!.withOpacity(0.7))),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          // child: SvgPicture.asset(
-                          //   e.isRead!
-                          //       ? "assets/icons/inbox_read.svg"
-                          //       : "assets/icons/inbox_read.svg",
-                          //   width: 6.5.w,
-                          // ),
-                          child: Icon(Iconsax.sagittarius),
+        child: Column(
+          children: groupedMessages.entries.map((entry) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: TextFont(
+                    text: DateFormat("M/yyyy")
+                        .format(DateFormat("dd MMM yyyy").parse(entry.key)),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    poppin: true,
+                    color: cr_2929,
+                  ),
+                ),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    var e = entry.value[index];
+                    var date = DateTime.parse(e.createAt!);
+                    return InkWell(
+                      onTap: () {
+                        homeController.messageListDetail.value = e;
+                        if (!e.isRead!) {
+                          homeController.updateMessageStatus(e.id!);
+                        }
+                        Get.to(() => NotificationDetail());
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: e.isRead!
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .onPrimary
+                                  .withOpacity(0.05)
+                              : color_f4f4,
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        SizedBox(width: 14),
-                        Column(
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              width: widthSizePKList,
-                              child: Flex(
-                                direction: Axis.horizontal,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Expanded(
-                                    child: TextFont(
-                                      text: e.title!,
-                                      noto: true,
-                                      maxLines: 1,
-                                      fontSize: 11.5,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    flex: 1,
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Image.asset(MyIcon.ic_readNotify),
+                            ),
+                            SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: widthSizePKList,
+                                  child: TextFont(
+                                    text: e.title!,
+                                    noto: true,
+                                    maxLines: 1,
+                                    fontSize: 11.5,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                  Expanded(
-                                    child: TextFont(
-                                      text: DateFormat("dd MMM, HH:mm")
-                                          .format(date),
-                                      maxLines: 1,
-                                      textAlign: TextAlign.end,
-                                      fontSize: 11,
-                                      color: cr_red,
-                                      poppin: true,
-                                    ),
-                                    flex: 1,
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            SizedBox(
-                              width: widthSizePKList,
-                              child: TextFont(
-                                  text: e.body!,
+                                ),
+                                SizedBox(height: 6),
+                                SizedBox(
+                                  width: widthSizePKList,
+                                  child: TextFont(
+                                    text: e.body!,
+                                    maxLines: 1,
+                                    noto: true,
+                                    fontSize: 10.5,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: 6),
+                                TextFont(
+                                  text:
+                                      DateFormat("dd MMM, HH:mm").format(date),
                                   maxLines: 1,
-                                  noto: true,
-                                  fontSize: 10.5,
-                                  color: Colors.black),
-                            ),
-                            SizedBox(
-                              height: 6,
+                                  textAlign: TextAlign.end,
+                                  fontSize: 11,
+                                  color: cr_red,
+                                  poppin: true,
+                                ),
+                              ],
                             )
                           ],
-                        )
-                      ],
-                    ),
-                  ));
-            },
-            separatorBuilder: (context, index) => SizedBox(
-                  height: 10,
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(height: 10),
+                  itemCount: entry.value.length,
                 ),
-            itemCount: homeController.messageList.length),
+              ],
+            );
+          }).toList(),
+        ),
       ),
     );
   }

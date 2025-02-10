@@ -101,4 +101,7 @@ class MyIcon {
   static String inbox_read = 'assets/icons/inbox_read.svg';
   static String inbox_new = 'assets/icons/inbox_new.svg';
   static String ic_notification = 'assets/icons/notification.svg';
+  static String ic_readNotify = 'assets/icons/readNoti.png';
+  static String ic_speaker = 'assets/icons/ic_speaker.svg';
+  static String bgg_nopic = 'assets/icons/bgg_nopic.svg';
 }

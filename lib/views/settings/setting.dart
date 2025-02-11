@@ -44,26 +44,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       backgroundColor: color_fff,
       appBar: BuildAppBar(title: 'setting'),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            buildHeader(context),
-            SizedBox(height: 15.sp),
-            buildConfig(),
-            SizedBox(height: 10.sp),
-            buildInfomation(),
-            SizedBox(height: 5.h),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                width: 50.w,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                decoration: BoxDecoration(color: color_f4f4, borderRadius: BorderRadius.circular(20)),
-                child: TextFont(text: 'logout', textAlign: TextAlign.center),
+      body: Obx(
+        () => SingleChildScrollView(
+          child: Column(
+            children: [
+              buildHeader(context),
+              SizedBox(height: 15.sp),
+              buildConfig(),
+              SizedBox(height: 10.sp),
+              buildInfomation(),
+              SizedBox(height: 5.h),
+              InkWell(
+                onTap: () {},
+                child: Container(
+                  width: 50.w,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  decoration: BoxDecoration(color: color_f4f4, borderRadius: BorderRadius.circular(20)),
+                  child: TextFont(text: 'logout', textAlign: TextAlign.center),
+                ),
               ),
-            ),
-            SizedBox(height: 5.h),
-          ],
+              SizedBox(height: 5.h),
+            ],
+          ),
         ),
       ),
     );

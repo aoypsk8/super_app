@@ -92,13 +92,11 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
   Future<void> _captureScreenshot() async {
     try {
       RenderRepaintBoundary boundary = _repaintBoundaryKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-
       if (boundary.debugNeedsPaint) {
         print("Waiting for repaint...");
         await Future.delayed(Duration(milliseconds: 500));
         return _captureScreenshot();
       }
-
       // Capture image with high resolution (pixelRatio 3.0 for better quality)
       ui.Image image = await boundary.toImage(pixelRatio: 5.0);
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);

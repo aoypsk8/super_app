@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/log_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
-import 'package:super_app/models/model-bank/BankListModel.dart';
+import 'package:super_app/models/BankListModel.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';

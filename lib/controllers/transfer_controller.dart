@@ -10,7 +10,7 @@ import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/log_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/menu_model.dart';
-import 'package:super_app/models/model-kyc/UserKycModel.dart';
+import 'package:super_app/models/UserKycModel.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/views/reusable_template/reusable_result.dart';

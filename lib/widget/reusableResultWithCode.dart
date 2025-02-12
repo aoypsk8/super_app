@@ -24,17 +24,43 @@ import 'package:saver_gallery/saver_gallery.dart';
 import 'package:intl/intl.dart';
 import 'package:super_app/widget/textfont.dart';
 
-class ResultWeTVscreen extends StatefulWidget {
-  const ResultWeTVscreen({super.key});
+class ReusableResultWithCode extends StatefulWidget {
+  final String fromAccountImage;
+  final String fromAccountName;
+  final String fromAccountNumber;
+  final String toAccountImage;
+  final String toAccountName;
+  final String toAccountNumber;
+  final String amount;
+  final String fee;
+  final String transactionId;
+  final String timestamp;
+  final bool fromHistory;
+  final String code;
+
+  const ReusableResultWithCode({
+    super.key,
+    required this.fromAccountImage,
+    required this.fromAccountName,
+    required this.fromAccountNumber,
+    required this.toAccountImage,
+    required this.toAccountName,
+    required this.toAccountNumber,
+    required this.amount,
+    required this.fee,
+    required this.transactionId,
+    required this.timestamp,
+    required this.fromHistory,
+    required this.code,
+  });
 
   @override
-  State<ResultWeTVscreen> createState() => _ResultWeTVscreenState();
+  State<ReusableResultWithCode> createState() => _ReusableResultWithCodeState();
 }
 
-class _ResultWeTVscreenState extends State<ResultWeTVscreen>
+class _ReusableResultWithCodeState extends State<ReusableResultWithCode>
     with SingleTickerProviderStateMixin {
   final screenshotController = ScreenshotController();
-  final weTVController = Get.put(WeTVController());
   final GlobalKey _globalKey = GlobalKey();
 
   final storage = GetStorage();
@@ -129,7 +155,7 @@ class _ResultWeTVscreenState extends State<ResultWeTVscreen>
               Clipboard.setData(ClipboardData(text: code));
               Get.snackbar(
                 'Copied!',
-                'WeTV code copied to clipboard',
+                'Code copied to clipboard',
                 snackPosition: SnackPosition.BOTTOM,
                 backgroundColor: cr_b326.withOpacity(0.1),
                 colorText: cr_b326,
@@ -247,13 +273,7 @@ class _ResultWeTVscreenState extends State<ResultWeTVscreen>
                                         children: [
                                           buildTextSuccess(),
                                           TextFont(
-                                            text:
-                                                DateFormat('dd MMM, yyyy HH:mm')
-                                                    .format(
-                                              DateTime.parse(weTVController
-                                                  .rxPayDatetime
-                                                  .replaceAll('/', '-')),
-                                            ),
+                                            text: widget.timestamp,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 9.5,
                                             color: cr_7070,
@@ -278,11 +298,11 @@ class _ResultWeTVscreenState extends State<ResultWeTVscreen>
                                                   const EdgeInsets.all(12.0),
                                               child: buildUserDetail(
                                                 profile:
-                                                    "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
+                                                    widget.fromAccountImage,
                                                 from: true,
-                                                msisdn: storage.read('msisdn'),
-                                                name:
-                                                    "userController.name.value",
+                                                msisdn:
+                                                    widget.fromAccountNumber,
+                                                name: widget.fromAccountName,
                                               ),
                                             ),
                                             const SizedBox(height: 5),
@@ -294,22 +314,17 @@ class _ResultWeTVscreenState extends State<ResultWeTVscreen>
                                               padding:
                                                   const EdgeInsets.all(12.0),
                                               child: buildUserDetail(
-                                                profile: weTVController
-                                                        .wetvdetail
-                                                        .value
-                                                        .logo ??
-                                                    "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
-                                                from: false,
-                                                msisdn: "",
-                                                name:
-                                                    weTVController.title.value,
-                                              ),
+                                                  profile:
+                                                      widget.toAccountImage,
+                                                  from: false,
+                                                  msisdn:
+                                                      widget.toAccountNumber,
+                                                  name: widget.toAccountName),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      buildWetvCodeBox(
-                                          weTVController.wetvCode.value),
+                                      buildWetvCodeBox(widget.code),
                                       const SizedBox(height: 10),
                                       TextFont(
                                         text: 'amount_transfer',
@@ -321,9 +336,7 @@ class _ResultWeTVscreenState extends State<ResultWeTVscreen>
                                         children: [
                                           TextFont(
                                             text: NumberFormat('#,###').format(
-                                                double.parse(weTVController
-                                                    .wetvdetail.value.price
-                                                    .toString())),
+                                                double.parse(widget.amount)),
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20,
                                             color: cr_b326,
@@ -339,9 +352,8 @@ class _ResultWeTVscreenState extends State<ResultWeTVscreen>
                                       const SizedBox(height: 20),
                                       buildTextDetail(
                                         title: "fee",
-                                        detail: NumberFormat('#,###').format(
-                                            double.parse(
-                                                weTVController.rxFee.value)),
+                                        detail: NumberFormat('#,###')
+                                            .format(double.parse(widget.fee)),
                                         money: true,
                                       ),
                                       const SizedBox(height: 20),
@@ -354,8 +366,7 @@ class _ResultWeTVscreenState extends State<ResultWeTVscreen>
                                             child: buildTextDetail(
                                                 maxlines: 1,
                                                 title: "ເລກໃບບິນ",
-                                                detail: weTVController
-                                                    .rxTransID.value),
+                                                detail: widget.transactionId),
                                           ),
                                           Expanded(
                                             flex: 1,
@@ -369,8 +380,7 @@ class _ResultWeTVscreenState extends State<ResultWeTVscreen>
                                                     MyIcon.ic_logo_x,
                                                   ),
                                                   size: 25.w,
-                                                  data: weTVController
-                                                      .rxTransID.value,
+                                                  data: widget.transactionId,
                                                   errorCorrectLevel:
                                                       QrErrorCorrectLevel.M,
                                                   typeNumber: null,

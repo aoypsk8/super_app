@@ -13,6 +13,7 @@ import 'package:super_app/views/finance_institution/VerifyAccountFinanceScreen.d
 import 'package:super_app/views/templateA/lists_province_tempA.dart';
 import 'package:super_app/views/templateA/verify_account_tempA.dart';
 import 'package:super_app/views/templateB/ListsProviderTempBScreen.dart';
+import 'package:super_app/views/ticket/ListsTicketScreen.dart';
 import 'package:super_app/views/transferwallet/ConfirmTranferScreen.dart';
 import 'package:super_app/views/transferwallet/OtpTransferEmailScreen.dart';
 import 'package:super_app/views/transferwallet/OtpTransferScreen.dart';
@@ -20,6 +21,8 @@ import 'package:super_app/views/transferwallet/TransferScreen.dart';
 import 'package:super_app/views/visa-mastercard/ListVisaMasterCard.dart';
 import 'package:super_app/views/weTV/wetv_package_list.dart';
 import 'package:super_app/views/x-jaidee/xjaidee.dart';
+
+import 'views/weTV/wetv_package_list.dart';
 
 class AppRoutes {
   static final routes = [
@@ -115,6 +118,13 @@ class AppRoutes {
       page: () => VisaMasterCard(),
     ),
 
+    // Visa Master Card
+    GetPage(
+      name: '/ticket',
+      page: () => ListsTicketScreen(),
+    ),
+
+    // WETv
     GetPage(
       name: '/wetv',
       page: () => WeTvPackageList(),

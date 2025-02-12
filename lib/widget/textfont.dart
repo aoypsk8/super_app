@@ -50,7 +50,7 @@ class TextFont extends StatelessWidget {
     }
     // 2. If `noto` is true, prioritize Noto Sans Serif.
     else if (noto) {
-      textStyle = GoogleFonts.notoSerifLao(
+      textStyle = GoogleFonts.notoSansLao(
         fontSize: fontSize.sp,
         fontWeight: fontWeight,
         decoration: underline ? TextDecoration.underline : null,
@@ -68,7 +68,7 @@ class TextFont extends StatelessWidget {
         decorationStyle: underline ? TextDecorationStyle.dashed : null,
       );
     } else if (languageCode == 'lo') {
-      textStyle = GoogleFonts.notoSerifLao(
+      textStyle = GoogleFonts.notoSansLao(
         fontSize: fontSize.sp,
         fontWeight: fontWeight,
         decoration: underline ? TextDecoration.underline : null,

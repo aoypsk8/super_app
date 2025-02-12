@@ -9,12 +9,14 @@ import 'package:get_storage/get_storage.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/models/appinfo_model.dart';
 import 'package:super_app/models/balance_model.dart';
+import 'package:super_app/models/model-history/history_detail_model.dart';
 import 'package:super_app/models/user_profile_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:super_app/views/reusable_template/reusable_result.dart';
 
 import '../models/model-history/history_model.dart';
 
@@ -28,6 +30,12 @@ class UserController extends GetxController with WidgetsBindingObserver {
   // profile
   Rx<UserProfileModel> userProfilemodel = UserProfileModel().obs;
 
+  // history
+  RxList<HistoryModel> historylists = <HistoryModel>[].obs;
+  RxMap<String, List<HistoryModel>> groupedHistory =
+      <String, List<HistoryModel>>{}.obs;
+  Rx<HistoryDetailModel> historyDetailModel = HistoryDetailModel().obs;
+
   // balance
   Rx<BalanceModel> balanceModel = BalanceModel().obs;
   RxInt totalBalance = 0.obs;
@@ -38,7 +46,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
   RxBool isCheckToken = false.obs;
 
   //auth
-  RxString rxMsisdn = '2052944141'.obs;
+  RxString rxMsisdn = '2052768833'.obs;
 
   RxString rxLat = ''.obs;
   RxString rxLong = ''.obs;
@@ -369,9 +377,6 @@ class UserController extends GetxController with WidgetsBindingObserver {
     Get.back();
   }
 
-  RxList<HistoryModel> historylists = <HistoryModel>[].obs;
-  RxMap<String, List<HistoryModel>> groupedHistory =
-      <String, List<HistoryModel>>{}.obs;
   fetchHistory() async {
     var msisdn = await storage.read('msisdn');
     var token = await storage.read('token');
@@ -396,6 +401,35 @@ class UserController extends GetxController with WidgetsBindingObserver {
       }
     } else {
       groupedHistory.clear();
+    }
+  }
+
+  fetchHistoryDetail(transID) async {
+    var url = '${MyConstant.urlHistory}/detail';
+    var data = {"transid": transID};
+    // var res = await DioClient.postNoLoading(url, data);
+    var res = await DioClient.postEncrypt(url, data);
+    if (res != null) {
+      historyDetailModel.value = HistoryDetailModel.fromJson(res);
+      Get.to(() => ReusableResultScreen(
+            fromAccountImage: userProfilemodel.value.profileImg!,
+            fromAccountName: historyDetailModel.value.fromAccName!,
+            fromAccountNumber: historyDetailModel.value.fromAcc!,
+            toAccountImage: historyDetailModel.value.logo == ""
+                ? "https://mmoney.la/AppLite/Users/mmoney.png"
+                : historyDetailModel.value.logo!,
+            toAccountName: historyDetailModel.value.toAccName!,
+            toAccountNumber: historyDetailModel.value.toAcc!,
+            toTitleProvider: historyDetailModel.value.provider!,
+            amount: historyDetailModel.value.amount!,
+            fee: historyDetailModel.value.fee == ""
+                ? "0"
+                : historyDetailModel.value.fee!,
+            transactionId: historyDetailModel.value.transid!,
+            note: historyDetailModel.value.ramark!,
+            timestamp: historyDetailModel.value.timestamp!,
+            fromHistory: true,
+          ));
     }
   }
 }

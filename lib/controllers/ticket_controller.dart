@@ -5,92 +5,110 @@ import 'package:get_storage/get_storage.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
+import 'package:super_app/models/ticket/TicketHistoryModel.dart';
+import 'package:super_app/models/ticket/TicketListsModel.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:intl/intl.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/reusableResultWithCode.dart';
-
-import '../services/helper/random.dart';
-import '../models/wetv_model.dart';
 import '../utility/dialog_helper.dart';
 import 'log_controller.dart';
 
-class WeTVController extends GetxController {
-  final paymentController = Get.put(PaymentController());
+class TicketController extends GetxController {
   final homeController = Get.find<HomeController>();
   final userController = Get.find<UserController>();
   final logController = LogController();
+  final paymentController = Get.put(PaymentController());
   final storage = GetStorage();
 
-  late RxList<WeTvModel> wetvmodel = RxList();
-  Rx<WeTvList> wetvdetail = WeTvList().obs;
-  late RxList<WeTvList> wetvlist = RxList();
-  late RxList<WeTvHistory> wetvhistory = RxList();
-  RxString title = 'WeTV'.obs;
-  RxString wetvCode = ''.obs;
+  RxList<TicketListsModel> ticketLists = RxList();
+  Rx<TicketListsModel> ticketDetail = TicketListsModel().obs;
+  RxList<TicketHistoryModel> historyLists = RxList();
+
   RxString rxTransID = ''.obs;
-  RxString rxPayDatetime = ''.obs;
-  RxBool loading = false.obs;
+  RxString rxTimeStamp = ''.obs;
+  RxString rxFee = ''.obs;
+  RxString rxPaymentAmount = ''.obs;
   RxString rxNote = ''.obs;
-  RxString rxFee = '0'.obs;
+  RxString rxticketCode = ''.obs;
 
   var logPaymentReq;
   var logPaymentRes;
 
-  // clear() {
-  //   wetvmodel = RxList();
-  //   wetvdetail = WeTvList().obs;
-  //   wetvhistory = RxList();
-  //   wetvlist = RxList();
-  //   title = 'WeTV'.obs;
-  //   wetvCode.value = '';
-  //   rxTransID.value = '';
-
-  //   logPaymentReq = null;
-  //   logPaymentRes = null;
-  // }
-
   @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-    fetchWeTvList();
-    fetchwetvhistory();
+  clear() {
+    ticketLists = <TicketListsModel>[].obs;
+    ticketDetail = TicketListsModel().obs;
+    historyLists = <TicketHistoryModel>[].obs;
+    rxTransID = ''.obs;
+    rxTimeStamp = ''.obs;
+    rxFee = ''.obs;
+    rxPaymentAmount = ''.obs;
+    rxNote = ''.obs;
+    rxticketCode = ''.obs;
+
+    logPaymentReq = null;
+    logPaymentRes = null;
   }
 
-  fetchWeTvList() async {
+  fetchTicketLists() async {
     List<String> urlSplit =
         homeController.menudetail.value.url.toString().split(";");
-    var response = await DioClient.postEncrypt(urlSplit[0], {});
-    wetvlist.value =
-        response.map<WeTvList>((json) => WeTvList.fromJson(json)).toList();
+    var response = await DioClient.postEncrypt(urlSplit[0], {}, loading: false);
+    ticketLists.value = response
+        .map<TicketListsModel>((json) => TicketListsModel.fromJson(json))
+        .toList();
+    // ticketLists.value = dataTest
+    //     .map<TicketListsModel>((json) => TicketListsModel.fromJson(json))
+    //     .toList();
   }
 
-  wetvpayment(amout) async {
+  fetchTicketHistory() async {
+    List<String> urlSplit =
+        homeController.menudetail.value.url.toString().split(";");
+
+    print(urlSplit);
+    var response = await DioClient.postEncrypt(loading: false, urlSplit[2], {
+      "msisdn": storage.read('msisdn'),
+    });
+    print(response);
+    // print('xxxxxx ${response.toString()}');
+    if (response != null) {
+      historyLists.value = response
+          .map<TicketHistoryModel>((json) => TicketHistoryModel.fromJson(json))
+          .toList();
+    }
+  }
+
+  paymentProcess() async {
     userController.fetchBalance();
-    rxTransID.value = homeController.menudetail.value.description.toString() +
-        await randomNumber().fucRandomNumber();
-    if (userController.mainBalance.value >= int.parse(amout)) {
-      var response;
+    if (userController.mainBalance.value >= ticketDetail.value.price!) {
       var data;
       var url;
+      var response;
+      rxFee.value = '0';
+
+      //? cashout from wallet
       response = await paymentController.cashoutWallet(
         rxTransID.value,
-        amout,
+        ticketDetail.value.price,
         '0',
         homeController.menudetail.value.groupNameEN.toString(),
         '',
-        '',
+        ticketDetail.value.title,
         '',
         homeController.menudetail.value.groupNameEN.toString(),
       );
+
       if (response["resultCode"] == 0) {
+        // //? Insert DB
         List<String> urlSplit =
             homeController.menudetail.value.url.toString().split(";");
+        url = urlSplit[1];
         data = {
           "TranID": rxTransID.value,
-          "weid": wetvdetail.value.weid,
-          "amount": wetvdetail.value.price,
+          "weid": ticketDetail.value.tickid,
+          "amount": ticketDetail.value.price,
           "PhoneUser": storage.read('msisdn'),
         };
 
@@ -110,37 +128,34 @@ class WeTVController extends GetxController {
           homeController.menudetail.value.groupNameEN.toString(),
           '',
           '',
-          amout.toString(),
+          ticketDetail.value.price.toString(),
           0,
           '0',
-          '',
+          ticketDetail.value.title,
           null,
           logPaymentReq,
           logPaymentRes,
         );
         if (response['ResultCode'] == '200') {
-          //? save parameter to result screen
-          // rxTimeStamp.value = response['CreateDate'];
-          // rxPaymentAmount.value = response['Amount'];
-          // Get.to(() => const ResultTempBScreen());
-          wetvCode.value = response["Code"];
-          rxPayDatetime.value =
+          rxticketCode.value = response["Code"].toString();
+          rxPaymentAmount.value = response['Price'].toString();
+          rxTimeStamp.value =
               DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
-          // Get.to(() => ResultWeTVscreen());
           Get.to(ReusableResultWithCode(
             fromAccountImage:
                 userController.userProfilemodel.value.profileImg ??
                     MyConstant.profile_default,
             fromAccountName: userController.profileName.value,
             fromAccountNumber: userController.rxMsisdn.value,
-            toAccountImage: wetvdetail.value.logo ?? MyConstant.profile_default,
-            toAccountName: title.value,
-            toAccountNumber: title.value,
-            amount: wetvdetail.value.price.toString(),
+            toAccountImage:
+                ticketDetail.value.logo ?? MyConstant.profile_default,
+            toAccountName: ticketDetail.value.title!,
+            toAccountNumber: ticketDetail.value.title!,
+            amount: ticketDetail.value.price.toString(),
             fee: rxFee.toString(),
             transactionId: rxTransID.value,
-            timestamp: rxPayDatetime.value,
-            code: wetvCode.value,
+            timestamp: rxTimeStamp.value,
+            code: rxticketCode.value,
             fromHistory: false,
           ));
         } else {
@@ -155,37 +170,8 @@ class WeTVController extends GetxController {
         DialogHelper.showErrorDialogNew(description: response['resultDesc']);
       }
     } else {
+      //! balance < payment
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
-    }
-
-    // var response = await DioClient.post(urlSplit[1], {
-    //   "TranID": rxTranID.value,
-    //   "weid": wetvdetail.value.weid,
-    //   "amount": wetvdetail.value.price,
-    //   "PhoneUser": storage.read('msisdn'),
-    // });
-    // if (response != null) {
-    //   if (response["ResultCode"] == "200") {
-    //     wetvCode.value = response["Code"];
-    //     Get.to(() => WeTVBill());
-    //   }
-    // } else {
-    //   paymentController.cashin(paymentController.rxtransid.value,
-    //       wetvdetail.value.price.toString(), response['ResultCode']);
-    // }
-  }
-
-  fetchwetvhistory() async {
-    List<String> urlSplit =
-        homeController.menudetail.value.url.toString().split(";");
-    var response = await DioClient.postEncrypt(loading: false, urlSplit[2], {
-      "msisdn": storage.read('msisdn'),
-    });
-    // print('xxxxxx ${response.toString()}');
-    if (response != null) {
-      wetvhistory.value = response
-          .map<WeTvHistory>((json) => WeTvHistory.fromJson(json))
-          .toList();
     }
   }
 }

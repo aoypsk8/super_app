@@ -1,8 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
@@ -10,8 +7,8 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/controllers/wetv_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
-import 'package:super_app/views/weTV/ResultWeTVScreen.dart';
-import 'package:super_app/views/weTV/list_payment_weTV.dart';
+import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
+import 'package:super_app/views/weTV/confirm_weTV.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -78,7 +75,15 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                           return InkWell(
                             onTap: () {
                               weTVController.wetvdetail.value = e;
-                              Get.to(() => ListsPaymentWeTVScreen());
+                              Get.to(ListsPaymentScreen(
+                                description: 'select_payment',
+                                stepBuild: '2/3',
+                                title: homeController.getMenuTitle(),
+                                onSelectedPayment: () {
+                                  Get.to(() => ConfirmWeTVScreen());
+                                  return Container();
+                                },
+                              ));
                             },
                             child: Container(
                               decoration: BoxDecoration(

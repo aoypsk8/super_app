@@ -151,6 +151,7 @@ class _ListsTicketScreenState extends State<ListsTicketScreen> {
             ),
             const SizedBox(height: 5),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(
                   Icons.access_time,

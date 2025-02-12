@@ -9,6 +9,8 @@ import 'package:super_app/models/ticket/TicketHistoryModel.dart';
 import 'package:super_app/models/ticket/TicketListsModel.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:intl/intl.dart';
+import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/widget/reusableResultWithCode.dart';
 import '../utility/dialog_helper.dart';
 import 'log_controller.dart';
 
@@ -139,7 +141,23 @@ class TicketController extends GetxController {
           rxPaymentAmount.value = response['Price'].toString();
           rxTimeStamp.value =
               DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
-          // Get.to(() => ResultTicketScreen());
+          Get.to(ReusableResultWithCode(
+            fromAccountImage:
+                userController.userProfilemodel.value.profileImg ??
+                    MyConstant.profile_default,
+            fromAccountName: userController.profileName.value,
+            fromAccountNumber: userController.rxMsisdn.value,
+            toAccountImage:
+                ticketDetail.value.logo ?? MyConstant.profile_default,
+            toAccountName: ticketDetail.value.title!,
+            toAccountNumber: ticketDetail.value.title!,
+            amount: ticketDetail.value.price.toString(),
+            fee: rxFee.toString(),
+            transactionId: rxTransID.value,
+            timestamp: rxTimeStamp.value,
+            code: rxticketCode.value,
+            fromHistory: false,
+          ));
         } else {
           DialogHelper.showErrorWithFunctionDialog(
               description: response['ResultDesc'],

@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_unnecessary_containers, non_constant_identifier_names
+// ignore_for_file: avoid_unnecessary_containers, non_constant_identifier_names, unnecessary_null_comparison
 import 'dart:io';
 import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
@@ -20,6 +21,7 @@ import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/scanqr/qr_scanner.dart';
 import 'package:super_app/views/web/openWebView.dart';
 import 'package:super_app/widget/myIcon.dart';
+import 'package:super_app/widget/pull_refresh.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class HomeRecommendScreen extends StatefulWidget {
@@ -36,7 +38,9 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
   final paymentController = Get.put(PaymentController());
   final qrController = Get.put(QrController());
   final controller = Get.put(TempAController());
-  final CarouselSliderController carouselController = CarouselSliderController();
+  RefreshController refreshController = RefreshController();
+  final CarouselSliderController carouselController =
+      CarouselSliderController();
 
   bool showAmount = false;
   int _current = 0;
@@ -87,8 +91,6 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    var menuModelItem = homeController.menuModel.first;
-
     return Scaffold(
       backgroundColor: cr_fbf7,
       floatingActionButton: SizedBox(
@@ -119,329 +121,373 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
-              child: SingleChildScrollView(
-                child: Column(
+      body: PullRefresh(
+        refreshController: refreshController,
+        onRefresh: () {
+          homeController.fetchServicesmMenu();
+          refreshController.refreshCompleted();
+        },
+        child: SingleChildScrollView(
+          child: homeController.menuModel.first != null
+              ? Column(
                   children: [
-                    PrimaryCardComponent(),
-                    const SizedBox(height: 20),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      padding: EdgeInsets.only(top: 12, bottom: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 5),
-                          Container(
-                            child: AlignedGridView.count(
-                              itemCount: menuModelItem.menulists!.length + 1,
-                              crossAxisCount: 4,
-                              mainAxisSpacing: 17,
-                              crossAxisSpacing: 20,
-                              shrinkWrap: true,
-                              primary: false,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (BuildContext context, int index) {
-                                if (index == menuModelItem.menulists!.length) {
-                                  return InkWell(
-                                    onTap: () async {},
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        SizedBox(height: 6),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                          ),
-                                          child: SvgPicture.asset(
-                                            MyIcon.ic_more,
-                                            width: 5.5.w,
-                                            height: 8.5.w,
-                                          ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        TextFont(
-                                          text: 'more',
-                                          fontSize: 9.5,
-                                          fontWeight: FontWeight.w400,
-                                          maxLines: 2,
-                                          color: cr_4139,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 10, left: 20, right: 20),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            PrimaryCardComponent(),
+                            const SizedBox(height: 20),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 10),
+                              padding: EdgeInsets.only(top: 12, bottom: 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 5),
+                                  Container(
+                                    child: AlignedGridView.count(
+                                      itemCount: homeController.menuModel.first
+                                              .menulists!.length +
+                                          1,
+                                      crossAxisCount: 4,
+                                      mainAxisSpacing: 17,
+                                      crossAxisSpacing: 20,
+                                      shrinkWrap: true,
+                                      primary: false,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        if (index ==
+                                            homeController.menuModel.first
+                                                .menulists!.length) {
+                                          return InkWell(
+                                            onTap: () async {},
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                SizedBox(height: 6),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 12,
+                                                  ),
+                                                  child: SvgPicture.asset(
+                                                    MyIcon.ic_more,
+                                                    width: 5.5.w,
+                                                    height: 8.5.w,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 10),
+                                                TextFont(
+                                                  text: 'more',
+                                                  fontSize: 9.5,
+                                                  fontWeight: FontWeight.w400,
+                                                  maxLines: 2,
+                                                  color: cr_4139,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }
 
-                                var result = menuModelItem.menulists![index];
-                                String? url = result.logo;
-                                String? updatedUrl = url!.replaceFirst(
-                                  'https://mmoney.la',
-                                  'https://gateway.ltcdev.la/AppImage',
-                                );
+                                        var result = homeController
+                                            .menuModel.first.menulists![index];
+                                        String? url = result.logo;
+                                        String? updatedUrl = url!.replaceFirst(
+                                          'https://mmoney.la',
+                                          'https://gateway.ltcdev.la/AppImage',
+                                        );
 
-                                return InkWell(
-                                  onTap: () async {
-                                    print(result.template);
-                                    await homeController.clear();
-                                    if (!userController.isCheckToken.value) {
-                                      userController.isCheckToken.value = true;
-                                      if (result.template == "proof") {
-                                        homeController.menutitle.value = result.groupNameEN!;
-                                        homeController.menudetail.value = result;
-                                        qrController.fetchProofLists();
-                                        Get.toNamed('/${result.template}');
-                                      } else {
-                                        userController.checktoken(name: 'menu').then((value) {
-                                          if (userController.isLogin.value) {
-                                            if (result.template != '/') {
-                                              homeController.menutitle.value = result.groupNameEN!;
-                                              homeController.menudetail.value = result;
-                                              if (result.template == "webview") {
-                                                Get.to(
-                                                  OpenWebView(url: homeController.menudetail.value.url.toString()),
-                                                );
+                                        return InkWell(
+                                          onTap: () async {
+                                            print(result.template);
+                                            await homeController.clear();
+                                            if (!userController
+                                                .isCheckToken.value) {
+                                              userController
+                                                  .isCheckToken.value = true;
+                                              if (result.template == "proof") {
+                                                homeController.menutitle.value =
+                                                    result.groupNameEN!;
+                                                homeController
+                                                    .menudetail.value = result;
+                                                qrController.fetchProofLists();
+                                                Get.toNamed(
+                                                    '/${result.template}');
                                               } else {
-                                                Get.toNamed('/${result.template}');
+                                                userController
+                                                    .checktoken(name: 'menu')
+                                                    .then((value) {
+                                                  if (userController
+                                                      .isLogin.value) {
+                                                    if (result.template !=
+                                                        '/') {
+                                                      homeController
+                                                              .menutitle.value =
+                                                          result.groupNameEN!;
+                                                      homeController.menudetail
+                                                          .value = result;
+                                                      if (result.template ==
+                                                          "webview") {
+                                                        Get.to(
+                                                          OpenWebView(
+                                                              url: homeController
+                                                                  .menudetail
+                                                                  .value
+                                                                  .url
+                                                                  .toString()),
+                                                        );
+                                                      } else {
+                                                        Get.toNamed(
+                                                            '/${result.template}');
+                                                      }
+                                                    } else {
+                                                      DialogHelper
+                                                          .showErrorDialogNew(
+                                                        description:
+                                                            'Not available',
+                                                      );
+                                                    }
+                                                  }
+                                                });
                                               }
-                                            } else {
-                                              DialogHelper.showErrorDialogNew(
-                                                description: 'Not available',
-                                              );
+                                              userController
+                                                  .isCheckToken.value = false;
                                             }
-                                          }
-                                        });
-                                      }
-                                      userController.isCheckToken.value = false;
-                                    }
-                                  },
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      SizedBox(height: 6),
-                                      SvgPicture.network(
-                                        updatedUrl,
-                                        placeholderBuilder: (BuildContext context) => Container(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: const CircularProgressIndicator(),
-                                        ),
-                                        width: 8.5.w,
-                                        height: 8.5.w,
-                                      ),
-                                      SizedBox(height: 10),
-                                      TextFont(
-                                        text: getLocalizedGroupName(result),
-                                        fontSize: 9.5,
-                                        fontWeight: FontWeight.w400,
-                                        maxLines: 2,
-                                        color: cr_4139,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
+                                          },
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              SizedBox(height: 6),
+                                              SvgPicture.network(
+                                                updatedUrl,
+                                                placeholderBuilder:
+                                                    (BuildContext context) =>
+                                                        Container(
+                                                  padding:
+                                                      const EdgeInsets.all(5.0),
+                                                  child:
+                                                      const CircularProgressIndicator(),
+                                                ),
+                                                width: 8.5.w,
+                                                height: 8.5.w,
+                                              ),
+                                              SizedBox(height: 10),
+                                              TextFont(
+                                                text: getLocalizedGroupName(
+                                                    result),
+                                                fontSize: 9.5,
+                                                fontWeight: FontWeight.w400,
+                                                maxLines: 2,
+                                                color: cr_4139,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                );
-                              },
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+
+                            // PrimaryButton(
+                            //     title: 'fetchServicesmMenu',
+                            //     onPressed: () {
+                            //       homeController.fetchServicesmMenu();
+                            //     }),
+                            // PrimaryButton(
+                            //     title: 'OTP TESTING',
+                            //     onPressed: () {
+                            //       Get.toNamed('/otpTransfer');
+                            //     }),
+                            // const SizedBox(height: 20),
+                            // PrimaryButton(
+                            //     title: 'Get Payment List',
+                            //     onPressed: () {
+                            //       Get.to(ListsPaymentScreen(
+                            //         description: 'select_payment',
+                            //         stepBuild: '4/5',
+                            //         title: homeController.getMenuTitle(),
+                            //         onSelectedPayment: () {
+                            //           paymentController
+                            //               .reqCashOut(
+                            //                   transID: controller.rxtransid.value,
+                            //                   amount: controller.rxPaymentAmount.value,
+                            //                   toAcc: controller.rxaccnumber.value,
+                            //                   chanel: homeController
+                            //                       .menudetail.value.groupNameEN,
+                            //                   provider:
+                            //                       controller.tempAdetail.value.code,
+                            //                   remark: controller.rxNote.value)
+                            //               .then(
+                            //                 (value) => {
+                            //                   if (value)
+                            //                     {Get.to(() => ConfirmTempAScreen())}
+                            //                 },
+                            //               );
+                            //           return Container();
+                            //         },
+                            //       ));
+                            //     }),
+                            // const SizedBox(height: 20),
+                            // PrimaryButton(
+                            //     title: 'Visa Master Card',
+                            //     onPressed: () {
+                            //       Get.toNamed('/visaMasterCard');
+                            //     }),
+                            // const SizedBox(height: 20),
+                            // PrimaryButton(
+                            //     title: 'OTP Email',
+                            //     onPressed: () {
+                            //       Get.toNamed('/otpTransferEmail');
+                            //     }),
+                            // const SizedBox(height: 20),
+                            // PrimaryButton(
+                            //     title: 'Transfer',
+                            //     onPressed: () {
+                            //       Get.toNamed('/transfer');
+                            //     }),
+                            // const SizedBox(height: 20),
+                            // PrimaryButton(
+                            //     title: 'Cash Out',
+                            //     onPressed: () {
+                            //       Get.toNamed('/cashOut');
+                            //     }),
+                            // const SizedBox(height: 20),
+                            // PrimaryButton(
+                            //     title: 'finance',
+                            //     onPressed: () {
+                            //       Get.toNamed('/finance');
+                            //     }),
+                            // const SizedBox(height: 20),
+                            // const SizedBox(height: 20),
+                            // PrimaryButton(
+                            //     title: 'tempA',
+                            //     onPressed: () async {
+                            //       Get.toNamed('/templateA');
+
+                            // Get.to(ReusableResultScreen(
+                            //     fromAccountImage: 'https://mmoney.la/AppLite/PartnerIcon/electricLogo.png',
+                            //     fromAccountName: 'fromAccountName',
+                            //     fromAccountNumber: 'fromAccountNumber',
+                            //     toAccountImage: 'https://mmoney.la/AppLite/PartnerIcon/electricLogo.png',
+                            //     toAccountName: 'toAccountName',
+                            //     toAccountNumber: 'toAccountNumber',
+                            //     toTitleProvider: 'toTitleProvider',
+                            //     amount: '1000',
+                            //     fee: '0',
+                            //     transactionId: 'transactionId',
+                            //     note: 'note',
+                            //     timestamp: '2025-01-29 09:47:10'));
+
+                            // Get.to(ScreenshotPage());
+                            //     }),
+                            // const SizedBox(height: 20),
+                            // PrimaryButton(
+                            //     title: 'XJaidee',
+                            //     onPressed: () {
+                            //       Get.toNamed('/xjaidee');
+                            //     }),
+                            // const SizedBox(height: 20),
+                            // PrimaryButton(
+                            //     title: 'X-Proof',
+                            //     onPressed: () {
+                            //       Get.toNamed('/proof');
+                            //     }),
+                          ],
+                        ),
                       ),
                     ),
-
-                    // PrimaryButton(
-                    //     title: 'fetchServicesmMenu',
-                    //     onPressed: () {
-                    //       homeController.fetchServicesmMenu();
-                    //     }),
-                    // PrimaryButton(
-                    //     title: 'OTP TESTING',
-                    //     onPressed: () {
-                    //       Get.toNamed('/otpTransfer');
-                    //     }),
-                    // const SizedBox(height: 20),
-                    // PrimaryButton(
-                    //     title: 'Get Payment List',
-                    //     onPressed: () {
-                    //       Get.to(ListsPaymentScreen(
-                    //         description: 'select_payment',
-                    //         stepBuild: '4/5',
-                    //         title: homeController.getMenuTitle(),
-                    //         onSelectedPayment: () {
-                    //           paymentController
-                    //               .reqCashOut(
-                    //                   transID: controller.rxtransid.value,
-                    //                   amount: controller.rxPaymentAmount.value,
-                    //                   toAcc: controller.rxaccnumber.value,
-                    //                   chanel: homeController
-                    //                       .menudetail.value.groupNameEN,
-                    //                   provider:
-                    //                       controller.tempAdetail.value.code,
-                    //                   remark: controller.rxNote.value)
-                    //               .then(
-                    //                 (value) => {
-                    //                   if (value)
-                    //                     {Get.to(() => ConfirmTempAScreen())}
-                    //                 },
-                    //               );
-                    //           return Container();
-                    //         },
-                    //       ));
-                    //     }),
-                    // const SizedBox(height: 20),
-                    // PrimaryButton(
-                    //     title: 'Visa Master Card',
-                    //     onPressed: () {
-                    //       Get.toNamed('/visaMasterCard');
-                    //     }),
-                    // const SizedBox(height: 20),
-                    // PrimaryButton(
-                    //     title: 'OTP Email',
-                    //     onPressed: () {
-                    //       Get.toNamed('/otpTransferEmail');
-                    //     }),
-                    // const SizedBox(height: 20),
-                    // PrimaryButton(
-                    //     title: 'Transfer',
-                    //     onPressed: () {
-                    //       Get.toNamed('/transfer');
-                    //     }),
-                    // const SizedBox(height: 20),
-                    // PrimaryButton(
-                    //     title: 'Cash Out',
-                    //     onPressed: () {
-                    //       Get.toNamed('/cashOut');
-                    //     }),
-                    // const SizedBox(height: 20),
-                    // PrimaryButton(
-                    //     title: 'finance',
-                    //     onPressed: () {
-                    //       Get.toNamed('/finance');
-                    //     }),
-                    // const SizedBox(height: 20),
-                    // const SizedBox(height: 20),
-                    // PrimaryButton(
-                    //     title: 'tempA',
-                    //     onPressed: () async {
-                    //       Get.toNamed('/templateA');
-
-                    // Get.to(ReusableResultScreen(
-                    //     fromAccountImage: 'https://mmoney.la/AppLite/PartnerIcon/electricLogo.png',
-                    //     fromAccountName: 'fromAccountName',
-                    //     fromAccountNumber: 'fromAccountNumber',
-                    //     toAccountImage: 'https://mmoney.la/AppLite/PartnerIcon/electricLogo.png',
-                    //     toAccountName: 'toAccountName',
-                    //     toAccountNumber: 'toAccountNumber',
-                    //     toTitleProvider: 'toTitleProvider',
-                    //     amount: '1000',
-                    //     fee: '0',
-                    //     transactionId: 'transactionId',
-                    //     note: 'note',
-                    //     timestamp: '2025-01-29 09:47:10'));
-
-                    // Get.to(ScreenshotPage());
-                    //     }),
-                    // const SizedBox(height: 20),
-                    // PrimaryButton(
-                    //     title: 'XJaidee',
-                    //     onPressed: () {
-                    //       Get.toNamed('/xjaidee');
-                    //     }),
-                    // const SizedBox(height: 20),
-                    // PrimaryButton(
-                    //     title: 'X-Proof',
-                    //     onPressed: () {
-                    //       Get.toNamed('/proof');
-                    //     }),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              color: color_fff,
-              width: Get.width,
-              padding: const EdgeInsets.only(top: 15, bottom: 25),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFont(
-                      text: "Deal for you, ມາລີນາ!",
-                      color: cr_4139,
-                      fontSize: 9.5,
-                      fontWeight: FontWeight.w500,
-                      noto: true,
+                    Container(
+                      color: color_fff,
+                      width: Get.width,
+                      padding: const EdgeInsets.only(top: 15, bottom: 25),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFont(
+                              text: "Deal for you, ມາລີນາ!",
+                              color: cr_4139,
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w500,
+                              noto: true,
+                            ),
+                            Divider(
+                              color: Theme.of(context).primaryColor,
+                              thickness: 2,
+                              endIndent: 310,
+                            ),
+                            const SizedBox(height: 20),
+                            buildRecomend(),
+                          ],
+                        ),
+                      ),
                     ),
-                    Divider(
-                      color: Theme.of(context).primaryColor,
-                      thickness: 2,
-                      endIndent: 310,
+                    const SizedBox(height: 15),
+                    Container(
+                      color: color_fff,
+                      width: Get.width,
+                      padding: const EdgeInsets.only(top: 15, bottom: 25),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFont(
+                              text: "Dropping Like It's Hot!",
+                              color: cr_4139,
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            Divider(
+                              color: Theme.of(context).primaryColor,
+                              thickness: 2,
+                              endIndent: 310,
+                            ),
+                            const SizedBox(height: 20),
+                            buildDropping(),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    Container(
+                      color: color_fff,
+                      width: Get.width,
+                      padding: const EdgeInsets.only(top: 15, bottom: 25),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFont(
+                              text: "Dropping Like It's Hot!",
+                              color: cr_4139,
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            Divider(
+                              color: Theme.of(context).primaryColor,
+                              thickness: 2,
+                              endIndent: 310,
+                            ),
+                            const SizedBox(height: 20),
+                            buildLoveit(),
+                          ],
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 20),
-                    buildRecomend(),
                   ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 15),
-            Container(
-              color: color_fff,
-              width: Get.width,
-              padding: const EdgeInsets.only(top: 15, bottom: 25),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFont(
-                      text: "Dropping Like It's Hot!",
-                      color: cr_4139,
-                      fontSize: 9.5,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    Divider(
-                      color: Theme.of(context).primaryColor,
-                      thickness: 2,
-                      endIndent: 310,
-                    ),
-                    const SizedBox(height: 20),
-                    buildDropping(),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 15),
-            Container(
-              color: color_fff,
-              width: Get.width,
-              padding: const EdgeInsets.only(top: 15, bottom: 25),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFont(
-                      text: "Dropping Like It's Hot!",
-                      color: cr_4139,
-                      fontSize: 9.5,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    Divider(
-                      color: Theme.of(context).primaryColor,
-                      thickness: 2,
-                      endIndent: 310,
-                    ),
-                    const SizedBox(height: 20),
-                    buildLoveit(),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-          ],
+                )
+              : const SizedBox(),
         ),
       ),
     );
@@ -496,7 +542,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         color: cr_black.withOpacity(0.2),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 5),
                         child: Row(
                           children: [
                             TextFont(
@@ -508,7 +555,11 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                             ),
                             const SizedBox(width: 5),
                             TextFont(
-                              text: showAmount ? fn.format(int.parse(userController.mainBalance.value.toString())) : "****",
+                              text: showAmount
+                                  ? fn.format(int.parse(userController
+                                      .mainBalance.value
+                                      .toString()))
+                                  : "****",
                               color: color_fff,
                               poppin: true,
                               fontWeight: FontWeight.w700,
@@ -711,7 +762,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
             items: List.generate((loveItUrls.length / 4).ceil(), (index) {
               int start = index * 4;
               int end = start + 4;
-              List<String> sublist = loveItUrls.sublist(start, end > loveItUrls.length ? loveItUrls.length : end);
+              List<String> sublist = loveItUrls.sublist(
+                  start, end > loveItUrls.length ? loveItUrls.length : end);
               return GridView.builder(
                 padding: const EdgeInsets.all(5),
                 shrinkWrap: true,

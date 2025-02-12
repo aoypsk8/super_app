@@ -1,11 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/ticket_controller.dart';
@@ -19,8 +16,8 @@ import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/buildUserDetail.dart';
 import 'package:super_app/widget/build_DotLine.dart';
 import 'package:super_app/widget/build_step_process.dart';
+import 'package:super_app/widget/reusableResultWithCode.dart';
 import 'package:super_app/widget/textfont.dart';
-import 'package:intl/intl.dart';
 
 class ConfirmTicketScreen extends StatefulWidget {
   const ConfirmTicketScreen({super.key});
@@ -99,7 +96,7 @@ class _ConfirmTicketScreenState extends State<ConfirmTicketScreen> {
           bgColor: Theme.of(context).primaryColor,
           title: 'confirm',
           func: () {
-            // ticketController.paymentProcess();
+            ticketController.paymentProcess();
           },
         ),
       ),

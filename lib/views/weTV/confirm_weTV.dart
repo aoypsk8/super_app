@@ -154,7 +154,8 @@ class _ConfirmWeTVScreenState extends State<ConfirmWeTVScreen> {
                     padding: const EdgeInsets.all(12.0),
                     child: buildUserDetail(
                       profile:
-                          "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
+                          userController.userProfilemodel.value.profileImg ??
+                              MyConstant.profile_default,
                       from: true,
                       msisdn: storage.read('msisdn'),
                       name: userController.profileName.value,
@@ -167,7 +168,8 @@ class _ConfirmWeTVScreenState extends State<ConfirmWeTVScreen> {
                     child: buildUserDetail(
                       profile: weTVController.wetvdetail.value.logo ?? '',
                       from: false,
-                      msisdn: "",
+                      msisdn:
+                          "${weTVController.wetvdetail.value.day.toString()} Days",
                       name: weTVController.title.value,
                     ),
                   ),

@@ -19,6 +19,8 @@ import 'package:super_app/views/transferwallet/TransferScreen.dart';
 import 'package:super_app/views/visa-mastercard/ListVisaMasterCard.dart';
 import 'package:super_app/views/x-jaidee/xjaidee.dart';
 
+import 'views/weTV/wetv_package_list.dart';
+
 class AppRoutes {
   static final routes = [
     GetPage(
@@ -117,6 +119,12 @@ class AppRoutes {
     GetPage(
       name: '/ticket',
       page: () => ListsTicketScreen(),
+    ),
+
+    // WETv
+    GetPage(
+      name: '/wetv',
+      page: () => WeTvPackageList(),
     ),
   ];
 }

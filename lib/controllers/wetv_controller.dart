@@ -7,7 +7,8 @@ import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:intl/intl.dart';
-import 'package:super_app/views/weTV/ResultWeTVScreen.dart';
+import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/widget/reusableResultWithCode.dart';
 
 import '../services/helper/random.dart';
 import '../models/wetv_model.dart';
@@ -125,7 +126,23 @@ class WeTVController extends GetxController {
           wetvCode.value = response["Code"];
           rxPayDatetime.value =
               DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
-          Get.to(() => ResultWeTVscreen());
+          // Get.to(() => ResultWeTVscreen());
+          Get.to(ReusableResultWithCode(
+            fromAccountImage:
+                userController.userProfilemodel.value.profileImg ??
+                    MyConstant.profile_default,
+            fromAccountName: userController.profileName.value,
+            fromAccountNumber: userController.rxMsisdn.value,
+            toAccountImage: wetvdetail.value.logo ?? MyConstant.profile_default,
+            toAccountName: title.value,
+            toAccountNumber: title.value,
+            amount: wetvdetail.value.price.toString(),
+            fee: rxFee.toString(),
+            transactionId: rxTransID.value,
+            timestamp: rxPayDatetime.value,
+            code: wetvCode.value,
+            fromHistory: false,
+          ));
         } else {
           DialogHelper.showErrorWithFunctionDialog(
               description: response['ResultDesc'],

@@ -251,7 +251,7 @@ class _ResultTempBscreenState extends State<ResultTempBscreen>
                                                 msisdn:
                                                     Controller.rxAccNo.value,
                                                 name: Controller.tempBdetail
-                                                        .value.nameEn ??
+                                                        .value.nameCode ??
                                                     '',
                                               ),
                                             ),

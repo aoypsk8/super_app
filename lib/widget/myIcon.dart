@@ -41,6 +41,7 @@ class MyIcon {
   static String animation_cat = 'assets/animation/cat1.gif';
   static String ic_mascot_dontknow = 'assets/animation/dontknow.gif';
   static String ic_mascot_good = 'assets/animation/good.gif';
+  static String animation_load = 'assets/animation/animation_load.json';
   static String animation_success = 'assets/animation/success.json';
 
   // bottom_nav

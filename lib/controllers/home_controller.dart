@@ -19,16 +19,19 @@ class HomeController extends GetxController {
   RxString rxBgBill = ''.obs;
   RxString urlwebview = ''.obs;
 
+  //version
+  RxString appVersion = ''.obs;
+
   RxString menutitle = ''.obs;
   RxList<MenuModel> menuModel = <MenuModel>[].obs; // Model of menuModel
   RxList<Menulists> menulist = <Menulists>[].obs; // List of menu items
   Rx<Menulists> menudetail = Menulists().obs; // Selected menu item
 
-//notify
+  //notify
   RxList<MessageList> messageList = <MessageList>[].obs;
   Rx<MessageList> messageListDetail = MessageList().obs;
   RxInt messageUnread = 0.obs;
-//! clear data
+  //! clear data
   clear() async {
     menutitle = ''.obs;
     menudetail = Menulists().obs;

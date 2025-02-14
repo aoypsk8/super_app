@@ -46,7 +46,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
   RxBool isCheckToken = false.obs;
 
   //auth
-  RxString rxMsisdn = '2052768833'.obs;
+  RxString rxMsisdn = '2054034422'.obs;
 
   RxString rxLat = ''.obs;
   RxString rxLong = ''.obs;
@@ -74,10 +74,10 @@ class UserController extends GetxController with WidgetsBindingObserver {
   @override
   void onReady() async {
     super.onReady();
-    String wallet = '2052944141';
+    String wallet = '2054034422';
     storage.write('msisdn', wallet);
     rxMsisdn.value = storage.read('msisdn');
-    await loginpincode(wallet, '123456');
+    await loginpincode(wallet, '357159');
     await fetchBalance();
     await queryUserProfile();
   }

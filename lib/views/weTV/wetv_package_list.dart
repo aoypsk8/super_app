@@ -1,11 +1,16 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/controllers/wetv_controller.dart';
+import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/views/weTV/confirm_weTV.dart';
@@ -73,17 +78,29 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                         itemBuilder: (context, index) {
                           final e = weTVController.wetvlist[index];
                           return InkWell(
-                            onTap: () {
+                            onTap: () async {
                               weTVController.wetvdetail.value = e;
-                              Get.to(ListsPaymentScreen(
-                                description: 'select_payment',
-                                stepBuild: '2/3',
-                                title: homeController.getMenuTitle(),
-                                onSelectedPayment: () {
-                                  Get.to(() => ConfirmWeTVScreen());
-                                  return Container();
-                                },
-                              ));
+                              if (userController.mainBalance.value >=
+                                  weTVController.wetvdetail.value.price!) {
+                                weTVController.rxTransID.value = homeController
+                                        .menudetail.value.description
+                                        .toString() +
+                                    await randomNumber().fucRandomNumber();
+                                Get.to(
+                                  ListsPaymentScreen(
+                                    description: 'select_payment',
+                                    stepBuild: '2/3',
+                                    title: homeController.getMenuTitle(),
+                                    onSelectedPayment: () {
+                                      Get.to(() => const ConfirmWeTVScreen());
+                                      return Container();
+                                    },
+                                  ),
+                                );
+                              } else {
+                                DialogHelper.showErrorDialogNew(
+                                    description: 'Your balance not enough.');
+                              }
                             },
                             child: Container(
                               decoration: BoxDecoration(

@@ -100,4 +100,5 @@ class MyConstant {
   //     "eyJhbFciOiJIUzI1NiJ10.eyJSb2xlIjoiUGFydG5lciIsIklzc3VlciI6Iklzc3VlciIsIlVzZYJuYW1lIjoiS2JhbmsiLCJleHAiOjE2NzU2Njc3NjksImlhdCI6MTY3NTY2Nzc2OX0.7z-xJ7SIeKMqDiUTYiQvXLpFG8Rx-DCjT0zSR4XAs2U";
 
   // static String urlAddress = 'https://gateway.mmoney.la';
+  static String urlBorrow = '/Borrowing';
 }

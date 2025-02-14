@@ -128,7 +128,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
           refreshController.refreshCompleted();
         },
         child: SingleChildScrollView(
-          child: homeController.menuModel.first != null
+          child: homeController.menuModel.isNotEmpty
               ? Column(
                   children: [
                     Padding(

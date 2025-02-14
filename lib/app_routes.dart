@@ -13,6 +13,7 @@ import 'package:super_app/views/finance_institution/VerifyAccountFinanceScreen.d
 import 'package:super_app/views/templateA/lists_province_tempA.dart';
 import 'package:super_app/views/templateA/verify_account_tempA.dart';
 import 'package:super_app/views/templateB/ListsProviderTempBScreen.dart';
+import 'package:super_app/views/borrowing/lists_borrowing.dart';
 import 'package:super_app/views/ticket/ListsTicketScreen.dart';
 import 'package:super_app/views/transferwallet/ConfirmTranferScreen.dart';
 import 'package:super_app/views/transferwallet/OtpTransferEmailScreen.dart';
@@ -133,6 +134,16 @@ class AppRoutes {
     GetPage(
       name: '/B',
       page: () => ListProviderTempBScreen(),
+    ),
+
+    GetPage(
+      name: '/airtimeborrowing',
+      page: () => ListsBorrowing(),
+    ),
+
+    GetPage(
+      name: '/databorrowing',
+      page: () => ListsBorrowing(),
     ),
   ];
 }

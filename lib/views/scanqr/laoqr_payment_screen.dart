@@ -2,11 +2,8 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
@@ -22,9 +19,7 @@ import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/buildUserDetail.dart';
 import 'package:super_app/widget/build_DotLine.dart';
 import 'package:super_app/widget/build_step_process.dart';
-import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
-import 'package:intl/intl.dart';
 
 class LaoQrPaymentScreen extends StatefulWidget {
   LaoQrPaymentScreen({super.key});

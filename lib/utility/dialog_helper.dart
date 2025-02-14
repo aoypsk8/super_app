@@ -11,76 +11,81 @@ import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class DialogHelper {
-  static void showErrorDialogNew(
-      {String title = 'Umm, Sorry!!',
-      String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.'}) {
+  static void showErrorDialogNew({
+    String title = 'Umm, Sorry!!',
+    String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.',
+    Function()? onClose,
+  }) {
     Get.dialog(
       WillPopScope(
         onWillPop: () async => false,
-        child: Dialog(
-          surfaceTintColor: color_fff,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: Padding(
-            padding: const EdgeInsets.all(0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 25),
-                Image.asset(
-                  MyIcon.ic_mascot_dontknow,
-                  height: 100,
-                  width: 100,
-                ),
-                SizedBox(height: 10),
-                TextFont(
-                  text: title,
-                  fontWeight: FontWeight.w400,
-                  color: cr_2929,
-                  fontSize: 12,
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: TextFont(
-                          text: description.tr,
-                          textAlign: TextAlign.center,
-                          maxLines: 5,
-                          fontWeight: FontWeight.normal,
-                          color: cr_7070,
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: cr_eae7,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                elevation: 0, // Remove shadow
-                                padding: EdgeInsets.symmetric(vertical: 10)),
-                            onPressed: (() => hide()),
-                            child: TextFont(
-                                text: 'close',
-                                textAlign: TextAlign.center,
-                                color: cr_3b3b,
-                                fontWeight: FontWeight.normal),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Dialog(
+            surfaceTintColor: color_fff,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: const EdgeInsets.all(0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: 25),
+                  Image.asset(
+                    MyIcon.ic_mascot_dontknow,
+                    height: 100,
+                    width: 100,
+                  ),
+                  SizedBox(height: 10),
+                  TextFont(
+                    text: title,
+                    fontWeight: FontWeight.w400,
+                    color: cr_2929,
+                    fontSize: 12,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: TextFont(
+                            text: description.tr,
+                            textAlign: TextAlign.center,
+                            maxLines: 5,
+                            fontWeight: FontWeight.normal,
+                            color: cr_7070,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 25),
-                    ],
+                        const SizedBox(height: 30),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: cr_eae7,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  elevation: 0, // Remove shadow
+                                  padding: EdgeInsets.symmetric(vertical: 10)),
+                              onPressed: onClose ?? (() => hide()),
+                              child: TextFont(
+                                  text: 'close',
+                                  textAlign: TextAlign.center,
+                                  color: cr_3b3b,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 25),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

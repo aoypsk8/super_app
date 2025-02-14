@@ -144,6 +144,7 @@ class AppRoutes {
     GetPage(
       name: '/databorrowing',
       page: () => ListsBorrowing(),
+      // transition: Transition.downToUp,
     ),
   ];
 }

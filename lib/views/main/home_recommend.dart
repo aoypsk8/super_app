@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
@@ -105,7 +106,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                 if (userController.isLogin.value) {
                   final result = await Get.to(() => QRScannerScreen());
                   if (result != null) {
-                    print(result);
+                    qrController.verifyQR(result);
                   }
                 }
               });
@@ -487,7 +488,15 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                     const SizedBox(height: 20),
                   ],
                 )
-              : const SizedBox(),
+              : Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Lottie.asset(
+                      MyIcon.animation_load,
+                      repeat: true,
+                    ),
+                  ),
+                ),
         ),
       ),
     );

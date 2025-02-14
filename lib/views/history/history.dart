@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/user_controller.dart';
-import 'package:super_app/models/model-history/history_model.dart';
+import 'package:super_app/models/history_model.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/buildAppBar.dart';
@@ -62,13 +62,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       _refreshController.refreshCompleted();
                       userController.fetchHistory();
                     },
-                    header: WaterDropHeader(complete: TextFont(text: 'loading_complete')),
+                    header: WaterDropHeader(
+                        complete: TextFont(text: 'loading_complete')),
                     child: ListView.builder(
                       padding: const EdgeInsets.all(8.0),
                       itemCount: userController.groupedHistory.keys.length,
                       itemBuilder: (context, index) {
-                        String yearMonth = userController.groupedHistory.keys.toList()[index];
-                        List<HistoryModel> transactions = userController.groupedHistory[yearMonth]!;
+                        String yearMonth =
+                            userController.groupedHistory.keys.toList()[index];
+                        List<HistoryModel> transactions =
+                            userController.groupedHistory[yearMonth]!;
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -90,35 +93,46 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 final data = transactions[subIndex];
                                 return InkWell(
                                   onTap: () {
-                                    userController.fetchHistoryDetail(data.tranID);
+                                    userController
+                                        .fetchHistoryDetail(data.tranID);
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                                    margin: const EdgeInsets.symmetric(vertical: 5),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 10),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 5),
                                     decoration: BoxDecoration(
                                       color: color_f4f4,
-                                      border: Border.all(color: color_f4f4, width: 1),
+                                      border: Border.all(
+                                          color: color_f4f4, width: 1),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Column(
                                       children: [
                                         buildDetail(data),
                                         Row(
-                                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.baseline,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
                                           textBaseline: TextBaseline.alphabetic,
                                           children: [
                                             TextFont(
-                                              text: '${data.type == 'OUT' ? '-' : '+'}${fn.format(double.parse('${data.amount}'))}',
+                                              text:
+                                                  '${data.type == 'OUT' ? '-' : '+'}${fn.format(double.parse('${data.amount}'))}',
                                               fontWeight: FontWeight.w500,
                                               fontSize: 16,
-                                              color: data.type == 'OUT' ? cr_b326 : Colors.green,
+                                              color: data.type == 'OUT'
+                                                  ? cr_b326
+                                                  : Colors.green,
                                               poppin: true,
                                             ),
                                             TextFont(
                                               text: '.00LAK',
                                               fontWeight: FontWeight.w500,
-                                              color: data.type == 'OUT' ? cr_b326 : Colors.green,
+                                              color: data.type == 'OUT'
+                                                  ? cr_b326
+                                                  : Colors.green,
                                               poppin: true,
                                             ),
                                           ],
@@ -157,10 +171,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFont(text: data.channel ?? '', fontSize: 14),
-              TextFont(text: data.tranID ?? '', poppin: true, fontSize: 10, color: color_777),
-              if (data.remark != null) TextFont(text: data.remark ?? '', poppin: true, color: color_777, fontSize: 10),
               TextFont(
-                text: DateFormat('dd MMM, yyyy HH:mm').format(DateTime.parse(data.created!)) ?? '',
+                  text: data.tranID ?? '',
+                  poppin: true,
+                  fontSize: 10,
+                  color: color_777),
+              if (data.remark != null)
+                TextFont(
+                    text: data.remark ?? '',
+                    poppin: true,
+                    color: color_777,
+                    fontSize: 10),
+              TextFont(
+                text: DateFormat('dd MMM, yyyy HH:mm')
+                        .format(DateTime.parse(data.created!)) ??
+                    '',
                 poppin: true,
                 color: color_777,
                 fontSize: 10,
@@ -177,7 +202,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
       case 'Mobile':
         return SvgPicture.asset(MyIcon.ic_telecom);
       case 'Transfer':
-        return SvgPicture.asset(data.type == "OUT" ? MyIcon.ic_cashout : MyIcon.ic_cashout);
+        return SvgPicture.asset(
+            data.type == "OUT" ? MyIcon.ic_cashout : MyIcon.ic_cashout);
       case 'QR':
         return SvgPicture.asset(MyIcon.ic_cashout);
       case 'Leasing':

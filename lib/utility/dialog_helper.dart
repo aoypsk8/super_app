@@ -333,45 +333,48 @@ class DialogHelper {
     Function()? onClose,
   }) {
     Get.dialog(
-      WillPopScope(
-        onWillPop: () async => false,
-        child: GestureDetector(
-          onTap: () {
-            if (onClose != null) {
-              onClose();
-              Get.back();
-              hide();
-            } else {
-              Get.until((route) => route.isFirst);
-              Get.back();
-              hide();
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50),
-            child: Dialog(
-              surfaceTintColor: color_fff,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              child: Padding(
-                padding: const EdgeInsets.all(0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40.0, vertical: 15),
-                      child: Image.asset(MyIcon.ic_mascot_good),
-                    ),
-                    SizedBox(height: 10),
-                    TextFont(
-                      text: title,
-                      fontWeight: FontWeight.w400,
-                      color: cr_2929,
-                      fontSize: 11,
-                    ),
-                    const SizedBox(height: 20),
-                  ],
+      Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: WillPopScope(
+          onWillPop: () async => false,
+          child: GestureDetector(
+            onTap: () {
+              if (onClose != null) {
+                onClose();
+                Get.back();
+                hide();
+              } else {
+                Get.until((route) => route.isFirst);
+                Get.back();
+                hide();
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Dialog(
+                surfaceTintColor: color_fff,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40.0, vertical: 15),
+                        child: Image.asset(MyIcon.ic_mascot_good),
+                      ),
+                      SizedBox(height: 10),
+                      TextFont(
+                        text: title,
+                        fontWeight: FontWeight.w400,
+                        color: cr_2929,
+                        fontSize: 12,
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
               ),
             ),

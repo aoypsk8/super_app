@@ -133,8 +133,6 @@ class _ListsBorrowingState extends State<ListsBorrowing> {
                                                         vertical: 2.0),
                                                 child: CardWidget(
                                                   packagename: data.packagename,
-                                                  logo: MyConstant
-                                                      .profile_default,
                                                   code: data.code,
                                                   amount:
                                                       data.amount.toString(),
@@ -166,7 +164,6 @@ class _ListsBorrowingState extends State<ListsBorrowing> {
 class CardWidget extends StatelessWidget {
   final String packagename;
   final String code;
-  final String logo;
   final String amount;
   final String type;
   final String detail;
@@ -175,7 +172,6 @@ class CardWidget extends StatelessWidget {
     required this.packagename,
     required this.code,
     required this.amount,
-    required this.logo,
     required this.type,
     required this.detail,
   });
@@ -223,16 +219,11 @@ class CardWidget extends StatelessWidget {
                               ClipRRect(
                                 borderRadius:
                                     BorderRadius.circular(50), // Makes it round
-                                child: CachedNetworkImage(
-                                  imageUrl: logo, // Uses your provided logo URL
+                                child: Image.asset(
+                                  "assets/icons/ltc_logo.png", // Using asset image
                                   width: 30, // Adjust size as needed
                                   height: 30,
                                   fit: BoxFit.cover,
-                                  placeholder: (context, url) =>
-                                      CircularProgressIndicator(), // Placeholder while loading
-                                  errorWidget: (context, url, error) => Icon(
-                                      Icons.error,
-                                      color: Colors.white), // Error icon
                                 ),
                               ),
                             ],

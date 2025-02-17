@@ -9,7 +9,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/models/appinfo_model.dart';
 import 'package:super_app/models/balance_model.dart';
-import 'package:super_app/models/model-history/history_detail_model.dart';
+import 'package:super_app/models/history_detail_model.dart';
+import 'package:super_app/models/history_model.dart';
 import 'package:super_app/models/user_profile_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/utility/dialog_helper.dart';
@@ -17,8 +18,6 @@ import 'package:super_app/utility/myconstant.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:super_app/views/reusable_template/reusable_result.dart';
-
-import '../models/model-history/history_model.dart';
 
 class UserController extends GetxController with WidgetsBindingObserver {
   final storage = GetStorage();

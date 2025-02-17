@@ -14,8 +14,6 @@ import 'package:super_app/utility/myIcon.dart';
 import 'package:super_app/views/settings/account_profile.dart';
 import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/widget/buildAppBar.dart';
-import 'package:super_app/widget/buildBottomAppbar.dart';
-import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -36,8 +34,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool isHidden = true;
   String maskPhoneNumber(String number) {
     if (number.length >= 7) {
-      return number.replaceRange(
-          3, 7, '****'); // Replace characters 4-7 with ****
+      return number.replaceRange(3, 7, '****'); // Replace characters 4-7 with ****
     }
     return number; // If length is less than 7, return as is
   }
@@ -47,28 +44,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       backgroundColor: color_fff,
       appBar: BuildAppBar(title: 'setting'),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            buildHeader(context),
-            SizedBox(height: 15.sp),
-            buildConfig(),
-            SizedBox(height: 10.sp),
-            buildInfomation(),
-            SizedBox(height: 5.h),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                width: 50.w,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                decoration: BoxDecoration(
-                    color: color_f4f4, borderRadius: BorderRadius.circular(20)),
-                child: TextFont(text: 'logout', textAlign: TextAlign.center),
+      body: Obx(
+        () => SingleChildScrollView(
+          child: Column(
+            children: [
+              buildHeader(context),
+              SizedBox(height: 15.sp),
+              buildConfig(),
+              SizedBox(height: 10.sp),
+              buildInfomation(),
+              SizedBox(height: 5.h),
+              InkWell(
+                onTap: () {},
+                child: Container(
+                  width: 50.w,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  decoration: BoxDecoration(color: color_f4f4, borderRadius: BorderRadius.circular(20)),
+                  child: TextFont(text: 'logout', textAlign: TextAlign.center),
+                ),
               ),
-            ),
-            SizedBox(height: 5.h),
-          ],
+              SizedBox(height: 5.h),
+            ],
+          ),
         ),
       ),
     );
@@ -87,15 +84,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     width: 50.sp,
                     height: 50.sp,
                     child: CircleAvatar(
-                      backgroundImage: CachedNetworkImageProvider(
-                          userController.userProfilemodel.value.profileImg ??
-                              ''),
-                      backgroundColor: Colors
-                          .transparent, // Optional: Set a background color
+                      backgroundImage: CachedNetworkImageProvider(userController.userProfilemodel.value.profileImg ?? ''),
+                      backgroundColor: Colors.transparent, // Optional: Set a background color
                     ),
                   ),
-                  SizedBox(
-                      width: 8), // Optional spacing between image and column
+                  SizedBox(width: 8), // Optional spacing between image and column
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,12 +104,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         Row(
                           children: [
                             TextFont(
-                              text: isHidden
-                                  ? maskPhoneNumber(userController
-                                          .userProfilemodel.value.msisdn ??
-                                      '2055555555')
-                                  : userController
-                                      .userProfilemodel.value.msisdn!,
+                              text: isHidden ? maskPhoneNumber(userController.userProfilemodel.value.msisdn ?? '2055555555') : userController.userProfilemodel.value.msisdn!,
                               poppin: true,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -137,33 +125,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ],
                         ),
                         Container(
-                          decoration: BoxDecoration(
-                              color: color_f4f4,
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(color: color_f4f4, borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              userController.userProfilemodel.value.verify ==
-                                      "Approved"
+                              userController.userProfilemodel.value.verify == "Approved"
                                   ? SvgPicture.asset(MyIconOld.ic_check_circle)
                                   : SvgPicture.asset(
                                       MyIconOld.ic_info,
-                                      color: userController.userProfilemodel
-                                                  .value.verify ==
-                                              "UnApproved"
-                                          ? color_primary_light
-                                          : Colors.grey,
+                                      color: userController.userProfilemodel.value.verify == "UnApproved" ? color_primary_light : Colors.grey,
                                     ),
                               SizedBox(width: 5),
                               TextFont(
-                                text: userController
-                                            .userProfilemodel.value.verify ==
-                                        'Pending'
-                                    ? '...Watting'
-                                    : userController
-                                        .userProfilemodel.value.verify!,
+                                text: userController.userProfilemodel.value.verify == 'Pending' ? '...Watting' : userController.userProfilemodel.value.verify!,
                                 fontSize: 10,
                                 poppin: true,
                               ),
@@ -177,11 +152,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ],
               ),
               Container(
-                decoration: BoxDecoration(
-                    color: color_primary_light,
-                    borderRadius: BorderRadius.circular(10)),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                decoration: BoxDecoration(color: color_primary_light, borderRadius: BorderRadius.circular(10)),
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                 child: Row(
                   children: [
                     Expanded(
@@ -210,10 +182,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
-                  BoxShadow(
-                      color: color_2929.withOpacity(0.1),
-                      blurRadius: 10,
-                      spreadRadius: 5),
+                  BoxShadow(color: color_2929.withOpacity(0.1), blurRadius: 10, spreadRadius: 5),
                 ],
               ),
               child: Column(
@@ -221,11 +190,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   Image.asset('assets/images/cart_gift.png', width: 25.w),
                   Container(
-                    decoration: BoxDecoration(
-                        color: color_fff,
-                        borderRadius: BorderRadius.circular(50)),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(color: color_fff, borderRadius: BorderRadius.circular(50)),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: TextFont(
                       text: 'ກົດຊວນໝູ່&ຮັບລາງວັນ',
                       fontSize: 10,
@@ -246,8 +212,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       margin: const EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-          color: color_f4f4, borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(color: color_f4f4, borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
           Padding(
@@ -305,8 +270,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     TextFont(text: "change_theme"),
                     Spacer(),
-                    Icon(Icons.arrow_forward_ios,
-                        color: color_7070, size: 15.sp),
+                    Icon(Icons.arrow_forward_ios, color: color_7070, size: 15.sp),
                   ],
                 ),
               ),
@@ -321,8 +285,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       margin: const EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-          color: color_f4f4, borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(color: color_f4f4, borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
           Padding(
@@ -355,8 +318,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           Divider(color: color_ecec),
-          userController.userProfilemodel.value.verify == "Approved" ||
-                  userController.userProfilemodel.value.verify == "Pending"
+          userController.userProfilemodel.value.verify == "Approved" || userController.userProfilemodel.value.verify == "Pending"
               ? SizedBox.shrink()
               : Column(
                   children: [
@@ -370,8 +332,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           children: [
                             TextFont(text: "verify_account"),
                             Spacer(),
-                            Icon(Icons.arrow_forward_ios,
-                                color: color_7070, size: 15.sp),
+                            Icon(Icons.arrow_forward_ios, color: color_7070, size: 15.sp),
                           ],
                         ),
                       ),
@@ -408,8 +369,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   });
                 },
               ),
-              TextFont(
-                  text: box.read('save_screenshot') ?? false ? "on" : "off"),
+              TextFont(text: box.read('save_screenshot') ?? false ? "on" : "off"),
             ],
           ),
         ],
@@ -419,15 +379,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _showLanguageDialog(BuildContext context) {
     final languageService = Get.find<LanguageService>();
+
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent, // Transparent background
+      isScrollControlled: true, // Allows bottom sheet to be flexible
+      backgroundColor: Colors.transparent, // Make the background transparent
       builder: (context) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(16),
               topRight: Radius.circular(16),
@@ -437,55 +398,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: Get.width / 7,
-                    height: 5,
-                    decoration: BoxDecoration(
-                        color: cr_ecec,
-                        borderRadius: BorderRadius.circular(20)),
-                  ),
-                ],
+              TextFont(
+                text: 'Select Language',
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: cr_7070,
+                poppin: true,
               ),
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextFont(
-                    text: 'Select Language',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: cr_7070,
-                    poppin: true,
-                  ),
-                  SizedBox(height: 16),
-                  GestureDetector(
-                    onTap: () => Get.back(),
-                    child: Icon(Icons.close, color: Colors.black54),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              Divider(color: color_ecec),
+              SizedBox(height: 16),
               _buildLanguageOption(context, 'English', 'en', languageService),
-              _buildLanguageOption(context, 'ລາວ', 'lo', languageService),
+              _buildLanguageOption(context, 'Lao', 'lo', languageService),
               _buildLanguageOption(context, 'Chinese', 'zh', languageService),
-              _buildLanguageOption(
-                  context, 'Vietnamese', 'vi', languageService),
-              SizedBox(height: 20),
-              SizedBox(
-                width: Get.width,
-                child: buildBottomAppbar(
-                  paddingbottom: 0,
-                  bgColor: Theme.of(context).primaryColor,
-                  title: 'save',
-                  func: () {
-                    Get.back();
-                  },
-                ),
-              ),
+              _buildLanguageOption(context, 'Vietnamese', 'vi', languageService),
+              SizedBox(height: 5.h),
             ],
           ),
         );
@@ -493,61 +418,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildLanguageOption(BuildContext context, String languageName,
-      String languageCode, LanguageService languageService) {
-    bool isSelected = languageService.locale.languageCode == languageCode;
-
-    return GestureDetector(
+  Widget _buildLanguageOption(BuildContext context, String languageName, String languageCode, LanguageService languageService) {
+    return ListTile(
+      title: TextFont(
+        text: languageName,
+        color: cr_7070, // Follow theme color
+      ),
+      trailing: languageService.locale.languageCode == languageCode ? Icon(Icons.check, color: Theme.of(context).primaryColor) : null, // Show check mark for the active language
       onTap: () {
         languageService.changeLanguage(languageCode);
-        Get.back();
+        Get.back(); // Close the bottom sheet after selecting a language
       },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 6),
-        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-        decoration: BoxDecoration(
-          color: color_f4f4,
-          border: isSelected
-              ? Border.all(color: cr_ef33)
-              : Border.all(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            languageCode == 'en'
-                ? SvgPicture.asset(
-                    MyIcon.flat_usa,
-                    width: 7.w,
-                    height: 7.w,
-                  )
-                : languageCode == 'lo'
-                    ? SvgPicture.asset(
-                        MyIcon.flat_lao,
-                        width: 7.w,
-                        height: 7.w,
-                      )
-                    : languageCode == 'zh'
-                        ? SvgPicture.asset(
-                            MyIcon.flat_ch,
-                            width: 7.w,
-                            height: 7.w,
-                          )
-                        : SvgPicture.asset(
-                            MyIcon.flat_vietnames,
-                            width: 7.w,
-                            height: 7.w,
-                          ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                languageName,
-                style: TextStyle(fontSize: 16, color: Colors.black87),
-              ),
-            ),
-            if (isSelected) Icon(Icons.check, color: cr_ef33),
-          ],
-        ),
-      ),
     );
   }
 }

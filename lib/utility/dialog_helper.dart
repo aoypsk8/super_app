@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/myIcon.dart';
@@ -332,45 +333,48 @@ class DialogHelper {
     Function()? onClose,
   }) {
     Get.dialog(
-      WillPopScope(
-        onWillPop: () async => false,
-        child: GestureDetector(
-          onTap: () {
-            if (onClose != null) {
-              onClose();
-              Get.back();
-              hide();
-            } else {
-              Get.until((route) => route.isFirst);
-              Get.back();
-              hide();
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50),
-            child: Dialog(
-              surfaceTintColor: color_fff,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              child: Padding(
-                padding: const EdgeInsets.all(0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40.0, vertical: 15),
-                      child: Image.asset(MyIcon.ic_mascot_good),
-                    ),
-                    SizedBox(height: 10),
-                    TextFont(
-                      text: title,
-                      fontWeight: FontWeight.w400,
-                      color: cr_2929,
-                      fontSize: 11,
-                    ),
-                    const SizedBox(height: 20),
-                  ],
+      Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: WillPopScope(
+          onWillPop: () async => false,
+          child: GestureDetector(
+            onTap: () {
+              if (onClose != null) {
+                onClose();
+                Get.back();
+                hide();
+              } else {
+                Get.until((route) => route.isFirst);
+                Get.back();
+                hide();
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Dialog(
+                surfaceTintColor: color_fff,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40.0, vertical: 15),
+                        child: Image.asset(MyIcon.ic_mascot_good),
+                      ),
+                      SizedBox(height: 10),
+                      TextFont(
+                        text: title,
+                        fontWeight: FontWeight.w400,
+                        color: cr_2929,
+                        fontSize: 12,
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -510,6 +514,99 @@ class DialogHelper {
                   size: 40,
                 ),
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static void showBorrowPopup({
+    required String borrow,
+    required String amount,
+    String okTitle = 'confirm',
+    Function()? onConfirm,
+  }) {
+    Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false, // Prevent back button closing
+        child: GestureDetector(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50),
+            child: Dialog(
+              surfaceTintColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Stack(
+                      children: [
+                        // Center the image
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 20), // Adjust padding if needed
+                            child: Image.asset(
+                              'assets/icons/problem.png',
+                              height: 120,
+                            ),
+                          ),
+                        ),
+
+                        // Close Button on Top-Right
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: IconButton(
+                            icon: Icon(Icons.close,
+                                color: Colors.black54, size: 24),
+                            onPressed: () {
+                              Get.back();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    TextFont(
+                      text: "$borrow?",
+                      fontSize: 10.sp,
+                    ),
+                    const SizedBox(height: 5),
+                    TextFont(
+                      text: amount,
+                      color: color_7070,
+                    ),
+                    const SizedBox(height: 15),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFF15244),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 10),
+                      ),
+                      onPressed: () {
+                        Get.back(); // Close the dialog
+                        if (onConfirm != null) {
+                          onConfirm(); // Trigger function if provided
+                        }
+                      },
+                      child: TextFont(
+                        text: okTitle,
+                        color: color_fff,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 8.sp,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

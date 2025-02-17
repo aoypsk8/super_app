@@ -154,7 +154,8 @@ class _ConfirmTempBScreenState extends State<ConfirmTempBScreen> {
                     padding: const EdgeInsets.all(12.0),
                     child: buildUserDetail(
                       profile:
-                          "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
+                          userController.userProfilemodel.value.profileImg ??
+                              MyConstant.profile_default,
                       from: true,
                       msisdn: storage.read('msisdn'),
                       name: userController.profileName.value,
@@ -168,7 +169,7 @@ class _ConfirmTempBScreenState extends State<ConfirmTempBScreen> {
                       profile: controller.tempBdetail.value.logo ?? '',
                       from: false,
                       msisdn: controller.rxAccNo.value,
-                      name: controller.tempBdetail.value.nameEn!,
+                      name: controller.tempBdetail.value.nameCode!,
                     ),
                   ),
                 ],

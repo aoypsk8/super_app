@@ -10,6 +10,7 @@ import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/models/appinfo_model.dart';
 import 'package:super_app/models/balance_model.dart';
 import 'package:super_app/models/history_detail_model.dart';
+import 'package:super_app/models/history_model.dart';
 import 'package:super_app/models/user_profile_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/utility/dialog_helper.dart';
@@ -17,8 +18,6 @@ import 'package:super_app/utility/myconstant.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:super_app/views/reusable_template/reusable_result.dart';
-
-import '../models/history_model.dart';
 
 class UserController extends GetxController with WidgetsBindingObserver {
   final storage = GetStorage();
@@ -46,7 +45,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
   RxBool isCheckToken = false.obs;
 
   //auth
-  RxString rxMsisdn = '2052768833'.obs;
+  RxString rxMsisdn = '2054034422'.obs;
 
   RxString rxLat = ''.obs;
   RxString rxLong = ''.obs;
@@ -74,10 +73,10 @@ class UserController extends GetxController with WidgetsBindingObserver {
   @override
   void onReady() async {
     super.onReady();
-    String wallet = '2052768833';
+    String wallet = '2054034422';
     storage.write('msisdn', wallet);
     rxMsisdn.value = storage.read('msisdn');
-    await loginpincode(wallet, '555555');
+    await loginpincode(wallet, '357159');
     await fetchBalance();
     await queryUserProfile();
   }

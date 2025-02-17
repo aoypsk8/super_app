@@ -34,7 +34,7 @@ class _VerifyAccountTempBState extends State<VerifyAccountTempB> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BuildAppBar(title: 'Digital TV'),
+      appBar: BuildAppBar(title: homeController.getMenuTitle()),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         behavior: HitTestBehavior.opaque,
@@ -97,7 +97,7 @@ class _VerifyAccountTempBState extends State<VerifyAccountTempB> {
                                             selectedIndex =
                                                 index; // Set the selected index
                                             accountNumber.text = account
-                                                    .accNo ??
+                                                    .serviceNumber ??
                                                 ''; // Set the account number in the text field
                                           });
                                         },
@@ -154,7 +154,8 @@ class _VerifyAccountTempBState extends State<VerifyAccountTempB> {
                                                   ),
                                                   TextFont(
                                                     text:
-                                                        account.accNo ?? "N/A",
+                                                        account.serviceNumber ??
+                                                            "N/A",
                                                     poppin: true,
                                                     color: color_777,
                                                   ),

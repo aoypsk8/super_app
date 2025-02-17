@@ -506,10 +506,10 @@ class _TransferScreenState extends State<TransferScreen> {
       DialogHelper.showErrorDialogNew(
           description: 'Can\'t transfer to same Wallet Account.');
     } else {
-      transferController.loading.value = true;
       transferController.vertifyWallet(
           toWallet, paymentAmount.toString(), note);
     }
+    transferController.loading.value = false;
   }
 }
 

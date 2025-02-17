@@ -1,16 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/controllers/wetv_controller.dart';
-import 'package:super_app/services/helper/random.dart';
+import 'package:super_app/models/wetv_model.dart';
 import 'package:super_app/utility/color.dart';
-import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/views/weTV/confirm_weTV.dart';
@@ -65,76 +63,26 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                          childAspectRatio: 1.1,
-                        ),
+                      child: AlignedGridView.count(
                         itemCount: weTVController.wetvlist.length,
-                        itemBuilder: (context, index) {
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
                           final e = weTVController.wetvlist[index];
-                          return InkWell(
-                            onTap: () async {
-                              weTVController.wetvdetail.value = e;
-                              if (userController.mainBalance.value >=
-                                  weTVController.wetvdetail.value.price!) {
-                                weTVController.rxTransID.value = homeController
-                                        .menudetail.value.description
-                                        .toString() +
-                                    await randomNumber().fucRandomNumber();
-                                Get.to(
-                                  ListsPaymentScreen(
-                                    description: 'select_payment',
-                                    stepBuild: '2/3',
-                                    title: homeController.getMenuTitle(),
-                                    onSelectedPayment: () {
-                                      Get.to(() => const ConfirmWeTVScreen());
-                                      return Container();
-                                    },
-                                  ),
-                                );
-                              } else {
-                                DialogHelper.showErrorDialogNew(
-                                    description: 'Your balance not enough.');
-                              }
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
-                                    blurRadius: 8,
-                                    offset: Offset(0, 1),
-                                  )
-                                ],
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.network(
-                                    e.logo!,
-                                    width: 15.w,
-                                    height: 15.w,
-                                  ),
-                                  SizedBox(height: 12),
-                                  TextFont(
-                                    text: 'ແພັກເກັດ ${e.day} ມື້',
-                                    fontSize: 12,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(height: 8),
-                                  TextFont(
-                                    text: '${fn.format(e.price)} LAK',
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ],
+                          return AnimationConfiguration.staggeredGrid(
+                            position: index,
+                            duration: const Duration(milliseconds: 800),
+                            columnCount: 2,
+                            child: ScaleAnimation(
+                              scale: 0.5,
+                              child: FadeInAnimation(
+                                child: buildWeTvCard(
+                                  weTVController: weTVController,
+                                  e: e,
+                                  homeController: homeController,
+                                ),
                               ),
                             ),
                           );
@@ -191,8 +139,9 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                                     CircleAvatar(
                                       backgroundColor:
                                           Colors.red.withOpacity(0.1),
-                                      backgroundImage: NetworkImage(
-                                        "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
+                                      child: Icon(
+                                        Icons.money,
+                                        color: Colors.red,
                                       ),
                                     ),
                                     SizedBox(width: 12),
@@ -203,7 +152,7 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                                         children: [
                                           TextFont(
                                             text:
-                                                'Lao Mobile Money Sole Company',
+                                                'Lao Mobile Money Sole Company...',
                                             fontSize: 12,
                                           ),
                                           SizedBox(height: 4),
@@ -247,5 +196,72 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
             ],
           ),
         ));
+  }
+}
+
+class buildWeTvCard extends StatelessWidget {
+  const buildWeTvCard({
+    super.key,
+    required this.weTVController,
+    required this.e,
+    required this.homeController,
+  });
+
+  final WeTVController weTVController;
+  final WeTvList e;
+  final HomeController homeController;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        weTVController.wetvdetail.value = e;
+        Get.to(ListsPaymentScreen(
+          description: 'select_payment',
+          stepBuild: '2/3',
+          title: homeController.getMenuTitle(),
+          onSelectedPayment: () {
+            Get.to(() => ConfirmWeTVScreen());
+            return Container();
+          },
+        ));
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: Offset(0, 1),
+            )
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.network(
+              e.logo!,
+              width: 15.w,
+              height: 15.w,
+            ),
+            SizedBox(height: 12),
+            TextFont(
+              text: 'ແພັກເກັດ ${e.day} ມື້',
+              fontSize: 12,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 8),
+            TextFont(
+              text: '${fn.format(e.price)} LAK',
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

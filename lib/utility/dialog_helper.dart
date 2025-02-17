@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -616,6 +616,140 @@ class DialogHelper {
 
   static void hide() {
     if (Get.isDialogOpen!) Get.back();
+  }
+
+  static void showDialogPolicy(
+      {String title = 'Policy',
+      String description = 'Policy Description.',
+      Function()? onClose,
+      bool isChecked = false}) {
+    Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false,
+        child: Dialog(
+          surfaceTintColor: color_fff,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: SingleChildScrollView(
+            child: _PolicyDialogContent(
+              title: title,
+              description: description,
+              isChecked: isChecked,
+              onClose: onClose,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PolicyDialogContent extends StatefulWidget {
+  final String title;
+  final String description;
+  final bool isChecked;
+  final Function()? onClose;
+
+  const _PolicyDialogContent({
+    required this.title,
+    required this.description,
+    required this.isChecked,
+    this.onClose,
+  });
+
+  @override
+  __PolicyDialogContentState createState() => __PolicyDialogContentState();
+}
+
+class __PolicyDialogContentState extends State<_PolicyDialogContent> {
+  late bool isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    isChecked = widget.isChecked;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextFont(
+                    fontSize: 16,
+                    text: widget.title,
+                    fontWeight: FontWeight.w500,
+                    color: cr_090a,
+                  ),
+                  InkWell(
+                    onTap: () => Get.back(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: SvgPicture.asset(
+                        MyIcon.ic_deleteX,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              TextFont(
+                fontSize: 12,
+                maxLines: 100,
+                text: widget.description,
+                fontWeight: FontWeight.w300,
+                color: color_777,
+              ),
+            ],
+          ),
+        ),
+        Row(
+          children: [
+            Checkbox(
+              value: isChecked,
+              onChanged: (value) {
+                setState(() {
+                  isChecked = value ?? false;
+                });
+              },
+            ),
+            Expanded(
+              child: TextFont(
+                fontSize: 12,
+                text: "ຂ້ອຍໄດ້ອ່ານນະໂຍບາຍ ແລະ ຍອມຮັບ",
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          width: Get.width,
+          child: buildBottomAppbar(
+            bgColor: isChecked ? cr_ef33 : Colors.grey,
+            title: 'next',
+            func: () {
+              if (isChecked) {
+                if (widget.onClose != null) {
+                  widget.onClose!();
+                }
+              } else {
+                Get.snackbar(
+                  'Error',
+                  'Please accept the policy to proceed.',
+                  backgroundColor: cr_ef33,
+                  colorText: Colors.white,
+                );
+              }
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
 

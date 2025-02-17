@@ -83,25 +83,23 @@ class _ListsTicketScreenState extends State<ListsTicketScreen> {
               ),
               const SizedBox(height: 10),
               Expanded(
-                child: AnimationLimiter(
-                  child: AlignedGridView.count(
-                    itemCount: ticketController.ticketLists.length,
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 15,
-                    crossAxisSpacing: 16,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return AnimationConfiguration.staggeredGrid(
-                        position: index,
-                        duration: const Duration(milliseconds: 800),
-                        columnCount: 2,
-                        child: ScaleAnimation(
-                          scale: 0.5,
-                          child: FadeInAnimation(child: buildTicket(index)),
-                        ),
-                      );
-                    },
-                  ),
+                child: AlignedGridView.count(
+                  itemCount: ticketController.ticketLists.length,
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 16,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return AnimationConfiguration.staggeredGrid(
+                      position: index,
+                      duration: const Duration(milliseconds: 800),
+                      columnCount: 2,
+                      child: ScaleAnimation(
+                        scale: 0.5,
+                        child: FadeInAnimation(child: buildTicket(index)),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

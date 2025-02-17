@@ -105,43 +105,40 @@ class _ListsBorrowingState extends State<ListsBorrowing> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    ...provider.data
-                                        .map((data) => GestureDetector(
-                                              onTap: () {
-                                                DialogHelper.showBorrowPopup(
-                                                  borrow: data.type == 'airtime'
-                                                      ? "ຢືມມູນຄ່າໂທ"
-                                                      : "ຢືມເນັດ",
-                                                  amount: data.type == 'airtime'
-                                                      ? "${fn.format(int.parse(data.amount.replaceAll(RegExp(r'[^0-9]'), '')))} LAK"
-                                                      : "${data.amount}GB",
-                                                  onConfirm: () {
-                                                    // Store provider path in rxPathUrl
-                                                    borrowingController
-                                                        .rxPathUrl
-                                                        .value = provider.path;
+                                    ...provider.data.map(
+                                      (data) => GestureDetector(
+                                        onTap: () {
+                                          DialogHelper.showBorrowPopup(
+                                            borrow: data.type == 'airtime'
+                                                ? "ຢືມມູນຄ່າໂທ"
+                                                : "ຢືມເນັດ",
+                                            amount: data.type == 'airtime'
+                                                ? "${fn.format(int.parse(data.amount.replaceAll(RegExp(r'[^0-9]'), '')))} LAK"
+                                                : "${data.amount}GB",
+                                            onConfirm: () {
+                                              // Store provider path in rxPathUrl
+                                              borrowingController.rxPathUrl
+                                                  .value = provider.path;
 
-                                                    // Call borrowing process
-                                                    borrowingController
-                                                        .borrowingProcess();
-                                                  },
-                                                );
-                                              },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 2.0),
-                                                child: CardWidget(
-                                                  packagename: data.packagename,
-                                                  code: data.code,
-                                                  amount:
-                                                      data.amount.toString(),
-                                                  type: data.type,
-                                                  detail: data.detail,
-                                                ),
-                                              ),
-                                            ))
-                                        .toList(),
+                                              // Call borrowing process
+                                              borrowingController
+                                                  .borrowingProcess();
+                                            },
+                                          );
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 2.0),
+                                          child: CardWidget(
+                                            packagename: data.packagename,
+                                            code: data.code,
+                                            amount: data.amount.toString(),
+                                            type: data.type,
+                                            detail: data.detail,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),

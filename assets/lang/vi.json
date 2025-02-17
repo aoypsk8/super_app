@@ -299,5 +299,7 @@
   "TermsPolicy":"Terms and Conditions of Use and Privacy Notice",
   "welcome_first_screen":"Welcome, ",
   "price":"Price",
-  "transfer_laoQR":"Transfer LaoQR"
+  "transfer_laoQR":"Transfer LaoQR",
+  "select_package":"Select Package",
+   "select_payment":"Select Payment"
 }

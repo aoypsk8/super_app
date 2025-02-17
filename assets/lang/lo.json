@@ -309,6 +309,8 @@
   "TermsPolicy":"Terms and Conditions of Use and Privacy Notice",
   "welcome_first_screen":"ຍິນດີຕ້ອນຮັບ, ",
   "price":"ລາຄາ",
-  "transfer_laoQR":"ປ້ອນລາຍການໂອນ"
+  "transfer_laoQR":"ປ້ອນລາຍການໂອນ",
+  "select_package":"ເລືອກແພັດເກດ",
+  "select_payment":"ເລືອກບັນຊີ"
 
 }

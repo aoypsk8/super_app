@@ -58,7 +58,7 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                       padding: const EdgeInsets.all(10),
                       child: buildStepProcess(
                         title: '1/3',
-                        desc: 'select package',
+                        desc: 'select_package',
                       ),
                     ),
                     Padding(

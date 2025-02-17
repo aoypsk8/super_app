@@ -422,7 +422,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent, // Transparent background
+      backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -539,9 +539,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
             SizedBox(width: 10),
             Expanded(
-              child: Text(
-                languageName,
-                style: TextStyle(fontSize: 16, color: Colors.black87),
+              child: TextFont(
+                text: languageName,
+                fontWeight: FontWeight.w400,
+                fontSize: 12,
+                color: cr_2929,
+                noto: languageCode == 'lo' ? true : false,
               ),
             ),
             if (isSelected) Icon(Icons.check, color: cr_ef33),

@@ -372,7 +372,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
     };
     var url = '${MyConstant.urlUser}/requpdate';
     await DioClient.postEncrypt(loading: false, url, dataUpdate, key: 'lmm');
-    queryUserProfile();
+    await queryUserProfile();
     // DialogHelper.showSuccess();
     Get.back();
   }

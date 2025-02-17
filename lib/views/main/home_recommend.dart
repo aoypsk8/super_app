@@ -21,6 +21,7 @@ import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/scanqr/qr_scanner.dart';
 import 'package:super_app/views/web/openWebView.dart';
+import 'package:super_app/widget/button.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/pull_refresh.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -411,6 +412,12 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                           ),
                         ),
                       ),
+                      PrimaryButton(
+                          title: 'XJaidee',
+                          onPressed: () {
+                            Get.toNamed('/xjaidee');
+                          }),
+                      const SizedBox(height: 20),
                       Container(
                         color: color_fff,
                         width: Get.width,

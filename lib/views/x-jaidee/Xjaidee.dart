@@ -3,6 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/views/x-jaidee/input_amountScreen.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 import 'package:intl/intl.dart';
@@ -65,7 +67,7 @@ class _XJaideeState extends State<XJaidee> {
                           size: 15.sp,
                         ),
                         onPressed: () {
-                          Get.back(); // Navigate back
+                          Get.back();
                         },
                       ),
                       TextFont(
@@ -100,7 +102,14 @@ class _XJaideeState extends State<XJaidee> {
                           buildButton(
                             icon: MyIcon.ic_load_xjaidee,
                             ontap: () {
-                              print("object");
+                              DialogHelper.showDialogPolicy(
+                                title: "Policyy",
+                                description:
+                                    "1. Registration is required to register through the mobile phone number of the customer who registered in accordance with the rules to open an M-Money wallet account, which has to be active and reachable. Users can register to use:  • Register and fill in the information, KYC manually according to the methods and procedures set by the company in this service.  2. After the registration is completed, the user must set a secure personal password according to the company's instructions, which is a 6-digit number, then wait for confirmation from the system to start using the service.Using M-Money Wallet Services  1. Top Up Wallet  Users of M-Money Wallet can top-up their wallet at: (1) the LTC Service Center, (2) the participating Banks.",
+                                onClose: () {
+                                  Get.to(() => InputAmountXJaideeScreen());
+                                },
+                              );
                             },
                             title: 'ຢືມສິນເຊື່ອ',
                           ),
@@ -233,7 +242,7 @@ class buildHistoryLoad extends StatelessWidget {
 class buildButton extends StatelessWidget {
   final String title;
   final String icon;
-  final Function ontap;
+  final VoidCallback ontap;
 
   const buildButton({
     super.key,
@@ -245,7 +254,7 @@ class buildButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: ontap(),
+      onTap: ontap,
       child: Column(
         children: [
           Container(

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -46,7 +47,7 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
     final WeTVController weTVController = Get.find();
     return Obx(() => Scaffold(
           backgroundColor: cr_fbf7,
-          appBar: BuildAppBar(title: 'ຈ່າຍຄ່າ WeTV'),
+          appBar: BuildAppBar(title: homeController.getMenuTitle()),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -104,7 +105,7 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: TextFont(
-                          text: 'ລາຍການລ່າສຸດ',
+                          text: 'history',
                           fontSize: 14,
                         ),
                       ),
@@ -115,77 +116,106 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                           itemCount: weTVController.wetvhistory.length,
                           itemBuilder: (context, index) {
                             final e = weTVController.wetvhistory[index];
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              child: Container(
-                                padding: EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade200,
-                                  borderRadius: BorderRadius.circular(12),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.08),
-                                      spreadRadius: 1,
-                                      blurRadius: 8,
-                                      offset: Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor:
-                                          Colors.red.withOpacity(0.1),
-                                      child: Icon(
-                                        Icons.money,
-                                        color: Colors.red,
+
+                            return AnimationConfiguration.staggeredList(
+                                position: index,
+                                duration: const Duration(milliseconds: 550),
+                                child: SlideAnimation(
+                                  verticalOffset:
+                                      50, // Slightly increased for a better effect
+                                  child: FlipAnimation(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Clipboard.setData(
+                                            ClipboardData(text: e.code!));
+                                        Get.snackbar(
+                                          'Copied!',
+                                          'Code copied to clipboard',
+                                          snackPosition: SnackPosition.BOTTOM,
+                                          backgroundColor:
+                                              cr_b326.withOpacity(0.1),
+                                          colorText: cr_b326,
+                                          duration: Duration(seconds: 2),
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 8,
+                                        ),
+                                        child: Container(
+                                          padding: EdgeInsets.all(16),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade200,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.08),
+                                                spreadRadius: 1,
+                                                blurRadius: 8,
+                                                offset: Offset(0, 2),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              CircleAvatar(
+                                                backgroundColor:
+                                                    Colors.red.withOpacity(0.1),
+                                                backgroundImage: NetworkImage(
+                                                  MyConstant.profile_default,
+                                                ),
+                                              ),
+                                              SizedBox(width: 12),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    TextFont(
+                                                      text:
+                                                          'Lao Mobile Money Sole Company',
+                                                      fontSize: 12,
+                                                    ),
+                                                    SizedBox(height: 4),
+                                                    TextFont(
+                                                      text: e.code!,
+                                                      color: Colors.grey,
+                                                      fontSize: 10,
+                                                    ),
+                                                    SizedBox(height: 4),
+                                                    TextFont(
+                                                      text: DateFormat(
+                                                              'dd MMM, yyyy HH:mm')
+                                                          .format(
+                                                        DateTime.parse(e
+                                                            .created!
+                                                            .replaceAll(
+                                                                '/', '-')),
+                                                      ),
+                                                      color: color_777,
+                                                      fontSize: 10,
+                                                      poppin: true,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              TextFont(
+                                                text:
+                                                    '-${fn.format(e.price)} LAK',
+                                                color: Colors.red,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(width: 12),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextFont(
-                                            text:
-                                                'Lao Mobile Money Sole Company...',
-                                            fontSize: 12,
-                                          ),
-                                          SizedBox(height: 4),
-                                          TextFont(
-                                            text: e.code!,
-                                            color: Colors.grey,
-                                            fontSize: 10,
-                                          ),
-                                          SizedBox(height: 4),
-                                          TextFont(
-                                            text:
-                                                DateFormat('dd MMM, yyyy HH:mm')
-                                                    .format(
-                                              DateTime.parse(e.created!
-                                                  .replaceAll('/', '-')),
-                                            ),
-                                            color: color_777,
-                                            fontSize: 10,
-                                            poppin: true,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    TextFont(
-                                      text: '-${fn.format(e.price)} LAK',
-                                      color: Colors.red,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
+                                  ),
+                                ));
                           },
                         ),
                       ),

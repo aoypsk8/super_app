@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/controllers/wetv_controller.dart';
 import 'package:super_app/utility/color.dart';
@@ -25,6 +26,8 @@ class ConfirmWeTVScreen extends StatefulWidget {
 }
 
 class _ConfirmWeTVScreenState extends State<ConfirmWeTVScreen> {
+  final homeController = Get.find<HomeController>();
+
   int _remainingTime = 600;
   Timer? _countdownTimer;
   void _startCountdownTimer() {
@@ -81,7 +84,7 @@ class _ConfirmWeTVScreenState extends State<ConfirmWeTVScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: BuildAppBar(title: "confirm_payment"),
+      appBar: BuildAppBar(title: homeController.getMenuTitle()),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
@@ -119,7 +122,7 @@ class _ConfirmWeTVScreenState extends State<ConfirmWeTVScreen> {
                   padding: const EdgeInsets.all(0),
                   child: buildStepProcess(
                     title: '3/3',
-                    desc: 'ກວດລາຍລະອຽດ',
+                    desc: 'confirm_payment',
                   ),
                 ),
                 Row(

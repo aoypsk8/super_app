@@ -84,7 +84,7 @@ class _ConfirmTempBScreenState extends State<ConfirmTempBScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: BuildAppBar(title: "confirm_payment"),
+      appBar: BuildAppBar(title: homeController.getMenuTitle()),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
@@ -119,7 +119,7 @@ class _ConfirmTempBScreenState extends State<ConfirmTempBScreen> {
                   padding: const EdgeInsets.all(0),
                   child: buildStepProcess(
                     title: '5/5',
-                    desc: 'ກວດລາຍລະອຽດ',
+                    desc: 'confirm_payment',
                   ),
                 ),
                 Row(

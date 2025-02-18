@@ -51,7 +51,7 @@ class _ListProviderTempBScreenState extends State<ListProviderTempBScreen> {
             padding: const EdgeInsets.all(10),
             child: buildStepProcess(
               title: '1/5',
-              desc: 'ເລືອກເຄືອຂ່າຍ',
+              desc: 'select_lists_item',
             ),
           ),
           Expanded(

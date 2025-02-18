@@ -310,7 +310,8 @@
   "welcome_first_screen":"ຍິນດີຕ້ອນຮັບ, ",
   "price":"ລາຄາ",
   "transfer_laoQR":"ປ້ອນລາຍການໂອນ",
-  "select_package":"ເລືອກແພັດເກດ",
-  "select_payment":"ເລືອກບັນຊີ"
+  "select_package":"ເລືອກແພັດເກັດ",
+  "select_payment":"ເລືອກບັນຊີ",
+  "select_lists_item":"ເລືອກລາຍການຊຳລະ"
 
 }

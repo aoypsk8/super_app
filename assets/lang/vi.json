@@ -301,5 +301,6 @@
   "price":"Price",
   "transfer_laoQR":"Transfer LaoQR",
   "select_package":"Select Package",
-   "select_payment":"Select Payment"
+   "select_payment":"Select Payment",
+   "select_lists_item":"Select a payment item"
 }

@@ -101,28 +101,38 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 10),
+                      SizedBox(height: 5),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: TextFont(
                           text: 'history',
-                          fontSize: 14,
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w500,
+                          noto: true,
                         ),
                       ),
-                      SizedBox(height: 10),
                       Expanded(
-                        child: ListView.builder(
-                          shrinkWrap: true, // Keep this
-                          itemCount: weTVController.wetvhistory.length,
-                          itemBuilder: (context, index) {
-                            final e = weTVController.wetvhistory[index];
+                        child: Obx(() {
+                          if (weTVController.wetvhistory.isEmpty) {
+                            return Center(
+                              child: TextFont(
+                                text: 'No data available',
+                                fontSize: 14,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            );
+                          }
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: weTVController.wetvhistory.length,
+                            itemBuilder: (context, index) {
+                              final e = weTVController.wetvhistory[index];
 
-                            return AnimationConfiguration.staggeredList(
+                              return AnimationConfiguration.staggeredList(
                                 position: index,
                                 duration: const Duration(milliseconds: 550),
                                 child: SlideAnimation(
-                                  verticalOffset:
-                                      50, // Slightly increased for a better effect
+                                  verticalOffset: 50,
                                   child: FlipAnimation(
                                     child: GestureDetector(
                                       onTap: () {
@@ -190,11 +200,11 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                                                       text: DateFormat(
                                                               'dd MMM, yyyy HH:mm')
                                                           .format(
-                                                        DateTime.parse(e
-                                                            .created!
-                                                            .replaceAll(
-                                                                '/', '-')),
-                                                      ),
+                                                              DateTime.parse(e
+                                                                  .created!
+                                                                  .replaceAll(
+                                                                      '/',
+                                                                      '-'))),
                                                       color: color_777,
                                                       fontSize: 10,
                                                       poppin: true,
@@ -215,14 +225,16 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                                       ),
                                     ),
                                   ),
-                                ));
-                          },
-                        ),
+                                ),
+                              );
+                            },
+                          );
+                        }),
                       ),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ));

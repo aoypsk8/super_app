@@ -18,7 +18,7 @@ class buildStepProcess extends StatelessWidget {
         TextFont(
           text: title,
           fontWeight: FontWeight.bold,
-          color: color_primary_light,
+          color: Theme.of(context).primaryColor,
           poppin: true,
         ),
         SizedBox(width: 5),

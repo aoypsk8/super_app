@@ -114,11 +114,17 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                       Expanded(
                         child: Obx(() {
                           if (weTVController.wetvhistory.isEmpty) {
-                            return Center(
-                              child: TextFont(
-                                text: 'No data available',
-                                fontSize: 14,
-                                color: Theme.of(context).primaryColor,
+                            return Align(
+                              alignment:
+                                  Alignment.center, // Move text to upper center
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: 100), // Adjust spacing as needed
+                                child: TextFont(
+                                  text: 'No data available',
+                                  fontSize: 14,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
                             );
                           }
@@ -291,13 +297,13 @@ class buildWeTvCard extends StatelessWidget {
             ),
             SizedBox(height: 12),
             TextFont(
-              text: 'ແພັກເກັດ ${e.day} ມື້',
+              text: '${'Data Package'.tr} ${e.day} ${'day'.tr}',
               fontSize: 12,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 8),
             TextFont(
-              text: '${fn.format(e.price)} LAK',
+              text: '${fn.format(e.price)} ${'kip'.tr}',
               fontSize: 12,
               fontWeight: FontWeight.w400,
             ),

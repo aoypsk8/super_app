@@ -346,6 +346,113 @@ class buildTextField extends StatelessWidget {
   }
 }
 
+class buildPasswordField extends StatefulWidget {
+  const buildPasswordField({
+    super.key,
+    required this.controller,
+    required this.label,
+    required this.name,
+    this.hintText = '',
+    this.fillcolor = color_f2f2,
+    this.bordercolor = color_f2f2,
+    this.errorBorderColor = Colors.red,
+    this.labelWeight = FontWeight.normal,
+    this.isRequire = true,
+    this.isEditable = true,
+  });
+
+  final TextEditingController controller;
+  final String name;
+  final String label;
+  final String hintText;
+  final Color fillcolor;
+  final Color bordercolor;
+  final Color errorBorderColor;
+  final FontWeight labelWeight;
+  final bool isRequire;
+  final bool isEditable;
+
+  @override
+  _buildPasswordFieldState createState() => _buildPasswordFieldState();
+}
+
+class _buildPasswordFieldState extends State<buildPasswordField> {
+  bool _obscureText = true;
+
+  @override
+  Widget build(BuildContext context) {
+    String languageCode = Get.locale?.languageCode ?? 'lo';
+    final defaultBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(
+        color: widget.bordercolor,
+        width: 1.5,
+      ),
+    );
+    final errorBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(
+        color: widget.errorBorderColor,
+        width: 1.5,
+      ),
+    );
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          widget.label == ''
+              ? SizedBox.shrink()
+              : TextFont(
+                  text: widget.label,
+                  fontWeight: widget.labelWeight,
+                ),
+          const SizedBox(height: 4),
+          FormBuilderTextField(
+            name: widget.name,
+            controller: widget.controller,
+            style: GoogleFonts.notoSansLao(fontSize: 13.sp, color: Colors.black),
+            obscureText: _obscureText, // Password hidden by default
+            enabled: widget.isEditable,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              hintText: widget.hintText.tr,
+              hintStyle: languageCode == 'lo'
+                  ? GoogleFonts.notoSansLao(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp)
+                  : GoogleFonts.poppins(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp),
+              fillColor: widget.fillcolor,
+              filled: true,
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: color_777,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText; // Toggle password visibility
+                  });
+                },
+              ),
+              enabledBorder: defaultBorder,
+              focusedBorder: defaultBorder,
+              disabledBorder: defaultBorder,
+              errorBorder: errorBorder,
+              focusedErrorBorder: errorBorder,
+              errorStyle: const TextStyle(height: 0),
+            ),
+            validator: widget.isRequire
+                ? FormBuilderValidators.compose([
+                    FormBuilderValidators.required(),
+                  ])
+                : null,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class buildLongTextFiled extends StatelessWidget {
   const buildLongTextFiled({
     super.key,

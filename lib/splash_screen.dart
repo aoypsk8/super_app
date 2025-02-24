@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:super_app/test.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/login/calendar.dart';
+import 'package:super_app/views/login/_login.dart';
+import 'package:super_app/views/login/login.dart';
 import 'package:super_app/views/main/bottom_nav.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -21,7 +25,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 1)).then((_) {
-      Get.offAll(BottomNav());
+      // Get.offAll(BottomNav());
+      Get.offAll(Test());
     });
   }
 

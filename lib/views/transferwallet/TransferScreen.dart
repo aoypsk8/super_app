@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, sized_box_for_whitespace, prefer_const_literals_to_create_immutables
-import 'package:contacts_service/contacts_service.dart';
+// import 'package:contacts_service/contacts_service.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -61,8 +61,7 @@ class _TransferScreenState extends State<TransferScreen> {
     _toWallet.text = '';
     transferController.destinationMsisdn.value = '';
     _balanceAmount = 0;
-    print(
-        'transferScrenn destinationMsisdn ${transferController.destinationMsisdn.value}');
+    print('transferScrenn destinationMsisdn ${transferController.destinationMsisdn.value}');
     _toWallet.text = transferController.destinationMsisdn.value;
     userController.increasepage();
     super.initState();
@@ -129,16 +128,7 @@ class _TransferScreenState extends State<TransferScreen> {
       '500,000',
       '1,000,000',
     ];
-    final List<String> textValue = [
-      "ເຕີມເງິນ",
-      "ຄ່າເຄື່ອງ",
-      "ຄ່າອາຫານ",
-      "ຄ່າເຄື່ອງດື່ມ",
-      "ເກັບອອມ",
-      "ໃຊ້ໜີ້",
-      "ຊ່ວຍເຫຼືອ",
-      "ການສຶກສາ"
-    ];
+    final List<String> textValue = ["ເຕີມເງິນ", "ຄ່າເຄື່ອງ", "ຄ່າອາຫານ", "ຄ່າເຄື່ອງດື່ມ", "ເກັບອອມ", "ໃຊ້ໜີ້", "ຊ່ວຍເຫຼືອ", "ການສຶກສາ"];
 
     return Container(
       color: color_fff,
@@ -172,45 +162,45 @@ class _TransferScreenState extends State<TransferScreen> {
               ),
               suffixonTapFuc: () async {
                 if (await Permission.contacts.request().isGranted) {
-                  try {
-                    final Contact? contact =
-                        await ContactsService.openDeviceContactPicker();
-                    if (contact != null) {
-                      final Item phone = contact.phones!.first;
-                      String phoneNO = phone.value
-                          .toString()
-                          .trim()
-                          .replaceAll(' ', '')
-                          .replaceAll('-', '');
-                      if (phoneNO.startsWith('020')) {
-                        setState(() {
-                          _toWallet.text = phoneNO.replaceAll('020', '20');
-                        });
-                      } else if (phoneNO.startsWith('+85620')) {
-                        setState(() {
-                          _toWallet.text = phoneNO.replaceAll('+85620', '20');
-                        });
-                      } else if (phoneNO.startsWith('85620')) {
-                        setState(() {
-                          _toWallet.text = phoneNO.replaceAll('85620', '20');
-                        });
-                      } else {
-                        setState(() {
-                          _toWallet.text = phoneNO;
-                        });
-                      }
-                    }
-                    setState(() {
-                      _contactName = contact!.displayName.toString();
-                    });
-                  } on FormOperationException catch (e) {
-                    switch (e.errorCode) {
-                      case FormOperationErrorCode.FORM_OPERATION_CANCELED:
-                      case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
-                      case FormOperationErrorCode.FORM_OPERATION_UNKNOWN_ERROR:
-                      default:
-                    }
-                  }
+                  // try {
+                  //   final Contact? contact =
+                  //       await ContactsService.openDeviceContactPicker();
+                  //   if (contact != null) {
+                  //     final Item phone = contact.phones!.first;
+                  //     String phoneNO = phone.value
+                  //         .toString()
+                  //         .trim()
+                  //         .replaceAll(' ', '')
+                  //         .replaceAll('-', '');
+                  //     if (phoneNO.startsWith('020')) {
+                  //       setState(() {
+                  //         _toWallet.text = phoneNO.replaceAll('020', '20');
+                  //       });
+                  //     } else if (phoneNO.startsWith('+85620')) {
+                  //       setState(() {
+                  //         _toWallet.text = phoneNO.replaceAll('+85620', '20');
+                  //       });
+                  //     } else if (phoneNO.startsWith('85620')) {
+                  //       setState(() {
+                  //         _toWallet.text = phoneNO.replaceAll('85620', '20');
+                  //       });
+                  //     } else {
+                  //       setState(() {
+                  //         _toWallet.text = phoneNO;
+                  //       });
+                  //     }
+                  //   }
+                  //   setState(() {
+                  //     _contactName = contact!.displayName.toString();
+                  //   });
+                  // } on FormOperationException catch (e) {
+                  //   switch (e.errorCode) {
+                  //     case FormOperationErrorCode.FORM_OPERATION_CANCELED:
+                  //     case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
+                  //     case FormOperationErrorCode.FORM_OPERATION_UNKNOWN_ERROR:
+                  //     default:
+                  //   }
+                  // }
                 }
               },
             ),
@@ -258,9 +248,7 @@ class _TransferScreenState extends State<TransferScreen> {
                           _paymentAmount.text = amountValue[index];
                         },
                         child: Container(
-                          decoration: BoxDecoration(
-                              color: color_f5f5,
-                              borderRadius: BorderRadius.circular(6)),
+                          decoration: BoxDecoration(color: color_f5f5, borderRadius: BorderRadius.circular(6)),
                           child: Center(
                             child: TextFont(
                               text: amountValue[index],
@@ -294,8 +282,7 @@ class _TransferScreenState extends State<TransferScreen> {
                               underline: true,
                             ),
                           ),
-                          Icon(Icons.keyboard_arrow_up_rounded,
-                              size: 15.sp, color: color_777),
+                          Icon(Icons.keyboard_arrow_up_rounded, size: 15.sp, color: color_777),
                         ],
                       ),
                     )
@@ -315,8 +302,7 @@ class _TransferScreenState extends State<TransferScreen> {
                             underline: true,
                           ),
                         ),
-                        Icon(Icons.keyboard_arrow_down_rounded,
-                            size: 15.sp, color: color_777),
+                        Icon(Icons.keyboard_arrow_down_rounded, size: 15.sp, color: color_777),
                       ],
                     ),
             ),
@@ -382,8 +368,7 @@ class _TransferScreenState extends State<TransferScreen> {
                               underline: true,
                             ),
                           ),
-                          Icon(Icons.keyboard_arrow_up_rounded,
-                              size: 15.sp, color: color_777),
+                          Icon(Icons.keyboard_arrow_up_rounded, size: 15.sp, color: color_777),
                         ],
                       ),
                     )
@@ -403,8 +388,7 @@ class _TransferScreenState extends State<TransferScreen> {
                             underline: true,
                           ),
                         ),
-                        Icon(Icons.keyboard_arrow_down_rounded,
-                            size: 15.sp, color: color_777),
+                        Icon(Icons.keyboard_arrow_down_rounded, size: 15.sp, color: color_777),
                       ],
                     ),
             ),
@@ -436,8 +420,7 @@ class _TransferScreenState extends State<TransferScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Iconsax.clock,
-                          color: Theme.of(context).primaryColor),
+                      Icon(Iconsax.clock, color: Theme.of(context).primaryColor),
                       const SizedBox(width: 5),
                       TextFont(
                         text: 'recent',
@@ -449,8 +432,7 @@ class _TransferScreenState extends State<TransferScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Iconsax.heart,
-                          color: Theme.of(context).primaryColor),
+                      Icon(Iconsax.heart, color: Theme.of(context).primaryColor),
                       const SizedBox(width: 5),
                       TextFont(
                         text: 'favorite',
@@ -493,24 +475,20 @@ class _TransferScreenState extends State<TransferScreen> {
   }
 
   Future _paymentProcess() async {
-    int paymentAmount = int.parse(
-        _paymentAmount.text.trim().replaceAll(RegExp(r'[^\w\s]+'), ''));
+    int paymentAmount = int.parse(_paymentAmount.text.trim().replaceAll(RegExp(r'[^\w\s]+'), ''));
     String toWallet = _toWallet.text;
     String note = _note.text;
     _balanceAmount = userController.mainBalance.value;
     String ownerWallet = await storage.read('msisdn') ?? '';
     if (paymentAmount < 1000) {
-      DialogHelper.showErrorDialogNew(
-          description: 'Minimum payment must than 1,000 Kip.');
+      DialogHelper.showErrorDialogNew(description: 'Minimum payment must than 1,000 Kip.');
     } else if (_balanceAmount < paymentAmount) {
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     } else if (ownerWallet == toWallet) {
-      DialogHelper.showErrorDialogNew(
-          description: 'Can\'t transfer to same Wallet Account.');
+      DialogHelper.showErrorDialogNew(description: 'Can\'t transfer to same Wallet Account.');
     } else {
       transferController.loading.value = true;
-      transferController.vertifyWallet(
-          toWallet, paymentAmount.toString(), note);
+      transferController.vertifyWallet(toWallet, paymentAmount.toString(), note);
     }
   }
 }

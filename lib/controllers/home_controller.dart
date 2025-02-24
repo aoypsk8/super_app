@@ -143,7 +143,6 @@ class HomeController extends GetxController {
     } else if (Platform.isIOS) {
       try {
         final Map<dynamic, dynamic> result = await platform.invokeMethod("getDeviceDetails");
-
         info = '''
         - Device Name (User-set): ${result["deviceName"]}
         - Model: ${result["deviceModel"]}

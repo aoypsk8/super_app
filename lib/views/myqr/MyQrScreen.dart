@@ -82,6 +82,16 @@ class _MyQrScreenState extends State<MyQrScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    userController.checktoken(name: 'menu').then((value) {
+      if (userController.isLogin.value) {
+        qrController.generateQR_firstscreen(0, 'static', '');
+      }
+    });
+  }
+
+  @override
   void dispose() {
     qrController.rxQrDynamicAmout.value = '';
     _note.text = '';

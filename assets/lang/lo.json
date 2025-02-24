@@ -314,5 +314,10 @@
   "change_primary_success": "ປ່ຽນບັນຊີສຳເລັດ!",
   "TermsPolicy": "Terms and Conditions of Use and Privacy Notice",
   "welcome_first_screen": "ຍິນດີຕ້ອນຮັບ",
-  "otp_send_to": "ລະຫັດ OTP ສົ່ງໄປຫາໝາຍເລກ : @phone"
+  "otp_send_to": "ລະຫັດ OTP ສົ່ງໄປຫາໝາຍເລກ : @phone",
+  "price": "ລາຄາ",
+  "transfer_laoQR": "ປ້ອນລາຍການໂອນ",
+  "select_package": "ເລືອກແພັດເກັດ",
+  "select_payment": "ເລືອກບັນຊີ",
+  "select_lists_item": "ເລືອກລາຍການຊຳລະ"
 }

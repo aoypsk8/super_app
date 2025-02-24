@@ -41,6 +41,7 @@ class MyIcon {
   static String animation_cat = 'assets/animation/cat1.gif';
   static String ic_mascot_dontknow = 'assets/animation/dontknow.gif';
   static String ic_mascot_good = 'assets/animation/good.gif';
+  static String animation_load = 'assets/animation/animation_load.json';
   static String animation_success = 'assets/animation/success.json';
 
   // bottom_nav
@@ -97,6 +98,15 @@ class MyIcon {
 
   static String ic_more = 'assets/icons/more.svg';
 
+  // notify
+  static String notice_box_empty = 'assets/icons/notice_box_empty.svg';
+  static String notice_animation_empty = 'assets/icons/emtybox.png';
+  static String inbox_read = 'assets/icons/inbox_read.svg';
+  static String inbox_new = 'assets/icons/inbox_new.svg';
+  static String ic_notification = 'assets/icons/notification.svg';
+  static String ic_readNotify = 'assets/icons/readNoti.png';
+  static String ic_speaker = 'assets/icons/ic_speaker.svg';
+  static String bgg_nopic = 'assets/icons/bgg_nopic.svg';
   //! history screen
   static String ic_bank = 'assets/history/ic_bank.svg';
   static String ic_cashout = 'assets/history/ic_cashout.svg';

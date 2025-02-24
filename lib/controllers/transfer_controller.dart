@@ -10,7 +10,7 @@ import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/log_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/menu_model.dart';
-import 'package:super_app/models/model-kyc/UserKycModel.dart';
+import 'package:super_app/models/UserKycModel.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/views/reusable_template/reusable_result.dart';
@@ -182,15 +182,15 @@ class TransferController extends GetxController {
   }
 
   transfer(Menulists menulist) async {
-    // final menuWithAppId14 = homeController.menumodel.value.firstWhere(
-    //   (menu) => menu.menulists!.any((item) => item.appid == 14),
-    // );
-    // if (menuWithAppId14 != null) {
-    //   final matchedItem =
-    //       menuWithAppId14.menulists!.firstWhere((item) => item.appid == 14);
-    //   homeController.menutitle.value = matchedItem.groupNameEN!;
-    //   homeController.menudetail.value = matchedItem;
-    // }
+    final menuWithAppId14 = homeController.menuModel.value.firstWhere(
+      (menu) => menu.menulists!.any((item) => item.appid == 14),
+    );
+    if (menuWithAppId14 != null) {
+      final matchedItem =
+          menuWithAppId14.menulists!.firstWhere((item) => item.appid == 14);
+      homeController.menutitle.value = matchedItem.groupNameEN!;
+      homeController.menudetail.value = matchedItem;
+    }
     try {
       List<String> urlSplit =
           homeController.menudetail.value.url.toString().split(";");
@@ -211,7 +211,7 @@ class TransferController extends GetxController {
       »»————————————————————————————————⚠️ old ⚠️—————————————————————————————————————————————««
       */
       // var response = await DioClient.postEncrypt(urlSplit[0], data, key: "");
-      var response = await DioClient.postEncrypt("/Transfer", data, key: "");
+      var response = await DioClient.postEncrypt(urlSplit[0], data, key: "");
       if (response["resultCode"].toString() == '0') {
         //! save log
         logPaymentReq = data;

@@ -303,5 +303,10 @@
   "change_primary_success": "Change Success!",
   "TermsPolicy": "Terms and Conditions of Use and Privacy Notice",
   "welcome_first_screen": "Welcome",
-  "otp_send_to": "OTP 代码已发送至号码 : @phone"
+  "otp_send_to": "OTP 代码已发送至号码 : @phone",
+  "price": "Price",
+  "transfer_laoQR": "Transfer LaoQR",
+  "select_package": "Select Package",
+  "select_payment": "Select Payment",
+  "select_lists_item": "Select a payment item"
 }

@@ -59,9 +59,7 @@ class _TransferScreenState extends State<TransferScreen> {
   @override
   void initState() {
     _toWallet.text = '';
-    transferController.destinationMsisdn.value = '';
     _balanceAmount = 0;
-    print('transferScrenn destinationMsisdn ${transferController.destinationMsisdn.value}');
     _toWallet.text = transferController.destinationMsisdn.value;
     userController.increasepage();
     super.initState();
@@ -71,6 +69,7 @@ class _TransferScreenState extends State<TransferScreen> {
   void dispose() {
     userController.decreasepage();
     _toWallet.text = '';
+    transferController.destinationMsisdn.value = '';
     super.dispose();
   }
 
@@ -487,9 +486,9 @@ class _TransferScreenState extends State<TransferScreen> {
     } else if (ownerWallet == toWallet) {
       DialogHelper.showErrorDialogNew(description: 'Can\'t transfer to same Wallet Account.');
     } else {
-      transferController.loading.value = true;
       transferController.vertifyWallet(toWallet, paymentAmount.toString(), note);
     }
+    transferController.loading.value = false;
   }
 }
 

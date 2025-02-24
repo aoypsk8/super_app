@@ -47,11 +47,6 @@ class _ListsProviderFinanceState extends State<ListsProviderFinance> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // TextFont(
-              //   text: 'choose_institution',
-              //   fontWeight: FontWeight.w500,
-              //   fontSize: 12,
-              // ),
               buildStepProcess(title: "1/4", desc: "choose_institution"),
               const SizedBox(height: 20),
               Expanded(

@@ -1,7 +1,7 @@
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:super_app/models/model-history/history_detail_model.dart';
+import 'package:super_app/models/history_detail_model.dart';
 
 class DatabaseHelper {
   static const _databaseName = 'test.db';
@@ -29,7 +29,8 @@ class DatabaseHelper {
     final documentsDirectory = await getDatabasesPath();
     final path = join(documentsDirectory, _databaseName);
 
-    return await openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+    return await openDatabase(path,
+        version: _databaseVersion, onCreate: _onCreate);
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -80,7 +81,8 @@ class DatabaseHelper {
       "SELECT name FROM sqlite_master WHERE type='table'",
     );
     print(tables);
-    return List.generate(tables.length, (index) => tables[index]['name'] as String);
+    return List.generate(
+        tables.length, (index) => tables[index]['name'] as String);
   }
 
   Future dropTable() async {
@@ -90,7 +92,8 @@ class DatabaseHelper {
 
   Future<void> dropDatabase() async {
     final appDir = await getApplicationDocumentsDirectory();
-    final databasePath = '${appDir.path}/$_databaseName'; // Replace with the actual database name
+    final databasePath =
+        '${appDir.path}/$_databaseName'; // Replace with the actual database name
     await deleteDatabase(databasePath);
   }
 
@@ -139,9 +142,11 @@ class DatabaseHelper {
     return await db.delete(table, where: 'transid = ?', whereArgs: [id]);
   }
 
-  Future<int> deleteDataByCondition(String conditionColumn, dynamic conditionValue) async {
+  Future<int> deleteDataByCondition(
+      String conditionColumn, dynamic conditionValue) async {
     Database db = await instance.database;
-    return await db.delete(table, where: '$conditionColumn = ?', whereArgs: [conditionValue]);
+    return await db.delete(table,
+        where: '$conditionColumn = ?', whereArgs: [conditionValue]);
   }
 
   Future deleteAll() async {

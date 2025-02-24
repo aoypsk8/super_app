@@ -311,5 +311,11 @@
   "change_primary_success": "Change Success!",
   "TermsPolicy": "Terms and Conditions of Use and Privacy Notice",
   "welcome_first_screen": "Welcome",
-  "otp_send_to": "The OTP code has been sent to the number : @phone"
+  "otp_send_to": "The OTP code has been sent to the number : @phone",
+  "price": "Price",
+  "transfer_laoQR": "Transfer LaoQR",
+  "select_package": "Select Package",
+  "select_payment": "Select Payment",
+  "select_lists_item": "Select a payment item",
+  "input_amount": "Input Amount"
 }

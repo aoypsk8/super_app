@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:super_app/controllers/home_controller.dart';
@@ -113,12 +111,10 @@ class PaymentController extends GetxController {
       isSuccess = true;
       return isSuccess;
     } else {
-      // DialogHelper.showErrorDialog(description: response['resultDesc']);
-      DialogHelper.showErrorWithFunctionDialog(
-          description: response['resultDesc'],
-          onClose: () {
-            Get.close(closepage);
-          });
+      DialogHelper.showErrorDialogNew(
+        description: response['resultDesc'],
+        onClose: () => Get.close(2),
+      );
       return isSuccess;
     }
   }

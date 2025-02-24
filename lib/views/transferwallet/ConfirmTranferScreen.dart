@@ -26,7 +26,7 @@ class ConfirmTranferScreen extends StatefulWidget {
 class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
   final userController = Get.find<UserController>();
   final transferController = Get.put(TransferController());
-  final homeController = Get.put(HomeController());
+  final homeController = Get.find<HomeController>();
   int _remainingTime = 600;
   Timer? _countdownTimer;
   void _startCountdownTimer() {
@@ -103,11 +103,6 @@ class _ConfirmTranferScreenState extends State<ConfirmTranferScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // TextFont(
-                //   text: 'Transfer',
-                //   fontWeight: FontWeight.w500,
-                //   fontSize: 11,
-                // ),
                 buildStepProcess(title: "3/3", desc: "transfer_wallet"),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,

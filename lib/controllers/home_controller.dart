@@ -2,7 +2,9 @@
 
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
@@ -49,6 +51,7 @@ class HomeController extends GetxController {
 
     await checkAppUpdate();
     await fetchServicesmMenu();
+    await getDeviceInfo();
   }
 
   String getMenuTitle() {
@@ -74,12 +77,10 @@ class HomeController extends GetxController {
     var res = await DioClient.getNoLoading(url);
     rxAppinfo.value = AppInfoModel.fromJson(res);
 
-    final imageCardFile =
-        await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_card');
+    final imageCardFile = await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_card');
     if (imageCardFile != null) rxBgCard.value = imageCardFile.path;
 
-    final imageBillFile =
-        await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_bill');
+    final imageBillFile = await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_bill');
     if (imageBillFile != null) rxBgBill.value = imageBillFile.path;
   }
 
@@ -87,8 +88,7 @@ class HomeController extends GetxController {
     final dio = Dio();
     final String? storedImageUrl = box.read(type);
     final documentDirectory = await getApplicationDocumentsDirectory();
-    final filePath =
-        '${documentDirectory.path}/$type.png'; // Fixed file name to avoid duplicates
+    final filePath = '${documentDirectory.path}/$type.png'; // Fixed file name to avoid duplicates
     File file = File(filePath);
     if (storedImageUrl == imageUrl && file.existsSync()) {
       print("✅ Image already exists and URL is the same. No need to download.");
@@ -98,8 +98,7 @@ class HomeController extends GetxController {
       if (file.existsSync()) {
         file.deleteSync();
       }
-      final response = await dio.get(imageUrl,
-          options: Options(responseType: ResponseType.bytes));
+      final response = await dio.get(imageUrl, options: Options(responseType: ResponseType.bytes));
       await file.writeAsBytes(response.data);
       box.write(type, imageUrl);
       print("✅ New image downloaded and saved.");
@@ -112,16 +111,11 @@ class HomeController extends GetxController {
 
   fetchServicesmMenu() async {
     try {
-      var response = await DioClient.postEncrypt(
-          loading: false, '/SuperApi/Info/Menus', {});
+      var response = await DioClient.postEncrypt(loading: false, '/SuperApi/Info/Menus', {});
       if (response != null && response is List) {
-        List<MenuModel> fetchedMenuModel = response
-            .map<MenuModel>((json) => MenuModel.fromJson(json))
-            .toList();
+        List<MenuModel> fetchedMenuModel = response.map<MenuModel>((json) => MenuModel.fromJson(json)).toList();
         menuModel.assignAll(fetchedMenuModel);
-        if (fetchedMenuModel.isNotEmpty &&
-            fetchedMenuModel[0].menulists != null &&
-            fetchedMenuModel[0].menulists!.isNotEmpty) {
+        if (fetchedMenuModel.isNotEmpty && fetchedMenuModel[0].menulists != null && fetchedMenuModel[0].menulists!.isNotEmpty) {
           menulist.assignAll(fetchedMenuModel[0].menulists!);
         }
       } else {
@@ -130,6 +124,37 @@ class HomeController extends GetxController {
     } catch (e) {
       print("Error: $e");
       DialogHelper.showErrorDialogNew(description: e.toString());
+    }
+  }
+
+  Future<void> getDeviceInfo() async {
+    const platform = MethodChannel('device_info_channel');
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    String info = '';
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      info = '''
+      - Model: ${androidInfo.model}
+      - DeviceID: ${androidInfo.id}
+      - DeviceModel: ${androidInfo.model}
+      - DeviceName: ${androidInfo.name}
+      - OSversion: ${androidInfo.version.release}|SDK${androidInfo.version.sdkInt}|${androidInfo.board}
+      ''';
+    } else if (Platform.isIOS) {
+      try {
+        final Map<dynamic, dynamic> result = await platform.invokeMethod("getDeviceDetails");
+
+        info = '''
+        - Device Name (User-set): ${result["deviceName"]}
+        - Model: ${result["deviceModel"]}
+        - Hardware Model: ${result["hardwareModel"]}
+        - OS Version: ${result["systemVersion"]}
+        - Device ID (UUID): ${result["deviceID"]}
+        ''';
+        print(info);
+      } on PlatformException catch (e) {
+        info = "Error retrieving device details: ${e.message}";
+      }
     }
   }
 }

@@ -11,6 +11,10 @@ class MyIcon {
   static String dialog_warning_red = 'assets/icons/dialog_warning_green.svg';
   static String languange = 'assets/icons/languange.svg';
 
+  //
+  static String ic_info1 = 'assets/icons/ic_info1.svg';
+  static String ic_creditcard = 'assets/icons/credit_card.svg';
+
   // background
   static String bg_gradient1 = 'assets/background/bg_gradient1.svg';
   static String bg_gradient2 = 'assets/background/bg_gradient2.svg';

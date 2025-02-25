@@ -14,6 +14,7 @@ import 'package:super_app/views/templateA/lists_province_tempA.dart';
 import 'package:super_app/views/templateA/verify_account_tempA.dart';
 import 'package:super_app/views/templateB/ListsProviderTempBScreen.dart';
 import 'package:super_app/views/borrowing/lists_borrowing.dart';
+import 'package:super_app/views/templateC/ListsProviderTempCScreen.dart';
 import 'package:super_app/views/ticket/ListsTicketScreen.dart';
 import 'package:super_app/views/transferwallet/ConfirmTranferScreen.dart';
 import 'package:super_app/views/transferwallet/OtpTransferEmailScreen.dart';
@@ -53,11 +54,6 @@ class AppRoutes {
       name: '/bank',
       page: () => ListsProviderBankScreen(),
     ),
-    GetPage(
-      name: '/cashOutConfirm',
-      page: () => ConfirmCashOutScreen(),
-    ),
-
     // Institution
     GetPage(
       name: '/finance',
@@ -145,6 +141,11 @@ class AppRoutes {
       name: '/databorrowing',
       page: () => ListsBorrowing(),
       // transition: Transition.downToUp,
+    ),
+
+    GetPage(
+      name: '/C',
+      page: () => ListProviderTempCScreen(),
     ),
   ];
 }

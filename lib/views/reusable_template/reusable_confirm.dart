@@ -1,32 +1,65 @@
+// ignore_for_file: unused_element, avoid_print
+
 import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:super_app/controllers/cashout_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:super_app/controllers/user_controller.dart';
-import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/buildAppBar.dart';
-import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/buildUserDetail.dart';
-import 'package:super_app/widget/build_DotLine.dart';
 import 'package:super_app/widget/build_step_process.dart';
-import 'package:super_app/widget/textfont.dart';
+import '../../../utility/color.dart';
+import '../../../widget/buildBottomAppbar.dart';
+import '../../../widget/build_DotLine.dart';
+import '../../../widget/textfont.dart';
 
-class ConfirmCashOutScreen extends StatefulWidget {
-  const ConfirmCashOutScreen({super.key});
+class ReusableConfirmScreen extends StatefulWidget {
+  final String appbarTitle;
+  final String stepProcess;
+  final String stepTitle;
+  final Widget Function() function;
+  final String fromAccountImage;
+  final String fromAccountName;
+  final String fromAccountNumber;
+  final String toAccountImage;
+  final String toAccountName;
+  final String toAccountNumber;
+  final String amount;
+  final String fee;
+  final String note;
+
+  const ReusableConfirmScreen({
+    super.key,
+    required this.appbarTitle,
+    required this.function,
+    required this.stepProcess,
+    required this.stepTitle,
+    required this.fromAccountImage,
+    required this.fromAccountName,
+    required this.fromAccountNumber,
+    required this.toAccountImage,
+    required this.toAccountName,
+    required this.toAccountNumber,
+    required this.amount,
+    required this.fee,
+    required this.note,
+  });
 
   @override
-  State<ConfirmCashOutScreen> createState() => _ConfirmCashOutScreenState();
+  _ReusableConfirmScreenState createState() => _ReusableConfirmScreenState();
 }
 
-class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
+class _ReusableConfirmScreenState extends State<ReusableConfirmScreen> {
   final userController = Get.find<UserController>();
+  final storage = GetStorage();
   int _remainingTime = 600;
   Timer? _countdownTimer;
+  bool hideButton = false;
+
   void _startCountdownTimer() {
     _countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_remainingTime > 0) {
@@ -71,15 +104,11 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
     return '$minutes:$secs';
   }
 
-  bool hideButton = false;
-  final cashOutController = Get.put(CashOutController());
-  final storage = GetStorage();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: BuildAppBar(title: "confirm_payment"),
+      appBar: BuildAppBar(title: widget.appbarTitle),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
@@ -90,12 +119,11 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
           bgColor: Theme.of(context).primaryColor,
           title: 'confirm_transfer',
           func: () {
+            widget.function;
             _countdownTimer?.cancel();
-            cashOutController.loading.value = true;
             setState(() {
               hideButton = true;
             });
-            cashOutController.confirmPayment();
             setState(() {
               hideButton = false;
             });
@@ -110,7 +138,8 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buildStepProcess(title: '3/3', desc: 'check_detail'),
+                buildStepProcess(
+                    title: widget.stepProcess, desc: widget.stepTitle),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,26 +169,22 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: buildUserDetail(
-                        profile:
-                            userController.userProfilemodel.value.profileImg ??
-                                MyConstant.profile_default,
+                      padding: const EdgeInsets.all(12.0),
+                      child: buildUserDetail(
+                        profile: widget.fromAccountImage,
                         from: true,
-                        msisdn: userController.userProfilemodel.value.msisdn
-                            .toString(),
-                        name:
-                            '${userController.userProfilemodel.value.name.toString()} ${userController.userProfilemodel.value.surname.toString()}'),
-                  ),
+                        msisdn: widget.fromAccountNumber,
+                        name: widget.fromAccountName,
+                      )),
                   const SizedBox(height: 5),
                   const buildDotLine(color: cr_ef33, dashlenght: 7),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: buildUserDetail(
-                      profile: cashOutController.rxLogo.value,
+                      profile: widget.toAccountImage,
                       from: false,
-                      msisdn: cashOutController.rxAccNo.toString(),
-                      name: cashOutController.rxAccName.toString(),
+                      msisdn: widget.toAccountNumber,
+                      name: widget.toAccountName,
                     ),
                   ),
                 ],
@@ -175,8 +200,7 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
             Row(
               children: [
                 TextFont(
-                  text: fn.format(
-                      double.parse(cashOutController.rxPaymentAmount.value)),
+                  text: fn.format(double.parse(widget.amount)),
                   fontWeight: FontWeight.w500,
                   fontSize: 20,
                   color: cr_b326,
@@ -192,14 +216,14 @@ class _ConfirmCashOutScreenState extends State<ConfirmCashOutScreen> {
             const SizedBox(height: 20),
             buildTextDetail(
               title: "fee",
-              detail: fn.format(double.parse(cashOutController.rxFee.value)),
+              detail: fn.format(double.parse(widget.fee)),
               money: true,
             ),
             const SizedBox(height: 20),
             buildTextDetail(
               money: false,
               title: "description",
-              detail: cashOutController.rxNote.value,
+              detail: widget.note,
             ),
           ],
         ),

@@ -11,6 +11,7 @@ import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/views/templateB/confirm_tempB.dart';
 import 'package:super_app/widget/buildAppBar.dart';
@@ -21,7 +22,7 @@ import 'package:super_app/widget/mounoy_textfield.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class PaymentTempBScreen extends StatelessWidget {
-  PaymentTempBScreen({Key? key}) : super(key: key);
+  PaymentTempBScreen({super.key});
 
   final controller = Get.find<TempBController>();
   final homeController = Get.find<HomeController>();
@@ -69,7 +70,7 @@ class PaymentTempBScreen extends StatelessWidget {
               if (int.parse(sanitizedAmount) < 1000) {
                 DialogHelper.showErrorDialogNew(description: "morethan1000");
               } else {
-                if (userController.mainBalance.value >=
+                if (userController.totalBalance.value >=
                     int.parse(sanitizedAmount)) {
                   controller.rxTransID.value =
                       homeController.menudetail.value.description.toString() +
@@ -80,7 +81,47 @@ class PaymentTempBScreen extends StatelessWidget {
                       stepBuild: '4/5',
                       title: homeController.getMenuTitle(),
                       onSelectedPayment: () {
-                        Get.to(() => const ConfirmTempBScreen());
+                        paymentController
+                            .reqCashOut(
+                          transID: controller.rxTransID.value,
+                          amount: controller.rxPaymentAmount.value,
+                          toAcc: controller.rxAccNo.value,
+                          chanel: homeController.menudetail.value.groupNameEN,
+                          provider: controller.tempBdetail.value.nameCode,
+                          remark: controller.rxNote.value,
+                        )
+                            .then((value) {
+                          if (value) {
+                            Get.to(() => ReusableConfirmScreen(
+                                  appbarTitle: "confirm_payment",
+                                  function: () {
+                                    controller.isLoading.value = true;
+                                    controller.paymentProcess(
+                                        homeController.menudetail.value);
+                                  },
+                                  stepProcess: "5/5",
+                                  stepTitle: "check_detail",
+                                  fromAccountImage: userController
+                                          .userProfilemodel.value.profileImg ??
+                                      MyConstant.profile_default,
+                                  fromAccountName:
+                                      '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+                                  fromAccountNumber: userController
+                                      .userProfilemodel.value.msisdn
+                                      .toString(),
+                                  toAccountImage:
+                                      controller.tempBdetail.value.logo ?? '',
+                                  toAccountName: controller
+                                      .rxAccName.value, // Fixed swapped values
+                                  toAccountNumber: controller.rxAccNo.value,
+                                  amount: controller.rxPaymentAmount.value,
+                                  fee: controller.tempBdetail.value.fee ??
+                                      '0', // Prevent null error
+                                  note: controller.rxNote.value,
+                                ));
+                          }
+                        });
+
                         return Container();
                       },
                     ),

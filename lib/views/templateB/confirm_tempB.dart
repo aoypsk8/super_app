@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
+import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/temp_b_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/controllers/wetv_controller.dart';
@@ -77,6 +78,7 @@ class _ConfirmTempBScreenState extends State<ConfirmTempBScreen> {
 
   final homeController = Get.find<HomeController>();
   final userController = Get.find<UserController>();
+  final paymentController = Get.find<PaymentController>();
   final controller = Get.put(TempBController());
   final storage = GetStorage();
 
@@ -221,8 +223,8 @@ class _ConfirmTempBScreenState extends State<ConfirmTempBScreen> {
                   const SizedBox(height: 20),
                   buildTextDetail(
                     title: "fee",
-                    detail:
-                        fn.format(int.parse(controller.tempBdetail.value.fee!)),
+                    detail: fn.format(
+                        double.parse(controller.tempBdetail.value.fee!)),
                     money: true,
                   ),
                 ],

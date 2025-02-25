@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +15,7 @@ import 'package:super_app/models/ReqCashoutBankModel.dart';
 import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/cashout/OtpTransferBankScreen.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_result.dart';
 import '../../../services/api/dio_client.dart';
 import '../../../utility/dialog_helper.dart';
@@ -138,7 +140,31 @@ class CashOutController extends GetxController {
       rxFee.value = response['fee'].toString();
       logVerify = response;
       loading.value = false;
-      Get.toNamed('/cashOutConfirm');
+      // Get.toNamed('/cashOutConfirm');
+      Get.to(
+        ReusableConfirmScreen(
+          appbarTitle: "confirm_payment",
+          function: () {
+            loading.value = true;
+            confirmPayment();
+            return Container();
+          },
+          stepProcess: "3/3",
+          stepTitle: "check_detail",
+          fromAccountImage: userController.userProfilemodel.value.profileImg ??
+              MyConstant.profile_default,
+          fromAccountName:
+              '${userController.userProfilemodel.value.name.toString()} ${userController.userProfilemodel.value.surname.toString()}',
+          fromAccountNumber:
+              userController.userProfilemodel.value.msisdn.toString(),
+          toAccountImage: rxLogo.value,
+          toAccountName: rxAccNo.toString(),
+          toAccountNumber: rxAccName.toString(),
+          amount: rxPaymentAmount.value,
+          fee: rxFee.value,
+          note: rxNote.value,
+        ),
+      );
     } else {
       loading.value = false;
       DialogHelper.showErrorDialogNew(description: response['resultdesc']);

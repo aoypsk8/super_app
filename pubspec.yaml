@@ -101,6 +101,9 @@ dependencies:
   # slider
   syncfusion_flutter_sliders: ^28.2.5
 
+  # cache
+  flutter_cache: ^0.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

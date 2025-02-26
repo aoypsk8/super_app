@@ -9,6 +9,9 @@ import 'package:super_app/models/PackageTempCModel.dart';
 import 'package:super_app/models/PrepiadTempCModel.dart';
 import 'package:super_app/models/providerTempCModel.dart';
 import 'package:super_app/models/serviceTempCModel.dart';
+import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_result.dart';
+import 'package:super_app/views/templateC/package/PackageListScreen.dart';
 import '../services/helper/random.dart';
 import '../models/menu_model.dart';
 import '../services/api/dio_client.dart';
@@ -84,7 +87,7 @@ class TempCController extends GetxController {
   //! QRY OPERATOR
   //!------------------------------------------------------------------------------
   fetchtempCList(Menulists menudetail) async {
-    cache.clear();
+    // cache.clear();
     //! check cache exist
     var cacheData = await cache.load('fetchtempCList', null);
     if (cacheData == null) {
@@ -128,9 +131,7 @@ class TempCController extends GetxController {
     rxAccNo.value = accNo;
     List<String> urlSplit = tempCservicedetail.value.url.toString().split(";");
     var url = urlSplit[0];
-
     rxService.value = tempCservicedetail.value.name.toString();
-
     var data = {
       "msisdn": accNo,
       "tranID": rxTransID.value,
@@ -138,7 +139,6 @@ class TempCController extends GetxController {
     };
     var response = await DioClient.postEncrypt(url, data, key: 'lmm');
     // await creditcardController.checkVisaPayment();
-
     if (response['ResultCode'] == "200") {
       if (rxService.value == "PREPAID") {
         rxAccName.value = "";
@@ -152,7 +152,7 @@ class TempCController extends GetxController {
         tempCpackagemodel.value = response['Packages']
             .map<Packages>((json) => Packages.fromJson(json))
             .toList();
-        // Get.to(() => const PackageListScreen());
+        Get.to(() => const PackageListScreen());
       } else {
         logVerify = response;
         rxAccName.value = response['Name'].toString();
@@ -272,6 +272,22 @@ class TempCController extends GetxController {
           rxPaymentAmount.value = int.parse(response['Amount']);
           saveHistoryMobile(rxAccNo.value, rxService.value);
           // Get.to(() => const ResultPrepaidTempCScreen());
+          Get.off(ReusableResultScreen(
+            fromAccountImage:
+                userController.userProfilemodel.value.profileImg ??
+                    MyConstant.profile_default,
+            fromAccountName: userController.profileName.value,
+            fromAccountNumber: userController.rxMsisdn.value,
+            toAccountImage: MyConstant.profile_default,
+            toAccountName: tempCservicedetail.value.description.toString(),
+            toAccountNumber: rxAccNo.value,
+            toTitleProvider: '',
+            amount: rxPaymentAmount.value.toString(),
+            fee: '0',
+            transactionId: rxTransID.value,
+            note: rxNote.value,
+            timestamp: rxTimeStamp.value,
+          ));
         } else {
           DialogHelper.showErrorWithFunctionDialog(
               description: response['ResultDesc'],

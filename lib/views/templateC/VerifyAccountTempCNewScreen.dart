@@ -124,6 +124,9 @@ class _VerifyAccountTempCNewScreenState
           footer: buildBottomAppbar(
             title: tempCcontroler.rxPrepaidShow.value ? 'confirm' : 'next',
             func: () {
+              tempCcontroler.rxNote.value = tempCcontroler
+                  .tempCservicedetail.value.description
+                  .toString();
               if (tempCcontroler.rxPrepaidShow.value) {
                 if (tempCcontroler.rxTotalAmount.value != 0 &&
                     tempCcontroler.rxPaymentAmount.value != 0 &&
@@ -150,7 +153,6 @@ class _VerifyAccountTempCNewScreenState
                                     function: () {
                                       tempCcontroler.paymentPrepaid(
                                           homeController.menudetail.value);
-                                      return Container();
                                     },
                                     stepProcess: "4/4",
                                     stepTitle: "check_detail",

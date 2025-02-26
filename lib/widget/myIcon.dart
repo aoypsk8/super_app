@@ -14,6 +14,7 @@ class MyIcon {
   //
   static String ic_info1 = 'assets/icons/ic_info1.svg';
   static String ic_creditcard = 'assets/icons/credit_card.svg';
+  static String mascot_package = 'assets/icons/mascot_package.png';
 
   // background
   static String bg_gradient1 = 'assets/background/bg_gradient1.svg';

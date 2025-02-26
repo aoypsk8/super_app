@@ -50,7 +50,7 @@ class _ListServiceTempCScreenState extends State<ListServiceTempCScreen> {
           child: Column(
             children: [
               SizedBox(height: 10),
-              buildStepProcess(title: "3/4", desc: "telecome_service"),
+              buildStepProcess(title: "2/4", desc: "telecome_service"),
               const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(

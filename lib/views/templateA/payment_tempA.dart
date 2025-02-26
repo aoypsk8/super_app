@@ -6,12 +6,12 @@ import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/tempA_controller.dart';
+import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
-import 'package:super_app/views/templateA/confirm_tempA.dart';
-import 'package:super_app/views/templateA/list_payment_tempA.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildButtonBottom.dart';
 import 'package:super_app/widget/buildTextField.dart';
@@ -24,6 +24,7 @@ class PaymentTempAScreen extends StatelessWidget {
 
   final controller = Get.find<TempAController>();
   final homeController = Get.find<HomeController>();
+  final userController = Get.find<UserController>();
 
   final PaymentController paymentController = Get.put(PaymentController());
 
@@ -85,7 +86,41 @@ class PaymentTempAScreen extends StatelessWidget {
                           remark: controller.rxNote.value)
                       .then(
                         (value) => {
-                          if (value) {Get.to(() => ConfirmTempAScreen())}
+                          if (value)
+                            {
+                              Get.to(() => ReusableConfirmScreen(
+                                    appbarTitle: "confirm_payment",
+                                    function: () {
+                                      controller.isLoading.value = true;
+                                      var amount = controller
+                                          .rxPaymentAmount.value
+                                          .replaceAll(RegExp(r'[^\w\s]+'), '');
+                                      controller.paymentprocess(amount);
+                                    },
+                                    stepProcess: "5/5",
+                                    stepTitle: "check_detail",
+                                    fromAccountImage: userController
+                                            .userProfilemodel
+                                            .value
+                                            .profileImg ??
+                                        MyConstant.profile_default,
+                                    fromAccountName:
+                                        '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+                                    fromAccountNumber: userController
+                                        .userProfilemodel.value.msisdn
+                                        .toString(),
+                                    toAccountImage:
+                                        controller.tempAdetail.value.logo ?? '',
+                                    toAccountName: controller.rxaccname
+                                        .value, // Fixed swapped values
+                                    toAccountNumber:
+                                        controller.rxaccnumber.value,
+                                    amount: controller.rxPaymentAmount.value,
+                                    fee: controller.tempAdetail.value.fee ??
+                                        '0', // Prevent null error
+                                    note: controller.rxNote.value,
+                                  ))
+                            }
                         },
                       );
                   return Container();

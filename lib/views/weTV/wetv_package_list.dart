@@ -11,8 +11,9 @@ import 'package:super_app/controllers/wetv_controller.dart';
 import 'package:super_app/models/wetv_model.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
-import 'package:super_app/views/weTV/confirm_weTV.dart';
+import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -269,7 +270,33 @@ class buildWeTvCard extends StatelessWidget {
           stepBuild: '2/3',
           title: homeController.getMenuTitle(),
           onSelectedPayment: () {
-            Get.to(() => ConfirmWeTVScreen());
+            Get.to(() => ReusableConfirmScreen(
+                  appbarTitle: "confirm_payment",
+                  function: () {
+                    weTVController.loading.value = true;
+                    var amount = weTVController.wetvdetail.value.price
+                        .toString()
+                        .replaceAll(new RegExp(r'[^\w\s]+'), '');
+                    weTVController.wetvpayment(amount);
+                  },
+                  stepProcess: "5/5",
+                  stepTitle: "check_detail",
+                  fromAccountImage:
+                      userController.userProfilemodel.value.profileImg ??
+                          MyConstant.profile_default,
+                  fromAccountName:
+                      '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+                  fromAccountNumber:
+                      userController.userProfilemodel.value.msisdn.toString(),
+                  toAccountImage: weTVController.wetvdetail.value.logo ?? '',
+                  toAccountName:
+                      weTVController.title.value, // Fixed swapped values
+                  toAccountNumber:
+                      "${weTVController.wetvdetail.value.day.toString()} Days",
+                  amount: weTVController.wetvdetail.value.price.toString(),
+                  fee: weTVController.rxFee.value, // Prevent null error
+                  note: weTVController.rxNote.value,
+                ));
             return Container();
           },
         ));

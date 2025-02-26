@@ -10,6 +10,7 @@ import 'package:super_app/services/theme_service.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/main/home_recommend.dart';
+import 'package:super_app/views/main/telecom_services.dart';
 import 'package:super_app/views/notification/notification_box.dart';
 import 'package:super_app/widget/mask_msisdn.dart';
 import 'package:super_app/widget/myIcon.dart';
@@ -213,6 +214,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           ),
                         ],
                         indicatorColor: Theme.of(context).colorScheme.onPrimary,
+                        dividerColor: cr_ecec,
                       ),
                     ),
                     Expanded(
@@ -220,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         controller: _tabController,
                         children: [
                           HomeRecommendScreen(), // HomeRecommend Component is here
-                          Text("hi1231231"), // HomeTelecom Component is here
+                          TelecomServices(), // HomeTelecom Component is here
                         ],
                       ),
                     ),

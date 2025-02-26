@@ -104,6 +104,9 @@ dependencies:
   # cache
   flutter_cache: ^0.1.0
 
+  #chart
+  percent_indicator: ^4.2.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

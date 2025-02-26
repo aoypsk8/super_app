@@ -43,6 +43,7 @@ const cr_ecec = Color(0xffECECEC);
 const cr_3b3b = Color(0xff3B3B3B);
 const cr_eae7 = Color(0xffEAE7E7);
 const cr_b692 = Color(0xffB69200);
+const cr_0e19 = Color(0xFFAF0E19);
 const cr_c20d = Color.fromARGB(255, 230, 17, 2);
 
 // box decoreaction

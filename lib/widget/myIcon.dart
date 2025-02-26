@@ -25,6 +25,7 @@ class MyIcon {
   static String bg_backgroundBill = 'assets/background/backgroundTrnasfer.png';
   static String bg_ic_background = 'assets/background/bii_ic_background.png';
   static String bgOfCard = 'assets/background/bgOfCard.svg';
+  static String bg_circle = 'assets/background/bg_circle.svg';
 
   //recurring
   static String ic_bill_link = 'assets/icons/ic_bill_link.png';
@@ -127,4 +128,7 @@ class MyIcon {
   static String ic_water = 'assets/history/ic_water.svg';
   static String ic_wetv = 'assets/history/ic_wetv.svg';
   static String ic_topup_pstn = 'assets/history/topup_pstn.svg';
+
+  //telecom services
+  static String ic_internet_round = 'assets/icons/ic_internet_round.svg';
 }

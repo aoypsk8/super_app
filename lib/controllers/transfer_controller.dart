@@ -146,11 +146,13 @@ class TransferController extends GetxController {
                         '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
                     fromAccountNumber:
                         userController.userProfilemodel.value.msisdn.toString(),
-                    toAccountImage: 'tempAdetail.value.logo ?? ' '',
-                    toAccountName: 'rxaccname.value', // Fixed swapped values
-                    toAccountNumber: 'rxaccnumber.value',
-                    amount: 'rxPaymentAmount.value',
-                    fee: 'tempAdetail.value.fee',
+                    toAccountImage: desTranferKyc.value.profileImg ??
+                        MyConstant.profile_default,
+                    toAccountName:
+                        destinationname.value, // Fixed swapped values
+                    toAccountNumber: destinationMsisdn.value,
+                    amount: amount.value,
+                    fee: '0', // Prevent null error
                     note: note.value,
                   ));
               return Container();

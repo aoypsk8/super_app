@@ -192,6 +192,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         onTap: (index) => setState(() {
                           indexTabs = index;
                         }),
+                        dividerColor: Colors.transparent,
                         tabs: [
                           Tab(
                             child: TextFont(

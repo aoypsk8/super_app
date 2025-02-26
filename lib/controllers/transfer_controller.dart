@@ -12,6 +12,7 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/menu_model.dart';
 import 'package:super_app/models/UserKycModel.dart';
 import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/views/reusable_template/reusable_result.dart';
 import '../services/helper/random.dart';
@@ -130,8 +131,28 @@ class TransferController extends GetxController {
             stepBuild: '2/3',
             title: homeController.getMenuTitle(),
             onSelectedPayment: () {
-              loading.value = false;
-              Get.toNamed('/confirmTransfer');
+              Get.to(() => ReusableConfirmScreen(
+                    appbarTitle: "confirm_payment",
+                    function: () {
+                      loading.value = true;
+                      transfer(homeController.menudetail.value);
+                    },
+                    stepProcess: "5/5",
+                    stepTitle: "check_detail",
+                    fromAccountImage:
+                        userController.userProfilemodel.value.profileImg ??
+                            MyConstant.profile_default,
+                    fromAccountName:
+                        '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+                    fromAccountNumber:
+                        userController.userProfilemodel.value.msisdn.toString(),
+                    toAccountImage: 'tempAdetail.value.logo ?? ' '',
+                    toAccountName: 'rxaccname.value', // Fixed swapped values
+                    toAccountNumber: 'rxaccnumber.value',
+                    amount: 'rxPaymentAmount.value',
+                    fee: 'tempAdetail.value.fee',
+                    note: note.value,
+                  ));
               return Container();
             },
           ));

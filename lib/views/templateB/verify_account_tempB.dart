@@ -16,7 +16,7 @@ import 'package:super_app/widget/mounoy_textfield.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class VerifyAccountTempB extends StatefulWidget {
-  VerifyAccountTempB({super.key});
+  const VerifyAccountTempB({super.key});
 
   @override
   State<VerifyAccountTempB> createState() => _VerifyAccountTempBState();
@@ -63,8 +63,10 @@ class _VerifyAccountTempBState extends State<VerifyAccountTempB> {
                       TextFont(text: 'history'),
                       Obx(() {
                         if (controller.isLoading.value) {
-                          return const Center(
-                              child: CircularProgressIndicator());
+                          return Expanded(
+                            child: const Center(
+                                child: CircularProgressIndicator()),
+                          );
                         }
                         if (controller.recenttampB.isEmpty) {
                           return Expanded(

@@ -14,8 +14,10 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/temp_b_controller.dart';
+import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/controllers/wetv_controller.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/buildUserDetail.dart';
@@ -35,7 +37,8 @@ class ResultTempBscreen extends StatefulWidget {
 class _ResultTempBscreenState extends State<ResultTempBscreen>
     with SingleTickerProviderStateMixin {
   final screenshotController = ScreenshotController();
-  final Controller = Get.put(TempBController());
+  final controller = Get.put(TempBController());
+  final userController = Get.find<UserController>();
   final GlobalKey _globalKey = GlobalKey();
 
   final storage = GetStorage();
@@ -200,7 +203,7 @@ class _ResultTempBscreenState extends State<ResultTempBscreen>
                                             text:
                                                 DateFormat('dd MMM, yyyy HH:mm')
                                                     .format(
-                                              DateTime.parse(Controller
+                                              DateTime.parse(controller
                                                   .rxTimeStamp
                                                   .replaceAll('/', '-')),
                                             ),
@@ -227,12 +230,15 @@ class _ResultTempBscreenState extends State<ResultTempBscreen>
                                               padding:
                                                   const EdgeInsets.all(12.0),
                                               child: buildUserDetail(
-                                                profile:
-                                                    "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
+                                                profile: userController
+                                                        .userProfilemodel
+                                                        .value
+                                                        .profileImg ??
+                                                    MyConstant.profile_default,
                                                 from: true,
                                                 msisdn: storage.read('msisdn'),
-                                                name:
-                                                    "userController.name.value",
+                                                name: userController
+                                                    .profileName.value,
                                               ),
                                             ),
                                             const SizedBox(height: 5),
@@ -244,13 +250,13 @@ class _ResultTempBscreenState extends State<ResultTempBscreen>
                                               padding:
                                                   const EdgeInsets.all(12.0),
                                               child: buildUserDetail(
-                                                profile: Controller.tempBdetail
+                                                profile: controller.tempBdetail
                                                         .value.logo ??
                                                     "https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png",
                                                 from: false,
                                                 msisdn:
-                                                    Controller.rxAccNo.value,
-                                                name: Controller.tempBdetail
+                                                    controller.rxAccNo.value,
+                                                name: controller.tempBdetail
                                                         .value.nameCode ??
                                                     '',
                                               ),
@@ -267,7 +273,7 @@ class _ResultTempBscreenState extends State<ResultTempBscreen>
                                             child: buildTextDetail(
                                               money: false,
                                               title: "description",
-                                              detail: Controller.rxNote.value,
+                                              detail: controller.rxNote.value,
                                               noto: true,
                                             ),
                                           ),
@@ -284,7 +290,7 @@ class _ResultTempBscreenState extends State<ResultTempBscreen>
                                         children: [
                                           TextFont(
                                             text: NumberFormat('#,###').format(
-                                                double.parse(Controller
+                                                double.parse(controller
                                                     .rxPaymentAmount.value
                                                     .toString())),
                                             fontWeight: FontWeight.w500,
@@ -304,7 +310,7 @@ class _ResultTempBscreenState extends State<ResultTempBscreen>
                                         title: "fee",
                                         detail: NumberFormat('#,###').format(
                                             double.parse(
-                                                Controller.rxFee.value)),
+                                                controller.rxFee.value)),
                                         money: true,
                                       ),
                                       const SizedBox(height: 20),
@@ -318,7 +324,7 @@ class _ResultTempBscreenState extends State<ResultTempBscreen>
                                                 maxlines: 1,
                                                 title: "ເລກໃບບິນ",
                                                 detail:
-                                                    Controller.rxTransID.value),
+                                                    controller.rxTransID.value),
                                           ),
                                           Expanded(
                                             flex: 1,
@@ -332,7 +338,7 @@ class _ResultTempBscreenState extends State<ResultTempBscreen>
                                                     MyIcon.ic_logo_x,
                                                   ),
                                                   size: 25.w,
-                                                  data: Controller
+                                                  data: controller
                                                       .rxTransID.value,
                                                   errorCorrectLevel:
                                                       QrErrorCorrectLevel.M,

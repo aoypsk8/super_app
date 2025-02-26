@@ -18,6 +18,7 @@ import 'package:super_app/utility/myconstant.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:super_app/views/reusable_template/reusable_result.dart';
+import 'package:super_app/widget/reusableResultWithCode.dart';
 
 class UserController extends GetxController with WidgetsBindingObserver {
   final storage = GetStorage();
@@ -45,7 +46,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
   RxBool isCheckToken = false.obs;
 
   //auth
-  RxString rxMsisdn = '2054034422'.obs;
+  RxString rxMsisdn = '2054042200'.obs;
 
   RxString rxLat = ''.obs;
   RxString rxLong = ''.obs;
@@ -73,10 +74,10 @@ class UserController extends GetxController with WidgetsBindingObserver {
   @override
   void onReady() async {
     super.onReady();
-    String wallet = '2052768833';
+    String wallet = '2054042200';
     storage.write('msisdn', wallet);
     rxMsisdn.value = storage.read('msisdn');
-    await loginpincode(wallet, '555555');
+    await loginpincode(wallet, '010824');
     await fetchBalance();
     await queryUserProfile();
   }
@@ -431,4 +432,32 @@ class UserController extends GetxController with WidgetsBindingObserver {
           ));
     }
   }
+
+  // fetchHistoryDetailWithCode(transID, String code) async {
+  //   var url = '${MyConstant.urlHistory}/detail';
+  //   var data = {"transid": transID};
+  //   // var res = await DioClient.postNoLoading(url, data);
+  //   var res = await DioClient.postEncrypt(url, data);
+  //   if (res != null) {
+  //     historyDetailModel.value = HistoryDetailModel.fromJson(res);
+  //     Get.to(ReusableResultWithCode(
+  //       fromAccountImage: userProfilemodel.value.profileImg!,
+  //       fromAccountName: historyDetailModel.value.fromAccName!,
+  //       fromAccountNumber: historyDetailModel.value.fromAcc!,
+  //       toAccountImage: historyDetailModel.value.logo == ""
+  //           ? MyConstant.profile_default
+  //           : historyDetailModel.value.logo!,
+  //       toAccountName: historyDetailModel.value.provider!,
+  //       toAccountNumber: historyDetailModel.value.provider!,
+  //       amount: historyDetailModel.value.amount!,
+  //       fee: historyDetailModel.value.fee == ""
+  //           ? "0"
+  //           : historyDetailModel.value.fee!,
+  //       transactionId: historyDetailModel.value.transid!,
+  //       timestamp: historyDetailModel.value.timestamp!,
+  //       fromHistory: false,
+  //       code: code,
+  //     ));
+  //   }
+  // }
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -10,8 +11,9 @@ import 'package:super_app/controllers/wetv_controller.dart';
 import 'package:super_app/models/wetv_model.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
-import 'package:super_app/views/weTV/confirm_weTV.dart';
+import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -46,7 +48,7 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
     final WeTVController weTVController = Get.find();
     return Obx(() => Scaffold(
           backgroundColor: cr_fbf7,
-          appBar: BuildAppBar(title: 'ຈ່າຍຄ່າ WeTV'),
+          appBar: BuildAppBar(title: homeController.getMenuTitle()),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -58,7 +60,7 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                       padding: const EdgeInsets.all(10),
                       child: buildStepProcess(
                         title: '1/3',
-                        desc: 'select package',
+                        desc: 'select_package',
                       ),
                     ),
                     Padding(
@@ -100,99 +102,146 @@ class _WeTvPackageListState extends State<WeTvPackageList> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 10),
+                      SizedBox(height: 5),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: TextFont(
-                          text: 'ລາຍການລ່າສຸດ',
-                          fontSize: 14,
+                          text: 'history',
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w500,
+                          noto: true,
                         ),
                       ),
-                      SizedBox(height: 10),
                       Expanded(
-                        child: ListView.builder(
-                          shrinkWrap: true, // Keep this
-                          itemCount: weTVController.wetvhistory.length,
-                          itemBuilder: (context, index) {
-                            final e = weTVController.wetvhistory[index];
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              child: Container(
-                                padding: EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade200,
-                                  borderRadius: BorderRadius.circular(12),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.08),
-                                      spreadRadius: 1,
-                                      blurRadius: 8,
-                                      offset: Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor:
-                                          Colors.red.withOpacity(0.1),
-                                      child: Icon(
-                                        Icons.money,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                    SizedBox(width: 12),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextFont(
-                                            text:
-                                                'Lao Mobile Money Sole Company...',
-                                            fontSize: 12,
-                                          ),
-                                          SizedBox(height: 4),
-                                          TextFont(
-                                            text: e.code!,
-                                            color: Colors.grey,
-                                            fontSize: 10,
-                                          ),
-                                          SizedBox(height: 4),
-                                          TextFont(
-                                            text:
-                                                DateFormat('dd MMM, yyyy HH:mm')
-                                                    .format(
-                                              DateTime.parse(e.created!
-                                                  .replaceAll('/', '-')),
-                                            ),
-                                            color: color_777,
-                                            fontSize: 10,
-                                            poppin: true,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    TextFont(
-                                      text: '-${fn.format(e.price)} LAK',
-                                      color: Colors.red,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ],
+                        child: Obx(() {
+                          if (weTVController.wetvhistory.isEmpty) {
+                            return Align(
+                              alignment:
+                                  Alignment.center, // Move text to upper center
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: 100), // Adjust spacing as needed
+                                child: TextFont(
+                                  text: 'No data available',
+                                  fontSize: 14,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
                             );
-                          },
-                        ),
+                          }
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: weTVController.wetvhistory.length,
+                            itemBuilder: (context, index) {
+                              final e = weTVController.wetvhistory[index];
+
+                              return AnimationConfiguration.staggeredList(
+                                position: index,
+                                duration: const Duration(milliseconds: 550),
+                                child: SlideAnimation(
+                                  verticalOffset: 50,
+                                  child: FlipAnimation(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Clipboard.setData(
+                                            ClipboardData(text: e.code!));
+                                        Get.snackbar(
+                                          'Copied!',
+                                          'Code copied to clipboard',
+                                          snackPosition: SnackPosition.BOTTOM,
+                                          backgroundColor:
+                                              cr_b326.withOpacity(0.1),
+                                          colorText: cr_b326,
+                                          duration: Duration(seconds: 2),
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 8,
+                                        ),
+                                        child: Container(
+                                          padding: EdgeInsets.all(16),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade200,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.08),
+                                                spreadRadius: 1,
+                                                blurRadius: 8,
+                                                offset: Offset(0, 2),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              CircleAvatar(
+                                                backgroundColor:
+                                                    Colors.red.withOpacity(0.1),
+                                                backgroundImage: NetworkImage(
+                                                  MyConstant.profile_default,
+                                                ),
+                                              ),
+                                              SizedBox(width: 12),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    TextFont(
+                                                      text:
+                                                          'Lao Mobile Money Sole Company',
+                                                      fontSize: 12,
+                                                    ),
+                                                    SizedBox(height: 4),
+                                                    TextFont(
+                                                      text: e.code!,
+                                                      color: Colors.grey,
+                                                      fontSize: 10,
+                                                    ),
+                                                    SizedBox(height: 4),
+                                                    TextFont(
+                                                      text: DateFormat(
+                                                              'dd MMM, yyyy HH:mm')
+                                                          .format(
+                                                              DateTime.parse(e
+                                                                  .created!
+                                                                  .replaceAll(
+                                                                      '/',
+                                                                      '-'))),
+                                                      color: color_777,
+                                                      fontSize: 10,
+                                                      poppin: true,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              TextFont(
+                                                text:
+                                                    '-${fn.format(e.price)} LAK',
+                                                color: Colors.red,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        }),
                       ),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ));
@@ -221,7 +270,33 @@ class buildWeTvCard extends StatelessWidget {
           stepBuild: '2/3',
           title: homeController.getMenuTitle(),
           onSelectedPayment: () {
-            Get.to(() => ConfirmWeTVScreen());
+            Get.to(() => ReusableConfirmScreen(
+                  appbarTitle: "confirm_payment",
+                  function: () {
+                    weTVController.loading.value = true;
+                    var amount = weTVController.wetvdetail.value.price
+                        .toString()
+                        .replaceAll(new RegExp(r'[^\w\s]+'), '');
+                    weTVController.wetvpayment(amount);
+                  },
+                  stepProcess: "5/5",
+                  stepTitle: "check_detail",
+                  fromAccountImage:
+                      userController.userProfilemodel.value.profileImg ??
+                          MyConstant.profile_default,
+                  fromAccountName:
+                      '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+                  fromAccountNumber:
+                      userController.userProfilemodel.value.msisdn.toString(),
+                  toAccountImage: weTVController.wetvdetail.value.logo ?? '',
+                  toAccountName:
+                      weTVController.title.value, // Fixed swapped values
+                  toAccountNumber:
+                      "${weTVController.wetvdetail.value.day.toString()} Days",
+                  amount: weTVController.wetvdetail.value.price.toString(),
+                  fee: weTVController.rxFee.value, // Prevent null error
+                  note: weTVController.rxNote.value,
+                ));
             return Container();
           },
         ));
@@ -249,13 +324,13 @@ class buildWeTvCard extends StatelessWidget {
             ),
             SizedBox(height: 12),
             TextFont(
-              text: 'ແພັກເກັດ ${e.day} ມື້',
+              text: '${'Data Package'.tr} ${e.day} ${'day'.tr}',
               fontSize: 12,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 8),
             TextFont(
-              text: '${fn.format(e.price)} LAK',
+              text: '${fn.format(e.price)} ${'kip'.tr}',
               fontSize: 12,
               fontWeight: FontWeight.w400,
             ),

@@ -21,7 +21,7 @@ class ReusableConfirmScreen extends StatefulWidget {
   final String appbarTitle;
   final String stepProcess;
   final String stepTitle;
-  final Widget Function() function;
+  final VoidCallback function;
   final String fromAccountImage;
   final String fromAccountName;
   final String fromAccountNumber;
@@ -119,7 +119,7 @@ class _ReusableConfirmScreenState extends State<ReusableConfirmScreen> {
           bgColor: Theme.of(context).primaryColor,
           title: 'confirm_transfer',
           func: () {
-            widget.function;
+            widget.function();
             _countdownTimer?.cancel();
             setState(() {
               hideButton = true;
@@ -220,11 +220,12 @@ class _ReusableConfirmScreenState extends State<ReusableConfirmScreen> {
               money: true,
             ),
             const SizedBox(height: 20),
-            buildTextDetail(
-              money: false,
-              title: "description",
-              detail: widget.note,
-            ),
+            if (widget.note != null && widget.note!.isNotEmpty)
+              buildTextDetail(
+                money: false,
+                title: "description",
+                detail: widget.note!,
+              ),
           ],
         ),
       ),

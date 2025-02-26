@@ -412,11 +412,11 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                           ),
                         ),
                       ),
-                      PrimaryButton(
-                          title: 'XJaidee',
-                          onPressed: () {
-                            Get.toNamed('/xjaidee');
-                          }),
+                      // PrimaryButton(
+                      //     title: 'XJaidee',
+                      //     onPressed: () {
+                      //       Get.toNamed('/xjaidee');
+                      //     }),
                       const SizedBox(height: 20),
                       Container(
                         color: color_fff,

@@ -132,12 +132,12 @@ class TransferController extends GetxController {
             title: homeController.getMenuTitle(),
             onSelectedPayment: () {
               Get.to(() => ReusableConfirmScreen(
-                    appbarTitle: "confirm_payment",
+                    appbarTitle: homeController.getMenuTitle(),
                     function: () {
                       loading.value = true;
                       transfer(homeController.menudetail.value);
                     },
-                    stepProcess: "5/5",
+                    stepProcess: "3/3",
                     stepTitle: "check_detail",
                     fromAccountImage:
                         userController.userProfilemodel.value.profileImg ??

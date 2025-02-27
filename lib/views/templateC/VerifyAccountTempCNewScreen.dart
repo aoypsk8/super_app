@@ -149,7 +149,7 @@ class _VerifyAccountTempCNewScreenState
                               {
                                 Get.to(
                                   ReusableConfirmScreen(
-                                    appbarTitle: "confirm_payment",
+                                    appbarTitle: homeController.getMenuTitle(),
                                     function: () {
                                       tempCcontroler.paymentPrepaid(
                                           homeController.menudetail.value);

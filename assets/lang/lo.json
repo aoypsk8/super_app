@@ -312,6 +312,9 @@
   "transfer_laoQR":"ປ້ອນລາຍການໂອນ",
   "select_package":"ເລືອກແພັດເກັດ",
   "select_payment":"ເລືອກບັນຊີ",
-  "select_lists_item":"ເລືອກລາຍການຊຳລະ"
+  "select_lists_item":"ເລືອກລາຍການຊຳລະ",
+  "check_detail": "ກວດສອບລາຍລະອຽດ",
+  "transfer_to_bank":"ປ້ອນລາຍການຖອນ",
+  "please_pay": "ກະລຸນາຈ່າຍເງິນ"
 
 }

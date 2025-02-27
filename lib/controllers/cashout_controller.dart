@@ -143,7 +143,7 @@ class CashOutController extends GetxController {
       // Get.toNamed('/cashOutConfirm');
       Get.to(
         () => ReusableConfirmScreen(
-          appbarTitle: "confirm_payment",
+          appbarTitle: homeController.getMenuTitle(),
           function: () {
             loading.value = true;
             confirmPayment();

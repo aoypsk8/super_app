@@ -310,5 +310,8 @@
   "select_package":"Select Package",
   "select_payment":"Select Payment",
   "select_lists_item":"Select a payment item",
-  "input_amount": "Input Amount"
+  "input_amount": "Input Amount",
+  "check_detail": "Check Details",
+  "transfer_to_bank":"Input withdrawal transaction",
+  "please_pay": "Please pay"
 }

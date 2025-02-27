@@ -89,7 +89,7 @@ class PaymentTempAScreen extends StatelessWidget {
                           if (value)
                             {
                               Get.to(() => ReusableConfirmScreen(
-                                    appbarTitle: "confirm_payment",
+                                    appbarTitle: homeController.getMenuTitle(),
                                     function: () {
                                       controller.isLoading.value = true;
                                       var amount = controller

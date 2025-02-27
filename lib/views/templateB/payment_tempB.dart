@@ -93,7 +93,7 @@ class PaymentTempBScreen extends StatelessWidget {
                             .then((value) {
                           if (value) {
                             Get.to(() => ReusableConfirmScreen(
-                                  appbarTitle: "confirm_payment",
+                                  appbarTitle: homeController.getMenuTitle(),
                                   function: () {
                                     controller.isLoading.value = true;
                                     controller.paymentProcess(

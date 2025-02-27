@@ -271,7 +271,7 @@ class buildWeTvCard extends StatelessWidget {
           title: homeController.getMenuTitle(),
           onSelectedPayment: () {
             Get.to(() => ReusableConfirmScreen(
-                  appbarTitle: "confirm_payment",
+                  appbarTitle: homeController.getMenuTitle(),
                   function: () {
                     weTVController.loading.value = true;
                     var amount = weTVController.wetvdetail.value.price
@@ -279,7 +279,7 @@ class buildWeTvCard extends StatelessWidget {
                         .replaceAll(new RegExp(r'[^\w\s]+'), '');
                     weTVController.wetvpayment(amount);
                   },
-                  stepProcess: "5/5",
+                  stepProcess: "3/3",
                   stepTitle: "check_detail",
                   fromAccountImage:
                       userController.userProfilemodel.value.profileImg ??

@@ -301,5 +301,8 @@
   "transfer_laoQR":"Transfer LaoQR",
   "select_package":"Select Package",
    "select_payment":"Select Payment",
-   "select_lists_item":"Select a payment item"
+   "select_lists_item":"Select a payment item",
+   "check_detail": "Check Details",
+   "transfer_to_bank":"Input withdrawal transaction",
+   "please_pay": "Please pay"
 }

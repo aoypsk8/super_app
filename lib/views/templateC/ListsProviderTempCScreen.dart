@@ -52,27 +52,32 @@ class _ListProviderTempCScreenState extends State<ListProviderTempCScreen> {
               buildStepProcess(title: "1/4", desc: "telecome_service"),
               const SizedBox(height: 10),
               Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.75,
-                  ),
-                  itemCount: tempCcontroler.tempCmodel.length,
-                  itemBuilder: (context, index) {
-                    return AnimationConfiguration.staggeredGrid(
-                      position: index,
-                      duration: const Duration(milliseconds: 600),
-                      columnCount: 3,
-                      child: ScaleAnimation(
-                        child: FadeInAnimation(
-                          child: buildListProvider(index),
+                child: tempCcontroler.tempCmodel.isEmpty
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.75,
                         ),
+                        itemCount: tempCcontroler.tempCmodel.length,
+                        itemBuilder: (context, index) {
+                          return AnimationConfiguration.staggeredGrid(
+                            position: index,
+                            duration: const Duration(milliseconds: 600),
+                            columnCount: 3,
+                            child: ScaleAnimation(
+                              child: FadeInAnimation(
+                                child: buildListProvider(index),
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
             ],
           ),

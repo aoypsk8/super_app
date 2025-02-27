@@ -129,11 +129,6 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10),
-            // TextFont(
-            //   text: 'transfer_to_bank',
-            //   fontWeight: FontWeight.w500,
-            //   fontSize: 12,
-            // ),
             buildStepProcess(title: '2/3', desc: 'transfer_to_bank'),
             const SizedBox(height: 10),
             buildNumberFiledValidate(

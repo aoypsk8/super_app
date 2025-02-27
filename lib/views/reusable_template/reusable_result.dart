@@ -91,7 +91,8 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
 
   Future<void> _captureScreenshot() async {
     try {
-      RenderRepaintBoundary boundary = _repaintBoundaryKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      RenderRepaintBoundary boundary = _repaintBoundaryKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
       if (boundary.debugNeedsPaint) {
         print("Waiting for repaint...");
         await Future.delayed(Duration(milliseconds: 500));
@@ -99,12 +100,14 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
       }
       // Capture image with high resolution (pixelRatio 3.0 for better quality)
       ui.Image image = await boundary.toImage(pixelRatio: 5.0);
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
 
       // Save to file
       final directory = await getApplicationDocumentsDirectory();
-      final String filePath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final String filePath =
+          '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
       File file = File(filePath);
       await file.writeAsBytes(pngBytes);
 
@@ -139,7 +142,8 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                 bottom: 0,
                 child: Opacity(
                   opacity: 0.9,
-                  child: Image.asset(MyIcon.bg_backgroundBill, fit: BoxFit.cover),
+                  child:
+                      Image.asset(MyIcon.bg_backgroundBill, fit: BoxFit.cover),
                 ),
               ),
               FooterLayout(
@@ -172,7 +176,6 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
                       children: [
                         SizedBox(height: 10.h),
                         buildTopClippath(),
@@ -189,16 +192,19 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                               children: [
                                 backgroudDetailBill(),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                                  padding: const EdgeInsets.only(
+                                      left: 15, right: 15, top: 15),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       buildTextSuccess(),
                                       SizedBox(height: 10),
                                       Container(
                                         decoration: BoxDecoration(
                                           color: cr_fdeb,
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         ),
                                         child: Column(
                                           children: [
@@ -210,14 +216,17 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                                               accName: widget.fromAccountName,
                                               accNo: widget.fromAccountNumber,
                                             ),
-                                            buildDotLine(color: Theme.of(context).primaryColor),
+                                            buildDotLine(
+                                                color: Theme.of(context)
+                                                    .primaryColor),
                                             buildAccountDetails(
                                               context: context,
                                               imageUrl: widget.toAccountImage,
                                               type: 'to',
                                               accName: widget.toAccountName,
                                               accNo: widget.toAccountNumber,
-                                              titleProvider: widget.toTitleProvider,
+                                              titleProvider:
+                                                  widget.toTitleProvider,
                                             ),
                                           ],
                                         ),
@@ -232,7 +241,8 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                                       Row(
                                         children: [
                                           TextFont(
-                                            text: fn.format(int.parse(widget.amount)),
+                                            text: fn.format(
+                                                int.parse(widget.amount)),
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20,
                                             color: cr_b326,
@@ -255,11 +265,14 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                                         ),
                                         money: true,
                                       ),
-                                      const SizedBox(height: 5),
-                                      buildTextDetail(title: "transaction_id", detail: widget.transactionId),
-                                      const SizedBox(height: 5),
+                                      const SizedBox(height: 10),
+                                      buildTextDetail(
+                                          title: "transaction_id",
+                                          detail: widget.transactionId),
+                                      const SizedBox(height: 10),
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
                                               child: buildTextDetail(
@@ -270,7 +283,8 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                                           )),
                                           Expanded(
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
                                               children: [
                                                 PrettyQr(
                                                   image: AssetImage(
@@ -278,7 +292,8 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                                                   ),
                                                   size: 35.w,
                                                   data: widget.transactionId,
-                                                  errorCorrectLevel: QrErrorCorrectLevel.H,
+                                                  errorCorrectLevel:
+                                                      QrErrorCorrectLevel.H,
                                                   typeNumber: null,
                                                   roundEdges: false,
                                                 ),
@@ -397,10 +412,13 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                         height: 50.sp,
                         child: CircleAvatar(
                           backgroundImage: CachedNetworkImageProvider(imageUrl),
-                          backgroundColor: Colors.transparent, // Optional: Set a background color
+                          backgroundColor: Colors
+                              .transparent, // Optional: Set a background color
                         ),
                       ),
-                      SizedBox(width: 8), // Optional spacing between image and column
+                      SizedBox(
+                          width:
+                              8), // Optional spacing between image and column
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

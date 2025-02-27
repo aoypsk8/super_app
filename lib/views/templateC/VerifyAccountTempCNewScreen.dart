@@ -19,6 +19,7 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/templateC/prepaid/ConfirmPrepaidTempCScreen.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
@@ -123,6 +124,9 @@ class _VerifyAccountTempCNewScreenState
           footer: buildBottomAppbar(
             title: tempCcontroler.rxPrepaidShow.value ? 'confirm' : 'next',
             func: () {
+              tempCcontroler.rxNote.value = tempCcontroler
+                  .tempCservicedetail.value.description
+                  .toString();
               if (tempCcontroler.rxPrepaidShow.value) {
                 if (tempCcontroler.rxTotalAmount.value != 0 &&
                     tempCcontroler.rxPaymentAmount.value != 0 &&
@@ -141,7 +145,41 @@ class _VerifyAccountTempCNewScreenState
                           remark: tempCcontroler.rxNote.value)
                       .then((value) => {
                             if (value)
-                              {Get.to(() => const ConfirmPrepaidTempCScreen())}
+                              // {Get.to(() => const ConfirmPrepaidTempCScreen())}
+                              {
+                                Get.to(
+                                  ReusableConfirmScreen(
+                                    appbarTitle: "confirm_payment",
+                                    function: () {
+                                      tempCcontroler.paymentPrepaid(
+                                          homeController.menudetail.value);
+                                    },
+                                    stepProcess: "4/4",
+                                    stepTitle: "check_detail",
+                                    fromAccountImage: userController
+                                            .userProfilemodel
+                                            .value
+                                            .profileImg ??
+                                        MyConstant.profile_default,
+                                    fromAccountName:
+                                        '${userController.userProfilemodel.value.name.toString()} ${userController.userProfilemodel.value.surname.toString()}',
+                                    fromAccountNumber: userController
+                                        .userProfilemodel.value.msisdn
+                                        .toString(),
+                                    toAccountImage: MyConstant.profile_default,
+                                    toAccountName: tempCcontroler
+                                        .tempCservicedetail.value.description
+                                        .toString(),
+                                    toAccountNumber: _accoutNumber.text,
+                                    amount:
+                                        tempCcontroler.rxTotalAmount.toString(),
+                                    fee: '0',
+                                    note: tempCcontroler
+                                        .tempCservicedetail.value.description
+                                        .toString(),
+                                  ),
+                                )
+                              }
                           });
                 } else {
                   DialogHelper.showErrorDialogNew(

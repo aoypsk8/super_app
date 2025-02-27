@@ -1,0 +1,43 @@
+import 'package:flutter/material.dart';
+
+class RoundedRectangleTabIndicator extends Decoration {
+  final Color color;
+  final double weight;
+  final double borderRadius;
+
+  RoundedRectangleTabIndicator({
+    required this.color,
+    this.weight = 4.0, // Thickness of the indicator
+    this.borderRadius = 8.0, // Rounded corners
+  });
+
+  @override
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
+    return _RoundedRectanglePainter(color, weight, borderRadius);
+  }
+}
+
+class _RoundedRectanglePainter extends BoxPainter {
+  final Color color;
+  final double weight;
+  final double borderRadius;
+
+  _RoundedRectanglePainter(this.color, this.weight, this.borderRadius);
+
+  @override
+  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
+    final Paint paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    final double width = configuration.size!.width;
+    final double height = weight;
+    final double left = offset.dx;
+    final double top = offset.dy + configuration.size!.height - height;
+
+    final Rect rect = Rect.fromLTWH(left, top, width, height);
+    final RRect roundedRect = RRect.fromRectAndRadius(rect, Radius.circular(borderRadius));
+
+    canvas.drawRRect(roundedRect, paint);
+  }
+}

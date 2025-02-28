@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
-import 'package:super_app/utility/myIcon.dart';
 import 'package:super_app/widget/mask_msisdn.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/pull_refresh.dart';
@@ -20,6 +19,7 @@ class TelecomServices extends StatefulWidget {
 
 class _TelecomServicesState extends State<TelecomServices> {
   RefreshController refreshController = RefreshController();
+  final fn = NumberFormat("#,###", "en_US");
   bool isHidden = true;
   String msisdn = '2055515155';
   @override
@@ -37,8 +37,9 @@ class _TelecomServicesState extends State<TelecomServices> {
   }
 
   Widget dashboard() {
-    return Padding(
-      padding: EdgeInsets.only(top: 14, left: 15, right: 15),
+    return Container(
+      padding: EdgeInsets.only(top: 14, left: 15, right: 15, bottom: 18),
+      color: color_fff,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -46,8 +47,118 @@ class _TelecomServicesState extends State<TelecomServices> {
               text: 'ຈຳນວນເບີທີ່ຜູກ',
               color: cr_7070,
               fontWeight: FontWeight.w500),
-          card()
+          card(),
+          SizedBox(height: 16),
+          phoneList()
         ],
+      ),
+    );
+  }
+
+  Widget phoneList() {
+    return ListView(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      children: [phoneCard(), btnPhone()],
+    );
+  }
+
+  Widget btnPhone() {
+    return InkWell(
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 16),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            decoration: ShapeDecoration(
+              color: Color(0xFFEFF6FF),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+            ),
+            child: TextFont(
+              text: 'ເບິ່ງທັງໝົດ 5 ເບີ',
+              color: cr_63eb,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget phoneCard() {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        padding: EdgeInsets.only(left: 20, right: 20, bottom: 14, top: 18),
+        decoration: ShapeDecoration(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(width: 1, color: Color(0xFFDDDDDD)),
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Row(
+          children: [
+            Column(
+              children: [
+                SvgPicture.asset(
+                  MyIcon.ic_sim_bw,
+                  width: 8.w,
+                ),
+                SizedBox(height: 3),
+                TextFont(
+                  text: 'Net SIM',
+                  color: color_blackE72,
+                  poppin: true,
+                  fontSize: 6,
+                ),
+              ],
+            ),
+            SizedBox(width: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      isHidden = !isHidden;
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      TextFont(
+                        text: isHidden ? maskMsisdnX(msisdn) : msisdn,
+                        poppin: true,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 11.5,
+                        color: cr_4139,
+                      ),
+                      SizedBox(width: 15),
+                      Icon(
+                        Icons.visibility_off,
+                        size: 4.w,
+                        color: color_777,
+                      )
+                    ],
+                  ),
+                ),
+                TextFont(
+                  text: 'ຫມາຍເລກ 02',
+                  color: color_777,
+                  fontSize: 10,
+                ),
+              ],
+            ),
+            Spacer(),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 7.w,
+              color: color_777,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -174,7 +285,7 @@ class _TelecomServicesState extends State<TelecomServices> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextFont(
-                    text: '₭ 10,000,000',
+                    text: '₭ ${fn.format(10000000)}',
                     poppin: true,
                     fontWeight: FontWeight.w600,
                     color: color_fff,

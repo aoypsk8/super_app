@@ -132,4 +132,5 @@ class MyIcon {
   //telecom services
   static String ic_internet_round = 'assets/icons/ic_internet_round.svg';
   static String ic_sim_round = 'assets/icons/ic_sim_round.svg';
+  static String ic_sim_bw = 'assets/icons/ic_sim_bw.svg';
 }

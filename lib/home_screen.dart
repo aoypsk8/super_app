@@ -185,8 +185,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: Column(
                   children: [
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                      padding: EdgeInsets.only(top: 5, left: 20, right: 20),
                       child: TabBar(
                         controller: _tabController,
                         indicatorSize: TabBarIndicatorSize.tab,

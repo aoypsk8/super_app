@@ -80,7 +80,7 @@ class PaymentTempBScreen extends StatelessWidget {
                       description: 'select_payment',
                       stepBuild: '4/5',
                       title: homeController.getMenuTitle(),
-                      onSelectedPayment: () {
+                      onSelectedPayment: (paymentType, cardIndex) {
                         paymentController
                             .reqCashOut(
                           transID: controller.rxTransID.value,
@@ -121,8 +121,6 @@ class PaymentTempBScreen extends StatelessWidget {
                                 ));
                           }
                         });
-
-                        return Container();
                       },
                     ),
                   );

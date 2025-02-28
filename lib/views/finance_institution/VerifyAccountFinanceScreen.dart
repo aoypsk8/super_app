@@ -183,10 +183,9 @@ class _VerifyAccountFinanceScreenState
                           .toString(),
                       stepBuild: '2/3',
                       title: homeController.getMenuTitle(),
-                      onSelectedPayment: () {
+                      onSelectedPayment: (paymentType, cardIndex) {
                         financeController.rxAccNo.value = _accoutNumber.text;
                         financeController.verifyAccount();
-                        return Container();
                       },
                     ),
                   );

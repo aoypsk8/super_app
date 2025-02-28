@@ -130,14 +130,16 @@ class TransferController extends GetxController {
             description: 'select_payment',
             stepBuild: '2/3',
             title: homeController.getMenuTitle(),
-            onSelectedPayment: () {
+            onSelectedPayment: (paymentType, cardIndex) {
+              print(paymentType);
+              print(cardIndex);
               Get.to(() => ReusableConfirmScreen(
-                    appbarTitle: "confirm_payment",
+                    appbarTitle: homeController.getMenuTitle(),
                     function: () {
                       loading.value = true;
                       transfer(homeController.menudetail.value);
                     },
-                    stepProcess: "5/5",
+                    stepProcess: "3/3",
                     stepTitle: "check_detail",
                     fromAccountImage:
                         userController.userProfilemodel.value.profileImg ??
@@ -146,14 +148,14 @@ class TransferController extends GetxController {
                         '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
                     fromAccountNumber:
                         userController.userProfilemodel.value.msisdn.toString(),
-                    toAccountImage: 'tempAdetail.value.logo ?? ' '',
-                    toAccountName: 'rxaccname.value', // Fixed swapped values
-                    toAccountNumber: 'rxaccnumber.value',
-                    amount: 'rxPaymentAmount.value',
-                    fee: 'tempAdetail.value.fee',
+                    toAccountImage: desTranferKyc.value.profileImg ??
+                        MyConstant.profile_default,
+                    toAccountName: destinationname.value,
+                    toAccountNumber: destinationMsisdn.value,
+                    amount: amount.value,
+                    fee: '0',
                     note: note.value,
                   ));
-              return Container();
             },
           ));
         }

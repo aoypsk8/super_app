@@ -174,9 +174,8 @@ class _TicketPaymentScreenState extends State<TicketPaymentScreen> {
                 description: 'select_payment',
                 stepBuild: '2/3',
                 title: homeController.getMenuTitle(),
-                onSelectedPayment: () {
+                onSelectedPayment: (paymentType, cardIndex) {
                   Get.to(() => const ConfirmTicketScreen());
-                  return Container();
                 },
               ));
             } else {

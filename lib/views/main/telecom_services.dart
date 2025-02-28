@@ -1,9 +1,13 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/telecomsrv_controller.dart';
+import 'package:super_app/models/telecomsrv_model.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/mask_msisdn.dart';
 import 'package:super_app/widget/myIcon.dart';
@@ -19,21 +23,30 @@ class TelecomServices extends StatefulWidget {
 
 class _TelecomServicesState extends State<TelecomServices> {
   RefreshController refreshController = RefreshController();
+  final telecomsrv = Get.put(TelecomsrvController());
   final fn = NumberFormat("#,###", "en_US");
   bool isHidden = true;
-  String msisdn = '2055515155';
+
+  refresh() async {
+    await telecomsrv.getAirtime();
+    await telecomsrv.getNetworktype();
+    await telecomsrv.getPackage();
+    await telecomsrv.phoneList();
+    refreshController.refreshCompleted();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PullRefresh(
-        refreshController: refreshController,
-        onRefresh: () {},
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [dashboard()],
-        ),
-      ),
-    );
+    return Obx(() => Scaffold(
+          body: PullRefresh(
+            refreshController: refreshController,
+            onRefresh: () => refresh(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [dashboard()],
+            ),
+          ),
+        ));
   }
 
   Widget dashboard() {
@@ -59,7 +72,13 @@ class _TelecomServicesState extends State<TelecomServices> {
     return ListView(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      children: [phoneCard(), btnPhone()],
+      children: [
+        ...telecomsrv.phoneListModel
+            .skip(1)
+            .take(2)
+            .mapIndexed((i, e) => phoneCard(i, e)),
+        btnPhone()
+      ],
     );
   }
 
@@ -68,7 +87,7 @@ class _TelecomServicesState extends State<TelecomServices> {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 16),
+            margin: EdgeInsets.only(top: 6),
             padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
             decoration: ShapeDecoration(
               color: Color(0xFFEFF6FF),
@@ -76,7 +95,7 @@ class _TelecomServicesState extends State<TelecomServices> {
                   borderRadius: BorderRadius.circular(8)),
             ),
             child: TextFont(
-              text: 'ເບິ່ງທັງໝົດ 5 ເບີ',
+              text: 'ເບິ່ງທັງໝົດ ${telecomsrv.phoneListModel.length} ເບີ',
               color: cr_63eb,
               fontSize: 11,
               fontWeight: FontWeight.w500,
@@ -87,11 +106,12 @@ class _TelecomServicesState extends State<TelecomServices> {
     );
   }
 
-  Widget phoneCard() {
+  Widget phoneCard(int i, PhoneListModel e) {
     return InkWell(
       onTap: () {},
       child: Container(
-        padding: EdgeInsets.only(left: 20, right: 20, bottom: 14, top: 18),
+        padding: EdgeInsets.only(left: 20, right: 20, bottom: 8, top: 12),
+        margin: EdgeInsets.only(bottom: 10),
         decoration: ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
@@ -109,7 +129,7 @@ class _TelecomServicesState extends State<TelecomServices> {
                 ),
                 SizedBox(height: 3),
                 TextFont(
-                  text: 'Net SIM',
+                  text: e.networkType ?? '',
                   color: color_blackE72,
                   poppin: true,
                   fontSize: 6,
@@ -129,7 +149,10 @@ class _TelecomServicesState extends State<TelecomServices> {
                   child: Row(
                     children: [
                       TextFont(
-                        text: isHidden ? maskMsisdnX(msisdn) : msisdn,
+                        text: isHidden
+                            ? maskMsisdnX(
+                                e.phoneNumber ?? telecomsrv.msisdn.value)
+                            : e.phoneNumber ?? telecomsrv.msisdn.value,
                         poppin: true,
                         fontWeight: FontWeight.w500,
                         fontSize: 11.5,
@@ -137,17 +160,27 @@ class _TelecomServicesState extends State<TelecomServices> {
                       ),
                       SizedBox(width: 15),
                       Icon(
-                        Icons.visibility_off,
+                        isHidden ? Icons.visibility_off : Icons.visibility,
                         size: 4.w,
                         color: color_777,
                       )
                     ],
                   ),
                 ),
-                TextFont(
-                  text: 'ຫມາຍເລກ 02',
-                  color: color_777,
-                  fontSize: 10,
+                Row(
+                  children: [
+                    TextFont(
+                      text: 'ຫມາຍເລກ ',
+                      color: color_777,
+                      fontSize: 10,
+                    ),
+                    TextFont(
+                      text: (i + 2).toString().padLeft(2, '0'),
+                      poppin: true,
+                      color: color_777,
+                      fontSize: 10,
+                    )
+                  ],
                 ),
               ],
             ),
@@ -239,7 +272,14 @@ class _TelecomServicesState extends State<TelecomServices> {
                       child: Row(
                         children: [
                           TextFont(
-                            text: isHidden ? maskMsisdnX(msisdn) : msisdn,
+                            text: isHidden
+                                ? maskMsisdnX(telecomsrv
+                                        .phoneListModel.isNotEmpty
+                                    ? telecomsrv.phoneListModel[0].phoneNumber!
+                                    : telecomsrv.msisdn.value)
+                                : telecomsrv.phoneListModel.isNotEmpty
+                                    ? telecomsrv.phoneListModel[0].phoneNumber!
+                                    : telecomsrv.msisdn.value,
                             poppin: true,
                             fontWeight: FontWeight.w400,
                             color: color_fff,
@@ -247,7 +287,7 @@ class _TelecomServicesState extends State<TelecomServices> {
                           ),
                           SizedBox(width: 15),
                           Icon(
-                            Icons.visibility_off,
+                            isHidden ? Icons.visibility_off : Icons.visibility,
                             size: 4.w,
                             color: color_fff,
                           )
@@ -266,7 +306,8 @@ class _TelecomServicesState extends State<TelecomServices> {
                     ),
                     SizedBox(width: 6),
                     TextFont(
-                      text: '(Prepaid)',
+                      text:
+                          '(${telecomsrv.phoneListModel.isNotEmpty ? telecomsrv.phoneListModel[0].networkType! : ''})',
                       fontSize: 8,
                       poppin: true,
                       color: color_fff,
@@ -285,7 +326,7 @@ class _TelecomServicesState extends State<TelecomServices> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextFont(
-                    text: '₭ ${fn.format(10000000)}',
+                    text: '₭ ${fn.format(int.parse(telecomsrv.airtime.value))}',
                     poppin: true,
                     fontWeight: FontWeight.w600,
                     color: color_fff,
@@ -309,19 +350,19 @@ class _TelecomServicesState extends State<TelecomServices> {
       lineWidth: 7.0,
       animation: true,
       animationDuration: 300,
-      percent: 0.7,
+      percent: telecomsrv.inusePackageModel.value.doublePercent ?? 0.0,
       center: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextFont(
-            text: '2512',
+            text: telecomsrv.inusePackageModel.value.qtaUsed ?? '0',
             poppin: true,
             color: color_fff,
             fontWeight: FontWeight.w500,
             fontSize: 15,
           ),
           TextFont(
-            text: '/5024 MB',
+            text: '/${telecomsrv.inusePackageModel.value.qtaValue ?? '0'} MB',
             poppin: true,
             fontSize: 9,
             color: color_fff,
@@ -371,7 +412,8 @@ class _TelecomServicesState extends State<TelecomServices> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFont(
-                  text: 'Package Social 518',
+                  text: telecomsrv.inusePackageModel.value.packageName ??
+                      'available',
                   poppin: true,
                   fontWeight: FontWeight.w400,
                   color: color_fff,
@@ -384,9 +426,10 @@ class _TelecomServicesState extends State<TelecomServices> {
                       color: color_fff,
                       fontSize: 9,
                     ),
-                    SizedBox(width: 10),
+                    SizedBox(width: 6),
                     TextFont(
-                      text: '28/02/2025 23:59',
+                      text: telecomsrv.inusePackageModel.value.dateStamp ??
+                          'available',
                       color: color_fff,
                       fontSize: 9,
                       poppin: true,

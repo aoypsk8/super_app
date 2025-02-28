@@ -233,6 +233,10 @@ class DioClient {
       if (key == 'visa') {
         dio.options.headers.addAll({"lmmkey": MyKey.keyVisa});
       }
+      if (key == 'mservices') {
+        dio.options.headers
+            .addAll({"authorization": "Bearer ${MyKey.mservicesKey}"});
+      }
       if (key == 'lmmkeyPro') {
         dio.options.headers.addAll({"lmmkey": MyKey.lmmkeyPro});
       } else if (key == 'nokey') {

@@ -101,4 +101,6 @@ class MyConstant {
 
   // static String urlAddress = 'https://gateway.mmoney.la';
   static String urlBorrow = '/Borrowing';
+
+  static String mservicesUrl = 'https://ms.laoteldev.com';
 }

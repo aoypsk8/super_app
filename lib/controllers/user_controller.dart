@@ -76,7 +76,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
     String wallet = '2055515155';
     storage.write('msisdn', wallet);
     rxMsisdn.value = storage.read('msisdn');
-    await loginpincode(wallet, '555555');
+    await loginpincode(wallet, '333333');
     await fetchBalance();
     await queryUserProfile();
   }

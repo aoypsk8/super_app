@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:super_app/models/telecomsrv_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/utility/myconstant.dart';
@@ -14,6 +14,8 @@ class TelecomsrvController extends GetxController {
   RxString msisdn = '2055xxxxxx'.obs;
   RxString airtime = '0'.obs;
   final storage = GetStorage();
+  //slide up control
+  PanelController panelController = PanelController();
 
   @override
   void onReady() async {

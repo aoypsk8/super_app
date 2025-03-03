@@ -1,11 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:super_app/controllers/telecomsrv_controller.dart';
 import 'package:super_app/models/telecomsrv_model.dart';
 import 'package:super_app/utility/color.dart';
@@ -37,16 +39,112 @@ class _TelecomServicesState extends State<TelecomServices> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Scaffold(
-          body: PullRefresh(
-            refreshController: refreshController,
-            onRefresh: () => refresh(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [dashboard()],
+    return Obx(() => SlidingUpPanel(
+          renderPanelSheet: false,
+          panel: floatingPanel(),
+          controller: telecomsrv.panelController,
+          maxHeight: Get.height / 2,
+          minHeight: 0.0,
+          backdropEnabled: true,
+          body: Scaffold(
+            body: PullRefresh(
+              refreshController: refreshController,
+              onRefresh: () => refresh(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [dashboard()],
+              ),
             ),
           ),
         ));
+  }
+
+  Widget floatingPanel() {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(14.0)),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 10.0,
+              color: Colors.grey,
+            ),
+          ]),
+      margin: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          Container(
+            width: 36.w,
+            margin: EdgeInsets.only(top: 6),
+            child: Divider(
+              color: cr_d9d9,
+              thickness: 3,
+            ),
+          ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextFont(
+                text: 'ລາຍການເບີຂອງທ່ານ',
+                fontSize: 11,
+              ),
+              InkWell(
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.add,
+                      color: color_ec1c,
+                    ),
+                    TextFont(
+                      text: 'ເພິ່ມເບີ',
+                      color: cr_red,
+                      fontSize: 11,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Expanded(child: phoneLists())
+        ],
+      ),
+    );
+  }
+
+  Widget phoneLists() {
+    return ListView(
+      padding: EdgeInsets.only(top: 10),
+      children: [
+        ...telecomsrv.phoneListModel.mapIndexed(
+          (i, e) => Slidable(
+            endActionPane: ActionPane(
+              motion: ScrollMotion(),
+              children: [
+                SlidableAction(
+                  // An action can be bigger than the others.
+                  flex: 2,
+                  onPressed: null,
+                  backgroundColor: Color(0xFF7BC043),
+                  foregroundColor: Colors.white,
+                  icon: Icons.archive,
+                  label: 'Archive',
+                ),
+                SlidableAction(
+                  onPressed: null,
+                  backgroundColor: Color(0xFF0392CF),
+                  foregroundColor: Colors.white,
+                  icon: Icons.save,
+                  label: 'Save',
+                ),
+              ],
+            ),
+            child: phoneCard(i, e, true),
+          ),
+        )
+      ],
+    );
   }
 
   Widget dashboard() {
@@ -76,7 +174,7 @@ class _TelecomServicesState extends State<TelecomServices> {
         ...telecomsrv.phoneListModel
             .skip(1)
             .take(2)
-            .mapIndexed((i, e) => phoneCard(i, e)),
+            .mapIndexed((i, e) => phoneCard(i, e, false)),
         btnPhone()
       ],
     );
@@ -84,6 +182,7 @@ class _TelecomServicesState extends State<TelecomServices> {
 
   Widget btnPhone() {
     return InkWell(
+      onTap: () => telecomsrv.panelController.open(),
       child: Column(
         children: [
           Container(
@@ -106,7 +205,7 @@ class _TelecomServicesState extends State<TelecomServices> {
     );
   }
 
-  Widget phoneCard(int i, PhoneListModel e) {
+  Widget phoneCard(int i, PhoneListModel e, bool main) {
     return InkWell(
       onTap: () {},
       child: Container(
@@ -115,7 +214,8 @@ class _TelecomServicesState extends State<TelecomServices> {
         decoration: ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
-            side: BorderSide(width: 1, color: Color(0xFFDDDDDD)),
+            side: BorderSide(
+                width: 1, color: main && i == 0 ? cr_red : color_ddd),
             borderRadius: BorderRadius.circular(12),
           ),
         ),
@@ -124,7 +224,7 @@ class _TelecomServicesState extends State<TelecomServices> {
             Column(
               children: [
                 SvgPicture.asset(
-                  MyIcon.ic_sim_bw,
+                  main && i == 0 ? MyIcon.ic_sim_color : MyIcon.ic_sim_bw,
                   width: 8.w,
                 ),
                 SizedBox(height: 3),
@@ -167,21 +267,29 @@ class _TelecomServicesState extends State<TelecomServices> {
                     ],
                   ),
                 ),
-                Row(
-                  children: [
-                    TextFont(
-                      text: 'ຫມາຍເລກ ',
-                      color: color_777,
-                      fontSize: 10,
-                    ),
-                    TextFont(
-                      text: (i + 2).toString().padLeft(2, '0'),
-                      poppin: true,
-                      color: color_777,
-                      fontSize: 10,
-                    )
-                  ],
-                ),
+                main && i == 0
+                    ? TextFont(
+                        text: 'ເບີຫລັກ',
+                        color: cr_red,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 10,
+                      )
+                    : Row(
+                        children: [
+                          TextFont(
+                            text: 'ຫມາຍເລກ ',
+                            color: color_777,
+                            fontSize: 10,
+                          ),
+                          TextFont(
+                            text:
+                                (i + (main ? 1 : 2)).toString().padLeft(2, '0'),
+                            poppin: true,
+                            color: color_777,
+                            fontSize: 10,
+                          )
+                        ],
+                      ),
               ],
             ),
             Spacer(),

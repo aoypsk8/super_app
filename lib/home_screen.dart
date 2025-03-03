@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
@@ -13,7 +12,6 @@ import 'package:super_app/views/main/home_recommend.dart';
 import 'package:super_app/views/main/telecom_services.dart';
 import 'package:super_app/views/notification/notification_box.dart';
 import 'package:super_app/widget/mask_msisdn.dart';
-import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -110,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     text: maskMsisdn(
                                       userController
                                               .userProfilemodel.value.msisdn ??
-                                          '2000000',
+                                          '205xxxx555',
                                       showMsisdn: showMsisdn,
                                     ),
                                     fontSize: 14,

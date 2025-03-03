@@ -269,7 +269,7 @@ class buildWeTvCard extends StatelessWidget {
           description: 'select_payment',
           stepBuild: '2/3',
           title: homeController.getMenuTitle(),
-          onSelectedPayment: () {
+          onSelectedPayment: (paymentType, cardIndex) {
             Get.to(() => ReusableConfirmScreen(
                   appbarTitle: homeController.getMenuTitle(),
                   function: () {
@@ -297,7 +297,6 @@ class buildWeTvCard extends StatelessWidget {
                   fee: weTVController.rxFee.value, // Prevent null error
                   note: weTVController.rxNote.value,
                 ));
-            return Container();
           },
         ));
       },

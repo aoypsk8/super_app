@@ -26,7 +26,7 @@ class PaymentController extends GetxController {
 
   getPaymentMethods() async {
     var url = "/SuperApi/Info/PaymentList";
-    var body = {"owner": "2052768833"};
+    var body = {"owner": userController.userProfilemodel.value.msisdn};
     var response = await DioClient.postEncrypt(loading: false, url, body);
     if (response != null && response is List) {
       paymentMethods.value = response

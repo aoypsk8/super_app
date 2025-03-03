@@ -11,7 +11,7 @@ import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class ListsPaymentScreen extends StatefulWidget {
-  final Widget Function() onSelectedPayment;
+  final void Function(String paymentType, String cardDetail) onSelectedPayment;
   final String stepBuild;
   final String description;
   final String title;
@@ -65,7 +65,15 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
                           verticalOffset: 50.0,
                           child: FadeInAnimation(
                             child: GestureDetector(
-                              onTap: widget.onSelectedPayment,
+                              onTap: () {
+                                final paymentType = paymentController
+                                    .paymentMethods[index].paymentType;
+                                final cardIndex = paymentController
+                                    .paymentMethods[index].id
+                                    .toString();
+                                widget.onSelectedPayment(
+                                    paymentType, cardIndex);
+                              },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 20, horizontal: 10),

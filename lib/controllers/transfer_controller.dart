@@ -130,7 +130,9 @@ class TransferController extends GetxController {
             description: 'select_payment',
             stepBuild: '2/3',
             title: homeController.getMenuTitle(),
-            onSelectedPayment: () {
+            onSelectedPayment: (paymentType, cardIndex) {
+              print(paymentType);
+              print(cardIndex);
               Get.to(() => ReusableConfirmScreen(
                     appbarTitle: homeController.getMenuTitle(),
                     function: () {
@@ -148,14 +150,12 @@ class TransferController extends GetxController {
                         userController.userProfilemodel.value.msisdn.toString(),
                     toAccountImage: desTranferKyc.value.profileImg ??
                         MyConstant.profile_default,
-                    toAccountName:
-                        destinationname.value, // Fixed swapped values
+                    toAccountName: destinationname.value,
                     toAccountNumber: destinationMsisdn.value,
                     amount: amount.value,
-                    fee: '0', // Prevent null error
+                    fee: '0',
                     note: note.value,
                   ));
-              return Container();
             },
           ));
         }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -11,6 +13,7 @@ class ReusableOtpScreen extends StatefulWidget {
   final String desc1;
   final String desc2;
   final String phoneNumber;
+
   final String buttonText;
   final Function(String) onOtpCompleted;
   final VoidCallback onResendPressed;
@@ -70,11 +73,23 @@ class _ReusableOtpScreenState extends State<ReusableOtpScreen> {
                   textAlign: TextAlign.center,
                   maxLines: 2,
                 ),
+                Obx(
+                  () => TextFont(
+                    text: 'ref_otp',
+                    args: true,
+                    arguments: {'refotp': userController.refcode.value},
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                  ),
+                ),
                 const SizedBox(height: 20),
                 buildOTP(),
                 const SizedBox(height: 30),
                 InkWell(
-                  onTap: widget.onResendPressed,
+                  onTap: () {
+                    widget.onResendPressed();
+                    pinController.clear();
+                  },
                   child: TextFont(
                     text: 'send_otp_again',
                     underline: true,

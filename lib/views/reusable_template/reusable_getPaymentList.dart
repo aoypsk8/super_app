@@ -16,12 +16,7 @@ class ListsPaymentScreen extends StatefulWidget {
   final String description;
   final String title;
 
-  ListsPaymentScreen(
-      {super.key,
-      required this.onSelectedPayment,
-      required this.stepBuild,
-      required this.description,
-      required this.title});
+  ListsPaymentScreen({super.key, required this.onSelectedPayment, required this.stepBuild, required this.description, required this.title});
 
   @override
   State<ListsPaymentScreen> createState() => _ListsPaymentScreenState();
@@ -50,8 +45,7 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Column(
             children: [
-              buildStepProcess(
-                  title: widget.stepBuild, desc: widget.description),
+              buildStepProcess(title: widget.stepBuild, desc: widget.description),
               Expanded(
                 child: AnimationLimiter(
                   child: ListView.builder(
@@ -67,8 +61,7 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
                             child: GestureDetector(
                               onTap: widget.onSelectedPayment,
                               child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 20, horizontal: 10),
+                                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                                 margin: const EdgeInsets.symmetric(vertical: 5),
                                 decoration: BoxDecoration(
                                   color: Colors.grey.shade200,
@@ -82,8 +75,7 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
                                   children: [
                                     ClipOval(
                                       child: Image.network(
-                                        paymentController
-                                            .paymentMethods[index].logo,
+                                        paymentController.paymentMethods[index].logo,
                                         fit: BoxFit.fill,
                                         width: 15.w,
                                       ),
@@ -91,12 +83,9 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
                                     SizedBox(width: 10),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          paymentController
-                                                  .paymentMethods[index]
-                                                  .maincard
+                                          paymentController.paymentMethods[index].maincard
                                               ? TextFont(
                                                   text: 'Primary',
                                                   poppin: true,
@@ -105,17 +94,12 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
                                                 )
                                               : SizedBox.shrink(),
                                           TextFont(
-                                            text: paymentController
-                                                .paymentMethods[index].title
-                                                .toString(),
+                                            text: paymentController.paymentMethods[index].title.toString(),
                                             poppin: true,
                                             fontWeight: FontWeight.w500,
                                           ),
                                           TextFont(
-                                            text: paymentController
-                                                .paymentMethods[index]
-                                                .description
-                                                .toString(),
+                                            text: paymentController.paymentMethods[index].description.toString(),
                                             poppin: true,
                                             color: Colors.grey.shade600,
                                           ),

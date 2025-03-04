@@ -1,16 +1,17 @@
 import 'package:get_storage/get_storage.dart';
+import 'package:get_storage/get_storage.dart';
 
-//! Model
-//! ===================================================================
 class TempUserProfile {
   final String username;
   final String fullname;
   final String imageProfile;
+  final DateTime lastLogin; // Added lastLogin field
 
   TempUserProfile({
     required this.username,
     required this.fullname,
     required this.imageProfile,
+    required this.lastLogin,
   });
 
   // Convert JSON to TempUserProfile object
@@ -19,6 +20,7 @@ class TempUserProfile {
       username: json['username'],
       fullname: json['fullname'],
       imageProfile: json['image_profile'],
+      lastLogin: DateTime.parse(json['last_login']), // Parse date
     );
   }
 
@@ -28,6 +30,7 @@ class TempUserProfile {
       'username': username,
       'fullname': fullname,
       'image_profile': imageProfile,
+      'last_login': lastLogin.toIso8601String(),
     };
   }
 }
@@ -36,16 +39,21 @@ class TempUserProfile {
 //! ===================================================================
 class TempUserProfileStorage {
   final box = GetStorage();
-  void addTempUserProfile(TempUserProfile profile) {
-    List<dynamic> users = box.read('user_profiles') ?? [];
-    bool exists = users.any((e) => e['username'] == profile.username);
 
-    if (!exists) {
+  // Add or update user profile with last login time
+  void addOrUpdateTempUserProfile(TempUserProfile profile) {
+    List<dynamic> users = box.read('user_profiles') ?? [];
+    int index = users.indexWhere((e) => e['username'] == profile.username);
+
+    if (index == -1) {
+      // New user, add to list
       users.add(profile.toJson());
-      box.write('user_profiles', users);
     } else {
-      print('User already exists'); // Handle user feedback here
+      // Existing user, update last login time
+      users[index] = profile.toJson();
     }
+
+    box.write('user_profiles', users);
   }
 
   // Read all user profiles
@@ -54,12 +62,13 @@ class TempUserProfileStorage {
     return users.map((e) => TempUserProfile.fromJson(e)).toList();
   }
 
-  // Update user profile
-  void updateTempUserProfile(String username, TempUserProfile updatedProfile) {
+  // Update only the last login time
+  void updateLastLogin(String username) {
     List<dynamic> users = box.read('user_profiles') ?? [];
     int index = users.indexWhere((e) => e['username'] == username);
+
     if (index != -1) {
-      users[index] = updatedProfile.toJson();
+      users[index]['last_login'] = DateTime.now().toIso8601String();
       box.write('user_profiles', users);
     }
   }
@@ -69,5 +78,20 @@ class TempUserProfileStorage {
     List<dynamic> users = box.read('user_profiles') ?? [];
     users.removeWhere((e) => e['username'] == username);
     box.write('user_profiles', users);
+  }
+
+  // ✅ NEW FUNCTION: Get the Last Logged-in User
+  TempUserProfile? getLastLoggedInUser() {
+    List<TempUserProfile> users = getTempUserProfiles();
+    if (users.isEmpty) return null;
+    users.sort((a, b) => b.lastLogin.compareTo(a.lastLogin));
+    return users.first;
+  }
+
+  TempUserProfile getUserByUsername(String username) {
+    List<TempUserProfile> users = getTempUserProfiles();
+    return users.firstWhere(
+      (user) => user.username == username,
+    );
   }
 }

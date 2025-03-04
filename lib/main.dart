@@ -8,6 +8,7 @@ import 'package:super_app/services/blindings/initial_blinding.dart';
 import 'package:super_app/services/language_service.dart';
 import 'package:super_app/services/theme_service.dart';
 import 'package:super_app/splash_screen.dart';
+import 'package:super_app/test.dart';
 import 'package:super_app/themes/dark_theme.dart';
 import 'package:super_app/themes/light_theme.dart';
 import 'package:super_app/translations.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         getPages: AppRoutes.routes,
         home: SplashScreen(),
+        // home: TestScreen(),
       );
     });
   }
@@ -53,6 +55,7 @@ class MyApp extends StatelessWidget {
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }

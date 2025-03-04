@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,8 @@ import 'package:super_app/controllers/calendar_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/views/login/appbar_login.dart';
 import 'package:super_app/views/login/bottom_datebar.dart';
+import 'package:super_app/views/login/login.dart';
+import 'package:super_app/views/login/login_have_acc.dart';
 import 'package:super_app/views/login/temp/temp_userprofile_model.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -21,15 +24,17 @@ class _UserProfileListViewState extends State<UserProfileListView> {
   bool chkSelected = false; // Track if any item is selected
   final calendarController = Get.put(CarlendarsController());
   DateTime now = DateTime.now();
+  TempUserProfile? seletedUser;
 
   @override
   Widget build(BuildContext context) {
     List<TempUserProfile> users = userStorage.getTempUserProfiles();
+
     String maskPhoneNumber(String number) {
       if (number.length >= 7) {
-        return number.replaceRange(3, 7, '****'); // Replace characters 4-7 with ****
+        return number.replaceRange(3, 7, '****');
       }
-      return number; // If length is less than 7, return as is
+      return number;
     }
 
     return Scaffold(
@@ -90,27 +95,20 @@ class _UserProfileListViewState extends State<UserProfileListView> {
                                     onTap: () {
                                       setState(() {
                                         selectedIndex = index;
-                                        chkSelected = true; // Mark selected
+                                        chkSelected = true;
+                                        seletedUser = user;
                                       });
-                                      print(user.fullname);
                                     },
                                     child: Container(
                                       margin: EdgeInsets.only(bottom: 10),
-                                      padding: EdgeInsets.symmetric(vertical: 25, horizontal: 10),
+                                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                                       decoration: BoxDecoration(
                                         color: isSelected ? color_fbd : color_ecec,
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
                                           color: isSelected ? color_primary_light.withOpacity(0.5) : Colors.transparent,
-                                          width: 2.0,
+                                          width: 1.0,
                                         ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black12,
-                                            blurRadius: 4,
-                                            offset: Offset(0, 2),
-                                          ),
-                                        ],
                                       ),
                                       child: Row(
                                         children: [
@@ -118,7 +116,7 @@ class _UserProfileListViewState extends State<UserProfileListView> {
                                             radius: 30,
                                             backgroundImage: CachedNetworkImageProvider(user.imageProfile),
                                           ),
-                                          SizedBox(width: 12),
+                                          SizedBox(width: 20.sp),
                                           Expanded(
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,6 +134,12 @@ class _UserProfileListViewState extends State<UserProfileListView> {
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
                                                 ),
+                                                // TextFont(
+                                                //   text: DateFormat('dd-MM-yyyy HH:mm').format(user.lastLogin),
+                                                //   poppin: true,
+                                                //   color: color_777,
+                                                //   fontSize: 8,
+                                                // ),
                                               ],
                                             ),
                                           ),
@@ -155,7 +159,9 @@ class _UserProfileListViewState extends State<UserProfileListView> {
                             ),
                       SizedBox(height: 10.sp),
                       buildBottomAppbar(
-                        func: chkSelected ? () => print('Continue with selected user') : () {}, // Disable if not selected
+                        func: chkSelected && seletedUser != null
+                            ? () => Get.offAll(LoginHaveAccount(user: seletedUser!.toJson()))
+                            : () {}, // Disable if not selected
                         title: 'continue_as',
                         bgColor: chkSelected ? cr_ef33 : color_d5d5,
                       ),
@@ -164,7 +170,7 @@ class _UserProfileListViewState extends State<UserProfileListView> {
                         children: [
                           InkWell(
                             onTap: () {
-                              print('Swap Account');
+                              Get.offAll(LoginScreen());
                             },
                             child: TextFont(
                               text: 'swap_account',

@@ -119,22 +119,22 @@ class _OptScreenState extends State<OptScreen> {
       //   ),
       // ),
 
-      body: ReusableOtpScreen(
-        title: 'verify',
-        desc1: 'otp_verification',
-        desc2: 'otp_send',
-        phoneNumber: '2055559999',
-        buttonText: 'Next',
-        onOtpCompleted: (otp) {
-          print('OTP Entered: $otp');
-          // Add your OTP verification logic here
-          Get.to(() => CreatePassword());
-        },
-        onResendPressed: () {
-          print('Resend OTP button pressed');
-          // Add your resend OTP logic here
-        },
-      ),
+      // body: ReusableOtpScreen(
+      //   title: 'verify',
+      //   desc1: 'otp_verification',
+      //   desc2: 'otp_send',
+      //   phoneNumber: '2055559999',
+      //   buttonText: 'Next',
+      //   onOtpCompleted: (otp) {
+      //     print('OTP Entered: $otp');
+      //     // Add your OTP verification logic here
+      //     Get.to(() => CreatePassword());
+      //   },
+      //   onResendPressed: () {
+      //     print('Resend OTP button pressed');
+      //     // Add your resend OTP logic here
+      //   },
+      // ),
     );
   }
 

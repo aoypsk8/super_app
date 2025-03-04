@@ -33,22 +33,21 @@ class AppbarLogin extends StatelessWidget {
                 text: 'other_service',
                 isSvg: true,
               ),
-              InkWell(
-                onTap: () {
-                  final userStorage = TempUserProfileStorage();
-
-                  userStorage.addTempUserProfile(TempUserProfile(
-                    username: '2059395774',
-                    fullname: 'Oudomsak PHABOUDY',
-                    imageProfile: 'https://profile.mmoney.la/ImageProfile/2052555999/image_cropper_974829D0-223A-4966-AAD4-61355CFE596A-9313-000005AFC1BF66E0.jpg',
-                  ));
-                },
-                child: TextFont(
-                  text: 'add\naccount',
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-              ),
+              // InkWell(
+              //   onTap: () {
+              //     final userStorage = TempUserProfileStorage();
+              //     userStorage.addTempUserProfile(TempUserProfile(
+              //       username: '2059395774',
+              //       fullname: 'Oudomsak PHABOUDY',
+              //       imageProfile: 'https://profile.mmoney.la/ImageProfile/2052555999/image_cropper_974829D0-223A-4966-AAD4-61355CFE596A-9313-000005AFC1BF66E0.jpg',
+              //     ));
+              //   },
+              //   child: TextFont(
+              //     text: 'add\naccount',
+              //     maxLines: 2,
+              //     textAlign: TextAlign.center,
+              //   ),
+              // ),
             ],
           ),
         ),

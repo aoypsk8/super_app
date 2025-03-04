@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/views/login/login.dart';
+import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -67,9 +68,19 @@ class LoginMmoney extends StatelessWidget {
                           name: 'username',
                           hintText: 'enter_wallet_id',
                         ),
-                        forgot_password(),
+                        // forgot_password(),
                         SizedBox(height: 20.sp),
-                        buildBottomAppbar(func: () {}, title: 'login'),
+                        buildBottomAppbar(
+                            func: () async {
+                              if (_formKey.currentState!.saveAndValidate()) {
+                                userController.rxMsisdn.value = _username.text;
+                                await userController.requestOTP(_username.text, 'reg_by_mmoney');
+                                // if (await userController.checkHaveWalletBO()) {
+                                //   await userController.requestOTP(_username.text, 'reg_by_mmoney');
+                                // }
+                              }
+                            },
+                            title: 'login'),
                         newuser_register(),
                       ],
                     ),

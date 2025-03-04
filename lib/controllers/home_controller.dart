@@ -1,19 +1,25 @@
-// ignore_for_file: invalid_use_of_protected_member
+// ignore_for_file: invalid_use_of_protected_member, avoid_print
 
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:super_app/models/appinfo_model.dart';
 import 'package:super_app/models/menu_model.dart';
 import 'package:super_app/models/notification_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
+import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/widget/textfont.dart';
 
 class HomeController extends GetxController {
   final box = GetStorage();
@@ -57,9 +63,9 @@ class HomeController extends GetxController {
     super.onReady();
     // storage.write('msisdn', "2052768833");
 
+    getAppVersion();
     await checkAppUpdate();
     await fetchServicesmMenu();
-    await getDeviceInfo();
   }
 
   String getMenuTitle() {
@@ -84,10 +90,8 @@ class HomeController extends GetxController {
     var url = '${MyConstant.urlLtcdev}/AppInfo/Info';
     var res = await DioClient.getNoLoading(url);
     rxAppinfo.value = AppInfoModel.fromJson(res);
-
     final imageCardFile = await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_card');
     if (imageCardFile != null) rxBgCard.value = imageCardFile.path;
-
     final imageBillFile = await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_bill');
     if (imageBillFile != null) rxBgBill.value = imageBillFile.path;
   }
@@ -135,36 +139,6 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> getDeviceInfo() async {
-    const platform = MethodChannel('device_info_channel');
-    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    String info = '';
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      info = '''
-      - Model: ${androidInfo.model}
-      - DeviceID: ${androidInfo.id}
-      - DeviceModel: ${androidInfo.model}
-      - DeviceName: ${androidInfo.name}
-      - OSversion: ${androidInfo.version.release}|SDK${androidInfo.version.sdkInt}|${androidInfo.board}
-      ''';
-    } else if (Platform.isIOS) {
-      try {
-        final Map<dynamic, dynamic> result = await platform.invokeMethod("getDeviceDetails");
-        info = '''
-        - Device Name (User-set): ${result["deviceName"]}
-        - Model: ${result["deviceModel"]}
-        - Hardware Model: ${result["hardwareModel"]}
-        - OS Version: ${result["systemVersion"]}
-        - Device ID (UUID): ${result["deviceID"]}
-        ''';
-        print(info);
-      } on PlatformException catch (e) {
-        info = "Error retrieving device details: ${e.message}";
-      }
-    }
-  }
-
   // message
   fetchMessageList() async {
     try {
@@ -201,5 +175,11 @@ class HomeController extends GetxController {
         }
       }
     }
+  }
+
+  Future<void> getAppVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    appVersion.value = packageInfo.version;
+    print('appVersion: ${appVersion}');
   }
 }

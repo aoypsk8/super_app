@@ -1,26 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
-import 'package:super_app/views/login/login.dart';
-import 'package:super_app/views/settings/verify_account.dart';
+import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/textfont.dart';
 
-class LoginTplusMservice extends StatelessWidget {
-  final Function(String) onMethodSelected;
-  final String title;
-  const LoginTplusMservice({super.key, required this.onMethodSelected, required this.title});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  final _username = TextEditingController();
+  final UserController userController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-    final _username = TextEditingController();
-    final _password = TextEditingController();
-    return Expanded(
-      child: Animate(
+    return Scaffold(
+      backgroundColor: color_fff,
+      appBar: BuildAppBar(title: 'register'),
+      body: Animate(
         delay: Durations.long1,
         effects: [FlipEffect(), SlideEffect()],
         child: GestureDetector(
@@ -36,13 +44,13 @@ class LoginTplusMservice extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFont(
-                        text: 'Login ',
+                        text: 'Register ',
                         color: color_primary_light,
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
                       ),
                       TextFont(
-                        text: 'with',
+                        text: 'New User',
                         maxLines: 2,
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
@@ -52,7 +60,7 @@ class LoginTplusMservice extends StatelessWidget {
                   Row(
                     children: [
                       TextFont(
-                        text: '$title Users',
+                        text: 'Super App',
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
                         maxLines: 2,
@@ -64,18 +72,27 @@ class LoginTplusMservice extends StatelessWidget {
                     key: _formKey,
                     child: Column(
                       children: [
-                        buildTextField(controller: _username, label: 'username', name: 'username'),
-                        buildPasswordField(controller: _password, label: 'password', name: 'password'),
-                        // forgot_password(),
+                        buildTextField(
+                          controller: _username,
+                          label: 'username',
+                          name: 'username',
+                          hintText: 'enter_your_username',
+                        ),
                         SizedBox(height: 20.sp),
                         buildBottomAppbar(
-                            func: () {
-                              if (_formKey.currentState!.saveAndValidate()) {
-                                userController.checkMserviceTplus(_username.text, _password.text);
+                            func: () async {
+                              _formKey.currentState!.save();
+                              if (_formKey.currentState!.validate()) {
+                                userController.rxMsisdn.value = _username.text;
+                                if (await userController.checkHaveWalletBO()) {
+                                  DialogHelper.showErrorDialogNew(description: 'You already have an account.');
+                                } else {
+                                  userController.requestOTP(_username.text, "register");
+                                }
                               }
                             },
-                            title: 'login'),
-                        newuser_register(),
+                            title: 'next'),
+                        // newuser_register(),
                       ],
                     ),
                   )

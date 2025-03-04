@@ -45,3 +45,42 @@ Content-Type: application/json
   "accountname": "Aoy Phongsakoun",
   "maincard": true
 }
+
+
+
+###
+post https://gateway.ltcdev.la/SuperAppLogin
+
+Authorization: hmac username="lmmapi", algorithm="hmac-sha256", headers="x-date request-line x-uuid digest", signature="GQnHcXyqObwOyC8Nwb2gFUS8xPtNgYMmVlR5xXvt7BU=", 
+Digest: SHA-256=QVJmFon70wmyR4lJ4xDNt9Icg8QXrWF9jN2IRaPbjAE=
+X-Date: Tue, 25 Feb 2025 08:14:33 GMT
+X-UUID: 59484e2e-eb2b-4bf2-b3a2-0b34afb7b950
+lmm-token: eyJhbFciOiJIUzI1NiJ10.eyJSb2xlIjoiUGFydG5lciIsIklzc3VlciI6Iklzc3VlciIsIlVzZYJuYW1lIjoiS2JhbmsiLCJleHAiOjE2NzU2Njc3NjksImlhdCI6MTY3NTY2Nzc2OX0.7z-xJ7SIeKMqDiUTYiQvXLpFG8Rx-DCjT0zSR4XAs2U
+apikey: eb718666-b20e-4091-b964-67a61e06fffe
+Content-Type: application/json
+
+{
+    "msisdn": "12345678901",
+    "device_id": "abc1231",
+    "devicemodel": "iPhone 13",
+    "imei": "123456789012345",
+    "osversion": "iOS 15",
+    "lat": "12.3456",
+    "long": "65.4321",
+    "appversion": "1.0.0",
+    "device_name": "John's iPhone"
+}
+
+
+
+###
+post https://gateway.ltcdev.la/SuperApi/Info/Menus
+
+Authorization: hmac username="lmmapi", algorithm="hmac-sha256", headers="x-date request-line x-uuid digest", signature="Ieo5/yVdZtLXcSaxtdZK/vVcBsLussL8c1bhhwJryZ4="
+Digest: SHA-256=RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=
+X-Date: Tue, 25 Feb 2025 08:12:50 GMT
+X-UUID: 1d9561a7-e1a5-48ed-b703-8c4a789a88d9
+lmm-token: eyJhbFciOiJIUzI1NiJ10.eyJSb2xlIjoiUGFydG5lciIsIklzc3VlciI6Iklzc3VlciIsIlVzZYJuYW1lIjoiS2JhbmsiLCJleHAiOjE2NzU2Njc3NjksImlhdCI6MTY3NTY2Nzc2OX0.7z-xJ7SIeKMqDiUTYiQvXLpFG8Rx-DCjT0zSR4XAs2U, apikey: eb718666-b20e-4091-b964-67a61e06fffe
+Content-Type: application/json
+
+{}

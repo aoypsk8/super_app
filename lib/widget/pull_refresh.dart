@@ -10,7 +10,9 @@ class PullRefresh extends StatefulWidget {
   final Widget? child;
   final Color bg;
   final RefreshController refreshController;
-  PullRefresh({Key? key, required this.onRefresh, required this.child, this.bg = color_f2f2, required this.refreshController}) : super(key: key);
+  PullRefresh(
+      {Key? key, required this.onRefresh, required this.child, this.bg = color_f2f2, required this.refreshController})
+      : super(key: key);
 
   @override
   State<PullRefresh> createState() => _PullRefreshState();
@@ -48,7 +50,8 @@ class _PullRefreshState extends State<PullRefresh> with TickerProviderStateMixin
       header: CustomHeader(
         refreshStyle: RefreshStyle.Behind,
         onOffsetChange: (offset) {
-          if (widget.refreshController.headerMode!.value != RefreshStatus.refreshing) _scaleController!.value = offset / 80.0;
+          if (widget.refreshController.headerMode!.value != RefreshStatus.refreshing)
+            _scaleController!.value = offset / 80.0;
         },
         builder: (c, m) {
           return Container(

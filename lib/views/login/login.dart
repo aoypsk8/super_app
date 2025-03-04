@@ -7,19 +7,25 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lottie/lottie.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/calendar_controller.dart';
+import 'package:super_app/controllers/home_controller.dart';
+import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/services/language_service.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/views/login/appbar_login.dart';
 import 'package:super_app/views/login/calendar.dart';
 import 'package:super_app/views/login/bottom_datebar.dart';
+import 'package:super_app/views/login/forgot_password.dart';
 import 'package:super_app/views/login/lists_user_login.dart';
 import 'package:super_app/views/login/login_have_acc.dart';
 import 'package:super_app/views/login/login_mmoney.dart';
 import 'package:super_app/views/login/login_tplus_mservice.dart';
 import 'package:super_app/views/login/opt_screen.dart';
 import 'package:super_app/views/login/temp/temp_userprofile_model.dart';
+import 'package:super_app/views/register/register.dart';
+import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/views/x-jaidee/Xjaidee.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildButtonBottom.dart';
@@ -28,7 +34,9 @@ import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({
+    super.key,
+  });
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -39,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final box = GetStorage();
   DateTime now = DateTime.now();
 
-  final TempUserProfileStorage userStorage = TempUserProfileStorage();
+  TempUserProfileStorage userStorage = TempUserProfileStorage();
 
   String signInWith = 'super_app';
 
@@ -48,9 +56,10 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loadData();
-      Future.delayed(Duration(seconds: 2), () {
-        showFullScreenDialog(context); // Show popup when loading completes
-      });
+      var msisdn = box.read('msisdn');
+      if (msisdn == null) {
+        showSignInWith(context);
+      }
     });
   }
 
@@ -58,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
     await calendarController.fetchCalendarMonthList(now.year.toString(), now.month.toString());
   }
 
-  void showFullScreenDialog(BuildContext context) {
+  void showSignInWith(BuildContext context) {
     var fromApps = [
       {
         "title": "M moneyX",
@@ -129,7 +138,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     decoration: BoxDecoration(
                                       color: color_f4f4,
                                       borderRadius: BorderRadius.circular(8),
-                                      boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))],
+                                      boxShadow: [
+                                        BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))
+                                      ],
                                     ),
                                     child: Row(
                                       children: [
@@ -211,8 +222,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<TempUserProfile> users = userStorage.getTempUserProfiles();
-
     Widget getLoginWidget() {
       switch (signInWith) {
         case 'default':
@@ -235,25 +244,18 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             AppbarLogin(),
             getLoginWidget(),
+            // users.isEmpty ? getLoginWidget() : LoginHaveAccount(user: Map<String, dynamic>.from(users[0].toJson())),
             InkWell(
-              onTap: () => showFullScreenDialog(context),
+              onTap: () {
+                showSignInWith(context);
+              },
               child: TextFont(text: 'sing_in_with'),
             ),
-            InkWell(
-              onTap: () => Get.to(OptScreen()),
-              child: TextFont(text: 'nextOTP'),
-            ),
-            InkWell(
-              onTap: () => Get.to(UserProfileListView()),
-              child: TextFont(text: 'login_have_acc'),
-            ),
+            SizedBox(height: 10),
           ],
         ),
       ),
-      bottomNavigationBar: BottomDateBar(
-        calendarController: calendarController,
-        now: now,
-      ),
+      bottomNavigationBar: BottomDateBar(calendarController: calendarController, now: now),
     );
   }
 
@@ -295,13 +297,16 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLanguageOption(BuildContext context, String languageName, String languageCode, LanguageService languageService) {
+  Widget _buildLanguageOption(
+      BuildContext context, String languageName, String languageCode, LanguageService languageService) {
     return ListTile(
       title: TextFont(
         text: languageName,
         color: cr_7070, // Follow theme color
       ),
-      trailing: languageService.locale.languageCode == languageCode ? Icon(Icons.check, color: Theme.of(context).primaryColor) : null, // Show check mark for the active language
+      trailing: languageService.locale.languageCode == languageCode
+          ? Icon(Icons.check, color: Theme.of(context).primaryColor)
+          : null, // Show check mark for the active language
       onTap: () {
         languageService.changeLanguage(languageCode);
         loadData();
@@ -368,17 +373,24 @@ class LoginUsernamePassword extends StatelessWidget {
                           controller: _username,
                           label: 'username',
                           name: 'username',
-                          hintText: 'Enter your Username',
+                          hintText: 'enter_your_username',
                         ),
                         buildPasswordField(
                           controller: _password,
                           label: 'password',
                           name: 'password',
-                          hintText: 'Enter your Password',
+                          hintText: 'enter_your_password',
                         ),
                         forgot_password(),
                         SizedBox(height: 20.sp),
-                        buildBottomAppbar(func: () {}, title: 'login'),
+                        buildBottomAppbar(
+                            func: () {
+                              _formKey.currentState!.save();
+                              if (_formKey.currentState!.validate()) {
+                                userController.loginSuperApp(_username.text, _password.text);
+                              }
+                            },
+                            title: 'login'),
                         newuser_register(),
                       ],
                     ),
@@ -408,7 +420,7 @@ class newuser_register extends StatelessWidget {
         TextFont(text: 'new_account?'),
         InkWell(
           onTap: () {
-            print('register new account');
+            Get.to(RegisterScreen());
           },
           child: TextFont(
             text: 'register',
@@ -429,9 +441,10 @@ class forgot_password extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final box = GetStorage();
     return InkWell(
       onTap: () {
-        print('forgot password');
+        Get.to(ForgotPasswordScreen());
       },
       child: Align(
           alignment: Alignment.centerRight,

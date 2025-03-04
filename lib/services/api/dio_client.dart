@@ -266,4 +266,27 @@ class DioClient {
       HandleApiError.dioError(e);
     }
   }
+
+  static Future<dynamic> delete(String url, dynamic body,
+      {String key = 'lite'}) async {
+    try {
+      Loading.show();
+      if (key == 'mservices') {
+        dio.options.headers
+            .addAll({"authorization": "Bearer ${MyKey.mservicesKey}"});
+      }
+      var response = await dio.delete(url, data: body);
+      Loading.hide();
+      if (response.statusCode == 200) {
+        return response.data;
+      } else if (response.statusCode == 401) {
+        Get.offAllNamed('/Home');
+      } else {
+        DialogHelper.showErrorDialogNew(description: response.statusMessage!);
+      }
+    } on DioException catch (e) {
+      Loading.hide();
+      HandleApiError.dioError(e);
+    }
+  }
 }

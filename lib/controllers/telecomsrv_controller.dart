@@ -3,6 +3,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:super_app/models/telecomsrv_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
+import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 
 class TelecomsrvController extends GetxController {
@@ -76,5 +77,22 @@ class TelecomsrvController extends GetxController {
     var res = await DioClient.getNoLoading(url, key: 'mservices');
     phoneListModel.value =
         (res as List).map((e) => PhoneListModel.fromJson(e)).toList();
+  }
+
+  delPhone(String submsisdn) async {
+    var url = '${MyConstant.mservicesUrl}/ManageUser';
+    var body = {
+      "main_msisdn": await storage.read('msisdn'),
+      "destrination_msisdn": submsisdn,
+      "language": 'en',
+    };
+    var res = await DioClient.delete(url, body, key: 'mservices');
+    if (res != null) {
+      phoneList();
+      DialogHelper.showErrorDialogNew(
+        title: res,
+        description: '',
+      );
+    }
   }
 }

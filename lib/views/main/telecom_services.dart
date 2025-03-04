@@ -11,6 +11,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:super_app/controllers/telecomsrv_controller.dart';
 import 'package:super_app/models/telecomsrv_model.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/widget/mask_msisdn.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/pull_refresh.dart';
@@ -62,85 +63,96 @@ class _TelecomServicesState extends State<TelecomServices> {
   Widget floatingPanel() {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(14.0)),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 10.0,
-              color: Colors.grey,
-            ),
-          ]),
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(14.0)),
+      ),
       margin: const EdgeInsets.all(8.0),
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: [
-          Container(
-            width: 36.w,
-            margin: EdgeInsets.only(top: 6),
-            child: Divider(
-              color: cr_d9d9,
-              thickness: 3,
+      child: ClipRRect(
+        child: Column(
+          children: [
+            Container(
+              width: 36.w,
+              margin: EdgeInsets.only(top: 6),
+              child: Divider(
+                color: cr_d9d9,
+                thickness: 3,
+              ),
             ),
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextFont(
-                text: 'ລາຍການເບີຂອງທ່ານ',
-                fontSize: 11,
-              ),
-              InkWell(
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.add,
-                      color: color_ec1c,
+            SizedBox(height: 10),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextFont(
+                    text: 'ລາຍການເບີຂອງທ່ານ',
+                    fontSize: 11,
+                  ),
+                  InkWell(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.add,
+                          color: color_ec1c,
+                        ),
+                        TextFont(
+                          text: 'ເພິ່ມເບີ',
+                          color: cr_red,
+                          fontSize: 11,
+                        )
+                      ],
                     ),
-                    TextFont(
-                      text: 'ເພິ່ມເບີ',
-                      color: cr_red,
-                      fontSize: 11,
-                    )
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          Expanded(child: phoneLists())
-        ],
+            ),
+            Expanded(child: phoneLists())
+          ],
+        ),
       ),
     );
   }
 
   Widget phoneLists() {
     return ListView(
-      padding: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: 10, left: 20, right: 20),
       children: [
         ...telecomsrv.phoneListModel.mapIndexed(
           (i, e) => Slidable(
+            enabled: i == 0 ? false : true,
             endActionPane: ActionPane(
               motion: ScrollMotion(),
+              extentRatio: 0.2,
               children: [
-                SlidableAction(
-                  // An action can be bigger than the others.
-                  flex: 2,
-                  onPressed: null,
-                  backgroundColor: Color(0xFF7BC043),
-                  foregroundColor: Colors.white,
-                  icon: Icons.archive,
-                  label: 'Archive',
-                ),
-                SlidableAction(
-                  onPressed: null,
-                  backgroundColor: Color(0xFF0392CF),
-                  foregroundColor: Colors.white,
-                  icon: Icons.save,
-                  label: 'Save',
-                ),
+                if (i != 0)
+                  CustomSlidableAction(
+                    onPressed: (i) => DialogHelper.dialogRecurringConfirm(
+                        title: 'ຈະລົບແທ້ຫວາ',
+                        description:
+                            'ເບີ ${e.phoneNumber} ລົບໄປກໍບໍ່ຊ່ວຍໃຫ້ລືມ,ເຈັບສູ໊ດດດດດ ',
+                        okTitle: 'ຕັດໃຈໄດ້ແລ້ວ',
+                        onOk: () {
+                          Get.back();
+                          telecomsrv.delPhone(e.phoneNumber!);
+                        }),
+                    padding: EdgeInsets.only(left: 10, top: 0, bottom: 11),
+                    child: SizedBox.expand(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 21),
+                        decoration: BoxDecoration(
+                          color: cr_8b85,
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        ),
+                        child: SvgPicture.asset(
+                          MyIcon.ic_trash,
+                          color: color_fff,
+                        ),
+                      ),
+                    ),
+                  )
               ],
             ),
-            child: phoneCard(i, e, true),
+            child: phoneCard(i, e, true, 8),
           ),
         )
       ],
@@ -174,7 +186,7 @@ class _TelecomServicesState extends State<TelecomServices> {
         ...telecomsrv.phoneListModel
             .skip(1)
             .take(2)
-            .mapIndexed((i, e) => phoneCard(i, e, false)),
+            .mapIndexed((i, e) => phoneCard(i, e, false, 12)),
         btnPhone()
       ],
     );
@@ -205,7 +217,7 @@ class _TelecomServicesState extends State<TelecomServices> {
     );
   }
 
-  Widget phoneCard(int i, PhoneListModel e, bool main) {
+  Widget phoneCard(int i, PhoneListModel e, bool main, double radius) {
     return InkWell(
       onTap: () {},
       child: Container(
@@ -216,7 +228,7 @@ class _TelecomServicesState extends State<TelecomServices> {
           shape: RoundedRectangleBorder(
             side: BorderSide(
                 width: 1, color: main && i == 0 ? cr_red : color_ddd),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(radius),
           ),
         ),
         child: Row(

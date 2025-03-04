@@ -134,4 +134,5 @@ class MyIcon {
   static String ic_sim_round = 'assets/icons/ic_sim_round.svg';
   static String ic_sim_bw = 'assets/icons/ic_sim_bw.svg';
   static String ic_sim_color = 'assets/icons/ic_sim_color.svg';
+  // static String ic_trash = 'assets/icons/ic_trash.svg';
 }

@@ -618,11 +618,12 @@ class DialogHelper {
     if (Get.isDialogOpen!) Get.back();
   }
 
-  static void showDialogPolicy(
-      {String title = 'Policy',
-      String description = 'Policy Description.',
-      Function()? onClose,
-      bool isChecked = false}) {
+  static void showDialogPolicy({
+    String title = 'Policy',
+    String description = 'Policy Description.',
+    Function()? onClose,
+    bool isChecked = false,
+  }) {
     Get.dialog(
       WillPopScope(
         onWillPop: () async => false,
@@ -630,13 +631,11 @@ class DialogHelper {
           surfaceTintColor: color_fff,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: SingleChildScrollView(
-            child: _PolicyDialogContent(
-              title: title,
-              description: description,
-              isChecked: isChecked,
-              onClose: onClose,
-            ),
+          child: _PolicyDialogContent(
+            title: title,
+            description: description,
+            isChecked: isChecked,
+            onClose: onClose,
           ),
         ),
       ),
@@ -672,83 +671,102 @@ class __PolicyDialogContentState extends State<_PolicyDialogContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Column(
+    return Container(
+      width: Get.width * 0.8, // Optional, to make dialog width responsive
+      constraints: BoxConstraints(
+        maxHeight: Get.height * 0.8, // Limit dialog height to 80% of screen
+      ),
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        mainAxisSize: MainAxisSize.min, // Fit around content
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextFont(
-                    fontSize: 16,
-                    text: widget.title,
-                    fontWeight: FontWeight.w500,
-                    color: cr_090a,
-                  ),
-                  InkWell(
-                    onTap: () => Get.back(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: SvgPicture.asset(
-                        MyIcon.ic_deleteX,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               TextFont(
-                fontSize: 12,
-                maxLines: 100,
-                text: widget.description,
-                fontWeight: FontWeight.w300,
-                color: color_777,
+                fontSize: 16,
+                text: widget.title,
+                fontWeight: FontWeight.w500,
+                color: cr_090a,
+              ),
+              InkWell(
+                onTap: () => Get.back(),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: SvgPicture.asset(MyIcon.ic_deleteX),
+                ),
               ),
             ],
           ),
-        ),
-        Row(
-          children: [
-            Checkbox(
-              value: isChecked,
-              onChanged: (value) {
-                setState(() {
-                  isChecked = value ?? false;
-                });
-              },
+          const SizedBox(height: 10),
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: Get.height *
+                  0.5, // Limit description height to max 50% of screen height
             ),
-            Expanded(
+            child: SingleChildScrollView(
               child: TextFont(
                 fontSize: 12,
-                text: "ຂ້ອຍໄດ້ອ່ານນະໂຍບາຍ ແລະ ຍອມຮັບ",
-                fontWeight: FontWeight.w500,
+                maxLines: 1000, // No real limit, it will scroll
+                text: widget.description,
+                fontWeight: FontWeight.w300,
+                color: cr_090a,
               ),
             ),
-          ],
-        ),
-        SizedBox(
-          width: Get.width,
-          child: buildBottomAppbar(
-            bgColor: isChecked ? cr_ef33 : Colors.grey,
-            title: 'next',
-            func: () {
-              if (isChecked) {
-                if (widget.onClose != null) {
-                  widget.onClose!();
-                }
-              } else {
-                Get.snackbar(
-                  'Error',
-                  'Please accept the policy to proceed.',
-                  backgroundColor: cr_ef33,
-                  colorText: Colors.white,
-                );
-              }
-            },
           ),
-        ),
-      ],
+
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Checkbox(
+                value: isChecked,
+                onChanged: (value) {
+                  setState(() {
+                    isChecked = value ?? false;
+                  });
+                },
+                checkColor:
+                    Colors.white, // Color of the check mark (the tick inside)
+                fillColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return cr_ef33; // Checked box background color
+                  }
+                  return Colors.white; // Unchecked box background color
+                }),
+              ),
+              Expanded(
+                child: TextFont(
+                  fontSize: 12,
+                  text: "ຂ້ອຍໄດ້ອ່ານນະໂຍບາຍ ແລະ ຍອມຮັບ",
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+
+          // Bottom button
+          SizedBox(
+            width: Get.width,
+            child: buildBottomAppbar(
+              high: 0,
+              bgColor: isChecked ? cr_ef33 : Colors.grey,
+              title: 'next',
+              func: () {
+                if (isChecked) {
+                  widget.onClose?.call();
+                } else {
+                  Get.snackbar(
+                    'Error',
+                    'Please accept the policy to proceed.',
+                    backgroundColor: cr_ef33,
+                    colorText: Colors.white,
+                  );
+                }
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

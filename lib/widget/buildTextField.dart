@@ -791,13 +791,8 @@ class buildDropDown_return_Value_Name_Validate extends StatelessWidget {
             ]),
             items: dataObject.map((data) {
               int months = int.parse(data[colName].toString());
-              int years = months ~/ 12;
-              int remainingMonths = months % 12;
-              String displayText = years > 0
-                  ? (remainingMonths > 0
-                      ? "$years Year${years > 1 ? 's' : ''} $remainingMonths Month${remainingMonths > 1 ? 's' : ''}"
-                      : "$years Year${years > 1 ? 's' : ''}")
-                  : "$months Month${months > 1 ? 's' : ''}";
+
+              String displayText = "$months ເດືອນ";
               return DropdownMenuItem(
                 value:
                     '${data[valName].toString()}-${data[colName].toString()}',

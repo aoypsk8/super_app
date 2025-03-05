@@ -103,9 +103,9 @@ class _XJaideeState extends State<XJaidee> {
                             icon: MyIcon.ic_load_xjaidee,
                             ontap: () {
                               DialogHelper.showDialogPolicy(
-                                title: "Policyy",
+                                title: "Policy",
                                 description:
-                                    "1. Registration is required to register through the mobile phone number of the customer who registered in accordance with the rules to open an M-Money wallet account, which has to be active and reachable. Users can register to use:  • Register and fill in the information, KYC manually according to the methods and procedures set by the company in this service.  2. After the registration is completed, the user must set a secure personal password according to the company's instructions, which is a 6-digit number, then wait for confirmation from the system to start using the service.Using M-Money Wallet Services  1. Top Up Wallet  Users of M-Money Wallet can top-up their wallet at: (1) the LTC Service Center, (2) the participating Banks.",
+                                    "1. Registration is required to register through the mobile phone number of the customer who registered in accordance with the rules to open an M-Money wallet account, which has to be active and reachable. Users can register to use:\n • Register and fill in the information, KYC manually according to the methods and procedures set by the company in this service.\n2. After the registration is completed, the user must set a secure personal password according to the company's instructions, which is a 6-digit number, then wait for confirmation from the system to start using the service.Using M-Money Wallet Services\n 1. Top Up Wallet\n Users of M-Money Wallet can top-up their wallet at: (1) the LTC Service Center, (2) the participating Banks, (3) the Agent Stores that the Company has periodically listed (4) Direct Sale staff. Minimum top up is 10,000 Kip (ten thousand kip).",
                                 onClose: () {
                                   Get.to(() => InputAmountXJaideeScreen());
                                 },

@@ -604,39 +604,44 @@ class UserController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  Future<void> checktokenSuperApp() async {
+  Future<bool> checktokenSuperApp() async {
     try {
       getCurrentLocation();
-      String msisdn = storage.read('msisdn');
-      String token = storage.read('token');
+      String? msisdn = storage.read('msisdn');
+      String? token = storage.read('token');
       TempUserProfileStorage boxUser = TempUserProfileStorage();
-      TempUserProfile? user = boxUser.getUserByUsername(msisdn);
+      TempUserProfile? user = boxUser.getUserByUsername(msisdn ?? '');
 
       if (msisdn == null) {
         storage.remove('msisdn');
         storage.remove('token');
         Get.offAll(SplashScreen());
-        return;
+        return false;
       }
 
       if (token == null) {
         Get.to(() => LoginHaveAccount(user: user.toJson()), transition: Transition.downToUp);
-        return;
+        return false;
       }
 
       var response = await DioClient.postEncrypt(
-          '${MyConstant.urlGateway}/checkauth', loading: false, {'msisdn': msisdn, 'token': token});
+        '${MyConstant.urlGateway}/checkauth',
+        loading: false,
+        {'msisdn': msisdn, 'token': token},
+      );
 
       if (response['resultCode'] == 0) {
         rxToken.value = token;
+        return true;
       } else {
         Get.to(() => LoginHaveAccount(user: user.toJson()), transition: Transition.downToUp);
+        return false;
       }
     } catch (e) {
       DialogHelper.showErrorDialogNew(description: "Authentication failed. Please try again.");
-
       rxToken.value = '';
-      Get.toNamed('/loginpincode');
+      Get.offAll(SplashScreen());
+      return false;
     }
   }
 
@@ -646,7 +651,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
     await insertLoginLog();
     await fetchBalance();
     await queryUserProfile(); //old
-    await queryProfileMmoney(msisdn); //new
+    // await queryProfileMmoney(msisdn); //new
     saveTempUserLogin(msisdn, profileName.value, userProfilemodel.value.profileImg ?? '');
     if (isRenewToken.value) {
       Get.back();
@@ -793,7 +798,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  register(regType, gender, fname, lname, birthdate, proid) async {
+  register(regType, gender, fname, lname, birthdate, proid, district, village) async {
     String verify, type = '';
     if (regType == 'Approved') {
       verify = 'Approved';
@@ -811,8 +816,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
       "birthdate": birthdate,
       "provinceCode": proid,
       "provinceDesc": proid,
-      "district": '',
-      "village": '',
+      "district": district,
+      "village": village,
       "card_id": '',
       "verify": verify,
       "type": type,

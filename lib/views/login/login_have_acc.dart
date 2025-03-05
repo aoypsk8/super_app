@@ -54,6 +54,12 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
   @override
   Widget build(BuildContext context) {
     // String lastLoginTime = widget.user['last_login'] != null ? DateFormat('HH:mm').format(DateTime.parse(widget.user['last_login'])) : 'No recent login';
+    String maskPhoneNumber(String number) {
+      if (number.length >= 7) {
+        return number.replaceRange(4, 7, '***');
+      }
+      return number;
+    }
 
     final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
     return Scaffold(
@@ -106,13 +112,13 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
                             ],
                           ),
                           TextFont(
-                            text: widget.user['fullname'] ?? 'Guest User',
+                            text: widget.user['fullname'] ?? '',
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             noto: true,
                           ),
                           TextFont(
-                            text: widget.user['username'] ?? 'No Account',
+                            text: maskPhoneNumber(widget.user['username']) ?? 'No Account',
                             fontSize: 18,
                             poppin: true,
                           ),

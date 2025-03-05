@@ -52,6 +52,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(height: 5.h),
               InkWell(
                 onTap: () {
+                  userController.isRenewToken.value = false;
                   Get.offAll(SplashScreen());
                 },
                 child: Container(
@@ -104,7 +105,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         Row(
                           children: [
                             TextFont(
-                              text: isHidden ? maskMsisdn(userController.userProfilemodel.value.msisdn ?? '2055555555') : userController.userProfilemodel.value.msisdn!,
+                              text: isHidden
+                                  ? maskMsisdn(userController.userProfilemodel.value.msisdn ?? '2055555555')
+                                  : userController.userProfilemodel.value.msisdn!,
                               poppin: true,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -134,11 +137,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ? SvgPicture.asset(MyIconOld.ic_check_circle)
                                   : SvgPicture.asset(
                                       MyIconOld.ic_info,
-                                      color: userController.userProfilemodel.value.verify == "UnApproved" ? color_primary_light : Colors.grey,
+                                      color: userController.userProfilemodel.value.verify == "UnApproved"
+                                          ? color_primary_light
+                                          : Colors.grey,
                                     ),
                               SizedBox(width: 5),
                               TextFont(
-                                text: userController.userProfilemodel.value.verify == 'Pending' ? '...Watting' : userController.userProfilemodel.value.verify!,
+                                text: userController.userProfilemodel.value.verify == 'Pending'
+                                    ? '...Watting'
+                                    : userController.userProfilemodel.value.verify!,
                                 fontSize: 10,
                                 poppin: true,
                               ),
@@ -318,7 +325,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           Divider(color: color_ecec),
-          userController.userProfilemodel.value.verify == "Approved" || userController.userProfilemodel.value.verify == "Pending"
+          userController.userProfilemodel.value.verify == "Approved" ||
+                  userController.userProfilemodel.value.verify == "Pending"
               ? SizedBox.shrink()
               : Column(
                   children: [
@@ -450,7 +458,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildLanguageOption(BuildContext context, String languageName, String languageCode, LanguageService languageService) {
+  Widget _buildLanguageOption(
+      BuildContext context, String languageName, String languageCode, LanguageService languageService) {
     bool isSelected = languageService.locale.languageCode == languageCode;
 
     return GestureDetector(

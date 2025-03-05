@@ -106,8 +106,8 @@ class _buildFavoriteTransferState extends State<buildFavoriteTransfer> {
                     },
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 10, top: 5),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
+                      padding: EdgeInsets.only(
+                          left: 10, right: 10, top: 5, bottom: 10),
                       decoration: const BoxDecoration(
                         border: Border(
                           bottom: BorderSide(color: cr_ecec),
@@ -137,7 +137,7 @@ class _buildFavoriteTransferState extends State<buildFavoriteTransfer> {
                                         TextFont(
                                           text: favoriteData[index]
                                               ['walletName'],
-                                          fontSize: 9,
+                                          fontSize: 12,
                                           color: cr_2929,
                                           fontWeight: FontWeight.w400,
                                         ),
@@ -145,7 +145,7 @@ class _buildFavoriteTransferState extends State<buildFavoriteTransfer> {
                                           text: maskMsisdn(favoriteData[index]
                                                   ['walletNo']
                                               .toString()),
-                                          fontSize: 9,
+                                          fontSize: 11,
                                           color: cr_7070,
                                           fontWeight: FontWeight.w400,
                                         ),

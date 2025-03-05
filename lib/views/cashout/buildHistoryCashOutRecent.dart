@@ -51,7 +51,7 @@ class _buildHistoryCashOutRecentState extends State<buildHistoryCashOutRecent> {
         print("HistoryCashout data exists: $data");
         // Sort data alphabetically by 'AccName'
         List<Map<String, dynamic>> sortedData =
-            List<Map<String, dynamic>>.from(data).take(5).toList();
+            List<Map<String, dynamic>>.from(data).take(20).toList();
         var searchResult = sortedData.firstWhere(
           (item) => item['id'] == cashOutController.rxCodeBank.value,
           orElse: () => {}, // Return null if no match is found
@@ -195,8 +195,8 @@ class _buildHistoryCashOutRecentState extends State<buildHistoryCashOutRecent> {
                       },
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 10, top: 5),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: EdgeInsets.only(
+                            left: 10, right: 10, top: 5, bottom: 10),
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(color: cr_ecec),
@@ -222,7 +222,7 @@ class _buildHistoryCashOutRecentState extends State<buildHistoryCashOutRecent> {
                                         children: [
                                           TextFont(
                                             text: historyData[index]['AccName'],
-                                            fontSize: 9,
+                                            fontSize: 12,
                                             color: cr_2929,
                                             fontWeight: FontWeight.w400,
                                           ),
@@ -230,7 +230,7 @@ class _buildHistoryCashOutRecentState extends State<buildHistoryCashOutRecent> {
                                             text: maskAccountNumber(
                                                 historyData[index]['AccNo']
                                                     .toString()),
-                                            fontSize: 9,
+                                            fontSize: 11,
                                             color: cr_7070,
                                             fontWeight: FontWeight.w400,
                                           ),

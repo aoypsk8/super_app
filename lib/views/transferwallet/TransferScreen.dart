@@ -16,6 +16,7 @@ import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/transferwallet/buildFavoriteTransfer.dart';
 import 'package:super_app/views/transferwallet/buildHistoryTranserAll.dart';
 import 'package:super_app/views/transferwallet/buildHistoryTranserRecent.dart';
+import 'package:super_app/widget/RoundedRectangleTabIndicator';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
@@ -30,7 +31,8 @@ class TransferScreen extends StatefulWidget {
   State<TransferScreen> createState() => _TransferScreenState();
 }
 
-class _TransferScreenState extends State<TransferScreen> {
+class _TransferScreenState extends State<TransferScreen>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final TextEditingController _toWallet = TextEditingController();
   final TextEditingController _paymentAmount = TextEditingController();
@@ -39,12 +41,14 @@ class _TransferScreenState extends State<TransferScreen> {
   // final homeController = Get.put<HomeController>(HomeController());
   final transferController = Get.put(TransferController());
   final storage = GetStorage();
-
   final FocusNode _amountFocusNode = FocusNode();
   String _contactName = '';
   int _balanceAmount = 0;
   bool isMore = false;
   bool isMoreText = false;
+
+  late TabController _tabController;
+  int indexTabs = 0;
 
   void _updateParentValue(String walletNo, String contactName) {
     setState(() {
@@ -58,16 +62,22 @@ class _TransferScreenState extends State<TransferScreen> {
 
   @override
   void initState() {
+    userController.increasepage();
     _toWallet.text = '';
     _balanceAmount = 0;
     _toWallet.text = transferController.destinationMsisdn.value;
-    userController.increasepage();
+
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(() {
+      setState(() {});
+    });
     super.initState();
   }
 
   @override
   void dispose() {
     userController.decreasepage();
+    _tabController.dispose();
     _toWallet.text = '';
     transferController.destinationMsisdn.value = '';
     super.dispose();
@@ -85,11 +95,12 @@ class _TransferScreenState extends State<TransferScreen> {
           child: FormBuilder(
             key: _formKey,
             child: Container(
+              height: Get.height,
               child: Column(
                 children: [
                   buildToWallet(context),
                   const SizedBox(height: 12),
-                  buildRecentTransfer(context),
+                  buildTabBar(context),
                 ],
               ),
             ),
@@ -147,11 +158,6 @@ class _TransferScreenState extends State<TransferScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10),
-            // TextFont(
-            //   text: 'transfer_wallet',
-            //   fontWeight: FontWeight.w500,
-            //   fontSize: 12,
-            // ),
             buildStepProcess(title: "1/3", desc: "transfer_wallet"),
             const SizedBox(height: 10),
             buildNumberFiledValidate(
@@ -412,83 +418,159 @@ class _TransferScreenState extends State<TransferScreen> {
     );
   }
 
-  Widget buildRecentTransfer(BuildContext context) {
-    return Container(
-      color: color_fff,
+  Widget buildTabBar(BuildContext context) {
+    return Expanded(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-        width: double.infinity,
-        child: Column(
-          children: [
-            Container(
-              height: 350,
-              child: ContainedTabBarView(
-                initialIndex: 0,
-                tabBarProperties: TabBarProperties(
-                  indicatorColor: Theme.of(context).primaryColor,
+        color: color_fff,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          child: Column(
+            children: [
+              TabBar(
+                controller: _tabController,
+                isScrollable: true,
+                tabAlignment: TabAlignment.start,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: RoundedRectangleTabIndicator(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  weight: 4.0,
+                  borderRadius: 10.0,
                 ),
-                tabBarViewProperties: TabBarViewProperties(
-                  physics: NeverScrollableScrollPhysics(),
-                ),
+                onTap: (index) => setState(() {
+                  indexTabs = index;
+                }),
+                dividerColor: Colors.transparent,
                 tabs: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Iconsax.clock,
-                          color: Theme.of(context).primaryColor),
-                      const SizedBox(width: 5),
-                      TextFont(
-                        text: 'recent',
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ],
+                  Tab(
+                    child: TextFont(
+                      text: 'recent',
+                      fontWeight: FontWeight.w600,
+                      color: indexTabs == 0
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : cr_7070,
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Iconsax.heart,
-                          color: Theme.of(context).primaryColor),
-                      const SizedBox(width: 5),
-                      TextFont(
-                        text: 'favorite',
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ],
+                  Tab(
+                    child: TextFont(
+                      text: 'favorite',
+                      fontWeight: FontWeight.w600,
+                      color: indexTabs == 1
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : cr_7070,
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Iconsax.like, color: Theme.of(context).primaryColor),
-                      const SizedBox(width: 5),
-                      TextFont(
-                        text: 'all',
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ],
+                  Tab(
+                    child: TextFont(
+                      text: '',
+                    ),
+                  ),
+                  Tab(
+                    child: TextFont(
+                      text: '',
+                    ),
                   ),
                 ],
-                views: [
-                  buildHistoryTransferRecent(
-                    updateParentValue: _updateParentValue,
-                  ),
-                  buildFavoriteTransfer(
-                    updateParentValue: _updateParentValue,
-                  ),
-                  buildHistoryTransferAll(
-                    updateParentValue: _updateParentValue,
-                  ),
-                ],
-                onChange: (index) => print(index),
+                indicatorColor: Theme.of(context).colorScheme.onPrimary,
               ),
-            ),
-          ],
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    buildHistoryTransferRecent(
+                      updateParentValue: _updateParentValue,
+                    ),
+                    buildFavoriteTransfer(
+                      updateParentValue: _updateParentValue,
+                    ),
+                    const SizedBox(),
+                    const SizedBox(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  // Widget buildRecentTransfer(BuildContext context) {
+  //   return Container(
+  //     color: color_fff,
+  //     child: Container(
+  //       margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+  //       width: double.infinity,
+  //       child: Column(
+  //         children: [
+  //           Container(
+  //             height: 350,
+  //             child: ContainedTabBarView(
+  //               initialIndex: 0,
+  //               tabBarProperties: TabBarProperties(
+  //                 indicatorColor: Theme.of(context).primaryColor,
+  //               ),
+  //               tabBarViewProperties: TabBarViewProperties(
+  //                 physics: NeverScrollableScrollPhysics(),
+  //               ),
+  //               tabs: [
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.center,
+  //                   children: [
+  //                     Icon(Iconsax.clock,
+  //                         color: Theme.of(context).primaryColor),
+  //                     const SizedBox(width: 5),
+  //                     TextFont(
+  //                       text: 'recent',
+  //                       color: Theme.of(context).primaryColor,
+  //                       fontWeight: FontWeight.w600,
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.center,
+  //                   children: [
+  //                     Icon(Iconsax.heart,
+  //                         color: Theme.of(context).primaryColor),
+  //                     const SizedBox(width: 5),
+  //                     TextFont(
+  //                       text: 'favorite',
+  //                       color: Theme.of(context).primaryColor,
+  //                       fontWeight: FontWeight.w600,
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.center,
+  //                   children: [
+  //                     Icon(Iconsax.like, color: Theme.of(context).primaryColor),
+  //                     const SizedBox(width: 5),
+  //                     TextFont(
+  //                       text: 'all',
+  //                       color: Theme.of(context).primaryColor,
+  //                       fontWeight: FontWeight.w600,
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ],
+  //               views: [
+  //                 buildHistoryTransferRecent(
+  //                   updateParentValue: _updateParentValue,
+  //                 ),
+  //                 buildFavoriteTransfer(
+  //                   updateParentValue: _updateParentValue,
+  //                 ),
+  //                 buildHistoryTransferAll(
+  //                   updateParentValue: _updateParentValue,
+  //                 ),
+  //               ],
+  //               onChange: (index) => print(index),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Future _paymentProcess() async {
     int paymentAmount = int.parse(

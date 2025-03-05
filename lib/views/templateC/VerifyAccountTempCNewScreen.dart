@@ -154,7 +154,7 @@ class _VerifyAccountTempCNewScreenState
                                       tempCcontroler.paymentPrepaid(
                                           homeController.menudetail.value);
                                     },
-                                    stepProcess: "4/4",
+                                    stepProcess: "4/5",
                                     stepTitle: "check_detail",
                                     fromAccountImage: userController
                                             .userProfilemodel
@@ -203,7 +203,7 @@ class _VerifyAccountTempCNewScreenState
                 child: Column(
                   children: [
                     SizedBox(height: 10),
-                    buildStepProcess(title: "3/4", desc: "ເລືອກມູນຄ່າໂທ   gg"),
+                    buildStepProcess(title: "3/5", desc: "gg"),
                     const SizedBox(height: 10),
                     buildForm(),
                     const SizedBox(height: 15),

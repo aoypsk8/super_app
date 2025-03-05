@@ -106,6 +106,7 @@ class PaymentController extends GetxController {
     };
     var response = await DioClient.postEncrypt(url, body,
         key: 'openkey', token: rxTokenCashOut.value);
+
     if (response['resultCode'] == "0000") {
       reqCashOutModel.value = RequestCashoutModel.fromJson(response);
       isSuccess = true;

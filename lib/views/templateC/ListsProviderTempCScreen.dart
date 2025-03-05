@@ -49,7 +49,7 @@ class _ListProviderTempCScreenState extends State<ListProviderTempCScreen> {
           child: Column(
             children: [
               SizedBox(height: 10),
-              buildStepProcess(title: "1/4", desc: "telecome_service"),
+              buildStepProcess(title: "1/5", desc: "telecome_service"),
               const SizedBox(height: 10),
               Expanded(
                 child: tempCcontroler.tempCmodel.isEmpty

@@ -13,7 +13,13 @@
   "mmoney_lite": "M moneyX",
   "login": "Nhật ký",
   "register": "Đăng ký",
+  "new_account?": "Tài khoản mới?",
+  "forgot_password": "Quên mật khẩu",
+  "username": "Tên người dùng",
+  "password": "Mật khẩu",
   "other_service": "Dịch vụ ",
+  "view_calendar": "Xem Lịch",
+  "no_events": "No Events",
   "msisdn": "Số điện thoại",
   "email": "thư điện tử",
   "msisdn_or_email": "Số điện thoại hoặc thư điện tử",
@@ -281,7 +287,6 @@
   "description": "Sự miêu tả",
   "cashout": "Cash Out",
   "transaction_id": "Mã giao dịch",
-  "amount_kip": "số lượng (LAK)",
   "input_amount": "Nhập số lượng",
   "select_province": "Chọn Tỉnh",
   "on": "Bật",
@@ -305,5 +310,7 @@
    "select_lists_item":"Select a payment item",
    "check_detail": "Check Details",
    "transfer_to_bank":"Input withdrawal transaction",
-   "please_pay": "Please pay"
+   "please_pay": "Please pay",
+  "otp_send_to": "Mã số OTP gửi cho Số : @phone",
+  "ref_otp": "The Ref OTP code : @refotp"
 }

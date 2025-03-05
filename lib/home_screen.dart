@@ -71,11 +71,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(50.0),
                             child: Image.network(
-                              userController
-                                          .userProfilemodel.value.profileImg !=
-                                      null
-                                  ? userController
-                                      .userProfilemodel.value.profileImg!
+                              userController.userProfilemodel.value.profileImg != null
+                                  ? userController.userProfilemodel.value.profileImg!
                                   : MyConstant.profile_default,
                             ),
                           ),
@@ -94,8 +91,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 ),
                                 const SizedBox(width: 3),
                                 TextFont(
-                                  text:
-                                      "${userController.userProfilemodel.value.name ?? ''}!",
+                                  text: "${userController.userProfilemodel.value.name ?? ''}!",
                                   fontWeight: FontWeight.w600,
                                   color: cr_7070,
                                 )
@@ -107,9 +103,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 children: [
                                   TextFont(
                                     text: maskMsisdn(
-                                      userController
-                                              .userProfilemodel.value.msisdn ??
-                                          '2000000',
+                                      userController.userProfilemodel.value.msisdn ?? '2000000',
                                       showMsisdn: showMsisdn,
                                     ),
                                     fontSize: 14,
@@ -126,9 +120,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     },
                                     child: Icon(
                                       size: 16.sp,
-                                      showMsisdn
-                                          ? Iconsax.eye
-                                          : Iconsax.eye_slash,
+                                      showMsisdn ? Iconsax.eye : Iconsax.eye_slash,
                                       color: cr_7070,
                                     ),
                                   ),
@@ -184,8 +176,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: Column(
                   children: [
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                       child: TabBar(
                         controller: _tabController,
                         indicatorSize: TabBarIndicatorSize.tab,
@@ -198,18 +189,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             child: TextFont(
                               text: 'recommend',
                               fontWeight: FontWeight.w600,
-                              color: indexTabs == 0
-                                  ? Theme.of(context).colorScheme.onPrimary
-                                  : cr_7070,
+                              color: indexTabs == 0 ? Theme.of(context).colorScheme.onPrimary : cr_7070,
                             ),
                           ),
                           Tab(
                             child: TextFont(
                               text: 'telecom_service',
                               fontWeight: FontWeight.w600,
-                              color: indexTabs == 1
-                                  ? Theme.of(context).colorScheme.onPrimary
-                                  : cr_7070,
+                              color: indexTabs == 1 ? Theme.of(context).colorScheme.onPrimary : cr_7070,
                             ),
                           ),
                         ],
@@ -265,8 +252,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               _buildLanguageOption(context, 'English', 'en', languageService),
               _buildLanguageOption(context, 'Lao', 'lo', languageService),
               _buildLanguageOption(context, 'Chinese', 'zh', languageService),
-              _buildLanguageOption(
-                  context, 'Vietnamese', 'vi', languageService),
+              _buildLanguageOption(context, 'Vietnamese', 'vi', languageService),
             ],
           ),
         );
@@ -274,8 +260,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildLanguageOption(BuildContext context, String languageName,
-      String languageCode, LanguageService languageService) {
+  Widget _buildLanguageOption(
+      BuildContext context, String languageName, String languageCode, LanguageService languageService) {
     return ListTile(
       title: TextFont(
         text: languageName,

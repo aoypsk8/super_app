@@ -11,33 +11,25 @@ class PullRefresh extends StatefulWidget {
   final Color bg;
   final RefreshController refreshController;
   PullRefresh(
-      {Key? key,
-      required this.onRefresh,
-      required this.child,
-      this.bg = color_f2f2,
-      required this.refreshController})
+      {Key? key, required this.onRefresh, required this.child, this.bg = color_f2f2, required this.refreshController})
       : super(key: key);
 
   @override
   State<PullRefresh> createState() => _PullRefreshState();
 }
 
-class _PullRefreshState extends State<PullRefresh>
-    with TickerProviderStateMixin {
+class _PullRefreshState extends State<PullRefresh> with TickerProviderStateMixin {
   AnimationController? _anicontroller, _scaleController;
 
   @override
   void initState() {
-    _anicontroller = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 1000));
-    _scaleController =
-        AnimationController(value: 0.0, vsync: this, upperBound: 1.0);
+    _anicontroller = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
+    _scaleController = AnimationController(value: 0.0, vsync: this, upperBound: 1.0);
     widget.refreshController.headerMode!.addListener(() {
       if (widget.refreshController.headerStatus == RefreshStatus.idle) {
         _scaleController!.value = 0.0;
         _anicontroller!.reset();
-      } else if (widget.refreshController.headerStatus ==
-          RefreshStatus.refreshing) {
+      } else if (widget.refreshController.headerStatus == RefreshStatus.refreshing) {
         _anicontroller!.repeat();
       }
     });
@@ -58,8 +50,8 @@ class _PullRefreshState extends State<PullRefresh>
       header: CustomHeader(
         refreshStyle: RefreshStyle.Behind,
         onOffsetChange: (offset) {
-          if (widget.refreshController.headerMode!.value !=
-              RefreshStatus.refreshing) _scaleController!.value = offset / 80.0;
+          if (widget.refreshController.headerMode!.value != RefreshStatus.refreshing)
+            _scaleController!.value = offset / 80.0;
         },
         builder: (c, m) {
           return Container(
@@ -72,9 +64,7 @@ class _PullRefreshState extends State<PullRefresh>
                   controller: _anicontroller,
                   itemBuilder: (_, int index) {
                     return DecoratedBox(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Colors.grey[300]),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: Colors.grey[300]),
                     );
                   },
                 ),

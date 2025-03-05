@@ -373,6 +373,29 @@ class QrController extends GetxController {
     }
   }
 
+  paymentPoint(transRef) async {
+    var url = '${MyConstant.urlPoint}/InsertPoint.php';
+    var data = {
+      "msisdn": storage.read('msisdn'),
+      "to_acc": qrModel.value.merchantMobile,
+      "amount": rxCouponAmount.value,
+      "channel": 'QR',
+      "remark": rxNote.value,
+      "provider": qrModel.value.provider,
+      "tranID": rxTransID.value,
+      "tranRef": transRef
+    };
+    var response =
+        await DioClient.postEncrypt(loading: false, url, data, key: 'point');
+
+    await logController.insertLog(
+      'x_cashout_coupon',
+      rxTransID.value,
+      data,
+      response,
+    );
+  }
+
   //!
   //! Save LOG
   //!------------------------------------------------------------------------------

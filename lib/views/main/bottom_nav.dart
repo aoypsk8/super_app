@@ -17,8 +17,8 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   int _currentIndex = 0;
-  final userController = Get.find<UserController>();
-  final qrController = Get.put(QrController());
+  // final userController = Get.find<UserController>();
+  // final qrController = Get.put(QrController());
   final List<Map<String, dynamic>> _menuItems = [
     {'icon': 'assets/icons/ic_home.svg', 'title': 'nav_home'},
     {'icon': 'assets/icons/ic_box.svg', 'title': 'nav_service'},
@@ -39,8 +39,7 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     // Get theme colors
     final activeColor = Theme.of(context).colorScheme.primary; // Active color
-    final inactiveColor =
-        Theme.of(context).unselectedWidgetColor; // Inactive color
+    final inactiveColor = Theme.of(context).unselectedWidgetColor; // Inactive color
 
     return Scaffold(
       body: _pages[_currentIndex],
@@ -49,11 +48,8 @@ class _BottomNavState extends State<BottomNav> {
         children: [
           // Active Indicator Positioned Above the BottomNavigationBar
           Positioned(
-            top:
-                -5, // Position the active indicator 5px above the BottomNavigationBar
-            left: MediaQuery.of(context).size.width /
-                _menuItems.length *
-                _currentIndex,
+            top: -5, // Position the active indicator 5px above the BottomNavigationBar
+            left: MediaQuery.of(context).size.width / _menuItems.length * _currentIndex,
             width: MediaQuery.of(context).size.width / _menuItems.length,
             child: Container(
               height: 5,
@@ -82,8 +78,7 @@ class _BottomNavState extends State<BottomNav> {
                       fontSize: 10.5,
                       text: item['title'],
                       color: isActive ? activeColor : inactiveColor,
-                      fontWeight:
-                          isActive ? FontWeight.bold : FontWeight.normal,
+                      fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                     )
                   ],
                 ),

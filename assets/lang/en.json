@@ -12,8 +12,14 @@
   "share": "Share",
   "mmoney_lite": "M moneyX",
   "login": "Sign in",
-  "register": "Sign up",
+  "register": "Register",
+  "new_account?": "New Account? ",
+  "forgot_password": "Forgot Password",
+  "username": "Username",
+  "password": "Password",
   "other_service": "Services",
+  "view_calendar": "View Calendar",
+  "no_events": "No Events",
   "msisdn": "Phone number",
   "email": "Email",
   "msisdn_or_email": "Phone number or Email",
@@ -313,5 +319,7 @@
   "input_amount": "Input Amount",
   "check_detail": "Check Details",
   "transfer_to_bank":"Input withdrawal transaction",
-  "please_pay": "Please pay"
+  "please_pay": "Please pay",
+  "otp_send_to": "The OTP code has been sent to the number : @phone",
+  "ref_otp": "The Ref OTP code : @refotp"
 }

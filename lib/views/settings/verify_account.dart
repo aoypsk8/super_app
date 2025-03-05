@@ -46,7 +46,7 @@ class _VerifyAccountScreenState extends State<VerifyAccountScreen> {
 
   String _provinceCode = '';
   var dataProvice = [
-    {"proid": 1, "Name": "ນະຄອນຫຼວງ", "Code": "VTE", "Description": "NULL"},
+    {"proid": 1, "Name": "ນະຄອນຫຼວງວຽງຈັນ", "Code": "VTE", "Description": "NULL"},
     {"proid": 2, "Name": "ວຽງຈັນ", "Code": "VTP", "Description": "NULL"},
     {"proid": 3, "Name": "ບໍລິຄຳໄຊ", "Code": "BKX", "Description": "NULL"},
     {"proid": 4, "Name": "ອຸດົມໄຊ", "Code": "UDX", "Description": "NULL"},
@@ -177,7 +177,8 @@ class _VerifyAccountScreenState extends State<VerifyAccountScreen> {
                       dataObject: dataProvice, // Pass your list
                       colName: "Code", // Column for display text
                       valName: "Code", // Column for value
-                      initValue: "VTE-VTE", // Example initial value
+                      initValue: "VTE-VTE",
+
                       onChanged: (value) {
                         List<String> province = value.toString().split('-');
                         _provinceCode = province[0];

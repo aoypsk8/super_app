@@ -25,6 +25,9 @@ class MyConstant {
   // https://gateway.mmoney.la/noti/initDevice/
   // static String urlNoti = '/Noti';
 
+// https://gateway.ltcdev.la/SuperAppLogin
+  static String urlSuperAppLogin = '/SuperAppLogin';
+
   static String urlOther = '/Other';
 
   // static String urlAddressNotify = 'https://gateway.mmoney.la/front/'; /////////
@@ -83,13 +86,11 @@ class MyConstant {
   static String desRoute = 'PRO';
 
   static int connectTimeout = 30000;
-  static Duration get delayTime =>
-      Duration(milliseconds: timeDilation.ceil() * 500);
+  static Duration get delayTime => Duration(milliseconds: timeDilation.ceil() * 500);
 
   static String userKYC = 'Users';
 
-  static String profile_default =
-      'https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png';
+  static String profile_default = 'https://gateway.ltcdev.la/AppImage/AppLite/Users/mmoney.png';
   // static String mlitekey =
   //     'gUkXa2r5u8x/A?D(G+KbPeShVmYq3t6v9y\$B&E)H@McQfTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z\$C&F)H@McQfTjWnZr4u7x!A%D*G';
   // static String lmmkeyApp =

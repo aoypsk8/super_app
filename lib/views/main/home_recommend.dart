@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,7 @@ import 'package:super_app/widget/button.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/pull_refresh.dart';
 import 'package:super_app/widget/textfont.dart';
+import 'package:intl/intl.dart';
 
 class HomeRecommendScreen extends StatefulWidget {
   const HomeRecommendScreen({super.key});
@@ -37,12 +39,11 @@ class HomeRecommendScreen extends StatefulWidget {
 class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
   final UserController userController = Get.find();
   final HomeController homeController = Get.find();
-  final paymentController = Get.put(PaymentController());
+  // final paymentController = Get.put(PaymentController());
   final qrController = Get.put(QrController());
-  final controller = Get.put(TempAController());
+  // final controller = Get.put(TempAController());
   RefreshController refreshController = RefreshController();
-  final CarouselSliderController carouselController =
-      CarouselSliderController();
+  final CarouselSliderController carouselController = CarouselSliderController();
 
   bool showAmount = false;
   int _current = 0;
@@ -101,19 +102,19 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
           height: 14.w,
           child: FloatingActionButton(
             onPressed: () {
-              qrController.clear();
-              if (!userController.isCheckToken.value) {
-                userController.isCheckToken.value = true;
-                userController.checktoken(name: 'menu').then((value) async {
-                  if (userController.isLogin.value) {
-                    final result = await Get.to(() => QRScannerScreen());
-                    if (result != null) {
-                      qrController.verifyQR(result);
-                    }
-                  }
-                });
-                userController.isCheckToken.value = false;
-              }
+              // qrController.clear();
+              // if (!userController.isCheckToken.value) {
+              //   userController.isCheckToken.value = true;
+              //   userController.checktoken(name: 'menu').then((value) async {
+              //     if (userController.isLogin.value) {
+              //       final result = await Get.to(() => QRScannerScreen());
+              //       if (result != null) {
+              //         qrController.verifyQR(result);
+              //       }
+              //     }
+              //   });
+              //   userController.isCheckToken.value = false;
+              // }
             },
             backgroundColor: Theme.of(context).primaryColor,
             shape: CircleBorder(),
@@ -135,8 +136,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                 ? Column(
                     children: [
                       Padding(
-                        padding:
-                            const EdgeInsets.only(top: 10, left: 20, right: 20),
+                        padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
@@ -151,20 +151,15 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                     SizedBox(height: 5),
                                     Container(
                                       child: AlignedGridView.count(
-                                        itemCount: homeController.menuModel
-                                                .first.menulists!.length +
-                                            1,
+                                        itemCount: homeController.menuModel.first.menulists!.length + 1,
                                         crossAxisCount: 4,
                                         mainAxisSpacing: 17,
                                         crossAxisSpacing: 20,
                                         shrinkWrap: true,
                                         primary: false,
                                         physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          if (index ==
-                                              homeController.menuModel.first
-                                                  .menulists!.length) {
+                                        itemBuilder: (BuildContext context, int index) {
+                                          if (index == homeController.menuModel.first.menulists!.length) {
                                             return InkWell(
                                               onTap: () async {},
                                               child: Column(
@@ -172,8 +167,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                                 children: [
                                                   SizedBox(height: 6),
                                                   Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
+                                                    padding: const EdgeInsets.symmetric(
                                                       horizontal: 12,
                                                     ),
                                                     child: SvgPicture.asset(
@@ -196,75 +190,50 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                             );
                                           }
 
-                                          var result = homeController.menuModel
-                                              .first.menulists![index];
+                                          var result = homeController.menuModel.first.menulists![index];
                                           String? url = result.logo;
-                                          String? updatedUrl =
-                                              url!.replaceFirst(
+                                          String? updatedUrl = url!.replaceFirst(
                                             'https://mmoney.la',
                                             'https://gateway.ltcdev.la/AppImage',
                                           );
 
                                           return InkWell(
                                             onTap: () async {
-                                              print(result.template);
-                                              await homeController.clear();
-                                              if (!userController
-                                                  .isCheckToken.value) {
-                                                userController
-                                                    .isCheckToken.value = true;
-                                                if (result.template ==
-                                                    "proof") {
-                                                  homeController
-                                                          .menutitle.value =
-                                                      result.groupNameEN!;
-                                                  homeController.menudetail
-                                                      .value = result;
-                                                  qrController
-                                                      .fetchProofLists();
-                                                  Get.toNamed(
-                                                      '/${result.template}');
-                                                } else {
-                                                  userController
-                                                      .checktoken(name: 'menu')
-                                                      .then((value) {
-                                                    if (userController
-                                                        .isLogin.value) {
-                                                      if (result.template !=
-                                                          '/') {
-                                                        homeController.menutitle
-                                                                .value =
-                                                            result.groupNameEN!;
-                                                        homeController
-                                                            .menudetail
-                                                            .value = result;
-                                                        if (result.template ==
-                                                            "webview") {
-                                                          Get.to(
-                                                            OpenWebView(
-                                                                url: homeController
-                                                                    .menudetail
-                                                                    .value
-                                                                    .url
-                                                                    .toString()),
-                                                          );
-                                                        } else {
-                                                          Get.toNamed(
-                                                              '/${result.template}');
-                                                        }
-                                                      } else {
-                                                        DialogHelper
-                                                            .showErrorDialogNew(
-                                                          description:
-                                                              'Not available',
-                                                        );
-                                                      }
-                                                    }
-                                                  });
-                                                }
-                                                userController
-                                                    .isCheckToken.value = false;
-                                              }
+                                              userController.isRenewToken.value = true;
+                                              userController.checktokenSuperApp();
+                                              // print(result.template);
+                                              // await homeController.clear();
+                                              // if (!userController.isCheckToken.value) {
+                                              //   userController.isCheckToken.value = true;
+                                              //   if (result.template == "proof") {
+                                              //     homeController.menutitle.value = result.groupNameEN!;
+                                              //     homeController.menudetail.value = result;
+                                              //     qrController.fetchProofLists();
+                                              //     Get.toNamed('/${result.template}');
+                                              //   } else {
+                                              //     userController.checktoken(name: 'menu').then((value) {
+                                              //       if (userController.isLogin.value) {
+                                              //         if (result.template != '/') {
+                                              //           homeController.menutitle.value = result.groupNameEN!;
+                                              //           homeController.menudetail.value = result;
+                                              //           if (result.template == "webview") {
+                                              //             Get.to(
+                                              //               OpenWebView(
+                                              //                   url: homeController.menudetail.value.url.toString()),
+                                              //             );
+                                              //           } else {
+                                              //             Get.toNamed('/${result.template}');
+                                              //           }
+                                              //         } else {
+                                              //           DialogHelper.showErrorDialogNew(
+                                              //             description: 'Not available',
+                                              //           );
+                                              //         }
+                                              //       }
+                                              //     });
+                                              //   }
+                                              //   userController.isCheckToken.value = false;
+                                              // }
                                             },
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
@@ -272,22 +241,16 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                                 SizedBox(height: 6),
                                                 SvgPicture.network(
                                                   updatedUrl,
-                                                  placeholderBuilder:
-                                                      (BuildContext context) =>
-                                                          Container(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            5.0),
-                                                    child:
-                                                        const CircularProgressIndicator(),
+                                                  placeholderBuilder: (BuildContext context) => Container(
+                                                    padding: const EdgeInsets.all(5.0),
+                                                    child: const CircularProgressIndicator(),
                                                   ),
                                                   width: 8.5.w,
                                                   height: 8.5.w,
                                                 ),
                                                 SizedBox(height: 10),
                                                 TextFont(
-                                                  text: getLocalizedGroupName(
-                                                      result),
+                                                  text: getLocalizedGroupName(result),
                                                   fontSize: 9.5,
                                                   fontWeight: FontWeight.w400,
                                                   maxLines: 2,
@@ -537,81 +500,71 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
               ),
               borderRadius: BorderRadius.circular(20)),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-              decoration: BoxDecoration(
-                color: color_fff,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: TextFont(
-                text: "Your balance",
-                color: Colors.black,
-                poppin: true,
-                fontSize: 7.5,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SizedBox(height: 40.sp),
+            Stack(
               children: [
-                ClipRect(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                Positioned.fill(
+                  child: Padding(
+                    padding: const EdgeInsets.all(2),
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: cr_black.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white, width: 1),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 2, horizontal: 5),
-                        child: Row(
-                          children: [
-                            TextFont(
-                              text: "₭",
-                              color: color_fff,
-                              poppin: true,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16.5,
-                            ),
-                            const SizedBox(width: 5),
-                            TextFont(
-                              text: showAmount
-                                  ? fn.format(int.parse(userController
-                                      .mainBalance.value
-                                      .toString()))
-                                  : "****",
-                              color: color_fff,
-                              poppin: true,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16.5,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    )
+                        .animate(onPlay: (controller) => controller.repeat()) // 🔄 Loop animation
+                        // .effect(duration: 100.ms) // Small padding to total duration
+                        .effect(delay: 1000.ms, duration: 4000.ms)
+                        .shimmer(blendMode: BlendMode.srcOver),
                   ),
                 ),
-                Container(
-                  width: 35.sp,
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(80),
-                    color: cr_black.withOpacity(0.2),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        showAmount = !showAmount;
-                      });
-                    },
-                    child: Icon(
-                      showAmount ? Iconsax.eye : Iconsax.eye_slash,
-                      color: color_fff,
+                ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: cr_black.withOpacity(0.1),
+                        border: Border.all(color: color_fff.withOpacity(0.7), width: 1),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // inherits the delay & duration from move
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: color_fff,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: TextFont(
+                              text: "Your balance",
+                              color: Colors.black,
+                              poppin: true,
+                              fontSize: 7.5,
+                            ),
+                          ),
+
+                          Divider(color: Theme.of(context).primaryColor.withOpacity(0.8), thickness: 3)
+                          // .animate(onPlay: (controller) => controller.repeat())
+                          // .effect(duration: 10.ms) // this "pads out" the total duration
+                          // .effect(delay: 10.ms, duration: 2000.ms)
+                          // .shimmer(blendMode: BlendMode.dstIn),
+                          ,
+                          AnimatedBalanceWidget(balance: int.parse(userController.mainBalance.value.toString())),
+
+                          // Divider(color: Theme.of(context).primaryColor.withOpacity(1), thickness: 3)
+                          //     .animate(onPlay: (controller) => controller.reverse())
+                          //     .effect(duration: 10.ms) // this "pads out" the total duration
+                          //     .effect(delay: 10.ms, duration: 2000.ms)
+                          //     .shimmer(blendMode: BlendMode.dstIn),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -787,8 +740,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
             items: List.generate((loveItUrls.length / 4).ceil(), (index) {
               int start = index * 4;
               int end = start + 4;
-              List<String> sublist = loveItUrls.sublist(
-                  start, end > loveItUrls.length ? loveItUrls.length : end);
+              List<String> sublist = loveItUrls.sublist(start, end > loveItUrls.length ? loveItUrls.length : end);
               return GridView.builder(
                 padding: const EdgeInsets.all(5),
                 shrinkWrap: true,
@@ -866,5 +818,81 @@ String getLocalizedGroupName(result) {
       return result.groupNameVT ?? '';
     default:
       return result.groupNameEN ?? '';
+  }
+}
+
+class AnimatedBalanceWidget extends StatefulWidget {
+  final int balance;
+
+  AnimatedBalanceWidget({required this.balance});
+
+  @override
+  _AnimatedBalanceWidgetState createState() => _AnimatedBalanceWidgetState();
+}
+
+class _AnimatedBalanceWidgetState extends State<AnimatedBalanceWidget> {
+  bool showAmount = false; // Toggle state
+  int animatedValue = 0; // Holds the animated balance value
+  final NumberFormat fn = NumberFormat("#,###"); // Currency formatter
+
+  void toggleBalance() {
+    setState(() {
+      showAmount = !showAmount;
+      if (showAmount) {
+        animatedValue = 0;
+        animateBalance();
+      }
+    });
+  }
+
+  void animateBalance() async {
+    for (int i = 0; i <= widget.balance; i += (widget.balance ~/ 30)) {
+      await Future.delayed(Duration(milliseconds: 10)); // Adjust speed
+      setState(() {
+        animatedValue = i;
+      });
+    }
+    setState(() {
+      animatedValue = widget.balance; // Ensure it lands on final value
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            TextFont(
+              text: showAmount ? fn.format(animatedValue) : "********", // Show animation or mask,
+              color: color_fff,
+              poppin: true,
+              fontWeight: FontWeight.w700,
+              fontSize: 16.5,
+            ),
+            const SizedBox(width: 5),
+            TextFont(
+              text: "₭",
+              color: color_fff,
+              noto: true,
+              fontWeight: FontWeight.w700,
+              fontSize: 16.5,
+            ),
+          ],
+        ),
+
+        // ✅ Toggle Button for Show/Hide Balance
+        GestureDetector(
+          onTap: toggleBalance, // Call toggle function
+          child: Icon(
+            showAmount ? Iconsax.eye : Iconsax.eye_slash,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
   }
 }

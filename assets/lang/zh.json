@@ -13,7 +13,13 @@
   "mmoney_lite": "只有 M moneyX",
   "login": "登入",
   "register": "注册",
+  "new_account?": "新账户？",
+  "forgot_password": "忘记密码",
+  "username": "用户名",
+  "password": "密码",
   "other_service": "服务",
+  "view_calendar": "查看日历",
+  "no_events": "No Events",
   "msisdn": "电话号码",
   "email": "电子邮件",
   "msisdn_or_email": "电话号码或者电子邮件",
@@ -304,5 +310,7 @@
    "select_lists_item":"Select a payment item",
    "check_detail": "Check Details",
    "transfer_to_bank":"Input withdrawal transaction",
-   "please_pay": "Please pay"
+   "please_pay": "Please pay",
+  "otp_send_to": "OTP 代码已发送至号码 : @phone",
+  "ref_otp": "The Ref OTP code : @refotp"
 }

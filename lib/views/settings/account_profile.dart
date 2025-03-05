@@ -31,7 +31,11 @@ class AccountProfileScreen extends StatelessWidget {
               buildTextDetail('birthday', userController.userProfilemodel.value.birthdate!),
               buildTextDetail(
                 'address',
-                '${userController.userProfilemodel.value.village ?? ''}\n${userController.userProfilemodel.value.district ?? ''}\n${userController.userProfilemodel.value.provinceDesc ?? ''}',
+                [
+                  userController.userProfilemodel.value.village,
+                  userController.userProfilemodel.value.district,
+                  userController.userProfilemodel.value.provinceDesc,
+                ].where((element) => element != null && element!.isNotEmpty).join('\n'),
                 noto: true,
                 maxline: 3,
               ),

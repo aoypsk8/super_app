@@ -1,27 +1,41 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, non_constant_identifier_names, unnecessary_null_comparison
 
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/models/appinfo_model.dart';
 import 'package:super_app/models/balance_model.dart';
 import 'package:super_app/models/history_detail_model.dart';
 import 'package:super_app/models/history_model.dart';
+import 'package:super_app/models/kyc_model.dart';
+import 'package:super_app/models/profile_mmoney_model.dart';
 import 'package:super_app/models/user_profile_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
+import 'package:super_app/splash_screen.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:super_app/views/login/create_password.dart';
+import 'package:super_app/views/login/login_have_acc.dart';
+import 'package:super_app/views/login/temp/temp_userprofile_model.dart';
+import 'package:super_app/views/main/bottom_nav.dart';
+import 'package:super_app/views/register/register_form.dart';
+import 'package:super_app/views/reusable_template/reusable_otp.dart';
 import 'package:super_app/views/reusable_template/reusable_result.dart';
 import 'package:super_app/widget/reusableResultWithCode.dart';
 
 class UserController extends GetxController with WidgetsBindingObserver {
   final storage = GetStorage();
+  final HomeController homController = Get.find();
+
   RxString walletid = ''.obs;
   RxString profileName = ''.obs;
   RxString birthday = ''.obs;
@@ -29,11 +43,11 @@ class UserController extends GetxController with WidgetsBindingObserver {
 
   // profile
   Rx<UserProfileModel> userProfilemodel = UserProfileModel().obs;
+  Rx<KycModel> kycModel = KycModel().obs;
 
   // history
   RxList<HistoryModel> historylists = <HistoryModel>[].obs;
-  RxMap<String, List<HistoryModel>> groupedHistory =
-      <String, List<HistoryModel>>{}.obs;
+  RxMap<String, List<HistoryModel>> groupedHistory = <String, List<HistoryModel>>{}.obs;
   Rx<HistoryDetailModel> historyDetailModel = HistoryDetailModel().obs;
 
   // balance
@@ -46,14 +60,24 @@ class UserController extends GetxController with WidgetsBindingObserver {
   RxBool isCheckToken = false.obs;
 
   //auth
-  RxString rxMsisdn = '2054042200'.obs;
+  RxString rxMsisdn = ''.obs;
 
+  // device info
+  RxString device_id = ''.obs;
+  RxString device_model = ''.obs;
+  RxString os_version = ''.obs;
+  RxString device_name = ''.obs;
   RxString rxLat = ''.obs;
   RxString rxLong = ''.obs;
 
   RxString rxToken = ''.obs;
   RxString rxEmail = ''.obs;
   RxString refcode = ''.obs;
+
+  // new super app
+  Rx<ProfileMmoneyModel> profileMmoneyModel = ProfileMmoneyModel().obs;
+
+  RxString rxPasswordPartner = ''.obs;
 
   //number page to close
   RxInt pageclose = 0.obs;
@@ -67,25 +91,20 @@ class UserController extends GetxController with WidgetsBindingObserver {
     print('pages : $pageclose');
   }
 
-  Future checktoken({String? name}) async {
-    getCurrentLocation();
-  }
+  // Future checktoken({String? name}) async {
+  //   getCurrentLocation();
+  // }
 
   @override
   void onReady() async {
     super.onReady();
-    String wallet = '2052768833';
-    storage.write('msisdn', wallet);
-    rxMsisdn.value = storage.read('msisdn');
-    await loginpincode(wallet, '555555');
-    await fetchBalance();
     await queryUserProfile();
   }
 
   Future<void> loginpincode(String msisdn, String pincode) async {
     try {
-      final response = await DioClient.postEncrypt(
-          '${MyConstant.urlGateway}/login', {"msisdn": msisdn, "pin": pincode});
+      final response =
+          await DioClient.postEncrypt('${MyConstant.urlGateway}/login', {"msisdn": msisdn, "pin": pincode});
       if (response != null && response["resultCode"] == 0) {
         final token = response['token'];
         if (token != null) {
@@ -95,45 +114,15 @@ class UserController extends GetxController with WidgetsBindingObserver {
           print('Token: $token');
         }
       } else {
-        print(
-            'Error: Login failed with resultCode ${response?["resultCode"] ?? "unknown"}');
+        print('Error: Login failed with resultCode ${response?["resultCode"] ?? "unknown"}');
       }
     } catch (e) {
       print('Error during login: $e');
     }
   }
 
-  Future<void> getCurrentLocation() async {
-    try {
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          print("Location permission denied");
-          return;
-        }
-      }
-      if (permission == LocationPermission.deniedForever) {
-        print(
-            "Location permission permanently denied. Please enable it in settings.");
-        return;
-      }
-      Position currentPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best,
-        forceAndroidLocationManager: true,
-      );
-      // Update latitude and longitude
-      rxLat.value = currentPosition.latitude.toString();
-      rxLong.value = currentPosition.longitude.toString();
-      print('Latitude: ${rxLat.value}, Longitude: ${rxLong.value}');
-    } catch (e) {
-      print("Error getting location: $e");
-    }
-  }
-
   Future<void> fetchBalance() async {
     try {
-      // Retrieve token and msisdn from storage
       var token = await storage.read('token');
       var msisdn = await storage.read('msisdn');
 
@@ -144,8 +133,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
       var url = '${MyConstant.urlConsumerInfo}/UserProfile';
       var data = {"msisdn": msisdn};
 
-      var response = await DioClient.postEncrypt(
-          loading: false, url, data, key: 'lmm-key');
+      var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm-key');
 
       if (response["resultCode"] == 0) {
         balanceModel.value = BalanceModel.fromJson(response);
@@ -160,8 +148,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
           // profileName.value = '${result.firstname ?? ''} ${result.lastname ?? ''}'.trim();
         }
       } else {
-        print(
-            'Error: ${response["resultMessage"] ?? "Unknown error occurred"}');
+        print('Error: ${response["resultMessage"] ?? "Unknown error occurred"}');
       }
     } catch (e) {
       print('Error in fetchBalance: $e');
@@ -170,22 +157,18 @@ class UserController extends GetxController with WidgetsBindingObserver {
 
   queryUserProfile() async {
     try {
-      var token = await storage.read('token');
-      var msisdn = await storage.read('msisdn');
-      if (token == null || msisdn == null) {
-        print('Error: Missing token or msisdn');
-        return;
-      }
+      //   var token = await storage.read('token');
+      //   var msisdn = await storage.read('msisdn');
       var url = '${MyConstant.urlUser}/query';
-      var data = {"msisdn": msisdn};
-      var response =
-          await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
+      var data = {"msisdn": rxMsisdn.value};
+      var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
       if (response != null) {
         userProfilemodel.value = UserProfileModel.fromJson(response);
-        profileName.value =
-            '${userProfilemodel.value.name} ${userProfilemodel.value.surname}';
+        profileName.value = '${userProfilemodel.value.name} ${userProfilemodel.value.surname}';
+        return true;
       } else {
         print('Error: Response is null');
+        return false;
       }
     } catch (e) {
       print('Error in queryKyc: $e');
@@ -208,8 +191,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
   }
 
   resendotp() async {
-    var response = await DioClient.postEncrypt(
-        '${MyConstant.urlGateway}/OTP', {'msisdn': rxMsisdn.value});
+    var response = await DioClient.postEncrypt('${MyConstant.urlGateway}/OTP', {'msisdn': rxMsisdn.value});
     print(response);
     if (response["resultCode"] == 0) {
       refcode.value = response["data"]["ref"].toString();
@@ -220,8 +202,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
 
   resendotpforemail() async {
     var response = await DioClient.postEncrypt(
-        '${MyConstant.urlLoginByEmail}/GetMsisdn',
-        {'email': rxEmail.value, 'birthday': rxBirthday.value});
+        '${MyConstant.urlLoginByEmail}/GetMsisdn', {'email': rxEmail.value, 'birthday': rxBirthday.value});
     print(response);
     if (response["resultCode"] == 0) {
       refcode.value = response["data"]["ref"].toString();
@@ -240,9 +221,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
       ),
     });
 
-    var responseUpload = await DioClient.postEncrypt(
-        '${MyConstant.urlProfileUpload}/upload', formData,
-        image: true);
+    var responseUpload = await DioClient.postEncrypt('${MyConstant.urlProfileUpload}/upload', formData, image: true);
     var dataUpdate = {
       "msisdn": userProfilemodel.value.msisdn,
       "gender": userProfilemodel.value.gender,
@@ -274,8 +253,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
     String fileName = imgFile.path.split('/').last;
     var formData = dio.FormData.fromMap({
       "id": userProfilemodel.value.msisdn,
-      'image': await dio.MultipartFile.fromFile('.${imgFile.path}',
-          filename: fileName),
+      'image': await dio.MultipartFile.fromFile('.${imgFile.path}', filename: fileName),
     });
     var responseUpload = await DioClient.postEncrypt(
       '${MyConstant.urlProfileUpload}/upload',
@@ -313,8 +291,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
     String fileName = imgFile.path.split('/').last;
     var formData = dio.FormData.fromMap({
       "id": userProfilemodel.value.msisdn,
-      'image': await dio.MultipartFile.fromFile('.${imgFile.path}',
-          filename: fileName),
+      'image': await dio.MultipartFile.fromFile('.${imgFile.path}', filename: fileName),
     });
     var responseUpload = await DioClient.postEncrypt(
       '${MyConstant.urlProfileUpload}/upload',
@@ -348,8 +325,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
     queryUserProfile();
   }
 
-  verificationRegister(gender, name, surname, bd, provincecode, province, dist,
-      village, identify) async {
+  verificationRegister(gender, name, surname, bd, provincecode, province, dist, village, identify) async {
     var dataUpdate = {
       "msisdn": userProfilemodel.value.msisdn,
       "gender": gender,
@@ -382,18 +358,12 @@ class UserController extends GetxController with WidgetsBindingObserver {
     var token = await storage.read('token');
     if (token != null && msisdn != null) {
       var url = '${MyConstant.urlHistory}/history';
-      var data = {
-        "wallet_id": walletid.value,
-        "msisdn": await storage.read('msisdn')
-      };
+      var data = {"wallet_id": walletid.value, "msisdn": await storage.read('msisdn')};
       var res = await DioClient.postEncrypt(url, loading: false, data);
-      List<HistoryModel> historyList =
-          res.map<HistoryModel>((json) => HistoryModel.fromJson(json)).toList();
+      List<HistoryModel> historyList = res.map<HistoryModel>((json) => HistoryModel.fromJson(json)).toList();
       groupedHistory.clear();
       for (var item in historyList) {
-        String key = item.created != null
-            ? item.created!.substring(0, 7)
-            : 'Unknown'; // Format: YYYY-MM
+        String key = item.created != null ? item.created!.substring(0, 7) : 'Unknown'; // Format: YYYY-MM
         if (!groupedHistory.containsKey(key)) {
           groupedHistory[key] = [];
         }
@@ -422,9 +392,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
             toAccountNumber: historyDetailModel.value.toAcc!,
             toTitleProvider: historyDetailModel.value.provider!,
             amount: historyDetailModel.value.amount!,
-            fee: historyDetailModel.value.fee == ""
-                ? "0"
-                : historyDetailModel.value.fee!,
+            fee: historyDetailModel.value.fee == "" ? "0" : historyDetailModel.value.fee!,
             transactionId: historyDetailModel.value.transid!,
             note: historyDetailModel.value.ramark!,
             timestamp: historyDetailModel.value.timestamp!,
@@ -433,31 +401,442 @@ class UserController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  // fetchHistoryDetailWithCode(transID, String code) async {
-  //   var url = '${MyConstant.urlHistory}/detail';
-  //   var data = {"transid": transID};
-  //   // var res = await DioClient.postNoLoading(url, data);
-  //   var res = await DioClient.postEncrypt(url, data);
-  //   if (res != null) {
-  //     historyDetailModel.value = HistoryDetailModel.fromJson(res);
-  //     Get.to(ReusableResultWithCode(
-  //       fromAccountImage: userProfilemodel.value.profileImg!,
-  //       fromAccountName: historyDetailModel.value.fromAccName!,
-  //       fromAccountNumber: historyDetailModel.value.fromAcc!,
-  //       toAccountImage: historyDetailModel.value.logo == ""
-  //           ? MyConstant.profile_default
-  //           : historyDetailModel.value.logo!,
-  //       toAccountName: historyDetailModel.value.provider!,
-  //       toAccountNumber: historyDetailModel.value.provider!,
-  //       amount: historyDetailModel.value.amount!,
-  //       fee: historyDetailModel.value.fee == ""
-  //           ? "0"
-  //           : historyDetailModel.value.fee!,
-  //       transactionId: historyDetailModel.value.transid!,
-  //       timestamp: historyDetailModel.value.timestamp!,
-  //       fromHistory: false,
-  //       code: code,
-  //     ));
-  //   }
-  // }
+  /*
+  ████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+  ████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+  ---- Device - App Info and Insernt login log
+
+  ████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+  ████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+  */
+  Future<void> getDeviceInfo() async {
+    const platform = MethodChannel('device_info_channel');
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      device_model.value = androidInfo.model;
+      device_id.value = androidInfo.id;
+      device_name.value = androidInfo.name;
+      os_version.value = '${androidInfo.version.release}|SDK${androidInfo.version.sdkInt}|${androidInfo.board}';
+    } else if (Platform.isIOS) {
+      try {
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        final Map<dynamic, dynamic> result = await platform.invokeMethod("getDeviceDetails");
+        device_model.value = '${result["hardwareModel"]} | ${iosInfo.modelName}';
+        device_id.value = result["deviceID"];
+        device_name.value = result["deviceName"];
+        os_version.value = result["systemVersion"];
+      } on PlatformException catch (e) {
+        print("Error retrieving device details: ${e.message}");
+      }
+    }
+  }
+
+  getCurrentLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          print('Location permission denied');
+          return;
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        print('permission: $permission}');
+        // _showLocationPermissionDialog();
+        return;
+      }
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best,
+      );
+      rxLat.value = position.latitude.toString();
+      rxLong.value = position.longitude.toString();
+      print('Location: ${rxLat.value}, ${rxLong.value}');
+    } catch (e) {
+      print('Error getting location: $e');
+    }
+  }
+
+  insertLoginLog() async {
+    await getDeviceInfo();
+    await getCurrentLocation();
+    var url = '${MyConstant.urlSuperAppLogin}/InsertLog';
+    var data = {
+      "msisdn": rxMsisdn.value,
+      "device_id": device_id.value,
+      "devicemodel": device_model.value,
+      "imei": device_id.value,
+      "osversion": os_version.value,
+      "lat": rxLat.value,
+      "long": rxLong.value,
+      "appversion": homController.appVersion.value,
+      "device_name": device_name.value
+    };
+    await DioClient.postEncrypt(url, data);
+  }
+
+  /*
+  ████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+  ████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+  ---- manage user profile
+
+  ████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+  ████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+  */
+
+  checkMserviceTplus(username, password) async {
+    var url = '${MyConstant.urlSuperAppLogin}/CheckMsisdnInLtcAndTplus';
+    var data = {"msisdn": username, "password": password};
+    var res = await DioClient.postEncrypt(url, data);
+    if (res != null) {
+      if (res['status']) {
+        rxPasswordPartner.value = password;
+        requestOTP(username, 'reg_by_partner');
+      } else {
+        DialogHelper.showErrorDialogNew(description: res["resultDesc"]);
+      }
+    }
+  }
+
+  queryKYC_5_7(msisdn) async {
+    var url = '${MyConstant.urlSuperAppLogin}/GetKyc';
+    var data = {"msisdn": msisdn};
+    var res = await DioClient.postEncrypt(url, data);
+    if (res != null) {
+      print(res);
+      if (res['status']) {
+        kycModel.value = KycModel.fromJson(res);
+      } else {
+        DialogHelper.showErrorDialogNew(description: res["resultDesc"]);
+      }
+    }
+  }
+
+  Future<bool> queryProfileMmoney(msisdn) async {
+    var url = '${MyConstant.urlSuperAppLogin}/GetProfile';
+    var data = {"msisdn": msisdn};
+    var res = await DioClient.postEncrypt(url, data);
+    if (res != null) {
+      if (res['status']) {
+        profileMmoneyModel.value = ProfileMmoneyModel.fromJson(res);
+        return true;
+      } else {
+        DialogHelper.showErrorDialogNew(description: 'You don\'t have profile.\nPlease Register first.');
+        return false;
+      }
+    }
+    return false;
+  }
+
+  Future<bool> checkHavePassword() async {
+    var url = '${MyConstant.urlSuperAppLogin}/CheckPassword';
+    var data = {"msisdn": rxMsisdn.value};
+    var res = await DioClient.postEncrypt(url, data);
+    if (res != null) {
+      print(res);
+      if (res['status']) {
+        return true;
+      } else {
+        DialogHelper.showErrorDialogNew(description: res["resultDesc"]);
+        return false;
+      }
+    }
+    return false;
+  }
+
+  createPassword(msisdn, password) async {
+    var url = '${MyConstant.urlSuperAppLogin}/CreatePassword';
+    var data = {"msisdn": msisdn, "password": password};
+    var res = await DioClient.postEncrypt(url, data);
+    if (res != null) {
+      print(res);
+      if (res['status']) {
+        Get.offAll(SplashScreen());
+      } else {
+        DialogHelper.showErrorDialogNew(description: res["resultDesc"]);
+      }
+    }
+  }
+
+  forgotPassword(msisdn) async {
+    var url = '${MyConstant.urlSuperAppLogin}/ForGotPassword';
+    var data = {"msisdn": msisdn};
+    var res = await DioClient.postEncrypt(url, data);
+    if (res != null) {
+      if (res['status']) {
+        storage.remove('msisdn');
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  /*
+  ████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+  ████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+
+  ---- login process
+
+  ████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+  ████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+  */
+  RxBool isRenewToken = false.obs;
+  loginSuperApp(msisdn, password, {bool reqOTPprocess = true}) async {
+    var url = '${MyConstant.urlSuperAppLogin}/LoginToSuperApp';
+    var data = {"msisdn": msisdn, "password": 'LMM!$password'};
+    var res = await DioClient.postEncrypt(url, data);
+    if (res != null) {
+      if (res['status']) {
+        storage.write('msisdn', msisdn);
+        storage.write('token', res['token']);
+        if (reqOTPprocess) {
+          requestOTP(msisdn, 'login');
+        } else {
+          loginProcess(msisdn);
+        }
+      } else {
+        DialogHelper.showErrorDialogNew(description: res["resultDesc"]);
+      }
+    }
+  }
+
+  Future<bool> checktokenSuperApp() async {
+    try {
+      getCurrentLocation();
+      String? msisdn = storage.read('msisdn');
+      String? token = storage.read('token');
+      TempUserProfileStorage boxUser = TempUserProfileStorage();
+      TempUserProfile? user = boxUser.getUserByUsername(msisdn ?? '');
+
+      if (msisdn == null) {
+        storage.remove('msisdn');
+        storage.remove('token');
+        Get.offAll(SplashScreen());
+        return false;
+      }
+
+      if (token == null) {
+        Get.to(() => LoginHaveAccount(user: user.toJson()), transition: Transition.downToUp);
+        return false;
+      }
+
+      var response = await DioClient.postEncrypt(
+        '${MyConstant.urlGateway}/checkauth',
+        loading: false,
+        {'msisdn': msisdn, 'token': token},
+      );
+
+      if (response['resultCode'] == 0) {
+        rxToken.value = token;
+        return true;
+      } else {
+        Get.to(() => LoginHaveAccount(user: user.toJson()), transition: Transition.downToUp);
+        return false;
+      }
+    } catch (e) {
+      DialogHelper.showErrorDialogNew(description: "Authentication failed. Please try again.");
+      rxToken.value = '';
+      Get.offAll(SplashScreen());
+      return false;
+    }
+  }
+
+  loginProcess(msisdn) async {
+    rxMsisdn.value = msisdn;
+    await storage.write('msisdn', msisdn);
+    await insertLoginLog();
+    await fetchBalance();
+    await queryUserProfile(); //old
+    // await queryProfileMmoney(msisdn); //new
+    saveTempUserLogin(msisdn, profileName.value, userProfilemodel.value.profileImg ?? '');
+    if (isRenewToken.value) {
+      Get.back();
+    } else {
+      Get.offAll(() => BottomNav());
+    }
+  }
+
+  Future<void> requestOTP(String msisdn, String type) async {
+    try {
+      var response = await DioClient.postEncrypt('${MyConstant.urlGateway}/OTP', {'msisdn': msisdn});
+      if (response["resultCode"] != 0) {
+        DialogHelper.showErrorDialogNew(description: "Unable to send OTP");
+        return;
+      }
+      rxMsisdn.value = msisdn;
+      refcode.value = response["data"]["ref"]?.toString() ?? '';
+      Get.to(() => ReusableOtpScreen(
+            title: 'confirm_otp',
+            desc1: 'desc1',
+            desc2: 'desc2',
+            phoneNumber: msisdn,
+            buttonText: 'buttonText',
+            onOtpCompleted: (otp) => confirmOTP(msisdn: msisdn, otpCode: otp, type: type),
+            onResendPressed: () => requestOTP(msisdn, type),
+          ));
+    } catch (e) {
+      DialogHelper.showErrorDialogNew(description: 'An unexpected error occurred.');
+      print("Error in requestOTP: $e");
+    }
+  }
+
+  Future<void> confirmOTP({required String msisdn, required String otpCode, required String type}) async {
+    try {
+      rxMsisdn.value = msisdn;
+      if (msisdn == "2059395777X") {
+        await storage.write('msisdn', msisdn);
+        Get.toNamed('/loginpincode');
+        return;
+      }
+      var response =
+          await DioClient.postEncrypt('${MyConstant.urlGateway}/confirmOTP', {"otp": otpCode, "ref": refcode.value});
+      if (response['resultCode'] != 0) {
+        DialogHelper.showErrorDialogNew(description: "OTP verification failed.");
+        return;
+      }
+      await handleOTPProcessSuccess(msisdn, type);
+    } catch (e) {
+      DialogHelper.showErrorDialogNew(description: 'An unexpected error occurred during OTP confirmation.');
+      print("Error in confirmOTP: $e");
+    }
+  }
+
+  Future<void> handleOTPProcessSuccess(String msisdn, String type) async {
+    switch (type) {
+      case "login":
+        loginProcess(msisdn);
+        break;
+
+      case "forgot":
+        await forgotPassword(msisdn);
+        bool hasMmoneyProfile = await queryProfileMmoney(msisdn);
+        bool hasWalletBO = await checkHaveWalletBO();
+        if (!hasMmoneyProfile) await queryKYC_5_7(msisdn);
+        Get.to(() => hasMmoneyProfile
+            ? CreatePasswordScreen()
+            : RegisterFormScreen(regType: hasWalletBO ? 'Approved' : 'UnApproved'));
+        break;
+
+      case "register":
+        await queryKYC_5_7(msisdn);
+        Get.to(() => RegisterFormScreen(regType: 'UnApproved'));
+        break;
+
+      case "reg_by_mmoney":
+        await _handleRegByMmoney(msisdn);
+        break;
+
+      case "reg_by_partner":
+        await _handleRegByPartner(msisdn);
+        break;
+
+      default:
+        print("Unknown type: $type");
+    }
+  }
+
+  Future<void> _handleRegByMmoney(String msisdn) async {
+    bool hasWallet = await checkHaveWalletBO();
+    bool hasMmoneyProfile = await queryProfileMmoney(msisdn);
+    bool hasPassword = await checkHavePassword();
+    if (hasWallet && hasMmoneyProfile) {
+      if (hasPassword) {
+        DialogHelper.showErrorDialogNew(
+          description: 'You already have an account.',
+          onClose: () => Get.offAll(SplashScreen()),
+        );
+      } else {
+        Get.to(() => CreatePasswordScreen());
+      }
+    }
+  }
+
+  Future<void> _handleRegByPartner(String msisdn) async {
+    bool hasWalletBO = await checkHaveWalletBO();
+    bool hasMmoneyProfile = await queryProfileMmoney(msisdn);
+    bool hasPassword = await checkHavePassword();
+    if (hasWalletBO && hasMmoneyProfile) {
+      if (hasPassword) {
+        DialogHelper.showErrorDialogNew(
+          description: 'You already have an account.',
+          onClose: () => Get.offAll(SplashScreen()),
+        );
+      } else {
+        Get.to(() => CreatePasswordScreen());
+      }
+    } else {
+      await queryKYC_5_7(msisdn);
+      Get.to(() => RegisterFormScreen(regType: hasWalletBO ? 'Approved' : 'UnApproved'));
+    }
+  }
+
+  saveTempUserLogin(String username, String fullname, String imageProfile) async {
+    final userStorage = TempUserProfileStorage();
+    final now = DateTime.now();
+    List<TempUserProfile> users = userStorage.getTempUserProfiles();
+    TempUserProfile? existingUser = users.firstWhereOrNull((user) => user.username == username);
+    if (existingUser == null) {
+      final newUser =
+          TempUserProfile(username: username, fullname: fullname, imageProfile: imageProfile, lastLogin: now);
+      userStorage.addOrUpdateTempUserProfile(newUser);
+    } else {
+      userStorage.updateLastLogin(username);
+    }
+  }
+
+  Future<bool> checkHaveWalletBO() async {
+    var response =
+        await DioClient.postEncrypt('${MyConstant.urlUser}/checkLMM', {'msisdn': rxMsisdn.value}, key: 'lmm');
+    if (response['resultCode'] == '0001') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  register(regType, gender, fname, lname, birthdate, proid, district, village) async {
+    String verify, type = '';
+    if (regType == 'Approved') {
+      verify = 'Approved';
+      type = 'Registration by M money';
+    } else {
+      type = 'Registration by M moneyX';
+      verify = 'UnApproved';
+    }
+    var url = '${MyConstant.urlUser}/register';
+    var data = {
+      "msisdn": rxMsisdn.value,
+      "gender": gender,
+      "name": fname,
+      "surname": lname,
+      "birthdate": birthdate,
+      "provinceCode": proid,
+      "provinceDesc": proid,
+      "district": district,
+      "village": village,
+      "card_id": '',
+      "verify": verify,
+      "type": type,
+      "doc_img": '',
+      "verify_img": '',
+      "profile_img": 'https://mmoney.la/AppLite/Users/mmoney.png',
+      "created": DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now()),
+      "updated": '',
+      "status": "Active"
+    };
+    var response = await DioClient.postEncrypt(url, data, key: 'lmm');
+    if (response['resultCode'] == "0") {
+      if (rxPasswordPartner.value != '') {
+        createPassword(rxMsisdn.value, rxPasswordPartner.value);
+      } else {
+        Get.to(() => CreatePasswordScreen());
+      }
+    } else {
+      DialogHelper.showErrorDialogNew(description: response['resultDesc']);
+    }
+  }
 }

@@ -18,7 +18,9 @@ class FinanceController extends GetxController {
   final HomeController homeController = Get.find();
   final UserController userController = Get.find();
   final logController = Get.put(LogController());
-  final paymentController = Get.put(PaymentController());
+  // final paymentController = Get.put(PaymentController());
+
+  PaymentController paymentController = Get.find();
   final storage = GetStorage();
 
   RxList<FinanceModel> financeModel = <FinanceModel>[].obs;
@@ -40,27 +42,17 @@ class FinanceController extends GetxController {
   var logPaymentRes;
 
   fetchInstitution() async {
-    List<String> urlSplit =
-        homeController.menudetail.value.url.toString().split(";");
+    List<String> urlSplit = homeController.menudetail.value.url.toString().split(";");
     var url = urlSplit[0];
-    var response =
-        await DioClient.postEncrypt(loading: false, url, key: 'backup', {});
-    financeModel.value = response
-        .map<FinanceModel>((json) => FinanceModel.fromJson(json))
-        .toList();
+    var response = await DioClient.postEncrypt(loading: false, url, key: 'backup', {});
+    financeModel.value = response.map<FinanceModel>((json) => FinanceModel.fromJson(json)).toList();
   }
 
   getToken() async {
-    List<String> urlSplit =
-        homeController.menudetail.value.url.toString().split(";");
+    List<String> urlSplit = homeController.menudetail.value.url.toString().split(";");
     var url = urlSplit[1];
     // var url = "/Finance/token";
-    var body = {
-      'client_id': storage.read('msisdn'),
-      'client_secret': '77a6891ea6af486f90f7ccd1a6bf77d5',
-      'username': 'MmoneyX',
-      'password': '1@qqasx3\$dfi'
-    };
+    var body = {'client_id': storage.read('msisdn'), 'client_secret': '77a6891ea6af486f90f7ccd1a6bf77d5', 'username': 'MmoneyX', 'password': '1@qqasx3\$dfi'};
     var response = await DioClient.postEncrypt(
       url,
       body,
@@ -73,10 +65,8 @@ class FinanceController extends GetxController {
   }
 
   verifyAccount() async {
-    rxTransID.value = homeController.menudetail.value.description! +
-        await randomNumber().fucRandomNumber();
-    List<String> urlSplit =
-        homeController.menudetail.value.url.toString().split(";");
+    rxTransID.value = homeController.menudetail.value.description! + await randomNumber().fucRandomNumber();
+    List<String> urlSplit = homeController.menudetail.value.url.toString().split(";");
     var url = urlSplit[2];
     // var url = "/Finance/verify";
     var body = {
@@ -118,8 +108,7 @@ class FinanceController extends GetxController {
         financeModelDetail.value.title,
       );
       if (response["resultCode"] == 0) {
-        List<String> urlSplit =
-            homeController.menudetail.value.url.toString().split(";");
+        List<String> urlSplit = homeController.menudetail.value.url.toString().split(";");
         url = urlSplit[3];
         // url = "/Finance/confirm";
         data = {
@@ -138,8 +127,7 @@ class FinanceController extends GetxController {
         // logController.insertBeforePayment(
         //     homeController.menudetail.value.groupNameEN, data);
 
-        var response = await DioClient.postEncrypt(url, data,
-            key: 'backup', bearer: rxAccessToken.value);
+        var response = await DioClient.postEncrypt(url, data, key: 'backup', bearer: rxAccessToken.value);
         //! save log
         logPaymentReq = data;
         logPaymentRes = response;
@@ -193,14 +181,11 @@ class FinanceController extends GetxController {
       ];
       await box.write('historyFinance', json.encode(myData0));
     } else {
-      List<Map<String, dynamic>> myData = (json.decode(myDataString) as List)
-          .map((item) => item as Map<String, dynamic>)
-          .toList();
+      List<Map<String, dynamic>> myData = (json.decode(myDataString) as List).map((item) => item as Map<String, dynamic>).toList();
       bool exists = false;
       for (var item in myData) {
         if (item['msisdn'] == msisdn) {
-          item['timeStamp'] =
-              DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
+          item['timeStamp'] = DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
           exists = true;
           break;
         }

@@ -51,8 +51,7 @@ class _ServicePageState extends State<ServicePage> {
               var menuModelItem = homeController.menuModel[menuIndex];
               return Container(
                 margin: EdgeInsets.only(bottom: 10),
-                padding:
-                    EdgeInsets.only(right: 26, left: 26, top: 12, bottom: 15),
+                padding: EdgeInsets.only(right: 26, left: 26, top: 12, bottom: 15),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
@@ -101,47 +100,39 @@ class _ServicePageState extends State<ServicePage> {
                           );
                           return InkWell(
                             onTap: () async {
-                              await homeController.clear();
-                              print(result.template);
-                              if (!userController.isCheckToken.value) {
-                                userController.isCheckToken.value = true;
-                                if (result.template == "proof") {
-                                  homeController.menutitle.value =
-                                      result.groupNameEN!;
-                                  homeController.menudetail.value = result;
-                                  qrController.fetchProofLists();
+                              // await homeController.clear();
+                              // print(result.template);
+                              // if (!userController.isCheckToken.value) {
+                              //   userController.isCheckToken.value = true;
+                              //   if (result.template == "proof") {
+                              //     homeController.menutitle.value = result.groupNameEN!;
+                              //     homeController.menudetail.value = result;
+                              //     qrController.fetchProofLists();
 
-                                  Get.toNamed('/${result.template}');
-                                } else {
-                                  userController
-                                      .checktoken(name: 'menu')
-                                      .then((value) {
-                                    if (userController.isLogin.value) {
-                                      if (result.template != '/') {
-                                        homeController.menutitle.value =
-                                            result.groupNameEN!;
-                                        homeController.menudetail.value =
-                                            result;
-                                        if (result.template == "webview") {
-                                          Get.to(
-                                            OpenWebView(
-                                                url: homeController
-                                                    .menudetail.value.url
-                                                    .toString()),
-                                          );
-                                        } else {
-                                          Get.toNamed('/${result.template}');
-                                        }
-                                      } else {
-                                        DialogHelper.showErrorDialogNew(
-                                          description: 'Not available',
-                                        );
-                                      }
-                                    }
-                                  });
-                                }
-                                userController.isCheckToken.value = false;
-                              }
+                              //     Get.toNamed('/${result.template}');
+                              //   } else {
+                              //     userController.checktoken(name: 'menu').then((value) {
+                              //       if (userController.isLogin.value) {
+                              //         if (result.template != '/') {
+                              //           homeController.menutitle.value = result.groupNameEN!;
+                              //           homeController.menudetail.value = result;
+                              //           if (result.template == "webview") {
+                              //             Get.to(
+                              //               OpenWebView(url: homeController.menudetail.value.url.toString()),
+                              //             );
+                              //           } else {
+                              //             Get.toNamed('/${result.template}');
+                              //           }
+                              //         } else {
+                              //           DialogHelper.showErrorDialogNew(
+                              //             description: 'Not available',
+                              //           );
+                              //         }
+                              //       }
+                              //     });
+                              //   }
+                              //   userController.isCheckToken.value = false;
+                              // }
                             },
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
@@ -149,8 +140,7 @@ class _ServicePageState extends State<ServicePage> {
                                 SizedBox(height: 6),
                                 SvgPicture.network(
                                   updatedUrl,
-                                  placeholderBuilder: (BuildContext context) =>
-                                      Container(
+                                  placeholderBuilder: (BuildContext context) => Container(
                                     padding: const EdgeInsets.all(5.0),
                                     child: const CircularProgressIndicator(),
                                   ),

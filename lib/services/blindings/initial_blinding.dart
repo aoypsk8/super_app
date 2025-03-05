@@ -8,6 +8,7 @@ class InitialBindings implements Bindings {
     // Get.lazyPut<HomeController>(() => HomeController());
 
     Get.put(HomeController());
-    Get.lazyPut<UserController>(() => UserController(), fenix: true);
+    Get.put(UserController());
+    // Get.lazyPut<UserController>(() => UserController(), fenix: true);
   }
 }

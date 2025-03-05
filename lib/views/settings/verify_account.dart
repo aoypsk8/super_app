@@ -46,7 +46,7 @@ class _VerifyAccountScreenState extends State<VerifyAccountScreen> {
 
   String _provinceCode = '';
   var dataProvice = [
-    {"proid": 1, "Name": "ນະຄອນຫຼວງ", "Code": "VTE", "Description": "NULL"},
+    {"proid": 1, "Name": "ນະຄອນຫຼວງວຽງຈັນ", "Code": "VTE", "Description": "NULL"},
     {"proid": 2, "Name": "ວຽງຈັນ", "Code": "VTP", "Description": "NULL"},
     {"proid": 3, "Name": "ບໍລິຄຳໄຊ", "Code": "BKX", "Description": "NULL"},
     {"proid": 4, "Name": "ອຸດົມໄຊ", "Code": "UDX", "Description": "NULL"},
@@ -163,7 +163,8 @@ class _VerifyAccountScreenState extends State<VerifyAccountScreen> {
                     SizedBox(height: 8),
                     buildTextField(controller: _fname, label: 'fname', name: 'fname', hintText: '', isEditable: true),
                     buildTextField(controller: _lname, label: 'lname', name: 'lname', hintText: '', isEditable: true),
-                    buildTextField(controller: _birthday, label: 'birthday', name: 'birthday', hintText: '', isEditable: false),
+                    buildTextField(
+                        controller: _birthday, label: 'birthday', name: 'birthday', hintText: '', isEditable: false),
                     buildSelectGender(),
                     Divider(color: color_ecec),
                     SizedBox(height: 8),
@@ -177,7 +178,8 @@ class _VerifyAccountScreenState extends State<VerifyAccountScreen> {
                       dataObject: dataProvice, // Pass your list
                       colName: "Code", // Column for display text
                       valName: "Code", // Column for value
-                      initValue: "VTE-VTE", // Example initial value
+                      initValue: '$_provinceCode-$_provinceCode',
+
                       onChanged: (value) {
                         List<String> province = value.toString().split('-');
                         _provinceCode = province[0];
@@ -221,7 +223,8 @@ class _VerifyAccountScreenState extends State<VerifyAccountScreen> {
           func: () {
             _formKey.currentState!.save();
             if (_formKey.currentState!.validate()) {
-              if (userController.userProfilemodel.value.docImg != '' && userController.userProfilemodel.value.verifyImg != '') {
+              if (userController.userProfilemodel.value.docImg != '' &&
+                  userController.userProfilemodel.value.verifyImg != '') {
                 userController.verificationRegister(
                   _gender,
                   _fname.text,
@@ -262,32 +265,39 @@ class _VerifyAccountScreenState extends State<VerifyAccountScreen> {
                 Column(
                   children: [
                     Container(
-                      child:
-                          (type == 'doc_img' ? (userController.userProfilemodel.value.docImg?.isEmpty ?? true) : (userController.userProfilemodel.value.verifyImg?.isEmpty ?? true))
-                              ? SizedBox(
-                                  width: 30.w,
-                                  child: Image.asset(
-                                    type == 'doc_img' ? 'assets/images/id_card.png' : 'assets/images/verify_account.png',
+                      child: (type == 'doc_img'
+                              ? (userController.userProfilemodel.value.docImg?.isEmpty ?? true)
+                              : (userController.userProfilemodel.value.verifyImg?.isEmpty ?? true))
+                          ? SizedBox(
+                              width: 30.w,
+                              child: Image.asset(
+                                type == 'doc_img' ? 'assets/images/id_card.png' : 'assets/images/verify_account.png',
+                              ),
+                            )
+                          : SizedBox(
+                              height: 85.w,
+                              child: Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Get.to(() => ImagepreviewScreen(
+                                          imageUrl: type == 'doc_img'
+                                              ? userController.userProfilemodel.value.docImg!
+                                              : userController.userProfilemodel.value.verifyImg!,
+                                          title: type == 'doc_img' ? 'Document Image' : 'Verify Account Image'));
+                                    },
+                                    child: CachedNetworkImage(
+                                        imageUrl: type == 'doc_img'
+                                            ? userController.userProfilemodel.value.docImg!
+                                            : userController.userProfilemodel.value.verifyImg!),
                                   ),
-                                )
-                              : SizedBox(
-                                  height: 85.w,
-                                  child: Row(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Get.to(() => ImagepreviewScreen(
-                                              imageUrl: type == 'doc_img' ? userController.userProfilemodel.value.docImg! : userController.userProfilemodel.value.verifyImg!,
-                                              title: type == 'doc_img' ? 'Document Image' : 'Verify Account Image'));
-                                        },
-                                        child: CachedNetworkImage(
-                                            imageUrl: type == 'doc_img' ? userController.userProfilemodel.value.docImg! : userController.userProfilemodel.value.verifyImg!),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                ],
+                              ),
+                            ),
                     ),
-                    (type == 'doc_img' ? (userController.userProfilemodel.value.docImg?.isEmpty ?? true) : (userController.userProfilemodel.value.verifyImg?.isEmpty ?? true))
+                    (type == 'doc_img'
+                            ? (userController.userProfilemodel.value.docImg?.isEmpty ?? true)
+                            : (userController.userProfilemodel.value.verifyImg?.isEmpty ?? true))
                         ? TextFont(
                             text: type == 'doc_img' ? 'take_document_image' : 'take_verify_image',
                             color: color_7070,
@@ -375,7 +385,9 @@ class _VerifyAccountScreenState extends State<VerifyAccountScreen> {
                   ? SvgPicture.asset(MyIconOld.ic_check_circle)
                   : SvgPicture.asset(
                       MyIconOld.ic_info,
-                      color: userController.userProfilemodel.value.verify == "UnApproved" ? color_primary_light : Colors.grey,
+                      color: userController.userProfilemodel.value.verify == "UnApproved"
+                          ? color_primary_light
+                          : Colors.grey,
                     ),
               SizedBox(width: 5),
               TextFont(
@@ -413,7 +425,8 @@ class _VerifyAccountScreenState extends State<VerifyAccountScreen> {
                     padding: EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(radius),
-                      border: Border.all(color: _genderMale ? color_primary_light : color_blackE72, width: _genderMale ? 1 : 0),
+                      border: Border.all(
+                          color: _genderMale ? color_primary_light : color_blackE72, width: _genderMale ? 1 : 0),
                       color: _genderMale ? color_primary_light.withOpacity(0.1) : color_f4f4,
                     ),
                     child: Row(
@@ -441,7 +454,8 @@ class _VerifyAccountScreenState extends State<VerifyAccountScreen> {
                     padding: EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(radius),
-                      border: Border.all(color: !_genderMale ? color_primary_light : color_f4f4, width: !_genderMale ? 1 : 0),
+                      border: Border.all(
+                          color: !_genderMale ? color_primary_light : color_f4f4, width: !_genderMale ? 1 : 0),
                       color: !_genderMale ? color_primary_light.withOpacity(0.1) : color_f4f4,
                     ),
                     child: Row(

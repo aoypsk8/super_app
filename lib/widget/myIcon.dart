@@ -96,6 +96,8 @@ class MyIcon {
   static String ic_problem = 'assets/icons/problem.png';
   static String ic_deleteX = 'assets/icons/deleteX.svg';
   static String ic_addCard = 'assets/icons/addCard.png';
+  static String ic_arrowUp = 'assets/icons/ic_chevrons_up.svg';
+
   // security
   static String ic_security_check = 'assets/icons/securityCheck.svg';
 

@@ -46,19 +46,22 @@ class _MyQrScreenState extends State<MyQrScreen> {
 
   Future<void> _captureScreenshot() async {
     try {
-      RenderRepaintBoundary boundary = _repaintBoundaryKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      RenderRepaintBoundary boundary = _repaintBoundaryKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
       if (boundary.debugNeedsPaint) {
         await Future.delayed(Duration(milliseconds: 500));
         return _captureScreenshot();
       }
       // Capture image with high resolution (pixelRatio 3.0 for better quality)
       ui.Image image = await boundary.toImage(pixelRatio: 5.0);
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
 
       // Save to file
       final directory = await getApplicationDocumentsDirectory();
-      final String filePath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final String filePath =
+          '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
       File file = File(filePath);
       await file.writeAsBytes(pngBytes);
 
@@ -81,11 +84,15 @@ class _MyQrScreenState extends State<MyQrScreen> {
   @override
   void initState() {
     super.initState();
-    // userController.checktoken(name: 'menu').then((value) {
-    //   if (userController.isLogin.value) {
-    //     qrController.generateQR_firstscreen(0, 'static', '');
-    //   }
-    // });
+    qrController.generateQR_firstscreen(0, 'static', '');
+    // checkToken();
+  }
+
+  void checkToken() async {
+    bool isValidToken = await userController.checktokenSuperApp();
+    if (isValidToken) {
+      qrController.generateQR_firstscreen(0, 'static', '');
+    }
   }
 
   @override
@@ -111,7 +118,8 @@ class _MyQrScreenState extends State<MyQrScreen> {
                     child: RepaintBoundary(
                       key: _repaintBoundaryKey,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
                         child: bodyQR(),
                       ),
                     ),
@@ -162,7 +170,9 @@ class _MyQrScreenState extends State<MyQrScreen> {
                   Row(
                     children: [
                       TextFont(
-                        text: qrController.generateQrModel.value.qrType?.toUpperCase() ?? "N/A",
+                        text: qrController.generateQrModel.value.qrType
+                                ?.toUpperCase() ??
+                            "N/A",
                         fontSize: 10,
                         poppin: true,
                         color: cr_2929,
@@ -228,7 +238,9 @@ class _MyQrScreenState extends State<MyQrScreen> {
                             ? PrettyQr(
                                 image: AssetImage(MyIcon.ic_lao_qr),
                                 size: 70.w,
-                                data: qrController.generateQrModel.value.qrstr ?? "N/A",
+                                data:
+                                    qrController.generateQrModel.value.qrstr ??
+                                        "N/A",
                                 errorCorrectLevel: QrErrorCorrectLevel.H,
                                 typeNumber: null,
                                 roundEdges: false,
@@ -304,8 +316,9 @@ class _MyQrScreenState extends State<MyQrScreen> {
                   width: 13.w,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(50.0),
-                    child:
-                        Image.network(userController.userProfilemodel.value.profileImg ?? MyConstant.profile_default),
+                    child: Image.network(
+                        userController.userProfilemodel.value.profileImg ??
+                            MyConstant.profile_default),
                   ),
                 ),
                 SizedBox(width: 10),
@@ -461,7 +474,8 @@ class _MyQrScreenState extends State<MyQrScreen> {
                     },
                     child: Container(
                       height: 60,
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 0),
                       child: Icon(
                         Icons.close,
                       ),
@@ -529,11 +543,14 @@ class _MyQrScreenState extends State<MyQrScreen> {
                           _formKey.currentState!.save();
                           if (_formKey.currentState!.validate()) {
                             FocusScope.of(context).requestFocus(FocusNode());
-                            int paymentAmount =
-                                int.parse(_dynamicAmount.text.trim().replaceAll(RegExp(r'[^\w\s]+'), ''));
-                            qrController.rxQrDynamicAmout.value = _dynamicAmount.text;
+                            int paymentAmount = int.parse(_dynamicAmount.text
+                                .trim()
+                                .replaceAll(RegExp(r'[^\w\s]+'), ''));
+                            qrController.rxQrDynamicAmout.value =
+                                _dynamicAmount.text;
                             Navigator.pop(context);
-                            qrController.generateQR_firstscreen(paymentAmount, 'dynamic', _note.text);
+                            qrController.generateQR_firstscreen(
+                                paymentAmount, 'dynamic', _note.text);
                           }
                         },
                       ),

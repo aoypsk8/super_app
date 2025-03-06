@@ -16,7 +16,6 @@ import 'package:super_app/views/templateB/ListsProviderTempBScreen.dart';
 import 'package:super_app/views/borrowing/lists_borrowing.dart';
 import 'package:super_app/views/templateC/ListsProviderTempCScreen.dart';
 import 'package:super_app/views/ticket/ListsTicketScreen.dart';
-import 'package:super_app/views/transferwallet/ConfirmTranferScreen.dart';
 import 'package:super_app/views/transferwallet/OtpTransferEmailScreen.dart';
 import 'package:super_app/views/transferwallet/OtpTransferScreen.dart';
 import 'package:super_app/views/transferwallet/TransferScreen.dart';

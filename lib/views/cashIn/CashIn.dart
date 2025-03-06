@@ -29,6 +29,7 @@ class _CashInScreenState extends State<CashInScreen> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final UserController userController = Get.find();
   final TextEditingController _paymentAmount = TextEditingController();
+  final FocusNode _amountFocusNode = FocusNode();
   final cashInController = Get.put(CashInController());
   int? selectedIndex;
 
@@ -78,6 +79,7 @@ class _CashInScreenState extends State<CashInScreen> {
                     controller: _paymentAmount,
                     label: 'amount_transfer',
                     name: 'amount',
+                    focus: _amountFocusNode,
                     hintText: '0',
                     max: 11,
                     fillcolor: color_f4f4,

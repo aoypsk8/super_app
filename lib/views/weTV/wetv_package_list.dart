@@ -272,14 +272,15 @@ class buildWeTvCard extends StatelessWidget {
           onSelectedPayment: (paymentType, cardIndex) {
             Get.to(() => ReusableConfirmScreen(
                   appbarTitle: "confirm_payment",
+                  isEnabled: weTVController.enableBottom,
                   function: () {
-                    weTVController.loading.value = true;
+                    weTVController.enableBottom.value = false;
                     var amount = weTVController.wetvdetail.value.price
                         .toString()
                         .replaceAll(new RegExp(r'[^\w\s]+'), '');
                     weTVController.wetvpayment(amount);
                   },
-                  stepProcess: "5/5",
+                  stepProcess: "3/3",
                   stepTitle: "check_detail",
                   fromAccountImage:
                       userController.userProfilemodel.value.profileImg ??

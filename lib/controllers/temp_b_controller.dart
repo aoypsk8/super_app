@@ -35,6 +35,8 @@ class TempBController extends GetxController {
   RxString rxTimeStamp = ''.obs;
   RxString rxPaymentAmount = ''.obs;
 
+  final RxBool enableBottom = true.obs;
+
   //? Log
   var logVerify;
   var logPaymentReq;
@@ -111,9 +113,11 @@ class TempBController extends GetxController {
       rxAccNo.value = response['Acc'];
       rxAccName.value = response['Name'];
       rxDebit.value = response['Amount'];
+      enableBottom.value = true;
       //? save log verify account
       Get.to(() => PaymentTempBScreen());
     } else {
+      enableBottom.value = true;
       DialogHelper.showErrorDialogNew(
           description: response['ResultDesc'] ?? "Unknown error occurred");
     }
@@ -183,8 +187,10 @@ class TempBController extends GetxController {
           //? save parameter to result screen
           rxTimeStamp.value = response['CreateDate'];
           rxPaymentAmount.value = response['Amount'];
+          enableBottom.value = true;
           Get.to(() => const ResultTempBscreen());
         } else {
+          enableBottom.value = true;
           DialogHelper.showErrorWithFunctionDialog(
               description: response['ResultDesc'],
               onClose: () {
@@ -193,6 +199,7 @@ class TempBController extends GetxController {
         }
       }
     } else {
+      enableBottom.value = true;
       //! balance < payment
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     }

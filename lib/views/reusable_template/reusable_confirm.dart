@@ -31,34 +31,33 @@ class ReusableConfirmScreen extends StatefulWidget {
   final String amount;
   final String fee;
   final String note;
+  final RxBool isEnabled;
 
-  const ReusableConfirmScreen({
-    super.key,
-    required this.appbarTitle,
-    required this.function,
-    required this.stepProcess,
-    required this.stepTitle,
-    required this.fromAccountImage,
-    required this.fromAccountName,
-    required this.fromAccountNumber,
-    required this.toAccountImage,
-    required this.toAccountName,
-    required this.toAccountNumber,
-    required this.amount,
-    required this.fee,
-    required this.note,
-  });
+  const ReusableConfirmScreen(
+      {super.key,
+      required this.appbarTitle,
+      required this.function,
+      required this.stepProcess,
+      required this.stepTitle,
+      required this.fromAccountImage,
+      required this.fromAccountName,
+      required this.fromAccountNumber,
+      required this.toAccountImage,
+      required this.toAccountName,
+      required this.toAccountNumber,
+      required this.amount,
+      required this.fee,
+      required this.note,
+      required this.isEnabled});
 
   @override
   _ReusableConfirmScreenState createState() => _ReusableConfirmScreenState();
 }
 
 class _ReusableConfirmScreenState extends State<ReusableConfirmScreen> {
-  final userController = Get.find<UserController>();
   final storage = GetStorage();
   int _remainingTime = 600;
   Timer? _countdownTimer;
-  bool hideButton = false;
 
   void _startCountdownTimer() {
     _countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -110,26 +109,22 @@ class _ReusableConfirmScreenState extends State<ReusableConfirmScreen> {
       backgroundColor: color_fff,
       appBar: BuildAppBar(title: widget.appbarTitle),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.only(top: 20),
-        decoration: BoxDecoration(
-          color: color_fff,
-          border: Border.all(color: color_ddd),
-        ),
-        child: buildBottomAppbar(
-          bgColor: Theme.of(context).primaryColor,
-          title: 'confirm_transfer',
-          func: () {
-            widget.function();
-            _countdownTimer?.cancel();
-            setState(() {
-              hideButton = true;
-            });
-            setState(() {
-              hideButton = false;
-            });
-          },
-        ),
-      ),
+          padding: EdgeInsets.only(top: 20),
+          decoration: BoxDecoration(
+            color: color_fff,
+            border: Border.all(color: color_ddd),
+          ),
+          child: Obx(
+            () => buildBottomAppbar(
+              bgColor: Theme.of(context).primaryColor,
+              title: 'confirm_transfer',
+              isEnabled: widget.isEnabled.value,
+              func: () {
+                widget.function();
+                _countdownTimer?.cancel();
+              },
+            ),
+          )),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
         child: SingleChildScrollView(

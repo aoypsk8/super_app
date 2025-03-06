@@ -88,7 +88,7 @@ class _ConfirmCashInScreenState extends State<ConfirmCashInScreen>
         _socketCheckTimer?.cancel();
         _countdownTimer?.cancel();
         DialogHelper.showSuccess(
-          onClose: () => DialogHelper.hide(),
+          // onClose: () => DialogHelper.hide(),
           title: 'success',
         );
       }

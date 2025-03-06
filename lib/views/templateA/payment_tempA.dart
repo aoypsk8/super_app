@@ -13,6 +13,7 @@ import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/widget/buildAppBar.dart';
+import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildButtonBottom.dart';
 import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/build_step_process.dart';
@@ -55,21 +56,24 @@ class PaymentTempAScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BuildButtonBottom(
+      bottomNavigationBar: buildBottomAppbar(
         title: 'next',
-        isActive: true,
+        isEnabled: controller.enableBottom.value,
         func: () {
+          controller.enableBottom.value = false;
           _formKey.currentState!.save();
           if (_formKey.currentState!.validate()) {
             if (int.parse(
                     _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '')) <
                 1000) {
+              controller.enableBottom.value = true;
               DialogHelper.showErrorDialogNew(
                   description: 'Minimum payment must than 1,000 Kip.');
             } else {
               controller.rxNote.value = _note.text;
               controller.rxPaymentAmount.value =
                   _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '');
+              controller.enableBottom.value = true;
               // Get.to(() => ListsPaymentTempAScreen());
               Get.to(ListsPaymentScreen(
                 description: 'select_payment',
@@ -89,8 +93,10 @@ class PaymentTempAScreen extends StatelessWidget {
                           if (value)
                             {
                               Get.to(() => ReusableConfirmScreen(
+                                    isEnabled: controller.enableBottom,
                                     appbarTitle: "confirm_payment",
                                     function: () {
+                                      controller.enableBottom.value = false;
                                       controller.isLoading.value = true;
                                       var amount = controller
                                           .rxPaymentAmount.value
@@ -121,24 +127,15 @@ class PaymentTempAScreen extends StatelessWidget {
                                     note: controller.rxNote.value,
                                   ))
                             }
+                          else
+                            {
+                              controller.enableBottom.value = true,
+                            }
                         },
                       );
                 },
               ));
-
-              // paymentController
-              //     .reqCashOut(
-              //         transID: controller.rxtransid.value,
-              //         amount: controller.rxPaymentAmount.value,
-              //         toAcc: controller.rxaccnumber.value,
-              //         chanel: homeController.menudetail.value.groupNameEN,
-              //         provider: controller.tempAdetail.value.code,
-              //         remark: controller.rxNote.value)
-              //     .then((value) => {
-              //           if (value) {Get.to(() => ConfirmTempAScreen())}
-              //         });
             }
-            // payment(_paymentAmount.text.replaceAll(",", ""));
           }
         },
       ),

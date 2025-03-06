@@ -2,11 +2,8 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:keyboard_attachable/keyboard_attachable.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
@@ -16,6 +13,7 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/reusable_template/reusable_confirm.dart';
+import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
@@ -110,7 +108,7 @@ class _PaymentPostpaidTempCScreenState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 10),
-          buildStepProcess(title: "4/5", desc: "detail"),
+          buildStepProcess(title: "4/6", desc: "detail"),
           const SizedBox(height: 14),
           Container(
             width: Get.width,
@@ -327,7 +325,9 @@ class _PaymentPostpaidTempCScreenState
             const SizedBox(height: 15),
             buildBottomAppbar(
               title: 'next',
+              isEnabled: tempCcontroler.enableBottom.value,
               func: () {
+                tempCcontroler.enableBottom.value = false;
                 _formKey.currentState!.save();
                 if (_formKey.currentState!.validate()) {
                   Future.delayed(MyConstant.delayTime).then(
@@ -335,6 +335,7 @@ class _PaymentPostpaidTempCScreenState
                       if (int.parse(_paymentAmount.text
                               .replaceAll(RegExp(r'[^\w\s]+'), '')) <
                           1000) {
+                        tempCcontroler.enableBottom.value = true;
                         DialogHelper.showErrorDialogNew(
                             description:
                                 'Minimum payment must than 1,000 Kip.');
@@ -343,6 +344,10 @@ class _PaymentPostpaidTempCScreenState
                         tempCcontroler.rxPaymentAmount.value = int.parse(
                             _paymentAmount.text
                                 .replaceAll(RegExp(r'[^\w\s]+'), ''));
+                        tempCcontroler.rxTotalAmount.value = int.parse(
+                            _paymentAmount.text
+                                .replaceAll(RegExp(r'[^\w\s]+'), ''));
+                        print(tempCcontroler.rxPaymentAmount.value);
                         paymentController
                             .reqCashOut(
                                 transID: tempCcontroler.rxTransID.value,
@@ -357,45 +362,65 @@ class _PaymentPostpaidTempCScreenState
                               (value) => {
                                 if (value)
                                   {
-                                    Get.to(
-                                      () => ReusableConfirmScreen(
-                                        appbarTitle: "confirm_payment",
-                                        function: () {
-                                          tempCcontroler.paymentPostpaid(
-                                              homeController.menudetail.value);
-                                        },
-                                        stepProcess: "5/5",
-                                        stepTitle: "check_detail",
-                                        fromAccountImage: userController
-                                                .userProfilemodel
-                                                .value
-                                                .profileImg ??
-                                            MyConstant.profile_default,
-                                        fromAccountName:
-                                            '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-                                        fromAccountNumber: userController
-                                            .userProfilemodel.value.msisdn
-                                            .toString(),
-                                        toAccountImage: tempCcontroler
-                                            .tempCdetail.value.groupLogo
-                                            .toString(),
-                                        toAccountName:
-                                            '${tempCcontroler.rxAccName.value} - ${tempCcontroler.tempCdetail.value.groupTelecom} - ${tempCcontroler.tempCservicedetail.value.name}',
-                                        toAccountNumber:
-                                            tempCcontroler.rxAccNo.value,
-                                        amount: tempCcontroler
-                                            .rxPaymentAmount.value
-                                            .toString(),
-                                        fee: '0',
-                                        note: tempCcontroler.rxNote.value,
-                                      ),
-                                    )
+                                    tempCcontroler.enableBottom.value = true,
+                                    Get.to(ListsPaymentScreen(
+                                      description: 'select_payment',
+                                      stepBuild: '5/6',
+                                      title: homeController.getMenuTitle(),
+                                      onSelectedPayment:
+                                          (paymentType, cardIndex) {
+                                        Get.to(
+                                          () => ReusableConfirmScreen(
+                                            isEnabled:
+                                                tempCcontroler.enableBottom,
+                                            appbarTitle: "confirm_payment",
+                                            function: () {
+                                              tempCcontroler
+                                                  .enableBottom.value = false;
+                                              tempCcontroler.paymentPostpaid(
+                                                  homeController
+                                                      .menudetail.value);
+                                            },
+                                            stepProcess: "6/6",
+                                            stepTitle: "check_detail",
+                                            fromAccountImage: userController
+                                                    .userProfilemodel
+                                                    .value
+                                                    .profileImg ??
+                                                MyConstant.profile_default,
+                                            fromAccountName:
+                                                '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+                                            fromAccountNumber: userController
+                                                .userProfilemodel.value.msisdn
+                                                .toString(),
+                                            toAccountImage: tempCcontroler
+                                                .tempCdetail.value.groupLogo
+                                                .toString(),
+                                            toAccountName:
+                                                '${tempCcontroler.rxAccName.value} - ${tempCcontroler.tempCdetail.value.groupTelecom} - ${tempCcontroler.tempCservicedetail.value.name}',
+                                            toAccountNumber:
+                                                tempCcontroler.rxAccNo.value,
+                                            amount: tempCcontroler
+                                                .rxPaymentAmount.value
+                                                .toString(),
+                                            fee: '0',
+                                            note: tempCcontroler.rxNote.value,
+                                          ),
+                                        );
+                                      },
+                                    ))
+                                  }
+                                else
+                                  {
+                                    tempCcontroler.enableBottom.value = true,
                                   }
                               },
                             );
                       }
                     },
                   );
+                } else {
+                  tempCcontroler.enableBottom.value = true;
                 }
               },
             ),

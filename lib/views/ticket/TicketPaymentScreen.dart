@@ -52,7 +52,7 @@ class _TicketPaymentScreenState extends State<TicketPaymentScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildStepProcess(title: "1/4", desc: "ປ້ອນຈໍານວນ"),
+                buildStepProcess(title: "1/3", desc: "detail"),
                 const SizedBox(height: 5),
                 SizedBox(
                   width: Get.width,

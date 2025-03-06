@@ -24,8 +24,6 @@ import 'package:super_app/views/visa-mastercard/ListVisaMasterCard.dart';
 import 'package:super_app/views/weTV/wetv_package_list.dart';
 import 'package:super_app/views/x-jaidee/xjaidee.dart';
 
-import 'views/weTV/wetv_package_list.dart';
-
 class AppRoutes {
   static final routes = [
     GetPage(
@@ -36,10 +34,10 @@ class AppRoutes {
       name: '/transfer',
       page: () => TransferScreen(),
     ),
-    GetPage(
-      name: '/confirmTransfer',
-      page: () => ConfirmTranferScreen(),
-    ),
+    // GetPage(
+    //   name: '/confirmTransfer',
+    //   page: () => ConfirmTranferScreen(),
+    // ),
     GetPage(
       name: '/otpTransferEmail',
       page: () => OtpTransferEmailScreen(),

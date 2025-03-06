@@ -9,6 +9,7 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/reusable_template/reusable_confirm.dart';
+import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/widget/RoundedRectangleTabIndicator';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/build_card_borrowing.dart';
@@ -60,7 +61,7 @@ class _PackageListScreenState extends State<PackageListScreen>
         child: Column(
           children: [
             SizedBox(height: 10),
-            buildStepProcess(title: "3/5", desc: "ເລືອກແພັກເກດ gg"),
+            buildStepProcess(title: "4/6", desc: "choose_package"),
             SizedBox(height: 10),
             buildTabBar(context),
           ],
@@ -160,6 +161,7 @@ class _PackageListScreenState extends State<PackageListScreen>
       padding: const EdgeInsets.only(bottom: 20),
       child: CardWidgetBorrowing(
         onTap: () {
+          tempCcontroler.enableBottom.value = false;
           tempCcontroler.rxCouponAmount.value = 0;
           tempCcontroler.rxPaymentAmount.value = int.parse(tempCcontroler
               .tempCpackagemodel[index].amount
@@ -187,35 +189,49 @@ class _PackageListScreenState extends State<PackageListScreen>
               .then((value) => {
                     if (value)
                       {
-                        Get.to(
-                          () => ReusableConfirmScreen(
-                            appbarTitle: "confirm_payment",
-                            function: () {
-                              tempCcontroler.paymentPackage(
-                                  homeController.menudetail.value);
-                            },
-                            stepProcess: "5/5",
-                            stepTitle: "check_detail",
-                            fromAccountImage: userController
-                                    .userProfilemodel.value.profileImg ??
-                                MyConstant.profile_default,
-                            fromAccountName:
-                                '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-                            fromAccountNumber: userController
-                                .userProfilemodel.value.msisdn
-                                .toString(),
-                            toAccountImage: MyConstant.profile_default,
-                            toAccountName: tempCcontroler
-                                .tempCpackagedetail.value.packageName!,
-                            toAccountNumber: "",
-                            amount: tempCcontroler
-                                .tempCpackagedetail.value.amount
-                                .toString(),
-                            fee: '0',
-                            note:
-                                'ດາຕ້າໃຊ້ໄດ້${tempCcontroler.tempCpackagedetail.value.packageValue} ແລະ ໄລຍະກຳນົດ ${tempCcontroler.tempCpackagedetail.value.userDay}ວັນ',
-                          ),
-                        )
+                        tempCcontroler.enableBottom.value = true,
+                        Get.to(ListsPaymentScreen(
+                          description: 'select_payment',
+                          stepBuild: '5/6',
+                          title: homeController.getMenuTitle(),
+                          onSelectedPayment: (paymentType, cardIndex) {
+                            Get.to(
+                              () => ReusableConfirmScreen(
+                                isEnabled: tempCcontroler.enableBottom,
+                                appbarTitle: "confirm_payment",
+                                function: () async {
+                                  tempCcontroler.enableBottom.value = false;
+                                  tempCcontroler.paymentPackage(
+                                      homeController.menudetail.value);
+                                },
+                                stepProcess: "6/6",
+                                stepTitle: "check_detail",
+                                fromAccountImage: userController
+                                        .userProfilemodel.value.profileImg ??
+                                    MyConstant.profile_default,
+                                fromAccountName:
+                                    '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+                                fromAccountNumber: userController
+                                    .userProfilemodel.value.msisdn
+                                    .toString(),
+                                toAccountImage: MyConstant.profile_default,
+                                toAccountName: tempCcontroler
+                                    .tempCpackagedetail.value.packageName!,
+                                toAccountNumber: "",
+                                amount: tempCcontroler
+                                    .tempCpackagedetail.value.amount
+                                    .toString(),
+                                fee: '0',
+                                note:
+                                    'ດາຕ້າໃຊ້ໄດ້${tempCcontroler.tempCpackagedetail.value.packageValue} ແລະ ໄລຍະກຳນົດ ${tempCcontroler.tempCpackagedetail.value.userDay}ວັນ',
+                              ),
+                            );
+                          },
+                        ))
+                      }
+                    else
+                      {
+                        tempCcontroler.enableBottom.value = true,
                       }
                   });
         },
@@ -285,36 +301,50 @@ class _PackageListScreenState extends State<PackageListScreen>
                 .then((value) => {
                       if (value)
                         {
-                          Get.to(
-                            () => ReusableConfirmScreen(
-                              appbarTitle: "confirm_payment",
-                              function: () {
-                                tempCcontroler.paymentPackage(
-                                    homeController.menudetail.value);
-                              },
-                              stepProcess: "5/5",
-                              stepTitle: "check_detail",
-                              fromAccountImage: userController
-                                      .userProfilemodel.value.profileImg ??
-                                  MyConstant.profile_default,
-                              fromAccountName:
-                                  '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-                              fromAccountNumber: userController
-                                  .userProfilemodel.value.msisdn
-                                  .toString(),
-                              toAccountImage: MyConstant.profile_default,
-                              toAccountName: tempCcontroler
-                                  .tempCpackagedetail.value.packageName!,
-                              toAccountNumber:
-                                  '${tempCcontroler.tempCpackagedetail.value.packageValue} | ${tempCcontroler.tempCpackagedetail.value.userDay} Day',
-                              amount: tempCcontroler
-                                  .tempCpackagedetail.value.amount
-                                  .toString(),
-                              fee: '0',
-                              note:
-                                  'ດາຕ້າໃຊ້ໄດ້${tempCcontroler.tempCpackagedetail.value.packageValue} ແລະ ໄລຍະກຳນົດ ${tempCcontroler.tempCpackagedetail.value.userDay}ວັນ',
-                            ),
-                          )
+                          tempCcontroler.enableBottom.value = true,
+                          Get.to(ListsPaymentScreen(
+                            description: 'select_payment',
+                            stepBuild: '5/6',
+                            title: homeController.getMenuTitle(),
+                            onSelectedPayment: (paymentType, cardIndex) {
+                              Get.to(
+                                () => ReusableConfirmScreen(
+                                  isEnabled: tempCcontroler.enableBottom,
+                                  appbarTitle: "confirm_payment",
+                                  function: () {
+                                    tempCcontroler.enableBottom.value = false;
+                                    tempCcontroler.paymentPackage(
+                                        homeController.menudetail.value);
+                                  },
+                                  stepProcess: "6/6",
+                                  stepTitle: "check_detail",
+                                  fromAccountImage: userController
+                                          .userProfilemodel.value.profileImg ??
+                                      MyConstant.profile_default,
+                                  fromAccountName:
+                                      '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+                                  fromAccountNumber: userController
+                                      .userProfilemodel.value.msisdn
+                                      .toString(),
+                                  toAccountImage: MyConstant.profile_default,
+                                  toAccountName: tempCcontroler
+                                      .tempCpackagedetail.value.packageName!,
+                                  toAccountNumber:
+                                      '${tempCcontroler.tempCpackagedetail.value.packageValue} | ${tempCcontroler.tempCpackagedetail.value.userDay} Day',
+                                  amount: tempCcontroler
+                                      .tempCpackagedetail.value.amount
+                                      .toString(),
+                                  fee: '0',
+                                  note:
+                                      'ດາຕ້າໃຊ້ໄດ້${tempCcontroler.tempCpackagedetail.value.packageValue} ແລະ ໄລຍະກຳນົດ ${tempCcontroler.tempCpackagedetail.value.userDay}ວັນ',
+                                ),
+                              );
+                            },
+                          ))
+                        }
+                      else
+                        {
+                          tempCcontroler.enableBottom.value = true,
                         }
                     });
           },

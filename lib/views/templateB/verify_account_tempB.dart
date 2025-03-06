@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/temp_b_controller.dart';
 import 'package:super_app/utility/color.dart';
-import 'package:super_app/views/scanqr/qr_scanner.dart';
 import 'package:super_app/widget/buildAppBar.dart';
+import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildButtonBottom.dart';
-import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/mounoy_textfield.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -183,12 +181,13 @@ class _VerifyAccountTempBState extends State<VerifyAccountTempB> {
           ],
         ),
       ),
-      bottomNavigationBar: BuildButtonBottom(
+      bottomNavigationBar: buildBottomAppbar(
           title: 'next',
+          isEnabled: controller.enableBottom.value,
           func: () {
             formKey.currentState!.save();
             if (formKey.currentState!.validate()) {
-              print(accountNumber.text);
+              controller.enableBottom.value = false;
               controller.verifyAcc(
                   accountNumber.text, homeController.menudetail.value);
             }

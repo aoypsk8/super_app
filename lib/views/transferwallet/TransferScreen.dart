@@ -1,20 +1,18 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, sized_box_for_whitespace, prefer_const_literals_to_create_immutables
 import 'package:contacts_service/contacts_service.dart';
-import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/transfer_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/transferwallet/buildFavoriteTransfer.dart';
-import 'package:super_app/views/transferwallet/buildHistoryTranserAll.dart';
 import 'package:super_app/views/transferwallet/buildHistoryTranserRecent.dart';
 import 'package:super_app/widget/RoundedRectangleTabIndicator';
 import 'package:super_app/widget/buildAppBar.dart';
@@ -38,7 +36,7 @@ class _TransferScreenState extends State<TransferScreen>
   final TextEditingController _paymentAmount = TextEditingController();
   final TextEditingController _note = TextEditingController();
   final UserController userController = Get.find();
-  // final homeController = Get.put<HomeController>(HomeController());
+  final homeController = Get.find<HomeController>();
   final transferController = Get.put(TransferController());
   final storage = GetStorage();
   final FocusNode _amountFocusNode = FocusNode();
@@ -85,45 +83,47 @@ class _TransferScreenState extends State<TransferScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: cr_fbf7,
-      appBar: BuildAppBar(title: "transfer"),
-      body: SingleChildScrollView(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          behavior: HitTestBehavior.opaque,
-          child: FormBuilder(
-            key: _formKey,
-            child: Container(
-              height: Get.height,
-              child: Column(
-                children: [
-                  buildToWallet(context),
-                  const SizedBox(height: 12),
-                  buildTabBar(context),
-                ],
+    return Obx(
+      () => Scaffold(
+        backgroundColor: cr_fbf7,
+        appBar: BuildAppBar(title: homeController.menutitle.value),
+        body: SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+            behavior: HitTestBehavior.opaque,
+            child: FormBuilder(
+              key: _formKey,
+              child: Container(
+                height: Get.height,
+                child: Column(
+                  children: [
+                    buildToWallet(context),
+                    const SizedBox(height: 12),
+                    buildTabBar(context),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(top: 20),
-        decoration: BoxDecoration(
-          color: color_fff,
-          border: Border.all(color: color_ddd),
-        ),
-        child: buildBottomAppbar(
-          bgColor: Theme.of(context).primaryColor,
-          title: 'next',
-          isEnabled: !transferController.loading.isTrue,
-          func: () {
-            transferController.loading.value = true;
-            _formKey.currentState!.save();
-            if (_formKey.currentState!.validate()) {
-              _paymentProcess();
-            }
-          },
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.only(top: 20),
+          decoration: BoxDecoration(
+            color: color_fff,
+            border: Border.all(color: color_ddd),
+          ),
+          child: buildBottomAppbar(
+            bgColor: Theme.of(context).primaryColor,
+            title: 'next',
+            isEnabled: transferController.enableBottom.value,
+            func: () {
+              transferController.enableBottom.value = false;
+              _formKey.currentState!.save();
+              if (_formKey.currentState!.validate()) {
+                _paymentProcess();
+              }
+            },
+          ),
         ),
       ),
     );
@@ -494,84 +494,6 @@ class _TransferScreenState extends State<TransferScreen>
     );
   }
 
-  // Widget buildRecentTransfer(BuildContext context) {
-  //   return Container(
-  //     color: color_fff,
-  //     child: Container(
-  //       margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-  //       width: double.infinity,
-  //       child: Column(
-  //         children: [
-  //           Container(
-  //             height: 350,
-  //             child: ContainedTabBarView(
-  //               initialIndex: 0,
-  //               tabBarProperties: TabBarProperties(
-  //                 indicatorColor: Theme.of(context).primaryColor,
-  //               ),
-  //               tabBarViewProperties: TabBarViewProperties(
-  //                 physics: NeverScrollableScrollPhysics(),
-  //               ),
-  //               tabs: [
-  //                 Row(
-  //                   mainAxisAlignment: MainAxisAlignment.center,
-  //                   children: [
-  //                     Icon(Iconsax.clock,
-  //                         color: Theme.of(context).primaryColor),
-  //                     const SizedBox(width: 5),
-  //                     TextFont(
-  //                       text: 'recent',
-  //                       color: Theme.of(context).primaryColor,
-  //                       fontWeight: FontWeight.w600,
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 Row(
-  //                   mainAxisAlignment: MainAxisAlignment.center,
-  //                   children: [
-  //                     Icon(Iconsax.heart,
-  //                         color: Theme.of(context).primaryColor),
-  //                     const SizedBox(width: 5),
-  //                     TextFont(
-  //                       text: 'favorite',
-  //                       color: Theme.of(context).primaryColor,
-  //                       fontWeight: FontWeight.w600,
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 Row(
-  //                   mainAxisAlignment: MainAxisAlignment.center,
-  //                   children: [
-  //                     Icon(Iconsax.like, color: Theme.of(context).primaryColor),
-  //                     const SizedBox(width: 5),
-  //                     TextFont(
-  //                       text: 'all',
-  //                       color: Theme.of(context).primaryColor,
-  //                       fontWeight: FontWeight.w600,
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ],
-  //               views: [
-  //                 buildHistoryTransferRecent(
-  //                   updateParentValue: _updateParentValue,
-  //                 ),
-  //                 buildFavoriteTransfer(
-  //                   updateParentValue: _updateParentValue,
-  //                 ),
-  //                 buildHistoryTransferAll(
-  //                   updateParentValue: _updateParentValue,
-  //                 ),
-  //               ],
-  //               onChange: (index) => print(index),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Future _paymentProcess() async {
     int paymentAmount = int.parse(
         _paymentAmount.text.trim().replaceAll(RegExp(r'[^\w\s]+'), ''));
@@ -580,18 +502,20 @@ class _TransferScreenState extends State<TransferScreen>
     _balanceAmount = userController.mainBalance.value;
     String ownerWallet = await storage.read('msisdn') ?? '';
     if (paymentAmount < 1000) {
+      transferController.enableBottom.value = true;
       DialogHelper.showErrorDialogNew(
           description: 'Minimum payment must than 1,000 Kip.');
     } else if (_balanceAmount < paymentAmount) {
+      transferController.enableBottom.value = true;
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     } else if (ownerWallet == toWallet) {
+      transferController.enableBottom.value = true;
       DialogHelper.showErrorDialogNew(
           description: 'Can\'t transfer to same Wallet Account.');
     } else {
       transferController.vertifyWallet(
           toWallet, paymentAmount.toString(), note);
     }
-    transferController.loading.value = false;
   }
 }
 

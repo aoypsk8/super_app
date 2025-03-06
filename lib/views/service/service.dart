@@ -51,7 +51,8 @@ class _ServicePageState extends State<ServicePage> {
               var menuModelItem = homeController.menuModel[menuIndex];
               return Container(
                 margin: EdgeInsets.only(bottom: 10),
-                padding: EdgeInsets.only(right: 26, left: 26, top: 12, bottom: 15),
+                padding:
+                    EdgeInsets.only(right: 26, left: 26, top: 12, bottom: 15),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
@@ -140,7 +141,8 @@ class _ServicePageState extends State<ServicePage> {
                                 SizedBox(height: 6),
                                 SvgPicture.network(
                                   updatedUrl,
-                                  placeholderBuilder: (BuildContext context) => Container(
+                                  placeholderBuilder: (BuildContext context) =>
+                                      Container(
                                     padding: const EdgeInsets.all(5.0),
                                     child: const CircularProgressIndicator(),
                                   ),

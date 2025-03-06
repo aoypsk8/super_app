@@ -33,6 +33,8 @@ class TempAController extends GetxController {
   RxString rxNote = ''.obs;
   RxString rxFee = ''.obs;
   RxString rxPaymentAmount = ''.obs;
+  final RxBool enableBottom = true.obs;
+
   var logVerify;
   var logPaymentReq;
   var logPaymentRes;
@@ -47,14 +49,20 @@ class TempAController extends GetxController {
         throw Exception("Malformed URL: Unable to extract the first URL part.");
       }
       var url = urlSplit[0];
-      var response = await DioClient.postEncrypt(loading: false, url, key: 'lmm', {});
+      var response =
+          await DioClient.postEncrypt(loading: false, url, key: 'lmm', {});
       if (response == null || response.isEmpty) {
         throw Exception("Empty or invalid response received from API.");
       }
-      tempAmodel.value = response.map<ProviderTempAModel>((json) => ProviderTempAModel.fromJson(json)).toList();
+      tempAmodel.value = response
+          .map<ProviderTempAModel>((json) => ProviderTempAModel.fromJson(json))
+          .toList();
       final part = tempAmodel.map((e) => e.part).toSet().toList();
       provsep.value = part.map((e) {
-        return {"partid": e, "data": tempAmodel.where((res) => res.part == e).toList()};
+        return {
+          "partid": e,
+          "data": tempAmodel.where((res) => res.part == e).toList()
+        };
       }).toList();
     } catch (e, stackTrace) {
       print("Error in fetchTempAList: $e");
@@ -63,17 +71,28 @@ class TempAController extends GetxController {
   }
 
   fetchrecent() async {
+    enableBottom.value = true;
     List<String> urlSplit = homeController.menudetail.value.url!.split(";");
     if (urlSplit.isEmpty || urlSplit[0].isEmpty) {
       throw Exception("Malformed URL: Unable to extract the first URL part.");
     }
-    var response = await DioClient.postEncrypt(loading: false, urlSplit[3], {"Msisdn": storage.read('msisdn'), "ProviderID": tempAdetail.value.code}, key: 'lmm');
-    recentTempA.value = response.map<RecentTempAModel>((json) => RecentTempAModel.fromJson(json)).toList();
+    var response = await DioClient.postEncrypt(
+        loading: false,
+        urlSplit[3],
+        {
+          "Msisdn": storage.read('msisdn'),
+          "ProviderID": tempAdetail.value.code
+        },
+        key: 'lmm');
+    recentTempA.value = response
+        .map<RecentTempAModel>((json) => RecentTempAModel.fromJson(json))
+        .toList();
   }
 
   Future<void> debitProcess(String accNumber) async {
     try {
-      rxtransid.value = "${homeController.menudetail.value.description!}${await randomNumber().fucRandomNumber()}";
+      rxtransid.value =
+          "${homeController.menudetail.value.description!}${await randomNumber().fucRandomNumber()}";
       final urlSplit = homeController.menudetail.value.url?.split(";") ?? [];
       final apiUrl = urlSplit[1];
       final payload = {
@@ -89,12 +108,16 @@ class TempAController extends GetxController {
         rxaccnumber.value = accNumber;
         debit.value = response['Debit'] ?? 0;
         rxFee.value = tempAdetail.value.fee!;
+        enableBottom.value = true;
         Get.to(() => PaymentTempAScreen());
       } else {
+        enableBottom.value = true;
         // Show error dialog with the result description
-        DialogHelper.showErrorDialogNew(description: response['ResultDesc'] ?? "Unknown error occurred");
+        DialogHelper.showErrorDialogNew(
+            description: response['ResultDesc'] ?? "Unknown error occurred");
       }
     } catch (e, stackTrace) {
+      enableBottom.value = true;
       print("Error in debitProcess: $e");
       print("StackTrace: $stackTrace");
     }
@@ -107,7 +130,8 @@ class TempAController extends GetxController {
       var url;
       var response;
       if (await paymentController.confirmCashOut()) {
-        List<String> urlSplit = homeController.menudetail.value.url?.split(";") ?? [];
+        List<String> urlSplit =
+            homeController.menudetail.value.url?.split(";") ?? [];
         url = urlSplit[2];
         data = {
           "AccName": rxaccname.value,
@@ -127,8 +151,10 @@ class TempAController extends GetxController {
         if (response['ResultCode'] == '200') {
           rxtimestamp.value = response['CreateDate'];
           rxPaymentAmount.value = amount;
+          enableBottom.value = true;
           Get.to(() => ReusableResultScreen(
-              fromAccountImage: userController.userProfilemodel.value.profileImg!,
+              fromAccountImage:
+                  userController.userProfilemodel.value.profileImg!,
               fromAccountName: userController.profileName.value,
               fromAccountNumber: userController.userProfilemodel.value.msisdn!,
               toAccountImage: tempAdetail.value.logo!,
@@ -141,15 +167,18 @@ class TempAController extends GetxController {
               note: rxNote.value,
               timestamp: rxtimestamp.value));
         } else {
+          enableBottom.value = true;
           DialogHelper.showErrorDialogNew(description: response['ResultCode']);
         }
       }
     } else {
+      enableBottom.value = true;
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     }
   }
 
-  Future<void> saveLogTempA(Map<String, dynamic> data, response, String amount) async {
+  Future<void> saveLogTempA(
+      Map<String, dynamic> data, response, String amount) async {
     final logController = Get.put(LogController());
     logPaymentReq = data;
     logPaymentRes = response;

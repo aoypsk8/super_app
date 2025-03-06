@@ -99,11 +99,11 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen>
             ),
             child: buildBottomAppbar(
               title: 'next',
-              isEnabled: !cashOutController.loading.isTrue,
+              isEnabled: cashOutController.enableBottom.value,
               func: () {
                 _formKey.currentState!.save();
                 if (_formKey.currentState!.validate()) {
-                  cashOutController.loading.value = true;
+                  cashOutController.enableBottom.value = false;
                   cashOutController.rxPaymentAmount.value =
                       _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '');
                   cashOutController.rxNote.value = _note.text;
@@ -161,6 +161,7 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen>
               name: 'amount',
               hintText: '0',
               max: 11,
+              focus: _amountFocusNode,
               fillcolor: color_f4f4,
               bordercolor: color_f4f4,
               suffixWidget: true,

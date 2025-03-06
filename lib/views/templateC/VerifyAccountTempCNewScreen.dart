@@ -20,7 +20,7 @@ import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/reusable_template/reusable_confirm.dart';
-import 'package:super_app/views/templateC/prepaid/ConfirmPrepaidTempCScreen.dart';
+import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
@@ -122,8 +122,10 @@ class _VerifyAccountTempCNewScreenState
             title: tempCcontroler.tempCservicedetail.value.description!),
         body: FooterLayout(
           footer: buildBottomAppbar(
+            isEnabled: tempCcontroler.enableBottom.value,
             title: tempCcontroler.rxPrepaidShow.value ? 'confirm' : 'next',
             func: () {
+              tempCcontroler.enableBottom.value = false;
               tempCcontroler.rxNote.value = tempCcontroler
                   .tempCservicedetail.value.description
                   .toString();
@@ -143,45 +145,63 @@ class _VerifyAccountTempCNewScreenState
                               "${tempCcontroler.tempCdetail.value.groupTelecom!}|${tempCcontroler.tempCservicedetail.value.name!}",
                           package: '',
                           remark: tempCcontroler.rxNote.value)
-                      .then((value) => {
-                            if (value)
-                              // {Get.to(() => const ConfirmPrepaidTempCScreen())}
-                              {
-                                Get.to(
-                                  ReusableConfirmScreen(
-                                    appbarTitle: "confirm_payment",
-                                    function: () {
-                                      tempCcontroler.paymentPrepaid(
-                                          homeController.menudetail.value);
-                                    },
-                                    stepProcess: "4/5",
-                                    stepTitle: "check_detail",
-                                    fromAccountImage: userController
-                                            .userProfilemodel
-                                            .value
-                                            .profileImg ??
-                                        MyConstant.profile_default,
-                                    fromAccountName:
-                                        '${userController.userProfilemodel.value.name.toString()} ${userController.userProfilemodel.value.surname.toString()}',
-                                    fromAccountNumber: userController
-                                        .userProfilemodel.value.msisdn
-                                        .toString(),
-                                    toAccountImage: MyConstant.profile_default,
-                                    toAccountName: tempCcontroler
-                                        .tempCservicedetail.value.description
-                                        .toString(),
-                                    toAccountNumber: _accoutNumber.text,
-                                    amount:
-                                        tempCcontroler.rxTotalAmount.toString(),
-                                    fee: '0',
-                                    note: tempCcontroler
-                                        .tempCservicedetail.value.description
-                                        .toString(),
-                                  ),
-                                )
-                              }
-                          });
+                      .then(
+                        (value) => {
+                          if (value)
+                            {
+                              tempCcontroler.enableBottom.value = true,
+                              Get.to(ListsPaymentScreen(
+                                description: 'select_payment',
+                                stepBuild: '5/6',
+                                title: homeController.getMenuTitle(),
+                                onSelectedPayment: (paymentType, cardIndex) {
+                                  Get.to(
+                                    ReusableConfirmScreen(
+                                      isEnabled: tempCcontroler.enableBottom,
+                                      appbarTitle: "confirm_payment",
+                                      function: () {
+                                        tempCcontroler.enableBottom.value =
+                                            false;
+                                        tempCcontroler.paymentPrepaid(
+                                            homeController.menudetail.value);
+                                      },
+                                      stepProcess: "6/6",
+                                      stepTitle: "check_detail",
+                                      fromAccountImage: userController
+                                              .userProfilemodel
+                                              .value
+                                              .profileImg ??
+                                          MyConstant.profile_default,
+                                      fromAccountName:
+                                          '${userController.userProfilemodel.value.name.toString()} ${userController.userProfilemodel.value.surname.toString()}',
+                                      fromAccountNumber: userController
+                                          .userProfilemodel.value.msisdn
+                                          .toString(),
+                                      toAccountImage:
+                                          MyConstant.profile_default,
+                                      toAccountName: tempCcontroler
+                                          .tempCservicedetail.value.description
+                                          .toString(),
+                                      toAccountNumber: _accoutNumber.text,
+                                      amount: tempCcontroler.rxTotalAmount
+                                          .toString(),
+                                      fee: '0',
+                                      note: tempCcontroler
+                                          .tempCservicedetail.value.description
+                                          .toString(),
+                                    ),
+                                  );
+                                },
+                              ))
+                            }
+                          else
+                            {
+                              tempCcontroler.enableBottom.value = true,
+                            }
+                        },
+                      );
                 } else {
+                  tempCcontroler.enableBottom.value = true;
                   DialogHelper.showErrorDialogNew(
                       description: 'Please select your amount.');
                 }
@@ -190,6 +210,8 @@ class _VerifyAccountTempCNewScreenState
                 if (_formKey.currentState!.validate()) {
                   FocusScope.of(context).requestFocus(FocusNode());
                   tempCcontroler.verifyAcc(_accoutNumber.text);
+                } else {
+                  tempCcontroler.enableBottom.value = true;
                 }
               }
             },
@@ -203,7 +225,10 @@ class _VerifyAccountTempCNewScreenState
                 child: Column(
                   children: [
                     SizedBox(height: 10),
-                    buildStepProcess(title: "3/5", desc: "gg"),
+                    buildStepProcess(
+                      title: tempCcontroler.rxPrepaidShow.value ? "4/6" : "3/6",
+                      desc: "input_phone_number",
+                    ),
                     const SizedBox(height: 10),
                     buildForm(),
                     const SizedBox(height: 15),

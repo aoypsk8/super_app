@@ -1,8 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, unused_local_variable, prefer_typing_uninitialized_variables
 
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,6 +28,8 @@ class CashOutController extends GetxController {
   RxList<RecentBankModel> recentModel = <RecentBankModel>[].obs;
   Rx<ReqCashoutBankModel> reqcashout = ReqCashoutBankModel().obs;
 
+  final RxBool enableBottom = true.obs;
+
   RxString rxTransID = ''.obs;
   RxString rxAccNo = ''.obs;
   RxString rxAccName = ''.obs;
@@ -40,8 +40,6 @@ class CashOutController extends GetxController {
 
   RxString rxCodeBank = ''.obs;
   RxString rxLogo = ''.obs;
-
-  RxBool loading = false.obs;
 
   //? Log
   var logVerify;
@@ -139,15 +137,15 @@ class CashOutController extends GetxController {
       rxAccName.value = response['accountName'];
       rxFee.value = response['fee'].toString();
       logVerify = response;
-      loading.value = false;
-      // Get.toNamed('/cashOutConfirm');
+      enableBottom.value = true;
       Get.to(
         () => ReusableConfirmScreen(
           appbarTitle: "confirm_payment",
           function: () {
-            loading.value = true;
+            enableBottom.value = false;
             confirmPayment();
           },
+          isEnabled: enableBottom,
           stepProcess: "3/3",
           stepTitle: "check_detail",
           fromAccountImage: userController.userProfilemodel.value.profileImg ??
@@ -165,7 +163,7 @@ class CashOutController extends GetxController {
         ),
       );
     } else {
-      loading.value = false;
+      enableBottom.value = true;
       DialogHelper.showErrorDialogNew(description: response['resultdesc']);
     }
   }
@@ -180,7 +178,6 @@ class CashOutController extends GetxController {
     int payment_fee = int.parse(rxPaymentAmount.value.toString()) +
         int.parse(rxFee.value.toString());
     if (balance > payment_fee) {
-      //
       var data = {
         "bid": bankDetail.value.bID,
         "amount": rxPaymentAmount.value.toString(),
@@ -193,14 +190,14 @@ class CashOutController extends GetxController {
       // print(response.toString());
       if (response["resultcode"] == "200") {
         reqcashout.value = ReqCashoutBankModel.fromJson(response);
-        loading.value = false;
+        enableBottom.value = true;
         Get.to(() => const OtpTransferBankScreen());
       } else {
-        loading.value = false;
+        enableBottom.value = true;
         DialogHelper.showErrorDialogNew(description: response['resultdesc']);
       }
     } else {
-      loading.value = false;
+      enableBottom.value = true;
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     }
   }
@@ -251,7 +248,7 @@ class CashOutController extends GetxController {
     );
     if (response["resultcode"] == "200") {
       rxTimeStamp.value = response["CreateDate"];
-      loading.value = false;
+
       Get.to(ReusableResultScreen(
         fromAccountImage: userController.userProfilemodel.value.profileImg ??
             MyConstant.profile_default,
@@ -268,7 +265,6 @@ class CashOutController extends GetxController {
         timestamp: rxTimeStamp.value,
       ));
     } else {
-      loading.value = false;
       DialogHelper.showErrorDialogNew(description: response['resultdesc']);
     }
   }

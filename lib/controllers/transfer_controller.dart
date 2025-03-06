@@ -36,8 +36,7 @@ class TransferController extends GetxController {
   RxString rxtransid = ''.obs;
   RxString rxtimestamp = ''.obs;
 
-  RxBool loading = false.obs;
-
+  final RxBool enableBottom = true.obs;
   //? Log
   var logVerifyRes;
   var logPaymentReq;
@@ -93,13 +92,12 @@ class TransferController extends GetxController {
               '${MyConstant.urlLoginByEmail}/GetMsisdn', otpDatas);
 
           if (otpResponse["resultCode"] == 0) {
-            // OTP sent successfully
             userController.refcode.value =
                 otpResponse["data"]["ref"].toString();
-
-            // Navigate to OtpTransferScreen
+            enableBottom.value = true;
             Get.toNamed('/otpTransferEmail');
           } else {
+            enableBottom.value = true;
             // Handle OTP sending failure
             DialogHelper.showErrorDialogNew(
                 description: otpResponse["resultDesc"].toString());
@@ -113,60 +111,62 @@ class TransferController extends GetxController {
               '${MyConstant.urlGateway}/signup', otpData);
 
           if (otpResponse["resultCode"] == 0) {
-            loading.value = false;
+            enableBottom.value = true;
             // OTP sent successfully
             userController.refcode.value =
                 otpResponse["data"]["ref"].toString();
             // Navigate to OtpTransferScreen
             Get.toNamed('/otpTransfer');
           } else {
-            loading.value = false;
+            enableBottom.value = true;
             // Handle OTP sending failure
             DialogHelper.showErrorDialogNew(
                 description: otpResponse["resultDesc"].toString());
           }
         } else {
+          enableBottom.value = true;
           Get.to(ListsPaymentScreen(
             description: 'select_payment',
             stepBuild: '2/3',
             title: homeController.getMenuTitle(),
             onSelectedPayment: (paymentType, cardIndex) {
-              print(paymentType);
-              print(cardIndex);
-              Get.to(() => ReusableConfirmScreen(
-                    appbarTitle: homeController.getMenuTitle(),
-                    function: () {
-                      loading.value = true;
-                      transfer(homeController.menudetail.value);
-                    },
-                    stepProcess: "3/3",
-                    stepTitle: "check_detail",
-                    fromAccountImage:
-                        userController.userProfilemodel.value.profileImg ??
-                            MyConstant.profile_default,
-                    fromAccountName:
-                        '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-                    fromAccountNumber:
-                        userController.userProfilemodel.value.msisdn.toString(),
-                    toAccountImage: desTranferKyc.value.profileImg ??
-                        MyConstant.profile_default,
-                    toAccountName: destinationname.value,
-                    toAccountNumber: destinationMsisdn.value,
-                    amount: amount.value,
-                    fee: '0',
-                    note: note.value,
-                  ));
+              Get.to(
+                () => ReusableConfirmScreen(
+                  appbarTitle: homeController.getMenuTitle(),
+                  function: () {
+                    enableBottom.value = false;
+                    transfer(homeController.menudetail.value);
+                  },
+                  isEnabled: enableBottom,
+                  stepProcess: "3/3",
+                  stepTitle: "check_detail",
+                  fromAccountImage:
+                      userController.userProfilemodel.value.profileImg ??
+                          MyConstant.profile_default,
+                  fromAccountName:
+                      '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+                  fromAccountNumber:
+                      userController.userProfilemodel.value.msisdn.toString(),
+                  toAccountImage: desTranferKyc.value.profileImg ??
+                      MyConstant.profile_default,
+                  toAccountName: destinationname.value,
+                  toAccountNumber: destinationMsisdn.value,
+                  amount: amount.value,
+                  fee: '0',
+                  note: note.value,
+                ),
+              );
             },
           ));
         }
       } else {
-        loading.value = false;
+        enableBottom.value = true;
         // Wallet verification failed
         DialogHelper.showErrorDialogNew(
             description: response["responseMessage"]);
       }
     } catch (e) {
-      loading.value = false;
+      enableBottom.value = true;
       // Handle unexpected errors
       DialogHelper.showErrorDialogNew(
           description: 'An unexpected error occurred. Please try again.');
@@ -260,7 +260,7 @@ class TransferController extends GetxController {
         userController.fetchBalance();
         rxtimestamp.value =
             DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
-        loading.value = false;
+        enableBottom.value = true;
 
         Get.to(ReusableResultScreen(
           fromAccountImage: userController.userProfilemodel.value.profileImg ??
@@ -279,11 +279,11 @@ class TransferController extends GetxController {
           timestamp: rxtimestamp.value,
         ));
       } else {
-        loading.value = false;
+        enableBottom.value = true;
         DialogHelper.showErrorDialogNew(description: response["resultDesc"]);
       }
     } catch (e) {
-      loading.value = false;
+      enableBottom.value = true;
       DialogHelper.showErrorDialogNew(description: e.toString());
     }
   }

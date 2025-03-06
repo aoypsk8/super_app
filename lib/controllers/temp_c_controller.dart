@@ -52,6 +52,8 @@ class TempCController extends GetxController {
   RxInt rxCouponAmount = 0.obs;
   RxInt rxTotalAmount = 0.obs;
 
+  final RxBool enableBottom = true.obs;
+
   //? Log
   var logVerify;
   var logPaymentReq;
@@ -144,6 +146,7 @@ class TempCController extends GetxController {
       if (rxService.value == "PREPAID") {
         rxAccName.value = "";
         rxPrepaidShow.value = true;
+        enableBottom.value = true;
         tempCprepaidmodel.value = response['Topup']
             .map<Topup>((json) => Topup.fromJson(json))
             .toList();
@@ -153,8 +156,10 @@ class TempCController extends GetxController {
         tempCpackagemodel.value = response['Packages']
             .map<Packages>((json) => Packages.fromJson(json))
             .toList();
+        enableBottom.value = true;
         Get.to(() => const PackageListScreen());
       } else {
+        enableBottom.value = true;
         logVerify = response;
         rxAccName.value = response['Name'].toString();
         rxDebit.value = response['Balance'].toString();
@@ -164,6 +169,7 @@ class TempCController extends GetxController {
         Get.to(() => const PaymentPostpaidTempCScreen());
       }
     } else {
+      enableBottom.value = true;
       rxCouponAmount.value = 0;
       rxPaymentAmount.value = 0;
       rxTotalAmount.value = 0;
@@ -205,6 +211,7 @@ class TempCController extends GetxController {
           rxTimeStamp.value = response['Created'];
           rxPaymentAmount.value = int.parse(response['Amount']);
           saveHistoryMobile(rxAccNo.value, rxService.value);
+          enableBottom.value = true;
           Get.to(
             ReusableResultScreen(
               fromAccountImage:
@@ -225,6 +232,7 @@ class TempCController extends GetxController {
             ),
           );
         } else {
+          enableBottom.value = true;
           DialogHelper.showErrorWithFunctionDialog(
               description: response['ResultDesc'],
               onClose: () {
@@ -233,6 +241,7 @@ class TempCController extends GetxController {
         }
       }
     } else {
+      enableBottom.value = true;
       //! balance < payment
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     }
@@ -288,7 +297,8 @@ class TempCController extends GetxController {
           rxTimeStamp.value = response['Created'];
           rxPaymentAmount.value = int.parse(response['Amount']);
           saveHistoryMobile(rxAccNo.value, rxService.value);
-          // Get.to(() => const ResultPrepaidTempCScreen());
+          enableBottom.value = true;
+
           Get.off(ReusableResultScreen(
             fromAccountImage:
                 userController.userProfilemodel.value.profileImg ??
@@ -375,6 +385,7 @@ class TempCController extends GetxController {
           rxPaymentAmount.value = int.parse(response['Amount']);
           saveHistoryMobile(rxAccNo.value, rxService.value);
           // Get.to(() => const ResultPackageTempCScreen());
+          enableBottom.value = true;
           Get.to(ReusableResultScreen(
             fromAccountImage:
                 userController.userProfilemodel.value.profileImg ??
@@ -393,6 +404,7 @@ class TempCController extends GetxController {
             timestamp: rxTimeStamp.value,
           ));
         } else {
+          enableBottom.value = true;
           DialogHelper.showErrorWithFunctionDialog(
               description: response['ResultDesc'],
               onClose: () {
@@ -400,10 +412,12 @@ class TempCController extends GetxController {
               });
         }
       } else {
+        enableBottom.value = true;
         DialogHelper.showErrorDialogNew(
             description: 'Your coupon amount not enough.');
       }
     } else {
+      enableBottom.value = true;
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     }
   }

@@ -33,6 +33,8 @@ class TempAController extends GetxController {
   RxString rxNote = ''.obs;
   RxString rxFee = ''.obs;
   RxString rxPaymentAmount = ''.obs;
+  final RxBool enableBottom = true.obs;
+
   var logVerify;
   var logPaymentReq;
   var logPaymentRes;
@@ -69,6 +71,7 @@ class TempAController extends GetxController {
   }
 
   fetchrecent() async {
+    enableBottom.value = true;
     List<String> urlSplit = homeController.menudetail.value.url!.split(";");
     if (urlSplit.isEmpty || urlSplit[0].isEmpty) {
       throw Exception("Malformed URL: Unable to extract the first URL part.");
@@ -105,13 +108,16 @@ class TempAController extends GetxController {
         rxaccnumber.value = accNumber;
         debit.value = response['Debit'] ?? 0;
         rxFee.value = tempAdetail.value.fee!;
+        enableBottom.value = true;
         Get.to(() => PaymentTempAScreen());
       } else {
+        enableBottom.value = true;
         // Show error dialog with the result description
         DialogHelper.showErrorDialogNew(
             description: response['ResultDesc'] ?? "Unknown error occurred");
       }
     } catch (e, stackTrace) {
+      enableBottom.value = true;
       print("Error in debitProcess: $e");
       print("StackTrace: $stackTrace");
     }
@@ -145,6 +151,7 @@ class TempAController extends GetxController {
         if (response['ResultCode'] == '200') {
           rxtimestamp.value = response['CreateDate'];
           rxPaymentAmount.value = amount;
+          enableBottom.value = true;
           Get.to(() => ReusableResultScreen(
               fromAccountImage:
                   userController.userProfilemodel.value.profileImg!,
@@ -160,10 +167,12 @@ class TempAController extends GetxController {
               note: rxNote.value,
               timestamp: rxtimestamp.value));
         } else {
+          enableBottom.value = true;
           DialogHelper.showErrorDialogNew(description: response['ResultCode']);
         }
       }
     } else {
+      enableBottom.value = true;
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     }
   }

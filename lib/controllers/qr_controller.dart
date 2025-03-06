@@ -252,6 +252,7 @@ class QrController extends GetxController {
         //! save log
         await saveLogQR(data, response);
         if (response['resultCode'] == "200") {
+          if (rxCouponAmount.value > 0) paymentPoint(rxTransrefCoupon.value);
           rxTransID.value = response['transactionNo'];
           rxTimeStamp.value = response['CreatedDatetime'];
           rxTotalAmount.value = int.parse(response['transAmount']);

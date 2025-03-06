@@ -32,7 +32,7 @@ class _UserProfileListViewState extends State<UserProfileListView> {
 
     String maskPhoneNumber(String number) {
       if (number.length >= 7) {
-        return number.replaceRange(3, 7, '****');
+        return number.replaceRange(4, 7, '***');
       }
       return number;
     }

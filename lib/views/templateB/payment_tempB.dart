@@ -13,7 +13,9 @@ import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
+import 'package:super_app/views/templateB/confirm_tempB.dart';
 import 'package:super_app/widget/buildAppBar.dart';
+import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildButtonBottom.dart';
 import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/build_step_process.dart';
@@ -56,10 +58,11 @@ class PaymentTempBScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BuildButtonBottom(
+      bottomNavigationBar: buildBottomAppbar(
           title: 'next',
-          isActive: true,
+          isEnabled: controller.enableBottom.value,
           func: () async {
+            controller.enableBottom.value = false;
             _formKey.currentState!.save();
             if (_formKey.currentState!.validate()) {
               String sanitizedAmount =
@@ -67,6 +70,7 @@ class PaymentTempBScreen extends StatelessWidget {
               controller.rxNote.value = _note.text;
               controller.rxPaymentAmount.value = sanitizedAmount.toString();
               if (int.parse(sanitizedAmount) < 1000) {
+                controller.enableBottom.value = true;
                 DialogHelper.showErrorDialogNew(description: "morethan1000");
               } else {
                 if (userController.totalBalance.value >=
@@ -74,6 +78,7 @@ class PaymentTempBScreen extends StatelessWidget {
                   controller.rxTransID.value =
                       homeController.menudetail.value.description.toString() +
                           await randomNumber().fucRandomNumber();
+                  controller.enableBottom.value = true;
                   Get.to(
                     () => ListsPaymentScreen(
                       description: 'select_payment',
@@ -89,41 +94,50 @@ class PaymentTempBScreen extends StatelessWidget {
                           provider: controller.tempBdetail.value.nameCode,
                           remark: controller.rxNote.value,
                         )
-                            .then((value) {
-                          if (value) {
-                            Get.to(() => ReusableConfirmScreen(
-                                  appbarTitle: homeController.getMenuTitle(),
-                                  function: () {
-                                    controller.isLoading.value = true;
-                                    controller.paymentProcess(
-                                        homeController.menudetail.value);
-                                  },
-                                  stepProcess: "5/5",
-                                  stepTitle: "check_detail",
-                                  fromAccountImage: userController
-                                          .userProfilemodel.value.profileImg ??
-                                      MyConstant.profile_default,
-                                  fromAccountName:
-                                      '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-                                  fromAccountNumber: userController
-                                      .userProfilemodel.value.msisdn
-                                      .toString(),
-                                  toAccountImage:
-                                      controller.tempBdetail.value.logo ?? '',
-                                  toAccountName: controller
-                                      .rxAccName.value, // Fixed swapped values
-                                  toAccountNumber: controller.rxAccNo.value,
-                                  amount: controller.rxPaymentAmount.value,
-                                  fee: controller.tempBdetail.value.fee ??
-                                      '0', // Prevent null error
-                                  note: controller.rxNote.value,
-                                ));
-                          }
-                        });
+                            .then(
+                          (value) {
+                            if (value) {
+                              Get.to(() => ReusableConfirmScreen(
+                                    isEnabled: controller.enableBottom,
+                                    appbarTitle: "confirm_payment",
+                                    function: () {
+                                      controller.isLoading.value = true;
+                                      controller.enableBottom.value = false;
+                                      controller.paymentProcess(
+                                          homeController.menudetail.value);
+                                    },
+                                    stepProcess: "5/5",
+                                    stepTitle: "check_detail",
+                                    fromAccountImage: userController
+                                            .userProfilemodel
+                                            .value
+                                            .profileImg ??
+                                        MyConstant.profile_default,
+                                    fromAccountName:
+                                        '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+                                    fromAccountNumber: userController
+                                        .userProfilemodel.value.msisdn
+                                        .toString(),
+                                    toAccountImage:
+                                        controller.tempBdetail.value.logo ?? '',
+                                    toAccountName: controller.rxAccName
+                                        .value, // Fixed swapped values
+                                    toAccountNumber: controller.rxAccNo.value,
+                                    amount: controller.rxPaymentAmount.value,
+                                    fee: controller.tempBdetail.value.fee ??
+                                        '0', // Prevent null error
+                                    note: controller.rxNote.value,
+                                  ));
+                            } else {
+                              controller.enableBottom.value = true;
+                            }
+                          },
+                        );
                       },
                     ),
                   );
                 } else {
+                  controller.enableBottom.value = true;
                   DialogHelper.showErrorDialogNew(
                       description: 'Your balance not enough.');
                 }

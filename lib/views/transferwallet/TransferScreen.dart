@@ -1,21 +1,20 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, sized_box_for_whitespace, prefer_const_literals_to_create_immutables
-// import 'package:contacts_service/contacts_service.dart';
-import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/transfer_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/transferwallet/buildFavoriteTransfer.dart';
-import 'package:super_app/views/transferwallet/buildHistoryTranserAll.dart';
 import 'package:super_app/views/transferwallet/buildHistoryTranserRecent.dart';
+import 'package:super_app/widget/RoundedRectangleTabIndicator';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
@@ -30,21 +29,24 @@ class TransferScreen extends StatefulWidget {
   State<TransferScreen> createState() => _TransferScreenState();
 }
 
-class _TransferScreenState extends State<TransferScreen> {
+class _TransferScreenState extends State<TransferScreen>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final TextEditingController _toWallet = TextEditingController();
   final TextEditingController _paymentAmount = TextEditingController();
   final TextEditingController _note = TextEditingController();
   final UserController userController = Get.find();
-  // final homeController = Get.put<HomeController>(HomeController());
+  final homeController = Get.find<HomeController>();
   final transferController = Get.put(TransferController());
   final storage = GetStorage();
-
   final FocusNode _amountFocusNode = FocusNode();
   String _contactName = '';
   int _balanceAmount = 0;
   bool isMore = false;
   bool isMoreText = false;
+
+  late TabController _tabController;
+  int indexTabs = 0;
 
   void _updateParentValue(String walletNo, String contactName) {
     setState(() {
@@ -58,16 +60,22 @@ class _TransferScreenState extends State<TransferScreen> {
 
   @override
   void initState() {
+    userController.increasepage();
     _toWallet.text = '';
     _balanceAmount = 0;
     _toWallet.text = transferController.destinationMsisdn.value;
-    userController.increasepage();
+
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(() {
+      setState(() {});
+    });
     super.initState();
   }
 
   @override
   void dispose() {
     userController.decreasepage();
+    _tabController.dispose();
     _toWallet.text = '';
     transferController.destinationMsisdn.value = '';
     super.dispose();
@@ -75,44 +83,47 @@ class _TransferScreenState extends State<TransferScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: cr_fbf7,
-      appBar: BuildAppBar(title: "transfer"),
-      body: SingleChildScrollView(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          behavior: HitTestBehavior.opaque,
-          child: FormBuilder(
-            key: _formKey,
-            child: Container(
-              child: Column(
-                children: [
-                  buildToWallet(context),
-                  const SizedBox(height: 12),
-                  buildRecentTransfer(context),
-                ],
+    return Obx(
+      () => Scaffold(
+        backgroundColor: cr_fbf7,
+        appBar: BuildAppBar(title: homeController.menutitle.value),
+        body: SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+            behavior: HitTestBehavior.opaque,
+            child: FormBuilder(
+              key: _formKey,
+              child: Container(
+                height: Get.height,
+                child: Column(
+                  children: [
+                    buildToWallet(context),
+                    const SizedBox(height: 12),
+                    buildTabBar(context),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(top: 20),
-        decoration: BoxDecoration(
-          color: color_fff,
-          border: Border.all(color: color_ddd),
-        ),
-        child: buildBottomAppbar(
-          bgColor: Theme.of(context).primaryColor,
-          title: 'next',
-          isEnabled: !transferController.loading.isTrue,
-          func: () {
-            transferController.loading.value = true;
-            _formKey.currentState!.save();
-            if (_formKey.currentState!.validate()) {
-              _paymentProcess();
-            }
-          },
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.only(top: 20),
+          decoration: BoxDecoration(
+            color: color_fff,
+            border: Border.all(color: color_ddd),
+          ),
+          child: buildBottomAppbar(
+            bgColor: Theme.of(context).primaryColor,
+            title: 'next',
+            isEnabled: transferController.enableBottom.value,
+            func: () {
+              transferController.enableBottom.value = false;
+              _formKey.currentState!.save();
+              if (_formKey.currentState!.validate()) {
+                _paymentProcess();
+              }
+            },
+          ),
         ),
       ),
     );
@@ -127,7 +138,16 @@ class _TransferScreenState extends State<TransferScreen> {
       '500,000',
       '1,000,000',
     ];
-    final List<String> textValue = ["ເຕີມເງິນ", "ຄ່າເຄື່ອງ", "ຄ່າອາຫານ", "ຄ່າເຄື່ອງດື່ມ", "ເກັບອອມ", "ໃຊ້ໜີ້", "ຊ່ວຍເຫຼືອ", "ການສຶກສາ"];
+    final List<String> textValue = [
+      "ເຕີມເງິນ",
+      "ຄ່າເຄື່ອງ",
+      "ຄ່າອາຫານ",
+      "ຄ່າເຄື່ອງດື່ມ",
+      "ເກັບອອມ",
+      "ໃຊ້ໜີ້",
+      "ຊ່ວຍເຫຼືອ",
+      "ການສຶກສາ"
+    ];
 
     return Container(
       color: color_fff,
@@ -138,11 +158,6 @@ class _TransferScreenState extends State<TransferScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10),
-            // TextFont(
-            //   text: 'transfer_wallet',
-            //   fontWeight: FontWeight.w500,
-            //   fontSize: 12,
-            // ),
             buildStepProcess(title: "1/3", desc: "transfer_wallet"),
             const SizedBox(height: 10),
             buildNumberFiledValidate(
@@ -161,45 +176,45 @@ class _TransferScreenState extends State<TransferScreen> {
               ),
               suffixonTapFuc: () async {
                 if (await Permission.contacts.request().isGranted) {
-                  // try {
-                  //   final Contact? contact =
-                  //       await ContactsService.openDeviceContactPicker();
-                  //   if (contact != null) {
-                  //     final Item phone = contact.phones!.first;
-                  //     String phoneNO = phone.value
-                  //         .toString()
-                  //         .trim()
-                  //         .replaceAll(' ', '')
-                  //         .replaceAll('-', '');
-                  //     if (phoneNO.startsWith('020')) {
-                  //       setState(() {
-                  //         _toWallet.text = phoneNO.replaceAll('020', '20');
-                  //       });
-                  //     } else if (phoneNO.startsWith('+85620')) {
-                  //       setState(() {
-                  //         _toWallet.text = phoneNO.replaceAll('+85620', '20');
-                  //       });
-                  //     } else if (phoneNO.startsWith('85620')) {
-                  //       setState(() {
-                  //         _toWallet.text = phoneNO.replaceAll('85620', '20');
-                  //       });
-                  //     } else {
-                  //       setState(() {
-                  //         _toWallet.text = phoneNO;
-                  //       });
-                  //     }
-                  //   }
-                  //   setState(() {
-                  //     _contactName = contact!.displayName.toString();
-                  //   });
-                  // } on FormOperationException catch (e) {
-                  //   switch (e.errorCode) {
-                  //     case FormOperationErrorCode.FORM_OPERATION_CANCELED:
-                  //     case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
-                  //     case FormOperationErrorCode.FORM_OPERATION_UNKNOWN_ERROR:
-                  //     default:
-                  //   }
-                  // }
+                  try {
+                    final Contact? contact =
+                        await ContactsService.openDeviceContactPicker();
+                    if (contact != null) {
+                      final Item phone = contact.phones!.first;
+                      String phoneNO = phone.value
+                          .toString()
+                          .trim()
+                          .replaceAll(' ', '')
+                          .replaceAll('-', '');
+                      if (phoneNO.startsWith('020')) {
+                        setState(() {
+                          _toWallet.text = phoneNO.replaceAll('020', '20');
+                        });
+                      } else if (phoneNO.startsWith('+85620')) {
+                        setState(() {
+                          _toWallet.text = phoneNO.replaceAll('+85620', '20');
+                        });
+                      } else if (phoneNO.startsWith('85620')) {
+                        setState(() {
+                          _toWallet.text = phoneNO.replaceAll('85620', '20');
+                        });
+                      } else {
+                        setState(() {
+                          _toWallet.text = phoneNO;
+                        });
+                      }
+                    }
+                    setState(() {
+                      _contactName = contact!.displayName.toString();
+                    });
+                  } on FormOperationException catch (e) {
+                    switch (e.errorCode) {
+                      case FormOperationErrorCode.FORM_OPERATION_CANCELED:
+                      case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
+                      case FormOperationErrorCode.FORM_OPERATION_UNKNOWN_ERROR:
+                      default:
+                    }
+                  }
                 }
               },
             ),
@@ -247,7 +262,9 @@ class _TransferScreenState extends State<TransferScreen> {
                           _paymentAmount.text = amountValue[index];
                         },
                         child: Container(
-                          decoration: BoxDecoration(color: color_f5f5, borderRadius: BorderRadius.circular(6)),
+                          decoration: BoxDecoration(
+                              color: color_f5f5,
+                              borderRadius: BorderRadius.circular(6)),
                           child: Center(
                             child: TextFont(
                               text: amountValue[index],
@@ -281,7 +298,8 @@ class _TransferScreenState extends State<TransferScreen> {
                               underline: true,
                             ),
                           ),
-                          Icon(Icons.keyboard_arrow_up_rounded, size: 15.sp, color: color_777),
+                          Icon(Icons.keyboard_arrow_up_rounded,
+                              size: 15.sp, color: color_777),
                         ],
                       ),
                     )
@@ -301,7 +319,8 @@ class _TransferScreenState extends State<TransferScreen> {
                             underline: true,
                           ),
                         ),
-                        Icon(Icons.keyboard_arrow_down_rounded, size: 15.sp, color: color_777),
+                        Icon(Icons.keyboard_arrow_down_rounded,
+                            size: 15.sp, color: color_777),
                       ],
                     ),
             ),
@@ -367,7 +386,8 @@ class _TransferScreenState extends State<TransferScreen> {
                               underline: true,
                             ),
                           ),
-                          Icon(Icons.keyboard_arrow_up_rounded, size: 15.sp, color: color_777),
+                          Icon(Icons.keyboard_arrow_up_rounded,
+                              size: 15.sp, color: color_777),
                         ],
                       ),
                     )
@@ -387,7 +407,8 @@ class _TransferScreenState extends State<TransferScreen> {
                             underline: true,
                           ),
                         ),
-                        Icon(Icons.keyboard_arrow_down_rounded, size: 15.sp, color: color_777),
+                        Icon(Icons.keyboard_arrow_down_rounded,
+                            size: 15.sp, color: color_777),
                       ],
                     ),
             ),
@@ -397,98 +418,104 @@ class _TransferScreenState extends State<TransferScreen> {
     );
   }
 
-  Widget buildRecentTransfer(BuildContext context) {
-    return Container(
-      color: color_fff,
+  Widget buildTabBar(BuildContext context) {
+    return Expanded(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-        width: double.infinity,
-        child: Column(
-          children: [
-            Container(
-              height: 350,
-              child: ContainedTabBarView(
-                initialIndex: 0,
-                tabBarProperties: TabBarProperties(
-                  indicatorColor: Theme.of(context).primaryColor,
+        color: color_fff,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          child: Column(
+            children: [
+              TabBar(
+                controller: _tabController,
+                isScrollable: true,
+                tabAlignment: TabAlignment.start,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: RoundedRectangleTabIndicator(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  weight: 4.0,
+                  borderRadius: 10.0,
                 ),
-                tabBarViewProperties: TabBarViewProperties(
-                  physics: NeverScrollableScrollPhysics(),
-                ),
+                onTap: (index) => setState(() {
+                  indexTabs = index;
+                }),
+                dividerColor: Colors.transparent,
                 tabs: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Iconsax.clock, color: Theme.of(context).primaryColor),
-                      const SizedBox(width: 5),
-                      TextFont(
-                        text: 'recent',
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ],
+                  Tab(
+                    child: TextFont(
+                      text: 'recent',
+                      fontWeight: FontWeight.w600,
+                      color: indexTabs == 0
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : cr_7070,
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Iconsax.heart, color: Theme.of(context).primaryColor),
-                      const SizedBox(width: 5),
-                      TextFont(
-                        text: 'favorite',
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ],
+                  Tab(
+                    child: TextFont(
+                      text: 'favorite',
+                      fontWeight: FontWeight.w600,
+                      color: indexTabs == 1
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : cr_7070,
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Iconsax.like, color: Theme.of(context).primaryColor),
-                      const SizedBox(width: 5),
-                      TextFont(
-                        text: 'all',
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ],
+                  Tab(
+                    child: TextFont(
+                      text: '',
+                    ),
+                  ),
+                  Tab(
+                    child: TextFont(
+                      text: '',
+                    ),
                   ),
                 ],
-                views: [
-                  buildHistoryTransferRecent(
-                    updateParentValue: _updateParentValue,
-                  ),
-                  buildFavoriteTransfer(
-                    updateParentValue: _updateParentValue,
-                  ),
-                  buildHistoryTransferAll(
-                    updateParentValue: _updateParentValue,
-                  ),
-                ],
-                onChange: (index) => print(index),
+                indicatorColor: Theme.of(context).colorScheme.onPrimary,
               ),
-            ),
-          ],
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    buildHistoryTransferRecent(
+                      updateParentValue: _updateParentValue,
+                    ),
+                    buildFavoriteTransfer(
+                      updateParentValue: _updateParentValue,
+                    ),
+                    const SizedBox(),
+                    const SizedBox(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Future _paymentProcess() async {
-    int paymentAmount = int.parse(_paymentAmount.text.trim().replaceAll(RegExp(r'[^\w\s]+'), ''));
+    int paymentAmount = int.parse(
+        _paymentAmount.text.trim().replaceAll(RegExp(r'[^\w\s]+'), ''));
     String toWallet = _toWallet.text;
     String note = _note.text;
     _balanceAmount = userController.mainBalance.value;
     String ownerWallet = await storage.read('msisdn') ?? '';
     if (paymentAmount < 1000) {
-      DialogHelper.showErrorDialogNew(description: 'Minimum payment must than 1,000 Kip.');
+      transferController.enableBottom.value = true;
+      DialogHelper.showErrorDialogNew(
+          description: 'Minimum payment must than 1,000 Kip.');
     } else if (_balanceAmount < paymentAmount) {
+      transferController.enableBottom.value = true;
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     } else if (ownerWallet == toWallet) {
-      DialogHelper.showErrorDialogNew(description: 'Can\'t transfer to same Wallet Account.');
+      transferController.enableBottom.value = true;
+      DialogHelper.showErrorDialogNew(
+          description: 'Can\'t transfer to same Wallet Account.');
     } else {
-      transferController.vertifyWallet(toWallet, paymentAmount.toString(), note);
+      transferController.vertifyWallet(
+          toWallet, paymentAmount.toString(), note);
     }
-    transferController.loading.value = false;
   }
 }
 

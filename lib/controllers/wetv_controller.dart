@@ -30,12 +30,13 @@ class WeTVController extends GetxController {
   RxString wetvCode = ''.obs;
   RxString rxTransID = ''.obs;
   RxString rxPayDatetime = ''.obs;
-  RxBool loading = false.obs;
   RxString rxNote = ''.obs;
   RxString rxFee = '0'.obs;
 
   var logPaymentReq;
   var logPaymentRes;
+
+  final RxBool enableBottom = true.obs;
 
   // clear() {
   //   wetvmodel = RxList();

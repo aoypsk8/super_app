@@ -12,6 +12,7 @@ import 'package:super_app/models/serviceTempCModel.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/reusable_template/reusable_result.dart';
 import 'package:super_app/views/templateC/package/PackageListScreen.dart';
+import 'package:super_app/views/templateC/postpaid/PaymentPostpaidTempCScreen.dart';
 import '../services/helper/random.dart';
 import '../models/menu_model.dart';
 import '../services/api/dio_client.dart';
@@ -50,6 +51,8 @@ class TempCController extends GetxController {
   RxInt rxPaymentAmount = 0.obs;
   RxInt rxCouponAmount = 0.obs;
   RxInt rxTotalAmount = 0.obs;
+
+  final RxBool enableBottom = true.obs;
 
   //? Log
   var logVerify;
@@ -143,6 +146,7 @@ class TempCController extends GetxController {
       if (rxService.value == "PREPAID") {
         rxAccName.value = "";
         rxPrepaidShow.value = true;
+        enableBottom.value = true;
         tempCprepaidmodel.value = response['Topup']
             .map<Topup>((json) => Topup.fromJson(json))
             .toList();
@@ -152,17 +156,20 @@ class TempCController extends GetxController {
         tempCpackagemodel.value = response['Packages']
             .map<Packages>((json) => Packages.fromJson(json))
             .toList();
+        enableBottom.value = true;
         Get.to(() => const PackageListScreen());
       } else {
+        enableBottom.value = true;
         logVerify = response;
         rxAccName.value = response['Name'].toString();
         rxDebit.value = response['Balance'].toString();
         rxCouponAmount.value = 0;
         rxPaymentAmount.value = 0;
         rxTotalAmount.value = 0;
-        // Get.to(() => const PaymentPostpaidTempCScreen());
+        Get.to(() => const PaymentPostpaidTempCScreen());
       }
     } else {
+      enableBottom.value = true;
       rxCouponAmount.value = 0;
       rxPaymentAmount.value = 0;
       rxTotalAmount.value = 0;
@@ -197,7 +204,6 @@ class TempCController extends GetxController {
           "name": rxAccName.value
         };
         response = await DioClient.postEncrypt(url, data, key: 'lmm');
-
         //! save log
         await saveLogPostpaid(data, response);
 
@@ -205,8 +211,28 @@ class TempCController extends GetxController {
           rxTimeStamp.value = response['Created'];
           rxPaymentAmount.value = int.parse(response['Amount']);
           saveHistoryMobile(rxAccNo.value, rxService.value);
-          // Get.to(() => const ResultPospaidTempCScreen());
+          enableBottom.value = true;
+          Get.to(
+            ReusableResultScreen(
+              fromAccountImage:
+                  userController.userProfilemodel.value.profileImg ??
+                      MyConstant.profile_default,
+              fromAccountName: userController.profileName.value,
+              fromAccountNumber: userController.rxMsisdn.value,
+              toAccountImage: tempCdetail.value.groupLogo.toString(),
+              toAccountName:
+                  '${rxAccName.value} - ${tempCdetail.value.groupTelecom} - ${tempCservicedetail.value.name}',
+              toAccountNumber: rxAccNo.value,
+              amount: rxPaymentAmount.value.toString(),
+              fee: '0',
+              note: rxNote.value,
+              toTitleProvider: '',
+              transactionId: rxTransID.value,
+              timestamp: rxTimeStamp.value,
+            ),
+          );
         } else {
+          enableBottom.value = true;
           DialogHelper.showErrorWithFunctionDialog(
               description: response['ResultDesc'],
               onClose: () {
@@ -215,6 +241,7 @@ class TempCController extends GetxController {
         }
       }
     } else {
+      enableBottom.value = true;
       //! balance < payment
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     }
@@ -264,14 +291,14 @@ class TempCController extends GetxController {
           "operator": tempCdetail.value.groupTelecom.toString(),
         };
         response = await DioClient.postEncrypt(url, data, key: 'lmm');
-        print(response);
         //! save log
         await saveLogPrepaid(data, response);
         if (response['ResultCode'] == '200') {
           rxTimeStamp.value = response['Created'];
           rxPaymentAmount.value = int.parse(response['Amount']);
           saveHistoryMobile(rxAccNo.value, rxService.value);
-          // Get.to(() => const ResultPrepaidTempCScreen());
+          enableBottom.value = true;
+
           Get.off(ReusableResultScreen(
             fromAccountImage:
                 userController.userProfilemodel.value.profileImg ??
@@ -324,40 +351,6 @@ class TempCController extends GetxController {
     );
   }
 
-  // paymentPrepaidVisa() async {
-  //   var data;
-  //   var url;
-  //   var response;
-
-  //   //? Insert DB
-  //   List<String> urlSplit = tempCservicedetail.value.url.toString().split(";");
-  //   url = urlSplit[1];
-  //   data = {
-  //     "PhoneUser": storage.read('msisdn'),
-  //     "msisdn": rxAccNo.value,
-  //     "tranID": rxTransID.value,
-  //     "type": tempCservicedetail.value.name.toString(),
-  //     "amount": rxTotalAmount.value.toStringAsFixed(0),
-  //     "discount": tempCdetail.value.discount.toString(),
-  //     "operator": tempCdetail.value.groupTelecom.toString(),
-  //   };
-  //   response = await DioClient.postEncrypt(url, data, key: 'lmm');
-  //   //! save log
-  //   saveLogPrepaid(data, response);
-  //   if (response['ResultCode'] == '200') {
-  //     rxTimeStamp.value = response['Created'];
-  //     rxPaymentAmount.value = int.parse(response['Amount']);
-  //     saveHistoryMobile(rxAccNo.value, rxService.value);
-  //     Get.to(() => const ResultPrepaidTempCScreen());
-  //   } else {
-  //     DialogHelper.showErrorWithFunctionDialog(
-  //         description: response['ResultDesc'],
-  //         onClose: () {
-  //           Get.close(userController.pageclose.value);
-  //         });
-  //   }
-  // }
-
   //!
   //! PACKAGE
   //!------------------------------------------------------------------------------
@@ -392,7 +385,26 @@ class TempCController extends GetxController {
           rxPaymentAmount.value = int.parse(response['Amount']);
           saveHistoryMobile(rxAccNo.value, rxService.value);
           // Get.to(() => const ResultPackageTempCScreen());
+          enableBottom.value = true;
+          Get.to(ReusableResultScreen(
+            fromAccountImage:
+                userController.userProfilemodel.value.profileImg ??
+                    MyConstant.profile_default,
+            fromAccountName: userController.profileName.value,
+            fromAccountNumber: userController.rxMsisdn.value,
+            toAccountImage: MyConstant.profile_default,
+            toAccountName: tempCpackagedetail.value.packageName!,
+            toAccountNumber:
+                '${tempCpackagedetail.value.packageValue} | ${tempCpackagedetail.value.userDay} Day',
+            toTitleProvider: '',
+            amount: rxPaymentAmount.toString(),
+            fee: '0',
+            transactionId: rxTransID.value,
+            note: rxNote.value,
+            timestamp: rxTimeStamp.value,
+          ));
         } else {
+          enableBottom.value = true;
           DialogHelper.showErrorWithFunctionDialog(
               description: response['ResultDesc'],
               onClose: () {
@@ -400,10 +412,12 @@ class TempCController extends GetxController {
               });
         }
       } else {
+        enableBottom.value = true;
         DialogHelper.showErrorDialogNew(
             description: 'Your coupon amount not enough.');
       }
     } else {
+      enableBottom.value = true;
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     }
   }

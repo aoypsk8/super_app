@@ -302,7 +302,7 @@ class DialogHelper {
                         onLoaded: (composition) {
                           autoClose
                               ? Future.delayed(composition.duration * 2, () {
-                                  Get.back();
+                                  hide();
                                 })
                               : null;
                         },
@@ -631,11 +631,13 @@ class DialogHelper {
           surfaceTintColor: color_fff,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: _PolicyDialogContent(
-            title: title,
-            description: description,
-            isChecked: isChecked,
-            onClose: onClose,
+          child: SingleChildScrollView(
+            child: _PolicyDialogContent(
+              title: title,
+              description: description,
+              isChecked: isChecked,
+              onClose: onClose,
+            ),
           ),
         ),
       ),

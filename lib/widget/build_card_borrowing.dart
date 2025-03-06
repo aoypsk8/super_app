@@ -81,11 +81,10 @@ class CardWidgetBorrowing extends StatelessWidget {
                                       )
                                     : const SizedBox(),
                                 ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                      50), // Makes it round
+                                  borderRadius: BorderRadius.circular(50),
                                   child: Image.asset(
-                                    "assets/icons/ltc_logo.png", // Using asset image
-                                    width: 30, // Adjust size as needed
+                                    "assets/icons/ltc_logo.png",
+                                    width: 30,
                                     height: 30,
                                     fit: BoxFit.cover,
                                   ),
@@ -94,33 +93,42 @@ class CardWidgetBorrowing extends StatelessWidget {
                             ),
                             TextFont(
                               color: color_fff,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
                               text: type == 'airtime'
                                   ? "${fn.format(int.parse(amount.replaceAll(RegExp(r'[^0-9]'), '')))} LAK"
                                   : "${amount} ${gb == true ? 'GB' : ''}",
                             ),
                             package == true
-                                ? Row(
+                                ? Wrap(
+                                    spacing: 2,
+                                    runSpacing: 2,
                                     children: [
                                       TextFont(
                                         color: color_fff,
                                         text: "ດາຕ້າໃຊ້ໄດ້",
                                       ),
-                                      const SizedBox(width: 2),
                                       TextFont(
                                         color: color_fff,
                                         text: detail,
                                       ),
-                                      const SizedBox(width: 2),
+                                      TextFont(
+                                        color: color_fff,
+                                        text: 'kip',
+                                      ),
+                                      TextFont(
+                                        color: color_fff,
+                                        text: "|",
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                       TextFont(
                                         color: color_fff,
                                         text: "ໄລຍະກຳນົດ",
                                       ),
-                                      const SizedBox(width: 2),
                                       TextFont(
                                         color: color_fff,
                                         text: detail2!,
                                       ),
-                                      const SizedBox(width: 2),
                                       TextFont(
                                         color: color_fff,
                                         text: "ວັນ",
@@ -130,7 +138,7 @@ class CardWidgetBorrowing extends StatelessWidget {
                                 : TextFont(
                                     color: color_fff,
                                     text: detail,
-                                  ),
+                                  )
                           ],
                         ),
                         Row(

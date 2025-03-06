@@ -9,6 +9,7 @@ import 'package:super_app/controllers/tempA_controller.dart';
 import 'package:super_app/models/provider_tempA_model.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/buildAppBar.dart';
+import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildButtonBottom.dart';
 import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -44,7 +45,9 @@ class _ListsProvinceTempAState extends State<ListsProvinceTempA> {
       appBar: BuildAppBar(title: homeController.getMenuTitle()),
       body: Column(
         children: [
-          Padding(padding: const EdgeInsets.all(10), child: buildStepProcess(title: '1/5', desc: 'select_province')),
+          Padding(
+              padding: const EdgeInsets.all(10),
+              child: buildStepProcess(title: '1/5', desc: 'select_province')),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -95,10 +98,12 @@ class _ListsProvinceTempAState extends State<ListsProvinceTempA> {
                             children: List.generate(
                               dataList.length,
                               (int gridIndex) {
-                                final ProviderTempAModel item = dataList[gridIndex];
+                                final ProviderTempAModel item =
+                                    dataList[gridIndex];
 
                                 // Check if this item is selected
-                                final isSelected = selectedItemCode == item.code;
+                                final isSelected =
+                                    selectedItemCode == item.code;
 
                                 return AnimationConfiguration.staggeredGrid(
                                   position: gridIndex,
@@ -113,25 +118,39 @@ class _ListsProvinceTempAState extends State<ListsProvinceTempA> {
                                             selectedItemCode = item.code;
                                             isActive = true;
                                           });
-                                          tempAcontroller.tempAdetail.value = dataList[gridIndex];
+                                          tempAcontroller.tempAdetail.value =
+                                              dataList[gridIndex];
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.1) : color_f4f4,
+                                            color: isSelected
+                                                ? Theme.of(context)
+                                                    .primaryColor
+                                                    .withOpacity(0.1)
+                                                : color_f4f4,
                                             border: Border.all(
-                                              color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.5) : color_f4f4,
+                                              color: isSelected
+                                                  ? Theme.of(context)
+                                                      .primaryColor
+                                                      .withOpacity(0.5)
+                                                  : color_f4f4,
                                               width: isSelected ? 2 : 1,
                                             ),
-                                            borderRadius: BorderRadius.circular(8),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
                                           child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Expanded(
                                                 flex: 2,
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: CachedNetworkImage(imageUrl: item.logo ?? ''),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: CachedNetworkImage(
+                                                      imageUrl:
+                                                          item.logo ?? ''),
                                                 ),
                                               ),
                                               const SizedBox(height: 5),
@@ -162,10 +181,11 @@ class _ListsProvinceTempAState extends State<ListsProvinceTempA> {
           ),
         ],
       ),
-      bottomNavigationBar: BuildButtonBottom(
+      bottomNavigationBar: buildBottomAppbar(
         title: 'next',
-        isActive: isActive!,
+        isEnabled: tempAcontroller.enableBottom.value,
         func: () {
+          tempAcontroller.enableBottom.value = false;
           tempAcontroller.fetchrecent();
           Get.toNamed('/verifyAccTempA');
         },

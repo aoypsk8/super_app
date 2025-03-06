@@ -52,6 +52,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
 
   final box = GetStorage();
   File? _backgroundImage;
+
   @override
   void initState() {
     super.initState();
@@ -136,16 +137,15 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                 ? Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
+                        padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
                               PrimaryCardComponent(),
-                              const SizedBox(height: 20),
                               Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                padding: EdgeInsets.only(top: 12, bottom: 15),
+                                padding: EdgeInsets.only(bottom: 15),
                                 child: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     SizedBox(height: 5),
@@ -163,7 +163,6 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                             return InkWell(
                                               onTap: () async {},
                                               child: Column(
-                                                mainAxisSize: MainAxisSize.max,
                                                 children: [
                                                   SizedBox(height: 6),
                                                   Padding(
@@ -200,40 +199,21 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                           return InkWell(
                                             onTap: () async {
                                               userController.isRenewToken.value = true;
-                                              userController.checktokenSuperApp();
-                                              // print(result.template);
-                                              // await homeController.clear();
-                                              // if (!userController.isCheckToken.value) {
-                                              //   userController.isCheckToken.value = true;
-                                              //   if (result.template == "proof") {
-                                              //     homeController.menutitle.value = result.groupNameEN!;
-                                              //     homeController.menudetail.value = result;
-                                              //     qrController.fetchProofLists();
-                                              //     Get.toNamed('/${result.template}');
-                                              //   } else {
-                                              //     userController.checktoken(name: 'menu').then((value) {
-                                              //       if (userController.isLogin.value) {
-                                              //         if (result.template != '/') {
-                                              //           homeController.menutitle.value = result.groupNameEN!;
-                                              //           homeController.menudetail.value = result;
-                                              //           if (result.template == "webview") {
-                                              //             Get.to(
-                                              //               OpenWebView(
-                                              //                   url: homeController.menudetail.value.url.toString()),
-                                              //             );
-                                              //           } else {
-                                              //             Get.toNamed('/${result.template}');
-                                              //           }
-                                              //         } else {
-                                              //           DialogHelper.showErrorDialogNew(
-                                              //             description: 'Not available',
-                                              //           );
-                                              //         }
-                                              //       }
-                                              //     });
-                                              //   }
-                                              //   userController.isCheckToken.value = false;
-                                              // }
+                                              bool isValidToken = await userController.checktokenSuperApp();
+                                              if (isValidToken) {
+                                                if (result.template != '/') {
+                                                  homeController.menutitle.value = result.groupNameEN!;
+                                                  homeController.menudetail.value = result;
+                                                  if (result.template == "webview") {
+                                                    Get.to(OpenWebView(
+                                                        url: homeController.menudetail.value.url.toString()));
+                                                  } else {
+                                                    Get.toNamed('/${result.template}');
+                                                  }
+                                                } else {
+                                                  DialogHelper.showErrorDialogNew(description: 'Not available');
+                                                }
+                                              }
                                             },
                                             child: Column(
                                               mainAxisSize: MainAxisSize.max,
@@ -498,13 +478,27 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                 image: FileImage(_backgroundImage!),
                 fit: BoxFit.cover,
               ),
-              borderRadius: BorderRadius.circular(20)),
+              borderRadius: BorderRadius.circular(10)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 40.sp),
+            SizedBox(height: 15.sp),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+              decoration: BoxDecoration(
+                color: color_fff,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: TextFont(
+                text: "Your balance",
+                color: Colors.black,
+                poppin: true,
+                fontSize: 7.5,
+              ),
+            ),
+            SizedBox(height: 5.sp),
             Stack(
               children: [
                 Positioned.fill(
@@ -535,34 +529,25 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // inherits the delay & duration from move
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                            decoration: BoxDecoration(
-                              color: color_fff,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: TextFont(
-                              text: "Your balance",
-                              color: Colors.black,
-                              poppin: true,
-                              fontSize: 7.5,
-                            ),
-                          ),
-
-                          Divider(color: Theme.of(context).primaryColor.withOpacity(0.8), thickness: 3)
-                          // .animate(onPlay: (controller) => controller.repeat())
-                          // .effect(duration: 10.ms) // this "pads out" the total duration
-                          // .effect(delay: 10.ms, duration: 2000.ms)
-                          // .shimmer(blendMode: BlendMode.dstIn),
-                          ,
-                          AnimatedBalanceWidget(balance: int.parse(userController.mainBalance.value.toString())),
-
-                          // Divider(color: Theme.of(context).primaryColor.withOpacity(1), thickness: 3)
-                          //     .animate(onPlay: (controller) => controller.reverse())
-                          //     .effect(duration: 10.ms) // this "pads out" the total duration
-                          //     .effect(delay: 10.ms, duration: 2000.ms)
+                          // Divider(
+                          //   color: Theme.of(context).primaryColor,
+                          //   thickness: 3,
+                          //   height: 3,
+                          // )
+                          //     .animate(onPlay: (controller) => controller.repeat())
+                          //     .effect(duration: 10.ms)
+                          //     .effect(delay: 10.ms, duration: 4000.ms)
                           //     .shimmer(blendMode: BlendMode.dstIn),
+                          AnimatedBalanceWidget(balance: int.parse(userController.mainBalance.value.toString())),
+                          Divider(
+                            color: Theme.of(context).primaryColor,
+                            thickness: 3,
+                            height: 3,
+                          )
+                              .animate(onPlay: (controller) => controller.repeat())
+                              .effect(duration: 10.ms)
+                              .effect(delay: 10.ms, duration: 4000.ms)
+                              .shimmer(blendMode: BlendMode.dstIn),
                         ],
                       ),
                     ),
@@ -834,6 +819,13 @@ class _AnimatedBalanceWidgetState extends State<AnimatedBalanceWidget> {
   bool showAmount = false; // Toggle state
   int animatedValue = 0; // Holds the animated balance value
   final NumberFormat fn = NumberFormat("#,###"); // Currency formatter
+  bool _isDisposed = false; // ✅ Track if widget is disposed
+
+  @override
+  void dispose() {
+    _isDisposed = true; // ✅ Mark widget as disposed
+    super.dispose();
+  }
 
   void toggleBalance() {
     setState(() {
@@ -848,10 +840,16 @@ class _AnimatedBalanceWidgetState extends State<AnimatedBalanceWidget> {
   void animateBalance() async {
     for (int i = 0; i <= widget.balance; i += (widget.balance ~/ 30)) {
       await Future.delayed(Duration(milliseconds: 10)); // Adjust speed
+
+      if (!mounted || _isDisposed) return; // ✅ Prevent `setState()` after dispose
+
       setState(() {
         animatedValue = i;
       });
     }
+
+    if (!mounted || _isDisposed) return; // ✅ Prevent `setState()` after dispose
+
     setState(() {
       animatedValue = widget.balance; // Ensure it lands on final value
     });
@@ -866,20 +864,22 @@ class _AnimatedBalanceWidgetState extends State<AnimatedBalanceWidget> {
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            TextFont(
-              text: showAmount ? fn.format(animatedValue) : "********", // Show animation or mask,
-              color: color_fff,
-              poppin: true,
-              fontWeight: FontWeight.w700,
-              fontSize: 16.5,
+            Text(
+              showAmount ? fn.format(animatedValue) : "********", // Show animation or mask,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 16.5,
+              ),
             ),
             const SizedBox(width: 5),
-            TextFont(
-              text: "₭",
-              color: color_fff,
-              noto: true,
-              fontWeight: FontWeight.w700,
-              fontSize: 16.5,
+            Text(
+              "₭",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 16.5,
+              ),
             ),
           ],
         ),

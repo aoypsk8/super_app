@@ -16,14 +16,13 @@ import 'package:super_app/views/templateB/ListsProviderTempBScreen.dart';
 import 'package:super_app/views/borrowing/lists_borrowing.dart';
 import 'package:super_app/views/templateC/ListsProviderTempCScreen.dart';
 import 'package:super_app/views/ticket/ListsTicketScreen.dart';
+import 'package:super_app/views/transferwallet/ConfirmTranferScreen.dart';
 import 'package:super_app/views/transferwallet/OtpTransferEmailScreen.dart';
 import 'package:super_app/views/transferwallet/OtpTransferScreen.dart';
 import 'package:super_app/views/transferwallet/TransferScreen.dart';
 import 'package:super_app/views/visa-mastercard/ListVisaMasterCard.dart';
 import 'package:super_app/views/weTV/wetv_package_list.dart';
 import 'package:super_app/views/x-jaidee/xjaidee.dart';
-
-import 'views/weTV/wetv_package_list.dart';
 
 class AppRoutes {
   static final routes = [
@@ -35,6 +34,10 @@ class AppRoutes {
       name: '/transfer',
       page: () => TransferScreen(),
     ),
+    // GetPage(
+    //   name: '/confirmTransfer',
+    //   page: () => ConfirmTranferScreen(),
+    // ),
     GetPage(
       name: '/otpTransferEmail',
       page: () => OtpTransferEmailScreen(),

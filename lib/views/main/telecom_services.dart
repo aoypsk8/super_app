@@ -17,6 +17,8 @@ import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/pull_refresh.dart';
 import 'package:super_app/widget/textfont.dart';
 
+import '../telecom/add_phone.dart';
+
 class TelecomServices extends StatefulWidget {
   const TelecomServices({super.key});
 
@@ -89,6 +91,13 @@ class _TelecomServicesState extends State<TelecomServices> {
                     fontSize: 11,
                   ),
                   InkWell(
+                    onTap: () => Get.to(
+                      () => AddPhonePage(),
+                      transition:
+                          Transition.downToUp, // Moves page from bottom to top
+                      duration: Duration(
+                          milliseconds: 300), // Adjust speed of animation
+                    ),
                     child: Row(
                       children: [
                         Icon(
@@ -99,6 +108,7 @@ class _TelecomServicesState extends State<TelecomServices> {
                           text: 'ເພິ່ມເບີ',
                           color: cr_red,
                           fontSize: 11,
+                          fontWeight: FontWeight.w500,
                         )
                       ],
                     ),

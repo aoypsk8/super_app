@@ -43,7 +43,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
   final qrController = Get.put(QrController());
   // final controller = Get.put(TempAController());
   RefreshController refreshController = RefreshController();
-  final CarouselSliderController carouselController = CarouselSliderController();
+  final CarouselSliderController carouselController =
+      CarouselSliderController();
 
   bool showAmount = false;
   int _current = 0;
@@ -137,7 +138,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                 ? Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+                        padding:
+                            const EdgeInsets.only(top: 20, left: 15, right: 15),
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
@@ -151,22 +153,28 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                     SizedBox(height: 5),
                                     Container(
                                       child: AlignedGridView.count(
-                                        itemCount: homeController.menuModel.first.menulists!.length + 1,
+                                        itemCount: homeController.menuModel
+                                                .first.menulists!.length +
+                                            1,
                                         crossAxisCount: 4,
                                         mainAxisSpacing: 17,
                                         crossAxisSpacing: 20,
                                         shrinkWrap: true,
                                         primary: false,
                                         physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (BuildContext context, int index) {
-                                          if (index == homeController.menuModel.first.menulists!.length) {
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          if (index ==
+                                              homeController.menuModel.first
+                                                  .menulists!.length) {
                                             return InkWell(
                                               onTap: () async {},
                                               child: Column(
                                                 children: [
                                                   SizedBox(height: 6),
                                                   Padding(
-                                                    padding: const EdgeInsets.symmetric(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
                                                       horizontal: 12,
                                                     ),
                                                     child: SvgPicture.asset(
@@ -189,29 +197,47 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                             );
                                           }
 
-                                          var result = homeController.menuModel.first.menulists![index];
+                                          var result = homeController.menuModel
+                                              .first.menulists![index];
                                           String? url = result.logo;
-                                          String? updatedUrl = url!.replaceFirst(
-                                            'https://mmoney.la',
-                                            'https://gateway.ltcdev.la/AppImage',
-                                          );
+                                          if (url != null &&
+                                              homeController
+                                                  .TPlus_theme.value) {
+                                            url = url.replaceFirst(
+                                                "Icons/", "Icons/y");
+                                          }
 
                                           return InkWell(
                                             onTap: () async {
-                                              userController.isRenewToken.value = true;
-                                              bool isValidToken = await userController.checktokenSuperApp();
+                                              userController
+                                                  .isRenewToken.value = true;
+                                              bool isValidToken =
+                                                  await userController
+                                                      .checktokenSuperApp();
                                               if (isValidToken) {
                                                 if (result.template != '/') {
-                                                  homeController.menutitle.value = result.groupNameEN!;
-                                                  homeController.menudetail.value = result;
-                                                  if (result.template == "webview") {
+                                                  homeController
+                                                          .menutitle.value =
+                                                      result.groupNameEN!;
+                                                  homeController.menudetail
+                                                      .value = result;
+                                                  if (result.template ==
+                                                      "webview") {
                                                     Get.to(OpenWebView(
-                                                        url: homeController.menudetail.value.url.toString()));
+                                                        url: homeController
+                                                            .menudetail
+                                                            .value
+                                                            .url
+                                                            .toString()));
                                                   } else {
-                                                    Get.toNamed('/${result.template}');
+                                                    Get.toNamed(
+                                                        '/${result.template}');
                                                   }
                                                 } else {
-                                                  DialogHelper.showErrorDialogNew(description: 'Not available');
+                                                  DialogHelper
+                                                      .showErrorDialogNew(
+                                                          description:
+                                                              'Not available');
                                                 }
                                               }
                                             },
@@ -220,17 +246,23 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                               children: [
                                                 SizedBox(height: 6),
                                                 SvgPicture.network(
-                                                  updatedUrl,
-                                                  placeholderBuilder: (BuildContext context) => Container(
-                                                    padding: const EdgeInsets.all(5.0),
-                                                    child: const CircularProgressIndicator(),
+                                                  url!,
+                                                  placeholderBuilder:
+                                                      (BuildContext context) =>
+                                                          Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
+                                                    child:
+                                                        const CircularProgressIndicator(),
                                                   ),
                                                   width: 8.5.w,
                                                   height: 8.5.w,
                                                 ),
                                                 SizedBox(height: 10),
                                                 TextFont(
-                                                  text: getLocalizedGroupName(result),
+                                                  text: getLocalizedGroupName(
+                                                      result),
                                                   fontSize: 9.5,
                                                   fontWeight: FontWeight.w400,
                                                   maxLines: 2,
@@ -509,7 +541,9 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         border: Border.all(color: Colors.white, width: 1),
                       ),
                     )
-                        .animate(onPlay: (controller) => controller.repeat()) // 🔄 Loop animation
+                        .animate(
+                            onPlay: (controller) =>
+                                controller.repeat()) // 🔄 Loop animation
                         // .effect(duration: 100.ms) // Small padding to total duration
                         .effect(delay: 1000.ms, duration: 4000.ms)
                         .shimmer(blendMode: BlendMode.srcOver),
@@ -523,7 +557,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: cr_black.withOpacity(0.1),
-                        border: Border.all(color: color_fff.withOpacity(0.7), width: 1),
+                        border: Border.all(
+                            color: color_fff.withOpacity(0.7), width: 1),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -537,13 +572,16 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                           //     .effect(duration: 10.ms)
                           //     .effect(delay: 10.ms, duration: 4000.ms)
                           //     .shimmer(blendMode: BlendMode.dstIn),
-                          AnimatedBalanceWidget(balance: int.parse(userController.mainBalance.value.toString())),
+                          AnimatedBalanceWidget(
+                              balance: int.parse(
+                                  userController.mainBalance.value.toString())),
                           Divider(
                             color: Theme.of(context).primaryColor,
                             thickness: 3,
                             height: 3,
                           )
-                              .animate(onPlay: (controller) => controller.repeat())
+                              .animate(
+                                  onPlay: (controller) => controller.repeat())
                               .effect(duration: 10.ms)
                               .effect(delay: 10.ms, duration: 4000.ms)
                               .shimmer(blendMode: BlendMode.dstIn),
@@ -724,7 +762,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
             items: List.generate((loveItUrls.length / 4).ceil(), (index) {
               int start = index * 4;
               int end = start + 4;
-              List<String> sublist = loveItUrls.sublist(start, end > loveItUrls.length ? loveItUrls.length : end);
+              List<String> sublist = loveItUrls.sublist(
+                  start, end > loveItUrls.length ? loveItUrls.length : end);
               return GridView.builder(
                 padding: const EdgeInsets.all(5),
                 shrinkWrap: true,
@@ -840,7 +879,8 @@ class _AnimatedBalanceWidgetState extends State<AnimatedBalanceWidget> {
     for (int i = 0; i <= widget.balance; i += (widget.balance ~/ 30)) {
       await Future.delayed(Duration(milliseconds: 10)); // Adjust speed
 
-      if (!mounted || _isDisposed) return; // ✅ Prevent `setState()` after dispose
+      if (!mounted || _isDisposed)
+        return; // ✅ Prevent `setState()` after dispose
 
       setState(() {
         animatedValue = i;
@@ -864,7 +904,9 @@ class _AnimatedBalanceWidgetState extends State<AnimatedBalanceWidget> {
           textBaseline: TextBaseline.alphabetic,
           children: [
             Text(
-              showAmount ? fn.format(animatedValue) : "********", // Show animation or mask,
+              showAmount
+                  ? fn.format(animatedValue)
+                  : "********", // Show animation or mask,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,

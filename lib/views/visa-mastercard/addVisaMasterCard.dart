@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:super_app/controllers/home_controller.dart';
+import 'package:super_app/controllers/payment_controller.dart';
+import 'package:super_app/services/api/dio_client.dart';
+import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/views/webview/webview_screen.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
@@ -21,13 +25,27 @@ class AddVisaMasterCard extends StatefulWidget {
 }
 
 class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
+  final paymentController = Get.put(PaymentController());
   final _formKey = GlobalKey<FormState>();
   final HomeController homeController = Get.find();
+  String cardType = 'MASTERCARD';
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
   final TextEditingController _expiryController = TextEditingController();
   final TextEditingController _cvvController = TextEditingController();
   bool isChecked = false;
+// Function to detect card type
+  String detectCardType(String cardNumber) {
+    if (cardNumber.isEmpty) return '';
+    if (cardNumber.startsWith('4')) {
+      return 'VISA';
+    } else if (RegExp(r'^5[1-5]').hasMatch(cardNumber) ||
+        RegExp(r'^222[1-9]|^22[3-9][0-9]|^2[3-6][0-9]{2}|^27[0-1][0-9]|^2720')
+            .hasMatch(cardNumber)) {
+      return 'MasterCard';
+    }
+    return 'Unknown';
+  }
 
   @override
   void initState() {
@@ -52,22 +70,26 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
         child: buildBottomAppbar(
           bgColor: Theme.of(context).primaryColor,
           title: 'save_data',
-          func: () {
+          func: () async {
             if (isChecked) {
+              setState(() {
+                cardType = detectCardType(_numberController.text);
+              });
               _formKey.currentState!.save();
               if (_formKey.currentState!.validate()) {
-                if (_formKey.currentState!.validate()) {
-                  DialogHelper.showSuccessWithMascot(
-                    onClose: () => {Get.back()},
-                    title: 'ບັນທຶກສຳເລັດ!',
-                  );
-                }
+                paymentController.addPaymentMethod(
+                  _numberController.text,
+                  _expiryController.text.replaceAll('/', ''),
+                  _cvvController.text,
+                  _nameController.text,
+                  cardType,
+                );
               }
             } else {
               DialogHelper.showErrorWithFunctionDialog(
-                closeTitle: "ກວດກ່ອນລູກພີ່",
-                title: "ກວດກ່ອນລູກພີ່",
-                description: "ກວດກ່ອນລູກພີ່ ຟ້າວໄປໃສ!",
+                closeTitle: "close",
+                title: "Please Check",
+                description: "Please check box first",
                 onClose: () {
                   Get.back();
                 },

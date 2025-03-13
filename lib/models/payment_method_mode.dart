@@ -34,7 +34,7 @@ class PaymentMethod {
       title: json['title'],
       description: json['description'],
       owner: json['owner'],
-      accname: json['accname'],
+      accname: json['accname'] ?? "",
       maincard: json['maincard'],
     );
   }

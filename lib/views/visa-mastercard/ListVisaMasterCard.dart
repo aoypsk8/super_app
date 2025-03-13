@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
@@ -32,15 +31,14 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
 
   int? selectedCardIndex = 0;
 
-  void confirmDelete(String owner, String paymentType) {
+  void confirmDelete(String owner, int id) {
     DialogHelper.showErrorWithFunctionDialog(
       closeTitle: "ລົບ",
       title: "ຕ້ອງການລົບບັນຊີນີ້ບໍ່",
       description: "ການກະທຳນີ້ຈະບໍ່ສາມາດກູຄືນໄດ້!",
       withCancel: true,
       onClose: () async {
-        var deleteData =
-            await paymentController.deletePaymentMethod(owner, paymentType);
+        var deleteData = await paymentController.deletePaymentMethod(owner, id);
         Get.back();
         if (deleteData) {
           DialogHelper.showSuccessWithMascot(
@@ -118,11 +116,10 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
                                 onTap: () async {
                                   paymentController.loading.value = true;
                                   await paymentController.updatePaymentMethod(
-                                    paymentController
-                                        .paymentMethods[index].owner,
-                                    paymentController
-                                        .paymentMethods[index].paymentType,
-                                  );
+                                      paymentController
+                                          .paymentMethods[index].owner,
+                                      paymentController
+                                          .paymentMethods[index].id);
                                   if (paymentController.loading.value) {
                                     showDialog(
                                       context: context,
@@ -210,7 +207,7 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
                                                         paymentController
                                                             .paymentMethods[
                                                                 index]
-                                                            .paymentType),
+                                                            .id),
                                                 child: paymentController
                                                             .paymentMethods[
                                                                 index]

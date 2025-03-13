@@ -7,6 +7,7 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/cashout_model.dart';
 import 'package:super_app/models/payment_method_mode.dart';
 import 'package:super_app/services/api/dio_client.dart';
+import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/checksum_util.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
@@ -37,9 +38,42 @@ class PaymentController extends GetxController {
     }
   }
 
-  updatePaymentMethod(String owner, String payment_type) async {
+  addPaymentMethod(String numberController, String expiryController,
+      String cvvController, String nameController, String cardType) async {
+    var url = "/CallBack_Visa_JDB/NonUi";
+    var body = {
+      "cardNumber": numberController,
+      "cardExpiryMMYY": expiryController,
+      "cvvCode": cvvController,
+      "payerName": nameController,
+      "channel": "MMONEYX",
+      "owner": "MMONEYX",
+      "lmm_tranid": 'XV${await randomNumber().fucRandomNumber()}',
+      "description": "Add Card",
+      "amountkip": 2000000,
+      "walletnumber": userController.rxMsisdn.value,
+      "paymentTypeFromApp": cardType,
+      "remeberCard": true
+    };
+    var response = await DioClient.postEncrypt(loading: true, url, body);
+    if (response['success'] == true) {
+      loading.value = false;
+      await getPaymentMethods();
+      DialogHelper.showSuccessWithMascot(
+        onClose: () => {Get.back()},
+        title: 'ບັນທຶກສຳເລັດ!',
+      );
+      return true;
+    } else {
+      DialogHelper.showErrorDialogNew(description: response['data']);
+      loading.value = false;
+      return false;
+    }
+  }
+
+  updatePaymentMethod(String owner, int id) async {
     var url = "/SuperApi/Info/UpdatePaymentList";
-    var body = {"owner": owner, "payment_type": payment_type};
+    var body = {"owner": owner, "id": id};
     var response = await DioClient.postEncrypt(loading: true, url, body);
     if (response['code'] == "0") {
       loading.value = false;
@@ -52,9 +86,9 @@ class PaymentController extends GetxController {
     }
   }
 
-  deletePaymentMethod(String owner, String payment_type) async {
+  deletePaymentMethod(String owner, int id) async {
     var url = "/SuperApi/Info/DeletePaymentList";
-    var body = {"owner": owner, "payment_type": payment_type};
+    var body = {"owner": owner, "id": id};
     var response = await DioClient.postEncrypt(loading: true, url, body);
     if (response['code'] == "0") {
       loading.value = false;

@@ -652,6 +652,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
     await fetchBalance();
     await queryUserProfile(); //old
     // await queryProfileMmoney(msisdn); //new
+    homController.fetchServicesmMenu(msisdn);
+
     saveTempUserLogin(msisdn, profileName.value, userProfilemodel.value.profileImg ?? '');
     if (isRenewToken.value) {
       Get.back();
@@ -716,6 +718,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
         bool hasMmoneyProfile = await queryProfileMmoney(msisdn);
         bool hasWalletBO = await checkHaveWalletBO();
         if (!hasMmoneyProfile) await queryKYC_5_7(msisdn);
+        storage.remove('biometric');
+        storage.remove('biometric_password');
         Get.to(() => hasMmoneyProfile
             ? CreatePasswordScreen()
             : RegisterFormScreen(regType: hasWalletBO ? 'Approved' : 'UnApproved'));
@@ -838,5 +842,24 @@ class UserController extends GetxController with WidgetsBindingObserver {
     } else {
       DialogHelper.showErrorDialogNew(description: response['resultDesc']);
     }
+  }
+
+  Future<bool> chkPasswordSetBiometic(msisdn, password) async {
+    bool chk = false;
+    var url = '${MyConstant.urlSuperAppLogin}/LoginToSuperApp';
+    var data = {"msisdn": msisdn, "password": 'LMM!$password'};
+    var res = await DioClient.postEncrypt(url, data);
+    if (res != null) {
+      if (res['status']) {
+        storage.write('msisdn', msisdn);
+        storage.write('token', res['token']);
+        storage.write('biometric_password', password);
+        chk = true;
+        return chk;
+      } else {
+        return chk;
+      }
+    }
+    return chk;
   }
 }

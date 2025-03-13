@@ -26,7 +26,6 @@ class HomeController extends GetxController {
   RxString rxBgCard = ''.obs;
   RxString rxBgBill = ''.obs;
   RxString urlwebview = ''.obs;
-  RxBool TPlus_theme = false.obs;
 
   //version
   RxString appVersion = ''.obs;
@@ -66,7 +65,6 @@ class HomeController extends GetxController {
 
     getAppVersion();
     await checkAppUpdate();
-    await fetchServicesmMenu();
   }
 
   String getMenuTitle() {
@@ -91,11 +89,9 @@ class HomeController extends GetxController {
     var url = '${MyConstant.urlLtcdev}/AppInfo/Info';
     var res = await DioClient.getNoLoading(url);
     rxAppinfo.value = AppInfoModel.fromJson(res);
-    final imageCardFile =
-        await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_card');
+    final imageCardFile = await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_card');
     if (imageCardFile != null) rxBgCard.value = imageCardFile.path;
-    final imageBillFile =
-        await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_bill');
+    final imageBillFile = await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_bill');
     if (imageBillFile != null) rxBgBill.value = imageBillFile.path;
   }
 
@@ -103,8 +99,7 @@ class HomeController extends GetxController {
     final dio = Dio();
     final String? storedImageUrl = box.read(type);
     final documentDirectory = await getApplicationDocumentsDirectory();
-    final filePath =
-        '${documentDirectory.path}/$type.png'; // Fixed file name to avoid duplicates
+    final filePath = '${documentDirectory.path}/$type.png'; // Fixed file name to avoid duplicates
     File file = File(filePath);
     if (storedImageUrl == imageUrl && file.existsSync()) {
       print("✅ Image already exists and URL is the same. No need to download.");
@@ -114,8 +109,7 @@ class HomeController extends GetxController {
       if (file.existsSync()) {
         file.deleteSync();
       }
-      final response = await dio.get(imageUrl,
-          options: Options(responseType: ResponseType.bytes));
+      final response = await dio.get(imageUrl, options: Options(responseType: ResponseType.bytes));
       await file.writeAsBytes(response.data);
       box.write(type, imageUrl);
       print("✅ New image downloaded and saved.");
@@ -126,17 +120,11 @@ class HomeController extends GetxController {
     }
   }
 
-  fetchServicesmMenu() async {
-    bool TPlusIcons = box.read("isDarkMode");
-    print(TPlusIcons);
-    TPlus_theme.value = TPlusIcons || false;
+  fetchServicesmMenu(msisdn) async {
     try {
-      var response = await DioClient.postEncrypt(
-          loading: false, '/SuperApi/Info/Menus', {});
+      var response = await DioClient.postEncrypt(loading: false, '/SuperApi/Info/Menus', {"msisdn": msisdn});
       if (response != null && response is List) {
-        List<MenuModel> fetchedMenuModel = response
-            .map<MenuModel>((json) => MenuModel.fromJson(json))
-            .toList();
+        List<MenuModel> fetchedMenuModel = response.map<MenuModel>((json) => MenuModel.fromJson(json)).toList();
         menuModel.assignAll(fetchedMenuModel);
         if (fetchedMenuModel.isNotEmpty &&
             fetchedMenuModel[0].menulists != null &&
@@ -172,8 +160,7 @@ class HomeController extends GetxController {
   }
 
   updateMessageStatus(int id) async {
-    await DioClient.postEncrypt(
-        loading: false, '${MyConstant.urlOther}/UpdateMessage', {'msisdn': id});
+    await DioClient.postEncrypt(loading: false, '${MyConstant.urlOther}/UpdateMessage', {'msisdn': id});
     fetchMessageList();
     fetchMessageUnread();
   }
@@ -182,10 +169,8 @@ class HomeController extends GetxController {
     var token = await box.read('token');
     var msisdn = await box.read('msisdn');
     if (token != null && msisdn != null) {
-      var response = await DioClient.postEncrypt(
-          loading: false,
-          '${MyConstant.urlOther}/UnreadMessage',
-          {'msisdn': msisdn});
+      var response =
+          await DioClient.postEncrypt(loading: false, '${MyConstant.urlOther}/UnreadMessage', {'msisdn': msisdn});
       if (response != null) {
         if (response['resultCode'] == "000") {
           messageUnread.value = response['total_unread'];

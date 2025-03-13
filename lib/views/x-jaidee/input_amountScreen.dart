@@ -22,7 +22,7 @@ class _InputAmountXJaideeScreenState extends State<InputAmountXJaideeScreen> {
   final TextEditingController _months = TextEditingController();
   final TextEditingController _monthlyPayment = TextEditingController();
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-  double _currentValue = 1000000;
+  double _currentValue = 500000;
   final double _min = 500000;
   final double _max = 5000000;
   final double _step = 500000;
@@ -57,8 +57,9 @@ class _InputAmountXJaideeScreenState extends State<InputAmountXJaideeScreen> {
   }
 
   void _updateMonthlyPayment() {
-    int months = int.tryParse(_months.text.split('-').last) ?? 3;
-    double monthlyPayment = _currentValue / months;
+    int months = int.tryParse(_months.text.split('-').last) ?? 1;
+    double monthlyPayment =
+        (_currentValue / months) + (_currentValue * 3 / 100);
     _monthlyPayment.text = fn.format(monthlyPayment);
   }
 
@@ -161,7 +162,7 @@ class _InputAmountXJaideeScreenState extends State<InputAmountXJaideeScreen> {
                   buildAccountingFiledVaidate(
                     enable: false,
                     controller: _percent,
-                    label: 'ເປີເຊັນການຜ່ອນຊຳລະ',
+                    label: 'ດອກເບ້ຍຕໍ່ເດືອນ',
                     name: 'percent',
                     hintText: '3 %',
                     max: 9,

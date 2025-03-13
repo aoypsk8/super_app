@@ -64,6 +64,9 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open.</string>
 
+	<key>NSFaceIDUsageDescription</key>
+	<string>We use Face ID to verify your identity</string>
+
 	<!-- url luncher -->
 	<key>LSApplicationQueriesSchemes</key>
 	<array>

@@ -129,7 +129,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
         body: PullRefresh(
           refreshController: refreshController,
           onRefresh: () {
-            homeController.fetchServicesmMenu();
+            homeController.fetchServicesmMenu(userController.rxMsisdn.value);
             refreshController.refreshCompleted();
           },
           child: SingleChildScrollView(

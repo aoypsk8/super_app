@@ -102,6 +102,7 @@ dependencies:
   animate_do: ^3.3.4
   # slider
   syncfusion_flutter_sliders: ^28.2.5
+  local_auth: ^2.3.0
 
 dev_dependencies:
   flutter_test:

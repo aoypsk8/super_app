@@ -65,7 +65,6 @@ class HomeController extends GetxController {
 
     getAppVersion();
     await checkAppUpdate();
-    await fetchServicesmMenu();
   }
 
   String getMenuTitle() {
@@ -121,13 +120,15 @@ class HomeController extends GetxController {
     }
   }
 
-  fetchServicesmMenu() async {
+  fetchServicesmMenu(msisdn) async {
     try {
-      var response = await DioClient.postEncrypt(loading: false, '/SuperApi/Info/Menus', {});
+      var response = await DioClient.postEncrypt(loading: false, '/SuperApi/Info/Menus', {"msisdn": msisdn});
       if (response != null && response is List) {
         List<MenuModel> fetchedMenuModel = response.map<MenuModel>((json) => MenuModel.fromJson(json)).toList();
         menuModel.assignAll(fetchedMenuModel);
-        if (fetchedMenuModel.isNotEmpty && fetchedMenuModel[0].menulists != null && fetchedMenuModel[0].menulists!.isNotEmpty) {
+        if (fetchedMenuModel.isNotEmpty &&
+            fetchedMenuModel[0].menulists != null &&
+            fetchedMenuModel[0].menulists!.isNotEmpty) {
           menulist.assignAll(fetchedMenuModel[0].menulists!);
         }
       } else {
@@ -168,7 +169,8 @@ class HomeController extends GetxController {
     var token = await box.read('token');
     var msisdn = await box.read('msisdn');
     if (token != null && msisdn != null) {
-      var response = await DioClient.postEncrypt(loading: false, '${MyConstant.urlOther}/UnreadMessage', {'msisdn': msisdn});
+      var response =
+          await DioClient.postEncrypt(loading: false, '${MyConstant.urlOther}/UnreadMessage', {'msisdn': msisdn});
       if (response != null) {
         if (response['resultCode'] == "000") {
           messageUnread.value = response['total_unread'];

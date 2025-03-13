@@ -200,11 +200,12 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                           var result = homeController.menuModel
                                               .first.menulists![index];
                                           String? url = result.logo;
-                                          String? updatedUrl =
-                                              url!.replaceFirst(
-                                            'https://mmoney.la',
-                                            'https://gateway.ltcdev.la/AppImage',
-                                          );
+                                          if (url != null &&
+                                              homeController
+                                                  .TPlus_theme.value) {
+                                            url = url.replaceFirst(
+                                                "Icons/", "Icons/y");
+                                          }
 
                                           return InkWell(
                                             onTap: () async {
@@ -245,7 +246,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                               children: [
                                                 SizedBox(height: 6),
                                                 SvgPicture.network(
-                                                  updatedUrl,
+                                                  url!,
                                                   placeholderBuilder:
                                                       (BuildContext context) =>
                                                           Container(
@@ -386,11 +387,11 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                           ),
                         ),
                       ),
-                      PrimaryButton(
-                          title: 'XJaidee',
-                          onPressed: () {
-                            Get.toNamed('/xjaidee');
-                          }),
+                      // PrimaryButton(
+                      //     title: 'XJaidee',
+                      //     onPressed: () {
+                      //       Get.toNamed('/xjaidee');
+                      //     }),
                       const SizedBox(height: 20),
                       Container(
                         color: color_fff,
@@ -402,8 +403,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               TextFont(
-                                text:
-                                    "Deal for you, ${userController.userProfilemodel.value.name}!",
+                                text: "Deal for you, ມາລີນາ!",
                                 color: cr_4139,
                                 fontSize: 9.5,
                                 fontWeight: FontWeight.w500,

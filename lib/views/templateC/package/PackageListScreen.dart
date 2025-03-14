@@ -37,7 +37,7 @@ class _PackageListScreenState extends State<PackageListScreen>
   void initState() {
     userController.increasepage();
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -107,16 +107,6 @@ class _PackageListScreenState extends State<PackageListScreen>
                       : cr_7070,
                 ),
               ),
-              Tab(
-                child: TextFont(
-                  text: '',
-                ),
-              ),
-              Tab(
-                child: TextFont(
-                  text: '',
-                ),
-              ),
             ],
             indicatorColor: Theme.of(context).colorScheme.onPrimary,
           ),
@@ -126,8 +116,6 @@ class _PackageListScreenState extends State<PackageListScreen>
               children: [
                 buildPackageRecomend(),
                 buildPackageAll(),
-                const SizedBox(),
-                const SizedBox()
               ],
             ),
           ),

@@ -41,14 +41,23 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
+    // Initialize TabController and listen for changes
     _tabController = TabController(length: 2, vsync: this);
-    setState(() {
-      if (homeController.rxBgCard.value == '') {
-        _backgroundImage = null;
-      } else {
-        _backgroundImage = File(homeController.rxBgCard.value);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging || _tabController.index != indexTabs) {
+        setState(() {
+          indexTabs = _tabController.index;
+        });
       }
     });
+
+    // Set background image without using setState in initState
+    if (homeController.rxBgCard.value == '') {
+      _backgroundImage = null;
+    } else {
+      _backgroundImage = File(homeController.rxBgCard.value);
+    }
   }
 
   @override
@@ -434,16 +443,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         child: TabBar(
                           controller: _tabController,
                           indicatorSize: TabBarIndicatorSize.tab,
-                          onTap: (index) => setState(() {
-                            indexTabs = index;
-                          }),
+                          onTap: (index) {
+                            setState(() {
+                              indexTabs = index;
+                            });
+                          },
                           dividerColor: Colors.transparent,
                           tabs: [
                             Tab(
                               child: TextFont(
                                 text: 'recommend',
                                 fontWeight: FontWeight.w600,
-                                // color: indexTabs == 0 ? Theme.of(context).colorScheme.onPrimary : cr_7070,
                                 color: indexTabs == 0 ? color_fff : cr_7070,
                               ),
                             ),
@@ -451,7 +461,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               child: TextFont(
                                 text: 'telecom_service',
                                 fontWeight: FontWeight.w600,
-                                // color: indexTabs == 1 ? Theme.of(context).colorScheme.onPrimary : cr_7070,
                                 color: indexTabs == 1 ? color_fff : cr_7070,
                               ),
                             ),

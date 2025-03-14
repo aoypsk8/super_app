@@ -150,7 +150,6 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(height: 5),
                                     Container(
                                       child: AlignedGridView.count(
                                         itemCount: homeController.menuModel

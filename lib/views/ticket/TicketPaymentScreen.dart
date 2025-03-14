@@ -8,11 +8,14 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
-import 'package:super_app/views/ticket/ConfirmTicketScreen.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
+import 'package:super_app/widget/build_pay_visa.dart';
 import 'package:super_app/widget/build_step_process.dart';
+import 'package:super_app/widget/input_cvv.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class TicketPaymentScreen extends StatefulWidget {
@@ -170,20 +173,98 @@ class _TicketPaymentScreenState extends State<TicketPaymentScreen> {
               ticketController.rxTransID.value =
                   homeController.menudetail.value.description.toString() +
                       await randomNumber().fucRandomNumber();
-              Get.to(ListsPaymentScreen(
-                description: 'select_payment',
-                stepBuild: '2/3',
-                title: homeController.getMenuTitle(),
-                onSelectedPayment: (paymentType, cardIndex) {
-                  Get.to(() => const ConfirmTicketScreen());
-                },
-              ));
+              Get.to(
+                ListsPaymentScreen(
+                  description:
+                      homeController.menudetail.value.groupNameEN.toString(),
+                  stepBuild: '2/3',
+                  title: homeController.getMenuTitle(),
+                  onSelectedPayment: (paymentType, cardIndex, uuid) async {
+                    if (paymentType == "Other") {
+                      homeController.RxamountUSD.value =
+                          await homeController.convertRate(
+                              ticketController.ticketDetail.value.price!);
+                      ticketController.rxTransID.value =
+                          "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                      Get.to(PaymentVisaMasterCard(
+                        function: () {
+                          ticketController
+                              .paymentProcessVisaWithoutstoredCardUniqueID(
+                            homeController.menudetail.value,
+                          );
+                        },
+                        trainID: ticketController.rxTransID.value,
+                        description: ticketController.rxNote.value,
+                        amount:
+                            int.parse(ticketController.rxPaymentAmount.value),
+                      ));
+                    } else if (paymentType == 'MMONEY') {
+                      navigateToConfirmScreen(paymentType);
+                    } else {
+                      homeController.RxamountUSD.value =
+                          await homeController.convertRate(
+                              ticketController.ticketDetail.value.price!);
+                      String? cvv = await showDynamicQRDialog(context, () {});
+                      if (cvv != null && cvv.isNotEmpty && cvv.length >= 3) {
+                        navigateToConfirmScreen(
+                          paymentType,
+                          cvv,
+                          uuid,
+                        );
+                      } else {
+                        DialogHelper.showErrorDialogNew(
+                          description: "please_input_cvv",
+                        );
+                      }
+                    }
+                  },
+                ),
+              );
             } else {
               DialogHelper.showErrorDialogNew(
                   description: 'Your balance not enough.');
             }
           },
         ),
+      ),
+    );
+  }
+
+  void navigateToConfirmScreen(String paymentType,
+      [String cvv = '', String storedCardUniqueID = '']) {
+    Get.to(
+      () => ReusableConfirmScreen(
+        isUSD: paymentType != 'MMONEY',
+        isEnabled: ticketController.enableBottom,
+        appbarTitle: "confirm_payment",
+        function: () {
+          ticketController.enableBottom.value = false;
+          if (paymentType == 'MMONEY') {
+            ticketController.paymentProcess();
+          } else {
+            ticketController.paymentProcessVisa(
+              homeController.menudetail.value,
+              storedCardUniqueID,
+              cvv,
+            );
+          }
+        },
+        stepProcess: "5/5",
+        stepTitle: "detail",
+        fromAccountImage: userController.userProfilemodel.value.profileImg ??
+            MyConstant.profile_default,
+        fromAccountName:
+            '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+        fromAccountNumber:
+            userController.userProfilemodel.value.msisdn.toString(),
+        toAccountImage: ticketController.ticketDetail.value.logo ??
+            MyConstant.profile_default,
+        toAccountName: ticketController.ticketDetail.value.title!,
+        toAccountNumber:
+            ticketController.ticketDetail.value.description.toString(),
+        amount: ticketController.rxPaymentAmount.value,
+        fee: '0',
+        note: ticketController.rxNote.value,
       ),
     );
   }

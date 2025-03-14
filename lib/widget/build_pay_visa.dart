@@ -5,7 +5,6 @@ import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
-import 'package:super_app/views/webview/webview_screen.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildExpiryDateField.dart';
@@ -14,14 +13,24 @@ import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 import 'package:u_credit_card/u_credit_card.dart';
 
-class AddVisaMasterCard extends StatefulWidget {
-  const AddVisaMasterCard({super.key});
+class PaymentVisaMasterCard extends StatefulWidget {
+  const PaymentVisaMasterCard({
+    super.key,
+    required this.function,
+    required this.trainID,
+    required this.description,
+    required this.amount,
+  });
+  final VoidCallback function;
+  final String trainID;
+  final int amount;
+  final String description;
 
   @override
-  State<AddVisaMasterCard> createState() => _AddVisaMasterCardState();
+  State<PaymentVisaMasterCard> createState() => _PaymentVisaMasterCardState();
 }
 
-class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
+class _PaymentVisaMasterCardState extends State<PaymentVisaMasterCard> {
   final paymentController = Get.put(PaymentController());
   final _formKey = GlobalKey<FormState>();
   final HomeController homeController = Get.find();
@@ -31,7 +40,7 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
   final TextEditingController _expiryController = TextEditingController();
   final TextEditingController _cvvController = TextEditingController();
   bool isChecked = false;
-// Function to detect card type
+  // Function to detect card type
   String detectCardType(String cardNumber) {
     if (cardNumber.isEmpty) return '';
     if (cardNumber.startsWith('4')) {
@@ -57,7 +66,7 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: BuildAppBar(title: "Add Visa/MasterCard"),
+      appBar: BuildAppBar(title: "PaymentByCreditCard"),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
@@ -66,31 +75,26 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
         ),
         child: buildBottomAppbar(
           bgColor: Theme.of(context).primaryColor,
-          title: 'save_data',
+          title: 'payment',
           func: () async {
-            if (isChecked) {
-              setState(() {
-                cardType = detectCardType(_numberController.text);
-              });
-              _formKey.currentState!.save();
-              if (_formKey.currentState!.validate()) {
-                paymentController.addPaymentMethod(
-                  _numberController.text,
-                  _expiryController.text.replaceAll('/', ''),
-                  _cvvController.text,
-                  _nameController.text,
-                  cardType,
-                );
+            setState(() {
+              cardType = detectCardType(_numberController.text);
+            });
+            _formKey.currentState!.save();
+            if (_formKey.currentState!.validate()) {
+              if (await paymentController.paymentCardWithoutstoredCardUniqueID(
+                widget.trainID,
+                _numberController.text,
+                _expiryController.text.replaceAll('/', ''),
+                _cvvController.text,
+                _nameController.text,
+                cardType,
+                widget.description,
+                widget.amount,
+                isChecked,
+              )) {
+                widget.function();
               }
-            } else {
-              DialogHelper.showErrorWithFunctionDialog(
-                closeTitle: "close",
-                title: "Please Check",
-                description: "Please check box first",
-                onClose: () {
-                  Get.back();
-                },
-              );
             }
           },
         ),
@@ -235,25 +239,10 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               TextFont(
-                                text: 'I agree to the ',
+                                text: 'Remeber Card',
                                 color: color_1a1,
                                 fontSize: 10,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  homeController.urlwebview.value =
-                                      'https://gateway.ltcdev.la/AppImage/en/consumer/policy/index.html';
-                                  Get.to(() => WebviewScreen());
-                                },
-                                child: TextFont(
-                                  text: 'Terms & Policy',
-                                  underline: true,
-                                  underlineColor: cr_7070,
-                                  color: cr_7070,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              )
                             ],
                           ),
                         ),

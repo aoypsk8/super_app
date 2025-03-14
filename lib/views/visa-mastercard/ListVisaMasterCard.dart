@@ -22,11 +22,10 @@ class VisaMasterCard extends StatefulWidget {
 
 class _VisaMasterCardState extends State<VisaMasterCard> {
   final paymentController = Get.put(PaymentController());
-
   @override
   void initState() {
     super.initState();
-    paymentController.getPaymentMethods();
+    paymentController.getPaymentMethods('all');
   }
 
   int? selectedCardIndex = 0;

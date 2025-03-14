@@ -10,6 +10,7 @@ import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/temp_c_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
+import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/reusable_template/reusable_confirm.dart';
@@ -17,7 +18,9 @@ import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
+import 'package:super_app/widget/build_pay_visa.dart';
 import 'package:super_app/widget/build_step_process.dart';
+import 'package:super_app/widget/input_cvv.dart';
 import 'package:super_app/widget/textfont.dart';
 import '../../../utility/dialog_helper.dart';
 import 'package:intl/intl.dart';
@@ -368,45 +371,52 @@ class _PaymentPostpaidTempCScreenState
                                       stepBuild: '5/6',
                                       title: homeController.getMenuTitle(),
                                       onSelectedPayment:
-                                          (paymentType, cardIndex) {
-                                        Get.to(
-                                          () => ReusableConfirmScreen(
-                                            isEnabled:
-                                                tempCcontroler.enableBottom,
-                                            appbarTitle: "confirm_payment",
+                                          (paymentType, cardIndex, uuid) async {
+                                        if (paymentType == "Other") {
+                                          homeController.RxamountUSD.value =
+                                              await homeController.convertRate(
+                                                  tempCcontroler
+                                                      .rxTotalAmount.value);
+                                          tempCcontroler.rxTransID.value =
+                                              "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                                          Get.to(PaymentVisaMasterCard(
                                             function: () {
                                               tempCcontroler
-                                                  .enableBottom.value = false;
-                                              tempCcontroler.paymentPostpaid(
-                                                  homeController
-                                                      .menudetail.value);
+                                                  .paymentPostpaidVisaWithoutstoredCardUniqueID(
+                                                homeController.menudetail.value,
+                                              );
                                             },
-                                            stepProcess: "6/6",
-                                            stepTitle: "check_detail",
-                                            fromAccountImage: userController
-                                                    .userProfilemodel
-                                                    .value
-                                                    .profileImg ??
-                                                MyConstant.profile_default,
-                                            fromAccountName:
-                                                '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-                                            fromAccountNumber: userController
-                                                .userProfilemodel.value.msisdn
-                                                .toString(),
-                                            toAccountImage: tempCcontroler
-                                                .tempCdetail.value.groupLogo
-                                                .toString(),
-                                            toAccountName:
-                                                '${tempCcontroler.rxAccName.value} - ${tempCcontroler.tempCdetail.value.groupTelecom} - ${tempCcontroler.tempCservicedetail.value.name}',
-                                            toAccountNumber:
-                                                tempCcontroler.rxAccNo.value,
+                                            trainID:
+                                                tempCcontroler.rxTransID.value,
+                                            description:
+                                                tempCcontroler.rxNote.value,
                                             amount: tempCcontroler
-                                                .rxPaymentAmount.value
-                                                .toString(),
-                                            fee: '0',
-                                            note: tempCcontroler.rxNote.value,
-                                          ),
-                                        );
+                                                .rxTotalAmount.value,
+                                          ));
+                                        } else if (paymentType == 'MMONEY') {
+                                          navigateToConfirmScreen(paymentType);
+                                        } else {
+                                          homeController.RxamountUSD.value =
+                                              await homeController.convertRate(
+                                                  tempCcontroler
+                                                      .rxTotalAmount.value);
+                                          String? cvv =
+                                              await showDynamicQRDialog(
+                                                  context, () {});
+                                          if (cvv != null &&
+                                              cvv.isNotEmpty &&
+                                              cvv.length >= 3) {
+                                            navigateToConfirmScreen(
+                                              paymentType,
+                                              cvv,
+                                              uuid,
+                                            );
+                                          } else {
+                                            DialogHelper.showErrorDialogNew(
+                                              description: "please_input_cvv",
+                                            );
+                                          }
+                                        }
                                       },
                                     ))
                                   }
@@ -426,6 +436,44 @@ class _PaymentPostpaidTempCScreenState
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void navigateToConfirmScreen(String paymentType,
+      [String cvv = '', String storedCardUniqueID = '']) {
+    Get.to(
+      () => ReusableConfirmScreen(
+        isUSD: paymentType != 'MMONEY',
+        isEnabled: tempCcontroler.enableBottom,
+        appbarTitle: "confirm_payment",
+        function: () {
+          tempCcontroler.enableBottom.value = false;
+          if (paymentType == 'MMONEY') {
+            tempCcontroler.paymentPostpaid(homeController.menudetail.value);
+          } else {
+            tempCcontroler.paymentPostpaidVisa(
+              homeController.menudetail.value,
+              storedCardUniqueID,
+              cvv,
+            );
+          }
+        },
+        stepProcess: "6/6",
+        stepTitle: "check_detail",
+        fromAccountImage: userController.userProfilemodel.value.profileImg ??
+            MyConstant.profile_default,
+        fromAccountName:
+            '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+        fromAccountNumber:
+            userController.userProfilemodel.value.msisdn.toString(),
+        toAccountImage: tempCcontroler.tempCdetail.value.groupLogo.toString(),
+        toAccountName:
+            '${tempCcontroler.rxAccName.value} - ${tempCcontroler.tempCdetail.value.groupTelecom} - ${tempCcontroler.tempCservicedetail.value.name}',
+        toAccountNumber: tempCcontroler.rxAccNo.value,
+        amount: tempCcontroler.rxPaymentAmount.value.toString(),
+        fee: '0',
+        note: tempCcontroler.rxNote.value,
       ),
     );
   }

@@ -1,10 +1,8 @@
 // ignore_for_file: sort_child_properties_last
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:keyboard_attachable/keyboard_attachable.dart';
 import 'package:sizer/sizer.dart';
@@ -12,14 +10,19 @@ import 'package:super_app/controllers/finance_controller.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:intl/intl.dart';
+import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
+import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
+import 'package:super_app/widget/build_pay_visa.dart';
+import 'package:super_app/widget/build_step_process.dart';
+import 'package:super_app/widget/input_cvv.dart';
 import 'package:super_app/widget/textfont.dart';
-
-import '../../widget/myIcon.dart';
 
 class PaymentFinanceScreen extends StatefulWidget {
   const PaymentFinanceScreen({super.key});
@@ -55,7 +58,7 @@ class _PaymentFinanceScreenState extends State<PaymentFinanceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BuildAppBar(
-          title: "homeController.menudetail.value.groupNameEN.toString()"),
+          title: homeController.menudetail.value.groupNameEN.toString()),
       body: FooterLayout(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -90,6 +93,8 @@ class _PaymentFinanceScreenState extends State<PaymentFinanceScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          buildStepProcess(title: "3/5", desc: "input_amount"),
+          SizedBox(height: 5.sp),
           TextFont(
             text: 'detail',
             fontWeight: FontWeight.w500,
@@ -230,12 +235,99 @@ class _PaymentFinanceScreenState extends State<PaymentFinanceScreen> {
                   financeController.rxNote.value = _note.text;
                   financeController.rxPaymentAmount.value =
                       _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '');
-                  Get.toNamed("/confirmFinance");
+                  Get.to(
+                    ListsPaymentScreen(
+                      description: homeController.menudetail.value.groupNameEN
+                          .toString(),
+                      stepBuild: '4/5',
+                      title: homeController.getMenuTitle(),
+                      onSelectedPayment: (paymentType, cardIndex, uuid) async {
+                        if (paymentType == "Other") {
+                          homeController.RxamountUSD.value =
+                              await homeController.convertRate(int.parse(
+                                  financeController.rxPaymentAmount.value));
+                          financeController.rxTransID.value =
+                              "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                          Get.to(PaymentVisaMasterCard(
+                            function: () {
+                              financeController
+                                  .paymentProcessVisaWithoutstoredCardUniqueID(
+                                homeController.menudetail.value,
+                              );
+                            },
+                            trainID: financeController.rxTransID.value,
+                            description: financeController.rxNote.value,
+                            amount: int.parse(
+                                financeController.rxPaymentAmount.value),
+                          ));
+                        } else if (paymentType == 'MMONEY') {
+                          navigateToConfirmScreen(paymentType);
+                        } else {
+                          homeController.RxamountUSD.value =
+                              await homeController.convertRate(int.parse(
+                                  financeController.rxPaymentAmount.value));
+                          String? cvv =
+                              await showDynamicQRDialog(context, () {});
+                          if (cvv != null &&
+                              cvv.isNotEmpty &&
+                              cvv.length >= 3) {
+                            navigateToConfirmScreen(
+                              paymentType,
+                              cvv,
+                              uuid,
+                            );
+                          } else {
+                            DialogHelper.showErrorDialogNew(
+                              description: "please_input_cvv",
+                            );
+                          }
+                        }
+                      },
+                    ),
+                  );
                 }
               }
             },
           ),
         ],
+      ),
+    );
+  }
+
+  void navigateToConfirmScreen(String paymentType,
+      [String cvv = '', String storedCardUniqueID = '']) {
+    Get.to(
+      () => ReusableConfirmScreen(
+        isUSD: paymentType != 'MMONEY',
+        isEnabled: financeController.enableBottom,
+        appbarTitle: "confirm_payment",
+        function: () {
+          financeController.enableBottom.value = false;
+          if (paymentType == 'MMONEY') {
+            financeController.paymentProcess();
+          } else {
+            financeController.paymentProcessVisa(
+              homeController.menudetail.value,
+              storedCardUniqueID,
+              cvv,
+            );
+          }
+        },
+        stepProcess: "5/5",
+        stepTitle: "detail",
+        fromAccountImage: userController.userProfilemodel.value.profileImg ??
+            MyConstant.profile_default,
+        fromAccountName:
+            '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+        fromAccountNumber:
+            userController.userProfilemodel.value.msisdn.toString(),
+        toAccountImage: financeController.financeModelDetail.value.logo!,
+        toAccountName: financeController.rxAccName.value,
+        toAccountNumber: financeController.rxAccNo.value,
+        amount: financeController.rxPaymentAmount.value,
+        fee: fn.format(
+            double.parse(financeController.financeModelDetail.value.fee!)),
+        note: financeController.rxNote.value,
       ),
     );
   }

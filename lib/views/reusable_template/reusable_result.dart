@@ -16,6 +16,7 @@ import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/utility/shareResult.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
@@ -41,8 +42,9 @@ class ReusableResultScreen extends StatefulWidget {
   final String note;
   final String timestamp;
   final bool fromHistory;
+  bool isUSD = false;
 
-  const ReusableResultScreen({
+  ReusableResultScreen({
     super.key,
     required this.fromAccountImage,
     required this.fromAccountName,
@@ -57,6 +59,7 @@ class ReusableResultScreen extends StatefulWidget {
     required this.note,
     required this.timestamp,
     this.fromHistory = false,
+    this.isUSD = false,
   });
 
   @override
@@ -65,6 +68,7 @@ class ReusableResultScreen extends StatefulWidget {
 
 class _ReusableResultScreenState extends State<ReusableResultScreen> {
   final ScreenshotController _screenshotController = ScreenshotController();
+  final homeController = Get.find<HomeController>();
   final box = GetStorage();
   GlobalKey _repaintBoundaryKey = GlobalKey();
 
@@ -249,7 +253,8 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                                             poppin: true,
                                           ),
                                           TextFont(
-                                            text: '.00 LAK',
+                                            text:
+                                                '.00 LAK ${widget.isUSD ? '(${homeController.RxamountUSD.value} USD)' : ''}',
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20,
                                             color: cr_b326,

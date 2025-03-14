@@ -35,11 +35,7 @@ class _ServicePageState extends State<ServicePage> {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        appBar: BuildAppBar(
-          title: "service_nav",
-          hasIcon: true,
-          onIconTap: () => Get.toNamed("/visaMasterCard"),
-        ),
+        appBar: BuildAppBar(title: "service_nav"),
         body: PullRefresh(
           refreshController: refreshController,
           onRefresh: () {

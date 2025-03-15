@@ -96,7 +96,9 @@ class _ServicePageState extends State<ServicePage> {
                           var result = menuModelItem.menulists![index];
                           String? url = result.logo;
                           if (url != null && homeController.TPlus_theme.value) {
-                            url = url.replaceFirst("Icons/", "Icons/y");
+                            url = url.replaceFirst("icons/", "icons/y");
+                          } else {
+                            url = url!.replaceFirst("icons/", "icons/");
                           }
 
                           return InkWell(

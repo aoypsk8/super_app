@@ -119,7 +119,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           children: [
                                             TextFont(
                                               text:
-                                                  '${data.type == 'OUT' ? '-' : '+'}${fn.format(double.parse('${data.amount}'))}',
+                                                  '${data.type == 'OUT' ? '-' : '+'}${fn.format(data.amount is int ? data.amount.toDouble() : data.amount)}',
                                               fontWeight: FontWeight.w500,
                                               fontSize: 16,
                                               color: data.type == 'OUT'
@@ -134,6 +134,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                   ? cr_b326
                                                   : Colors.green,
                                               poppin: true,
+                                              fontSize: 11,
                                             ),
                                           ],
                                         ),

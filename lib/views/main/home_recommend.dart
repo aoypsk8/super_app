@@ -183,7 +183,10 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                               homeController
                                                   .TPlus_theme.value) {
                                             url = url.replaceFirst(
-                                                "Icons/", "Icons/y");
+                                                "icons/", "icons/y");
+                                          } else {
+                                            url = url!.replaceFirst(
+                                                "icons/", "icons/");
                                           }
 
                                           return InkWell(

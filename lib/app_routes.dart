@@ -86,8 +86,13 @@ class AppRoutes {
     ),
 
     // XJaidee
+    // GetPage(
+    //   name: '/xjaidee',
+    //   page: () => XJaidee(),
+    // ),
+
     GetPage(
-      name: '/xjaidee',
+      name: '/tvlists',
       page: () => XJaidee(),
     ),
 

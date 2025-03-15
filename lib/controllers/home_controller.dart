@@ -28,6 +28,8 @@ class HomeController extends GetxController {
   RxString urlwebview = ''.obs;
   RxBool TPlus_theme = false.obs;
 
+// USD AMOUNT
+  RxDouble RxamountUSD = 0.0.obs;
   //version
   RxString appVersion = ''.obs;
 
@@ -40,6 +42,7 @@ class HomeController extends GetxController {
   RxList<MessageList> messageList = <MessageList>[].obs;
   Rx<MessageList> messageListDetail = MessageList().obs;
   RxInt messageUnread = 0.obs;
+
   //! clear data
   clear() async {
     menutitle = ''.obs;
@@ -66,7 +69,6 @@ class HomeController extends GetxController {
 
     getAppVersion();
     await checkAppUpdate();
-    await fetchServicesmMenu();
   }
 
   String getMenuTitle() {
@@ -126,13 +128,13 @@ class HomeController extends GetxController {
     }
   }
 
-  fetchServicesmMenu() async {
+  fetchServicesmMenu(msisdn) async {
     bool TPlusIcons = box.read("isDarkMode");
     print(TPlusIcons);
     TPlus_theme.value = TPlusIcons || false;
     try {
       var response = await DioClient.postEncrypt(
-          loading: false, '/SuperApi/Info/Menus', {});
+          loading: false, '/SuperApi/Info/Menus', {"msisdn": msisdn});
       if (response != null && response is List) {
         List<MenuModel> fetchedMenuModel = response
             .map<MenuModel>((json) => MenuModel.fromJson(json))
@@ -198,5 +200,11 @@ class HomeController extends GetxController {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     appVersion.value = packageInfo.version;
     print('appVersion: ${appVersion}');
+  }
+
+  convertRate(int amountkip) async {
+    var response = await DioClient.postEncrypt(
+        '${MyConstant.urlVisa}/ConvertRate', {'amount': amountkip});
+    return response['usd'];
   }
 }

@@ -39,7 +39,7 @@ class _ServicePageState extends State<ServicePage> {
         body: PullRefresh(
           refreshController: refreshController,
           onRefresh: () {
-            homeController.fetchServicesmMenu();
+            homeController.fetchServicesmMenu(userController.rxMsisdn.value);
             // completely here after finished
             refreshController.refreshCompleted();
           },

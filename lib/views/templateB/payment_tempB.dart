@@ -15,9 +15,10 @@ import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
-import 'package:super_app/widget/buildButtonBottom.dart';
 import 'package:super_app/widget/buildTextField.dart';
+import 'package:super_app/widget/build_pay_visa.dart';
 import 'package:super_app/widget/build_step_process.dart';
+import 'package:super_app/widget/input_cvv.dart';
 import 'package:super_app/widget/mounoy_textfield.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -83,7 +84,7 @@ class PaymentTempBScreen extends StatelessWidget {
                       description: 'select_payment',
                       stepBuild: '4/5',
                       title: homeController.getMenuTitle(),
-                      onSelectedPayment: (paymentType, cardIndex) {
+                      onSelectedPayment: (paymentType, cardIndex, uuid) async {
                         paymentController
                             .reqCashOut(
                           transID: controller.rxTransID.value,
@@ -94,39 +95,48 @@ class PaymentTempBScreen extends StatelessWidget {
                           remark: controller.rxNote.value,
                         )
                             .then(
-                          (value) {
+                          (value) async {
                             if (value) {
-                              Get.to(() => ReusableConfirmScreen(
-                                    isEnabled: controller.enableBottom,
-                                    appbarTitle: "confirm_payment",
-                                    function: () {
-                                      controller.isLoading.value = true;
-                                      controller.enableBottom.value = false;
-                                      controller.paymentProcess(
-                                          homeController.menudetail.value);
-                                    },
-                                    stepProcess: "5/5",
-                                    stepTitle: "check_detail",
-                                    fromAccountImage: userController
-                                            .userProfilemodel
-                                            .value
-                                            .profileImg ??
-                                        MyConstant.profile_default,
-                                    fromAccountName:
-                                        '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-                                    fromAccountNumber: userController
-                                        .userProfilemodel.value.msisdn
-                                        .toString(),
-                                    toAccountImage:
-                                        controller.tempBdetail.value.logo ?? '',
-                                    toAccountName: controller.rxAccName
-                                        .value, // Fixed swapped values
-                                    toAccountNumber: controller.rxAccNo.value,
-                                    amount: controller.rxPaymentAmount.value,
-                                    fee: controller.tempBdetail.value.fee ??
-                                        '0', // Prevent null error
-                                    note: controller.rxNote.value,
-                                  ));
+                              if (paymentType == "Other") {
+                                homeController.RxamountUSD.value =
+                                    await homeController.convertRate(int.parse(
+                                        controller.rxPaymentAmount.value));
+                                controller.rxTransID.value =
+                                    "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                                //! Confirm CashOut
+                                Get.to(PaymentVisaMasterCard(
+                                  function: () {
+                                    controller
+                                        .paymentProcessVisaWithoutstoredCardUniqueID(
+                                            homeController.menudetail.value);
+                                  },
+                                  trainID: controller.rxTransID.value,
+                                  description: controller.rxNote.value,
+                                  amount: int.parse(
+                                      controller.rxPaymentAmount.value),
+                                ));
+                              } else if (paymentType == 'MMONEY') {
+                                navigateToConfirmScreen(paymentType);
+                              } else {
+                                homeController.RxamountUSD.value =
+                                    await homeController.convertRate(int.parse(
+                                        controller.rxPaymentAmount.value));
+                                String? cvv =
+                                    await showDynamicQRDialog(context, () {});
+                                if (cvv != null &&
+                                    cvv.isNotEmpty &&
+                                    cvv.length >= 3) {
+                                  navigateToConfirmScreen(
+                                    paymentType,
+                                    cvv,
+                                    uuid,
+                                  );
+                                } else {
+                                  DialogHelper.showErrorDialogNew(
+                                    description: "please_input_cvv",
+                                  );
+                                }
+                              }
                             } else {
                               controller.enableBottom.value = true;
                             }
@@ -236,5 +246,41 @@ class PaymentTempBScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void navigateToConfirmScreen(String paymentType,
+      [String cvv = '', String storedCardUniqueID = '']) {
+    Get.to(() => ReusableConfirmScreen(
+          isUSD: paymentType != 'MMONEY',
+          isEnabled: controller.enableBottom,
+          appbarTitle: "confirm_payment",
+          function: () {
+            if (paymentType == 'MMONEY') {
+              controller.isLoading.value = true;
+              controller.enableBottom.value = false;
+              controller.paymentProcess(homeController.menudetail.value);
+            } else {
+              controller.paymentProcessVisa(
+                homeController.menudetail.value,
+                storedCardUniqueID,
+                cvv,
+              );
+            }
+          },
+          stepProcess: "5/5",
+          stepTitle: "check_detail",
+          fromAccountImage: userController.userProfilemodel.value.profileImg ??
+              MyConstant.profile_default,
+          fromAccountName:
+              '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+          fromAccountNumber:
+              userController.userProfilemodel.value.msisdn.toString(),
+          toAccountImage: controller.tempBdetail.value.logo ?? '',
+          toAccountName: controller.rxAccName.value, // Fixed swapped values
+          toAccountNumber: controller.rxAccNo.value,
+          amount: controller.rxPaymentAmount.value,
+          fee: controller.tempBdetail.value.fee ?? '0', // Prevent null error
+          note: controller.rxNote.value,
+        ));
   }
 }

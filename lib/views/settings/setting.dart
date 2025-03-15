@@ -1,9 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/services/language_service.dart';
@@ -12,10 +16,13 @@ import 'package:super_app/splash_screen.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myIcon.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/login/login_have_acc.dart';
+import 'package:super_app/views/login/temp/temp_userprofile_model.dart';
 import 'package:super_app/views/settings/account_profile.dart';
 import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
+import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/mask_msisdn.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -29,12 +36,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final box = GetStorage();
   final userController = Get.find<UserController>();
   final themeService = Get.find<ThemeService>();
+  final _confirmPassword = TextEditingController();
   @override
   void initState() {
     super.initState();
   }
 
   bool isHidden = true;
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -354,10 +363,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Spacer(),
               Switch(
                 value: box.read('biometric') ?? false,
-                onChanged: (value) {
-                  setState(() {
-                    box.write('biometric', value);
-                  });
+                onChanged: (value) async {
+                  if (value) {
+                    bool isAuthenticated = await _showPasswordConfirmationDialog(context);
+                    if (isAuthenticated) {
+                      setState(() {
+                        box.write('biometric', value);
+                      });
+                    }
+                  } else {
+                    setState(() {
+                      box.write('biometric', value);
+                    });
+                  }
                 },
               ),
               TextFont(text: box.read('biometric') ?? false ? "on" : "off"),
@@ -515,5 +533,107 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
     );
+  }
+
+  Future<bool> _showPasswordConfirmationDialog(BuildContext context) async {
+    String? msisdn = storage.read('msisdn');
+    TempUserProfileStorage boxUser = TempUserProfileStorage();
+    TempUserProfile? user = boxUser.getUserByUsername(msisdn ?? '');
+    final TextEditingController _passwordController = TextEditingController();
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    bool isAuthenticated = false;
+
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          behavior: HitTestBehavior.opaque,
+          child: Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            width: 40.w,
+                            height: 40.w,
+                            child: Lottie.asset('assets/animation/circle.json'),
+                          ),
+                          Container(
+                            width: 30.w,
+                            height: 30.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: color_primary_light.withOpacity(0.2), width: 5),
+                            ),
+                            child: CircleAvatar(
+                              radius: 80.sp,
+                              backgroundColor: Colors.transparent,
+                              backgroundImage: CachedNetworkImageProvider(
+                                user.imageProfile,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      TextFont(text: user.fullname, fontSize: 14, fontWeight: FontWeight.w500, noto: true),
+                      SizedBox(height: 10),
+                      TextFont(text: user.username, fontSize: 14, color: color_777, poppin: true),
+                      SizedBox(height: 10),
+                      buildPasswordField(
+                          controller: _passwordController, label: 'confirm_password', name: 'confirm_password'),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(dialogContext).pop(false);
+                            },
+                            child: TextFont(text: 'Cancel', color: color_777),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                isAuthenticated = await userController.chkPasswordSetBiometic(
+                                    user.username, _passwordController.text);
+                                if (isAuthenticated) {
+                                  Navigator.of(dialogContext).pop(true);
+                                } else {
+                                  ScaffoldMessenger.of(dialogContext)
+                                      .showSnackBar(SnackBar(content: Text('Incorrect password')));
+                                }
+                              }
+                            },
+                            child: TextFont(
+                              text: 'Confirm',
+                              color: Theme.of(dialogContext).primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    return isAuthenticated;
   }
 }

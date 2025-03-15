@@ -9,7 +9,6 @@ import 'package:super_app/controllers/finance_controller.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
-import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
@@ -121,13 +120,8 @@ class _VerifyAccountFinanceScreenState
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // TextFont(
-                              //   text: 'account_number',
-                              //   fontWeight: FontWeight.w500,
-                              //   fontSize: 12,
-                              // ),
                               buildStepProcess(
-                                  title: "2/4", desc: "input_account_number"),
+                                  title: "2/5", desc: "input_account_number"),
                               SizedBox(height: 5.sp),
                               FormBuilder(
                                 key: _formKey,
@@ -177,18 +171,9 @@ class _VerifyAccountFinanceScreenState
                 // Get.toNamed("/paymentFinace");
                 _formKey.currentState!.save();
                 if (_formKey.currentState!.validate()) {
-                  Get.to(
-                    ListsPaymentScreen(
-                      description: homeController.menudetail.value.groupNameEN
-                          .toString(),
-                      stepBuild: '2/3',
-                      title: homeController.getMenuTitle(),
-                      onSelectedPayment: (paymentType, cardIndex) {
-                        financeController.rxAccNo.value = _accoutNumber.text;
-                        financeController.verifyAccount();
-                      },
-                    ),
-                  );
+                  financeController.rxAccNo.value = _accoutNumber.text;
+                  financeController.verifyAccount();
+
                   return Container();
                 }
               },

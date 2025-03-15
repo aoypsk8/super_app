@@ -9,6 +9,7 @@ class PaymentMethod {
   final String owner;
   final String accname;
   final bool maincard;
+  final String uuid;
 
   PaymentMethod({
     required this.id,
@@ -21,6 +22,7 @@ class PaymentMethod {
     required this.owner,
     required this.accname,
     required this.maincard,
+    required this.uuid,
   });
 
   // Factory method to create a PaymentMethod object from JSON
@@ -34,8 +36,9 @@ class PaymentMethod {
       title: json['title'],
       description: json['description'],
       owner: json['owner'],
-      accname: json['accname'],
+      accname: json['accname'] ?? "",
       maincard: json['maincard'],
+      uuid: json['uuid'] ?? "",
     );
   }
 
@@ -52,6 +55,7 @@ class PaymentMethod {
       'owner': owner,
       'accname': accname,
       'maincard': maincard,
+      'uuid': uuid,
     };
   }
 }

@@ -1,19 +1,26 @@
-// ignore_for_file: invalid_use_of_protected_member
+// ignore_for_file: invalid_use_of_protected_member, use_build_context_synchronously
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/temp_c_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
+import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/widget/RoundedRectangleTabIndicator';
 import 'package:super_app/widget/buildAppBar.dart';
+import 'package:super_app/widget/buildBottomAppbar.dart';
+import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/build_card_borrowing.dart';
+import 'package:super_app/widget/build_pay_visa.dart';
 import 'package:super_app/widget/build_step_process.dart';
+import 'package:super_app/widget/input_cvv.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class PackageListScreen extends StatefulWidget {
@@ -182,38 +189,49 @@ class _PackageListScreenState extends State<PackageListScreen>
                           description: 'select_payment',
                           stepBuild: '5/6',
                           title: homeController.getMenuTitle(),
-                          onSelectedPayment: (paymentType, cardIndex) {
-                            Get.to(
-                              () => ReusableConfirmScreen(
-                                isEnabled: tempCcontroler.enableBottom,
-                                appbarTitle: "confirm_payment",
-                                function: () async {
-                                  tempCcontroler.enableBottom.value = false;
-                                  tempCcontroler.paymentPackage(
-                                      homeController.menudetail.value);
+                          onSelectedPayment:
+                              (paymentType, cardIndex, uuid) async {
+                            if (paymentType == "Other") {
+                              homeController.RxamountUSD.value =
+                                  await homeController.convertRate(
+                                      tempCcontroler
+                                          .tempCpackagedetail.value.amount!);
+                              tempCcontroler.rxTransID.value =
+                                  "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                              Get.to(PaymentVisaMasterCard(
+                                function: () {
+                                  tempCcontroler
+                                      .paymentPackageVisaWithoutstoredCardUniqueID(
+                                    homeController.menudetail.value,
+                                  );
                                 },
-                                stepProcess: "6/6",
-                                stepTitle: "check_detail",
-                                fromAccountImage: userController
-                                        .userProfilemodel.value.profileImg ??
-                                    MyConstant.profile_default,
-                                fromAccountName:
-                                    '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-                                fromAccountNumber: userController
-                                    .userProfilemodel.value.msisdn
-                                    .toString(),
-                                toAccountImage: MyConstant.profile_default,
-                                toAccountName: tempCcontroler
-                                    .tempCpackagedetail.value.packageName!,
-                                toAccountNumber: "",
-                                amount: tempCcontroler
-                                    .tempCpackagedetail.value.amount
-                                    .toString(),
-                                fee: '0',
-                                note:
-                                    'ດາຕ້າໃຊ້ໄດ້${tempCcontroler.tempCpackagedetail.value.packageValue} ແລະ ໄລຍະກຳນົດ ${tempCcontroler.tempCpackagedetail.value.userDay}ວັນ',
-                              ),
-                            );
+                                trainID: tempCcontroler.rxTransID.value,
+                                description: tempCcontroler.rxNote.value,
+                                amount: tempCcontroler.rxTotalAmount.value,
+                              ));
+                            } else if (paymentType == 'MMONEY') {
+                              navigateToConfirmScreen(paymentType);
+                            } else {
+                              homeController.RxamountUSD.value =
+                                  await homeController.convertRate(
+                                      tempCcontroler
+                                          .tempCpackagedetail.value.amount!);
+                              String? cvv =
+                                  await showDynamicQRDialog(context, () {});
+                              if (cvv != null &&
+                                  cvv.isNotEmpty &&
+                                  cvv.length >= 3) {
+                                navigateToConfirmScreen(
+                                  paymentType,
+                                  cvv,
+                                  uuid,
+                                );
+                              } else {
+                                DialogHelper.showErrorDialogNew(
+                                  description: "please_input_cvv",
+                                );
+                              }
+                            }
                           },
                         ))
                       }
@@ -286,55 +304,69 @@ class _PackageListScreenState extends State<PackageListScreen>
                     package:
                         '${tempCcontroler.tempCpackagemodel[index].pKCode}|${tempCcontroler.tempCpackagemodel[index].sPNV}',
                     remark: tempCcontroler.rxNote.value)
-                .then((value) => {
-                      if (value)
-                        {
-                          tempCcontroler.enableBottom.value = true,
-                          Get.to(ListsPaymentScreen(
+                .then(
+                  (value) => {
+                    if (value)
+                      {
+                        tempCcontroler.enableBottom.value = true,
+                        Get.to(
+                          ListsPaymentScreen(
                             description: 'select_payment',
                             stepBuild: '5/6',
                             title: homeController.getMenuTitle(),
-                            onSelectedPayment: (paymentType, cardIndex) {
-                              Get.to(
-                                () => ReusableConfirmScreen(
-                                  isEnabled: tempCcontroler.enableBottom,
-                                  appbarTitle: "confirm_payment",
+                            onSelectedPayment:
+                                (paymentType, cardIndex, uuid) async {
+                              if (paymentType == "Other") {
+                                homeController.RxamountUSD.value =
+                                    await homeController.convertRate(
+                                        tempCcontroler
+                                            .tempCpackagedetail.value.amount!);
+                                tempCcontroler.rxTransID.value =
+                                    "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                                Get.to(PaymentVisaMasterCard(
                                   function: () {
-                                    tempCcontroler.enableBottom.value = false;
-                                    tempCcontroler.paymentPackage(
-                                        homeController.menudetail.value);
+                                    tempCcontroler
+                                        .paymentPackageVisaWithoutstoredCardUniqueID(
+                                      homeController.menudetail.value,
+                                    );
                                   },
-                                  stepProcess: "6/6",
-                                  stepTitle: "check_detail",
-                                  fromAccountImage: userController
-                                          .userProfilemodel.value.profileImg ??
-                                      MyConstant.profile_default,
-                                  fromAccountName:
-                                      '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-                                  fromAccountNumber: userController
-                                      .userProfilemodel.value.msisdn
-                                      .toString(),
-                                  toAccountImage: MyConstant.profile_default,
-                                  toAccountName: tempCcontroler
-                                      .tempCpackagedetail.value.packageName!,
-                                  toAccountNumber:
-                                      '${tempCcontroler.tempCpackagedetail.value.packageValue} | ${tempCcontroler.tempCpackagedetail.value.userDay} Day',
-                                  amount: tempCcontroler
-                                      .tempCpackagedetail.value.amount
-                                      .toString(),
-                                  fee: '0',
-                                  note:
-                                      'ດາຕ້າໃຊ້ໄດ້${tempCcontroler.tempCpackagedetail.value.packageValue} ແລະ ໄລຍະກຳນົດ ${tempCcontroler.tempCpackagedetail.value.userDay}ວັນ',
-                                ),
-                              );
+                                  trainID: tempCcontroler.rxTransID.value,
+                                  description: tempCcontroler.rxNote.value,
+                                  amount: tempCcontroler.rxTotalAmount.value,
+                                ));
+                              } else if (paymentType == 'MMONEY') {
+                                navigateToConfirmScreen(paymentType);
+                              } else {
+                                homeController.RxamountUSD.value =
+                                    await homeController.convertRate(
+                                        tempCcontroler
+                                            .tempCpackagedetail.value.amount!);
+                                String? cvv =
+                                    await showDynamicQRDialog(context, () {});
+                                if (cvv != null &&
+                                    cvv.isNotEmpty &&
+                                    cvv.length >= 3) {
+                                  navigateToConfirmScreen(
+                                    paymentType,
+                                    cvv,
+                                    uuid,
+                                  );
+                                } else {
+                                  DialogHelper.showErrorDialogNew(
+                                    description: "please_input_cvv",
+                                  );
+                                }
+                              }
                             },
-                          ))
-                        }
-                      else
-                        {
-                          tempCcontroler.enableBottom.value = true,
-                        }
-                    });
+                          ),
+                        )
+                      }
+                    else
+                      {
+                        tempCcontroler.enableBottom.value = true,
+                      }
+                  },
+                );
           },
           packagename: tempCcontroler.tempCpackagemodel[index].packageName!,
           code: "ຊື້ແພັກເກັດ",
@@ -351,6 +383,45 @@ class _PackageListScreenState extends State<PackageListScreen>
         ),
       );
     }
+  }
+
+  void navigateToConfirmScreen(String paymentType,
+      [String cvv = '', String storedCardUniqueID = '']) {
+    Get.to(
+      () => ReusableConfirmScreen(
+        isUSD: paymentType != 'MMONEY',
+        isEnabled: tempCcontroler.enableBottom,
+        appbarTitle: "confirm_payment",
+        function: () {
+          tempCcontroler.enableBottom.value = false;
+          if (paymentType == 'MMONEY') {
+            tempCcontroler.paymentPackage(homeController.menudetail.value);
+          } else {
+            tempCcontroler.paymentPackageVisa(
+              homeController.menudetail.value,
+              storedCardUniqueID,
+              cvv,
+            );
+          }
+        },
+        stepProcess: "6/6",
+        stepTitle: "check_detail",
+        fromAccountImage: userController.userProfilemodel.value.profileImg ??
+            MyConstant.profile_default,
+        fromAccountName:
+            '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+        fromAccountNumber:
+            userController.userProfilemodel.value.msisdn.toString(),
+        toAccountImage: MyConstant.profile_default,
+        toAccountName: tempCcontroler.tempCpackagedetail.value.packageName!,
+        toAccountNumber:
+            '${tempCcontroler.tempCpackagedetail.value.packageValue} | ${tempCcontroler.tempCpackagedetail.value.userDay} Day',
+        amount: tempCcontroler.tempCpackagedetail.value.amount.toString(),
+        fee: '0',
+        note:
+            'ດາຕ້າໃຊ້ໄດ້${tempCcontroler.tempCpackagedetail.value.packageValue} ແລະ ໄລຍະກຳນົດ ${tempCcontroler.tempCpackagedetail.value.userDay}ວັນ',
+      ),
+    );
   }
 }
 

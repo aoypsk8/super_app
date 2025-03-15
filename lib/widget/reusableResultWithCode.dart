@@ -13,6 +13,7 @@ import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/wetv_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
@@ -37,8 +38,9 @@ class ReusableResultWithCode extends StatefulWidget {
   final String timestamp;
   final bool fromHistory;
   final String code;
+  bool isUSD = false;
 
-  const ReusableResultWithCode({
+  ReusableResultWithCode({
     super.key,
     required this.fromAccountImage,
     required this.fromAccountName,
@@ -52,6 +54,7 @@ class ReusableResultWithCode extends StatefulWidget {
     required this.timestamp,
     required this.fromHistory,
     required this.code,
+    this.isUSD = false,
   });
 
   @override
@@ -60,6 +63,7 @@ class ReusableResultWithCode extends StatefulWidget {
 
 class _ReusableResultWithCodeState extends State<ReusableResultWithCode>
     with SingleTickerProviderStateMixin {
+  final homeController = Get.find<HomeController>();
   final screenshotController = ScreenshotController();
   final GlobalKey _globalKey = GlobalKey();
 
@@ -342,7 +346,8 @@ class _ReusableResultWithCodeState extends State<ReusableResultWithCode>
                                             color: cr_b326,
                                           ),
                                           TextFont(
-                                            text: '.00 LAK',
+                                            text:
+                                                '.00 LAK ${widget.isUSD ? '(${homeController.RxamountUSD.value} USD)' : ''}',
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20,
                                             color: cr_b326,

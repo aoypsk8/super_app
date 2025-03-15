@@ -22,6 +22,7 @@ class TempAController extends GetxController {
   Rx<ProviderTempAModel> tempAdetail = ProviderTempAModel().obs;
   RxList<Map<String, Object?>> provsep = <Map<String, Object?>>[].obs;
   RxList<RecentTempAModel> recentTempA = <RecentTempAModel>[].obs;
+  final paymentController = Get.put(PaymentController());
   final storage = GetStorage();
   final homeController = Get.find<HomeController>();
 
@@ -197,5 +198,119 @@ class TempAController extends GetxController {
       logPaymentReq,
       logPaymentRes,
     );
+  }
+
+  //!
+  //! VISA - MASTER CARD Template A
+  //!------------------------------------------------------------------------------
+  paymentprocessVisa(String amount, Menulists menudetail,
+      String storedCardUniqueID, String cvvCode) async {
+    var data;
+    var url;
+    var response;
+    rxtransid.value =
+        "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+    print(rxtransid.value);
+    print(amount);
+    if (await paymentController.paymentByVisaMasterCard(
+      rxtransid.value,
+      '',
+      int.parse(amount),
+      storedCardUniqueID,
+      cvvCode,
+    )) {
+      List<String> urlSplit =
+          homeController.menudetail.value.url?.split(";") ?? [];
+      url = urlSplit[2];
+      data = {
+        "AccName": rxaccname.value,
+        "TransactionID": rxtransid.value,
+        "AccNo": rxaccnumber.value,
+        "Amount": amount,
+        "EWid": tempAdetail.value.eWid,
+        "ProCode": tempAdetail.value.code,
+        "PhoneUser": storage.read('msisdn'),
+        "Title": homeController.menudetail.value.groupNameEN,
+        "Remark": ''
+      };
+      response = await DioClient.postEncrypt(url, data, key: 'lmm');
+
+      //! save log
+      await saveLogTempA(data, response, amount);
+      if (response['ResultCode'] == '200') {
+        rxtimestamp.value = response['CreateDate'];
+        rxPaymentAmount.value = amount;
+        enableBottom.value = true;
+        Get.to(() => ReusableResultScreen(
+            isUSD: true,
+            fromAccountImage: userController.userProfilemodel.value.profileImg!,
+            fromAccountName: userController.profileName.value,
+            fromAccountNumber: userController.userProfilemodel.value.msisdn!,
+            toAccountImage: tempAdetail.value.logo!,
+            toAccountName: rxaccname.value,
+            toAccountNumber: rxaccnumber.value,
+            toTitleProvider: tempAdetail.value.title!,
+            amount: rxPaymentAmount.value,
+            fee: rxFee.value,
+            transactionId: rxtransid.value,
+            note: rxNote.value,
+            timestamp: rxtimestamp.value));
+      } else {
+        enableBottom.value = true;
+        DialogHelper.showErrorDialogNew(description: response['ResultCode']);
+      }
+    } else {
+      enableBottom.value = true;
+    }
+  }
+
+  //!
+  //! VISA - MASTER CARD Template A
+  //!------------------------------------------------------------------------------
+  paymentprocessVisaWithoutstoredCardUniqueID(
+      String amount, Menulists menudetail) async {
+    var data;
+    var url;
+    var response;
+    List<String> urlSplit =
+        homeController.menudetail.value.url?.split(";") ?? [];
+    url = urlSplit[2];
+    data = {
+      "AccName": rxaccname.value,
+      "TransactionID": rxtransid.value,
+      "AccNo": rxaccnumber.value,
+      "Amount": amount,
+      "EWid": tempAdetail.value.eWid,
+      "ProCode": tempAdetail.value.code,
+      "PhoneUser": storage.read('msisdn'),
+      "Title": homeController.menudetail.value.groupNameEN,
+      "Remark": ''
+    };
+    response = await DioClient.postEncrypt(url, data, key: 'lmm');
+
+    //! save log
+    await saveLogTempA(data, response, amount);
+    if (response['ResultCode'] == '200') {
+      rxtimestamp.value = response['CreateDate'];
+      rxPaymentAmount.value = amount;
+      enableBottom.value = true;
+      Get.to(() => ReusableResultScreen(
+          isUSD: true,
+          fromAccountImage: userController.userProfilemodel.value.profileImg!,
+          fromAccountName: userController.profileName.value,
+          fromAccountNumber: userController.userProfilemodel.value.msisdn!,
+          toAccountImage: tempAdetail.value.logo!,
+          toAccountName: rxaccname.value,
+          toAccountNumber: rxaccnumber.value,
+          toTitleProvider: tempAdetail.value.title!,
+          amount: rxPaymentAmount.value,
+          fee: rxFee.value,
+          transactionId: rxtransid.value,
+          note: rxNote.value,
+          timestamp: rxtimestamp.value));
+    } else {
+      enableBottom.value = true;
+      DialogHelper.showErrorDialogNew(description: response['ResultCode']);
+    }
   }
 }

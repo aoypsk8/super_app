@@ -129,7 +129,7 @@ class TransferController extends GetxController {
             description: 'select_payment',
             stepBuild: '2/3',
             title: homeController.getMenuTitle(),
-            onSelectedPayment: (paymentType, cardIndex) {
+            onSelectedPayment: (paymentType, cardIndex, uuid) {
               Get.to(
                 () => ReusableConfirmScreen(
                   appbarTitle: homeController.getMenuTitle(),

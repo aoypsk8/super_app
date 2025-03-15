@@ -1,13 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/calendar_controller.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/utility/myIcon.dart';
 import 'package:super_app/views/login/appbar_login.dart';
 import 'package:super_app/views/login/bottom_datebar.dart';
 import 'package:super_app/views/login/lists_user_login.dart';
@@ -31,24 +35,48 @@ class LoginHaveAccount extends StatefulWidget {
 
 class _LoginHaveAccountState extends State<LoginHaveAccount> {
   final calendarController = Get.put(CarlendarsController());
-
   final box = GetStorage();
-
   DateTime now = DateTime.now();
-
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-
   final _password = TextEditingController();
+  final LocalAuthentication _localAuth = LocalAuthentication();
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      loadData();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      loadCalendar();
+      await loginWithBiometric();
     });
   }
 
-  loadData() async {
+  loadCalendar() async {
     await calendarController.fetchCalendarMonthList(now.year.toString(), now.month.toString());
+  }
+
+  loginWithBiometric() async {
+    bool chkBiometric = box.read('biometric') ?? false;
+    bool canCheck = false;
+    if (chkBiometric) {
+      bool isAuthenticated = false;
+      try {
+        isAuthenticated = await _localAuth.authenticate(
+          localizedReason: "Authenticate to login.",
+          options: const AuthenticationOptions(
+            biometricOnly: true,
+            useErrorDialogs: true,
+            stickyAuth: true,
+            sensitiveTransaction: true,
+          ),
+        );
+        if (isAuthenticated) {
+          String pwd = storage.read('biometric_password') ?? '';
+          userController.loginSuperApp(widget.user['username'], pwd, reqOTPprocess: false);
+        }
+      } catch (e) {
+        print("Biometric authentication error: $e");
+      }
+    }
   }
 
   @override
@@ -146,23 +174,24 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
                               forgot_password(),
                             ],
                           ),
-                          SizedBox(height: 20.sp),
+                          SizedBox(height: 10.sp),
+
                           buildBottomAppbar(
+                              high: 0,
                               func: () {
                                 _formKey.currentState!.save();
                                 if (_formKey.currentState!.validate()) {
-                                  userController.loginSuperApp(
-                                    widget.user['username'],
-                                    _password.text,
-                                    reqOTPprocess: false,
-                                  );
+                                  userController.loginSuperApp(widget.user['username'], _password.text,
+                                      reqOTPprocess: false);
                                 }
                               },
                               title: 'login'),
+
+                          SizedBox(height: 10.sp),
+                          buildLoginBiometric(),
+                          SizedBox(height: 10.sp),
                           InkWell(
-                            onTap: () {
-                              Get.offAll(LoginScreen());
-                            },
+                            onTap: () => Get.offAll(LoginScreen()),
                             child: TextFont(
                               text: 'swap_account',
                               underline: true,
@@ -170,6 +199,7 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
                               underlineColor: cr_ef33,
                             ),
                           ),
+                          SizedBox(height: 15.h),
                         ],
                       ),
                     ),
@@ -181,6 +211,29 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
         ),
       ),
       bottomNavigationBar: BottomDateBar(calendarController: calendarController, now: now),
+    );
+  }
+
+  InkWell buildLoginBiometric() {
+    return InkWell(
+      onTap: () async => await loginWithBiometric(),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(MyIconOld.ic_face, color: color_777),
+              SizedBox(width: 10.sp),
+              TextFont(text: 'login_with_biometic', color: color_777)
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

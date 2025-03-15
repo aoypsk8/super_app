@@ -316,6 +316,7 @@ class TempCController extends GetxController {
             timestamp: rxTimeStamp.value,
           ));
         } else {
+          enableBottom.value = true;
           DialogHelper.showErrorWithFunctionDialog(
               description: response['ResultDesc'],
               onClose: () {
@@ -323,10 +324,12 @@ class TempCController extends GetxController {
               });
         }
       } else {
+        enableBottom.value = true;
         DialogHelper.showErrorDialogNew(
             description: 'Your coupon amount not enough.');
       }
     } else {
+      enableBottom.value = true;
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     }
   }
@@ -442,42 +445,6 @@ class TempCController extends GetxController {
     );
   }
 
-  paymentPackageVisa() async {
-    var data;
-    var url;
-    var response;
-    List<String> urlSplit = tempCservicedetail.value.url.toString().split(";");
-    url = urlSplit[1];
-    data = {
-      "PhoneUser": storage.read('msisdn'),
-      "phoneType": tempCpackagedetail.value.typeName.toString(),
-      "type": tempCservicedetail.value.name.toString(),
-      "msisdn": rxAccNo.value,
-      "tranID": rxTransID.value,
-      "massage": tempCpackagedetail.value.description.toString(),
-      "amount": rxTotalAmount.value.toStringAsFixed(0),
-      "Pk_code": tempCpackagedetail.value.pKCode.toString(),
-      "discount": tempCdetail.value.discount.toString(),
-      "operator": tempCpackagedetail.value.operator.toString()
-    };
-    response = await DioClient.postEncrypt(url, data, key: 'lmm');
-    //! save log
-    saveLogPackage(data, response);
-    if (response['ResultCode'] == '200') {
-      //? save parameter to result screen
-      rxTimeStamp.value = response['Created'];
-      rxPaymentAmount.value = int.parse(response['Amount']);
-      saveHistoryMobile(rxAccNo.value, rxService.value);
-      // Get.to(() => const ResultPackageTempCScreen());
-    } else {
-      DialogHelper.showErrorWithFunctionDialog(
-          description: response['ResultDesc'],
-          onClose: () {
-            Get.close(userController.pageclose.value);
-          });
-    }
-  }
-
   void saveHistoryMobile(String msisdn, String mobileType) async {
     final box = GetStorage();
     String? myDataString = box.read('historyMobile');
@@ -514,6 +481,385 @@ class TempCController extends GetxController {
         });
       }
       await box.write('historyMobile', json.encode(myData));
+    }
+  }
+
+  //!
+  //! VISA - MASTER CARD PACKAGE
+  //!------------------------------------------------------------------------------
+  paymentPackageVisa(
+      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    var data;
+    var url;
+    var response;
+    rxTransID.value =
+        "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+    if (await paymentController.paymentByVisaMasterCard(
+      rxTransID.value,
+      tempCpackagedetail.value.description.toString(),
+      rxTotalAmount.value,
+      storedCardUniqueID,
+      cvvCode,
+    )) {
+      //! Insert DB
+      List<String> urlSplit =
+          tempCservicedetail.value.url.toString().split(";");
+      var url = urlSplit[1];
+
+      var data = {
+        "PhoneUser": storage.read('msisdn'),
+        "phoneType": tempCpackagedetail.value.typeName.toString(),
+        "type": tempCservicedetail.value.name.toString(),
+        "msisdn": rxAccNo.value,
+        "tranID": rxTransID.value,
+        "massage": tempCpackagedetail.value.description.toString(),
+        "amount": rxTotalAmount.value.toStringAsFixed(0),
+        "Pk_code": tempCpackagedetail.value.pKCode.toString(),
+        "discount": tempCdetail.value.discount.toString(),
+        "operator": tempCpackagedetail.value.operator.toString()
+      };
+      response = await DioClient.postEncrypt(url, data, key: 'lmm');
+      //! save log
+      await saveLogPackage(data, response);
+      if (response['ResultCode'] == '200') {
+        rxTimeStamp.value = response['Created'];
+        rxPaymentAmount.value = int.parse(response['Amount']);
+        saveHistoryMobile(rxAccNo.value, rxService.value);
+        enableBottom.value = true;
+        Get.to(ReusableResultScreen(
+          isUSD: true,
+          fromAccountImage: userController.userProfilemodel.value.profileImg ??
+              MyConstant.profile_default,
+          fromAccountName: userController.profileName.value,
+          fromAccountNumber: userController.rxMsisdn.value,
+          toAccountImage: MyConstant.profile_default,
+          toAccountName: tempCpackagedetail.value.packageName!,
+          toAccountNumber:
+              '${tempCpackagedetail.value.packageValue} | ${tempCpackagedetail.value.userDay} Day',
+          toTitleProvider: '',
+          amount: rxPaymentAmount.toString(),
+          fee: '0',
+          transactionId: rxTransID.value,
+          note: rxNote.value,
+          timestamp: rxTimeStamp.value,
+        ));
+      } else {
+        enableBottom.value = true;
+        DialogHelper.showErrorWithFunctionDialog(
+            description: response['ResultDesc'],
+            onClose: () {
+              Get.close(userController.pageclose.value + 1);
+            });
+      }
+    } else {
+      enableBottom.value = true;
+    }
+  }
+
+  //!
+  //! VISA - MASTER CARD PACKAGE WithoutstoredCardUniqueID
+  //!------------------------------------------------------------------------------
+  paymentPackageVisaWithoutstoredCardUniqueID(Menulists menudetail) async {
+    var response;
+    //! Insert DB
+    List<String> urlSplit = tempCservicedetail.value.url.toString().split(";");
+    var url = urlSplit[1];
+    var data = {
+      "PhoneUser": storage.read('msisdn'),
+      "phoneType": tempCpackagedetail.value.typeName.toString(),
+      "type": tempCservicedetail.value.name.toString(),
+      "msisdn": rxAccNo.value,
+      "tranID": rxTransID.value,
+      "massage": tempCpackagedetail.value.description.toString(),
+      "amount": rxTotalAmount.value.toStringAsFixed(0),
+      "Pk_code": tempCpackagedetail.value.pKCode.toString(),
+      "discount": tempCdetail.value.discount.toString(),
+      "operator": tempCpackagedetail.value.operator.toString()
+    };
+    response = await DioClient.postEncrypt(url, data, key: 'lmm');
+    //! save log
+    await saveLogPackage(data, response);
+    if (response['ResultCode'] == '200') {
+      rxTimeStamp.value = response['Created'];
+      rxPaymentAmount.value = int.parse(response['Amount']);
+      saveHistoryMobile(rxAccNo.value, rxService.value);
+      enableBottom.value = true;
+      Get.to(ReusableResultScreen(
+        isUSD: true,
+        fromAccountImage: userController.userProfilemodel.value.profileImg ??
+            MyConstant.profile_default,
+        fromAccountName: userController.profileName.value,
+        fromAccountNumber: userController.rxMsisdn.value,
+        toAccountImage: MyConstant.profile_default,
+        toAccountName: tempCpackagedetail.value.packageName!,
+        toAccountNumber:
+            '${tempCpackagedetail.value.packageValue} | ${tempCpackagedetail.value.userDay} Day',
+        toTitleProvider: '',
+        amount: rxPaymentAmount.toString(),
+        fee: '0',
+        transactionId: rxTransID.value,
+        note: rxNote.value,
+        timestamp: rxTimeStamp.value,
+      ));
+    } else {
+      enableBottom.value = true;
+      DialogHelper.showErrorWithFunctionDialog(
+          description: response['ResultDesc'],
+          onClose: () {
+            Get.close(userController.pageclose.value + 1);
+          });
+    }
+  }
+
+  //!
+  //! VISA - MASTER CARD PREPAID
+  //!------------------------------------------------------------------------------
+  paymentPrepaidVisa(
+      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    var data;
+    var url;
+    var response;
+    rxTransID.value =
+        "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+    //! Confirm CashOut
+    if (await paymentController.paymentByVisaMasterCard(
+      rxTransID.value,
+      tempCpackagedetail.value.description.toString(),
+      rxTotalAmount.value,
+      storedCardUniqueID,
+      cvvCode,
+    )) {
+      //! Insert DB
+      List<String> urlSplit =
+          tempCservicedetail.value.url.toString().split(";");
+      var url = urlSplit[1];
+      var data = {
+        "PhoneUser": storage.read('msisdn'),
+        "msisdn": rxAccNo.value,
+        "tranID": rxTransID.value,
+        "type": tempCservicedetail.value.name.toString(),
+        "amount": rxTotalAmount.value.toStringAsFixed(0),
+        "discount": tempCdetail.value.discount.toString(),
+        "operator": tempCdetail.value.groupTelecom.toString(),
+      };
+      response = await DioClient.postEncrypt(url, data, key: 'lmm');
+      //! save log
+      await saveLogPrepaid(data, response);
+      if (response['ResultCode'] == '200') {
+        rxTimeStamp.value = response['Created'];
+        rxPaymentAmount.value = int.parse(response['Amount']);
+        saveHistoryMobile(rxAccNo.value, rxService.value);
+        enableBottom.value = true;
+
+        Get.off(ReusableResultScreen(
+          isUSD: true,
+          fromAccountImage: userController.userProfilemodel.value.profileImg ??
+              MyConstant.profile_default,
+          fromAccountName: userController.profileName.value,
+          fromAccountNumber: userController.rxMsisdn.value,
+          toAccountImage: MyConstant.profile_default,
+          toAccountName: tempCservicedetail.value.description.toString(),
+          toAccountNumber: rxAccNo.value,
+          toTitleProvider: '',
+          amount: rxPaymentAmount.value.toString(),
+          fee: '0',
+          transactionId: rxTransID.value,
+          note: rxNote.value,
+          timestamp: rxTimeStamp.value,
+        ));
+      } else {
+        enableBottom.value = true;
+        DialogHelper.showErrorWithFunctionDialog(
+            description: response['ResultDesc'],
+            onClose: () {
+              Get.close(userController.pageclose.value + 1);
+            });
+      }
+    } else {
+      enableBottom.value = true;
+    }
+  }
+
+  //!
+  //! VISA - MASTER CARD PREPAID
+  //!------------------------------------------------------------------------------
+  paymentPrepaidVisaWithoutstoredCardUniqueID(Menulists menudetail) async {
+    var response;
+
+    //! Insert DB
+    List<String> urlSplit = tempCservicedetail.value.url.toString().split(";");
+    var url = urlSplit[1];
+    var data = {
+      "PhoneUser": storage.read('msisdn'),
+      "msisdn": rxAccNo.value,
+      "tranID": rxTransID.value,
+      "type": tempCservicedetail.value.name.toString(),
+      "amount": rxTotalAmount.value.toStringAsFixed(0),
+      "discount": tempCdetail.value.discount.toString(),
+      "operator": tempCdetail.value.groupTelecom.toString(),
+    };
+    response = await DioClient.postEncrypt(url, data, key: 'lmm');
+    //! save log
+    await saveLogPrepaid(data, response);
+    if (response['ResultCode'] == '200') {
+      rxTimeStamp.value = response['Created'];
+      rxPaymentAmount.value = int.parse(response['Amount']);
+      saveHistoryMobile(rxAccNo.value, rxService.value);
+      enableBottom.value = true;
+
+      Get.off(ReusableResultScreen(
+        isUSD: true,
+        fromAccountImage: userController.userProfilemodel.value.profileImg ??
+            MyConstant.profile_default,
+        fromAccountName: userController.profileName.value,
+        fromAccountNumber: userController.rxMsisdn.value,
+        toAccountImage: MyConstant.profile_default,
+        toAccountName: tempCservicedetail.value.description.toString(),
+        toAccountNumber: rxAccNo.value,
+        toTitleProvider: '',
+        amount: rxPaymentAmount.value.toString(),
+        fee: '0',
+        transactionId: rxTransID.value,
+        note: rxNote.value,
+        timestamp: rxTimeStamp.value,
+      ));
+    } else {
+      enableBottom.value = true;
+      DialogHelper.showErrorWithFunctionDialog(
+          description: response['ResultDesc'],
+          onClose: () {
+            Get.close(userController.pageclose.value + 1);
+          });
+    }
+  }
+
+  //!
+  //! POSTPAID
+  //!------------------------------------------------------------------------------
+  paymentPostpaidVisa(
+      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    var data;
+    var url;
+    var response;
+    //! Confirm CashOut
+    rxTransID.value =
+        "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+    if (await paymentController.paymentByVisaMasterCard(
+      rxTransID.value,
+      tempCpackagedetail.value.description.toString(),
+      rxTotalAmount.value,
+      storedCardUniqueID,
+      cvvCode,
+    )) {
+      //! Insert DB
+      List<String> urlSplit =
+          tempCservicedetail.value.url.toString().split(";");
+      var url = urlSplit[1];
+      var data = {
+        "PhoneUser": storage.read('msisdn'),
+        "msisdn": rxAccNo.value,
+        "tranID": rxTransID.value,
+        "type": tempCservicedetail.value.name.toString(),
+        "amount": rxTotalAmount.value.toStringAsFixed(0),
+        "discount": tempCdetail.value.discount.toString(),
+        "operator": tempCdetail.value.groupTelecom.toString(),
+        "name": rxAccName.value
+      };
+      response = await DioClient.postEncrypt(url, data, key: 'lmm');
+      //! save log
+      await saveLogPostpaid(data, response);
+
+      if (response['ResultCode'] == '200') {
+        rxTimeStamp.value = response['Created'];
+        rxPaymentAmount.value = int.parse(response['Amount']);
+        saveHistoryMobile(rxAccNo.value, rxService.value);
+        enableBottom.value = true;
+        Get.to(
+          ReusableResultScreen(
+            isUSD: true,
+            fromAccountImage:
+                userController.userProfilemodel.value.profileImg ??
+                    MyConstant.profile_default,
+            fromAccountName: userController.profileName.value,
+            fromAccountNumber: userController.rxMsisdn.value,
+            toAccountImage: tempCdetail.value.groupLogo.toString(),
+            toAccountName:
+                '${rxAccName.value} - ${tempCdetail.value.groupTelecom} - ${tempCservicedetail.value.name}',
+            toAccountNumber: rxAccNo.value,
+            amount: rxPaymentAmount.value.toString(),
+            fee: '0',
+            note: rxNote.value,
+            toTitleProvider: '',
+            transactionId: rxTransID.value,
+            timestamp: rxTimeStamp.value,
+          ),
+        );
+      } else {
+        enableBottom.value = true;
+        DialogHelper.showErrorWithFunctionDialog(
+            description: response['ResultDesc'],
+            onClose: () {
+              Get.close(userController.pageclose.value + 1);
+            });
+      }
+    } else {
+      enableBottom.value = true;
+    }
+  }
+
+  //!
+  //! POSTPAID
+  //!------------------------------------------------------------------------------
+  paymentPostpaidVisaWithoutstoredCardUniqueID(Menulists menudetail) async {
+    var response;
+    //! Insert DB
+    List<String> urlSplit = tempCservicedetail.value.url.toString().split(";");
+    var url = urlSplit[1];
+    var data = {
+      "PhoneUser": storage.read('msisdn'),
+      "msisdn": rxAccNo.value,
+      "tranID": rxTransID.value,
+      "type": tempCservicedetail.value.name.toString(),
+      "amount": rxTotalAmount.value.toStringAsFixed(0),
+      "discount": tempCdetail.value.discount.toString(),
+      "operator": tempCdetail.value.groupTelecom.toString(),
+      "name": rxAccName.value
+    };
+    response = await DioClient.postEncrypt(url, data, key: 'lmm');
+    //! save log
+    await saveLogPostpaid(data, response);
+
+    if (response['ResultCode'] == '200') {
+      rxTimeStamp.value = response['Created'];
+      rxPaymentAmount.value = int.parse(response['Amount']);
+      saveHistoryMobile(rxAccNo.value, rxService.value);
+      enableBottom.value = true;
+      Get.to(
+        ReusableResultScreen(
+          isUSD: true,
+          fromAccountImage: userController.userProfilemodel.value.profileImg ??
+              MyConstant.profile_default,
+          fromAccountName: userController.profileName.value,
+          fromAccountNumber: userController.rxMsisdn.value,
+          toAccountImage: tempCdetail.value.groupLogo.toString(),
+          toAccountName:
+              '${rxAccName.value} - ${tempCdetail.value.groupTelecom} - ${tempCservicedetail.value.name}',
+          toAccountNumber: rxAccNo.value,
+          amount: rxPaymentAmount.value.toString(),
+          fee: '0',
+          note: rxNote.value,
+          toTitleProvider: '',
+          transactionId: rxTransID.value,
+          timestamp: rxTimeStamp.value,
+        ),
+      );
+    } else {
+      enableBottom.value = true;
+      DialogHelper.showErrorWithFunctionDialog(
+          description: response['ResultDesc'],
+          onClose: () {
+            Get.close(userController.pageclose.value + 1);
+          });
     }
   }
 }

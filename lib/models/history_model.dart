@@ -6,7 +6,8 @@ class HistoryModel {
   String? created;
   String? remark;
 
-  HistoryModel({this.tranID, this.type, this.amount, this.channel, this.created});
+  HistoryModel(
+      {this.tranID, this.type, this.amount, this.channel, this.created});
 
   HistoryModel.fromJson(Map<String, dynamic> json) {
     tranID = json['tranID'];

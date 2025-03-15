@@ -7,6 +7,7 @@ import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/tempA_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
+import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
@@ -14,9 +15,9 @@ import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
-import 'package:super_app/widget/buildButtonBottom.dart';
-import 'package:super_app/widget/buildTextField.dart';
+import 'package:super_app/widget/build_pay_visa.dart';
 import 'package:super_app/widget/build_step_process.dart';
+import 'package:super_app/widget/input_cvv.dart';
 import 'package:super_app/widget/mounoy_textfield.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -75,66 +76,68 @@ class PaymentTempAScreen extends StatelessWidget {
                   _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '');
               controller.enableBottom.value = true;
               // Get.to(() => ListsPaymentTempAScreen());
-              Get.to(ListsPaymentScreen(
-                description: 'select_payment',
-                stepBuild: '4/5',
-                title: homeController.getMenuTitle(),
-                onSelectedPayment: (paymentType, cardIndex) {
-                  paymentController
-                      .reqCashOut(
-                          transID: controller.rxtransid.value,
-                          amount: controller.rxPaymentAmount.value,
-                          toAcc: controller.rxaccnumber.value,
-                          chanel: homeController.menudetail.value.groupNameEN,
-                          provider: controller.tempAdetail.value.code,
-                          remark: controller.rxNote.value)
-                      .then(
-                        (value) => {
-                          if (value)
-                            {
-                              Get.to(() => ReusableConfirmScreen(
-                                    isEnabled: controller.enableBottom,
-                                    appbarTitle: "confirm_payment",
-                                    function: () {
-                                      controller.enableBottom.value = false;
-                                      controller.isLoading.value = true;
-                                      var amount = controller
-                                          .rxPaymentAmount.value
-                                          .replaceAll(RegExp(r'[^\w\s]+'), '');
-                                      controller.paymentprocess(amount);
-                                    },
-                                    stepProcess: "5/5",
-                                    stepTitle: "check_detail",
-                                    fromAccountImage: userController
-                                            .userProfilemodel
-                                            .value
-                                            .profileImg ??
-                                        MyConstant.profile_default,
-                                    fromAccountName:
-                                        '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-                                    fromAccountNumber: userController
-                                        .userProfilemodel.value.msisdn
-                                        .toString(),
-                                    toAccountImage:
-                                        controller.tempAdetail.value.logo ?? '',
-                                    toAccountName: controller.rxaccname
-                                        .value, // Fixed swapped values
-                                    toAccountNumber:
-                                        controller.rxaccnumber.value,
-                                    amount: controller.rxPaymentAmount.value,
-                                    fee: controller.tempAdetail.value.fee ??
-                                        '0', // Prevent null error
-                                    note: controller.rxNote.value,
-                                  ))
-                            }
-                          else
-                            {
-                              controller.enableBottom.value = true,
-                            }
-                        },
-                      );
-                },
-              ));
+              Get.to(
+                ListsPaymentScreen(
+                  description: 'select_payment',
+                  stepBuild: '4/5',
+                  title: homeController.getMenuTitle(),
+                  onSelectedPayment: (paymentType, cardIndex, uuid) {
+                    paymentController
+                        .reqCashOut(
+                      transID: controller.rxtransid.value,
+                      amount: controller.rxPaymentAmount.value,
+                      toAcc: controller.rxaccnumber.value,
+                      chanel: homeController.menudetail.value.groupNameEN,
+                      provider: controller.tempAdetail.value.code,
+                      remark: controller.rxNote.value,
+                    )
+                        .then((value) async {
+                      if (value) {
+                        if (paymentType == "Other") {
+                          homeController.RxamountUSD.value =
+                              await homeController.convertRate(
+                            int.parse(controller.rxPaymentAmount.value),
+                          );
+                          controller.rxtransid.value =
+                              "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                          Get.to(PaymentVisaMasterCard(
+                            function: () {
+                              controller
+                                  .paymentprocessVisaWithoutstoredCardUniqueID(
+                                controller.rxPaymentAmount.value,
+                                homeController.menudetail.value,
+                              );
+                            },
+                            trainID: controller.rxtransid.value,
+                            description: controller.rxNote.value,
+                            amount: int.parse(controller.rxPaymentAmount.value),
+                          ));
+                        } else if (paymentType == 'MMONEY') {
+                          navigateToConfirmScreen(paymentType);
+                        } else {
+                          homeController.RxamountUSD.value =
+                              await homeController.convertRate(
+                            int.parse(controller.rxPaymentAmount.value),
+                          );
+                          String? cvv =
+                              await showDynamicQRDialog(context, () {});
+                          if (cvv != null &&
+                              cvv.isNotEmpty &&
+                              cvv.length >= 3) {
+                            navigateToConfirmScreen(paymentType, cvv, uuid);
+                          } else {
+                            DialogHelper.showErrorDialogNew(
+                              description: "please_input_cvv",
+                            );
+                          }
+                        }
+                      } else {
+                        controller.enableBottom.value = true;
+                      }
+                    });
+                  },
+                ),
+              );
             }
           }
         },
@@ -256,5 +259,46 @@ class PaymentTempAScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void navigateToConfirmScreen(String paymentType,
+      [String cvv = '', String storedCardUniqueID = '']) {
+    Get.to(() => ReusableConfirmScreen(
+          isUSD: paymentType != 'MMONEY',
+          isEnabled: controller.enableBottom,
+          appbarTitle: "confirm_payment",
+          function: () {
+            controller.enableBottom.value = false;
+            controller.isLoading.value = true;
+            if (paymentType == 'MMONEY') {
+              var amount = controller.rxPaymentAmount.value
+                  .replaceAll(RegExp(r'[^\w\s]+'), '');
+              controller.paymentprocess(amount);
+            } else {
+              var amount = controller.rxPaymentAmount.value
+                  .replaceAll(RegExp(r'[^\w\s]+'), '');
+              controller.paymentprocessVisa(
+                amount,
+                homeController.menudetail.value,
+                storedCardUniqueID,
+                cvv,
+              );
+            }
+          },
+          stepProcess: "5/5",
+          stepTitle: "check_detail",
+          fromAccountImage: userController.userProfilemodel.value.profileImg ??
+              MyConstant.profile_default,
+          fromAccountName:
+              '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+          fromAccountNumber:
+              userController.userProfilemodel.value.msisdn.toString(),
+          toAccountImage: controller.tempAdetail.value.logo ?? '',
+          toAccountName: controller.rxaccname.value, // Fixed swapped values
+          toAccountNumber: controller.rxaccnumber.value,
+          amount: controller.rxPaymentAmount.value,
+          fee: controller.tempAdetail.value.fee ?? '0', // Prevent null error
+          note: controller.rxNote.value,
+        ));
   }
 }

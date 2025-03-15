@@ -9,6 +9,7 @@ import 'package:super_app/services/language_service.dart';
 import 'package:super_app/services/theme_service.dart';
 import 'package:super_app/splash_screen.dart';
 import 'package:super_app/test.dart';
+import 'package:super_app/test_biometric.dart';
 import 'package:super_app/themes/dark_theme.dart';
 import 'package:super_app/themes/light_theme.dart';
 import 'package:super_app/translations.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         getPages: AppRoutes.routes,
         home: SplashScreen(),
-        // home: TestScreen(),
+        // home: BiometricAuthScreen(),
       );
     });
   }

@@ -103,20 +103,17 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
           width: 14.w,
           height: 14.w,
           child: FloatingActionButton(
-            onPressed: () {
-              // qrController.clear();
-              // if (!userController.isCheckToken.value) {
-              //   userController.isCheckToken.value = true;
-              //   userController.checktoken(name: 'menu').then((value) async {
-              //     if (userController.isLogin.value) {
-              //       final result = await Get.to(() => QRScannerScreen());
-              //       if (result != null) {
-              //         qrController.verifyQR(result);
-              //       }
-              //     }
-              //   });
-              //   userController.isCheckToken.value = false;
-              // }
+            onPressed: () async {
+              qrController.clear();
+              if (!userController.isCheckToken.value) {
+                bool isValidToken = await userController.checktokenSuperApp();
+                if (isValidToken) {
+                  final result = await Get.to(() => QRScannerScreen());
+                  if (result != null) {
+                    qrController.verifyQR(result);
+                  }
+                }
+              }
             },
             backgroundColor: Theme.of(context).primaryColor,
             shape: CircleBorder(),
@@ -130,7 +127,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
         body: PullRefresh(
           refreshController: refreshController,
           onRefresh: () {
-            homeController.fetchServicesmMenu();
+            homeController.fetchServicesmMenu(userController.rxMsisdn.value);
             refreshController.refreshCompleted();
           },
           child: SingleChildScrollView(

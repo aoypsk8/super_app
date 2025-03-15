@@ -190,7 +190,7 @@ class _MyQrScreenState extends State<MyQrScreen> {
               ),
               qrController.rxQrDynamicAmout.value == ''
                   ? TextFont(
-                      text: "Scan_me",
+                      text: "scan_me",
                       poppin: true,
                       color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.w700,

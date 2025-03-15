@@ -274,7 +274,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               TextFont(
-                                text: "Deal for you, ມາລີນາ!",
+                                text:
+                                    "Deal for you, ${userController.userProfilemodel.value.name}!",
                                 color: cr_4139,
                                 fontSize: 9.5,
                                 fontWeight: FontWeight.w500,

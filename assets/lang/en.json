@@ -336,5 +336,7 @@
   "confirm_new_password": "Confirm new password",
   "confirm_password": "Confirm password",
   "change_theme": "Change theme",
-  "all_transaction": "All Transaction"
+  "all_transaction": "All Transaction",
+  "scan_me":"Scan me",
+  "loading_complete":"Loading complete"
 }

@@ -4,6 +4,7 @@ import 'package:super_app/utility/color.dart';
 final ThemeData darkTheme = ThemeData.light().copyWith(
   scaffoldBackgroundColor: const Color(0xFFFFBF7F6),
   primaryColor: color_primary_dark,
+  cardTheme: cr_fdeb,
   appBarTheme: AppBarTheme(
     color: color_primary_dark,
     iconTheme: const IconThemeData(color: Colors.black),

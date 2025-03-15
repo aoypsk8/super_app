@@ -78,7 +78,7 @@ class _ServicePageState extends State<ServicePage> {
                       width: 13.w,
                       height: 3,
                       decoration: BoxDecoration(
-                        color: cr_ef33,
+                        color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(3),
                       ),
                     ),
@@ -96,7 +96,9 @@ class _ServicePageState extends State<ServicePage> {
                           var result = menuModelItem.menulists![index];
                           String? url = result.logo;
                           if (url != null && homeController.TPlus_theme.value) {
-                            url = url.replaceFirst("Icons/", "Icons/y");
+                            url = url.replaceFirst("icons/", "icons/y");
+                          } else {
+                            url = url!.replaceFirst("icons/", "icons/");
                           }
 
                           return InkWell(

@@ -16,7 +16,9 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
   unselectedWidgetColor: color_7070, // Inactive color
 
   // Define textTheme for text color customization
-  textTheme: const TextTheme(bodyMedium: TextStyle(color: color_fff), bodySmall: TextStyle(color: cr_bf29)),
+  textTheme: const TextTheme(
+      bodyMedium: TextStyle(color: color_fff),
+      bodySmall: TextStyle(color: cr_bf29)),
 
   switchTheme: SwitchThemeData(
     thumbColor: MaterialStateProperty.resolveWith<Color?>((states) {

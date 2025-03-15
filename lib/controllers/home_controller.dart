@@ -1,7 +1,8 @@
 // ignore_for_file: invalid_use_of_protected_member, avoid_print
 
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:flutter_cache/flutter_cache.dart' as cache;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:super_app/models/appinfo_model.dart';
+import 'package:super_app/models/home_model.dart';
 import 'package:super_app/models/menu_model.dart';
 import 'package:super_app/models/notification_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
@@ -43,6 +45,13 @@ class HomeController extends GetxController {
   Rx<MessageList> messageListDetail = MessageList().obs;
   RxInt messageUnread = 0.obs;
 
+  // advertiment
+  RxList<AdsList> adslist = <AdsList>[].obs;
+  Rx<AdsList> hotproduct = AdsList().obs;
+  Rx<AdsList> banner = AdsList().obs;
+  Rx<AdsList> moreoption = AdsList().obs;
+  Rx<AdsList> recommend = AdsList().obs;
+
   //! clear data
   clear() async {
     menutitle = ''.obs;
@@ -68,6 +77,7 @@ class HomeController extends GetxController {
     // storage.write('msisdn', "2052768833");
 
     getAppVersion();
+    fetchads();
     await checkAppUpdate();
   }
 
@@ -206,5 +216,44 @@ class HomeController extends GetxController {
     var response = await DioClient.postEncrypt(
         '${MyConstant.urlVisa}/ConvertRate', {'amount': amountkip});
     return response['usd'];
+  }
+
+  fetchads() async {
+    //! check cache exist
+    var cacheData = await cache.load('ads', null);
+
+    if (cacheData == null) {
+      print('${MyConstant.urlAddress}/Ads');
+      var response = await DioClient.postEncrypt(
+        '${MyConstant.urlAddress}/Ads',
+        {},
+        loading: false,
+      );
+      if (response != null) {
+        //! save cache
+        await cache.remember('ads', jsonEncode(response), 60 * 5);
+        adslist.value =
+            response.map<AdsList>((json) => AdsList.fromJson(json)).toList();
+        for (var i = 0; i < adslist.value.length; i++) {
+          if (adslist.value[i].index == '0') banner.value = adslist.value[i];
+          if (adslist.value[i].index == '1')
+            hotproduct.value = adslist.value[i];
+          if (adslist.value[i].index == '2') recommend.value = adslist.value[i];
+          if (adslist.value[i].index == '3')
+            moreoption.value = adslist.value[i];
+        }
+      }
+    } else {
+      //! load cache
+      adslist.value = jsonDecode(cacheData)
+          .map<AdsList>((json) => AdsList.fromJson(json))
+          .toList();
+      for (var i = 0; i < adslist.value.length; i++) {
+        if (adslist.value[i].index == '0') banner.value = adslist.value[i];
+        if (adslist.value[i].index == '1') hotproduct.value = adslist.value[i];
+        if (adslist.value[i].index == '2') recommend.value = adslist.value[i];
+        if (adslist.value[i].index == '3') moreoption.value = adslist.value[i];
+      }
+    }
   }
 }

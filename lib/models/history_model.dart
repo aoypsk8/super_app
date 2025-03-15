@@ -1,13 +1,18 @@
 class HistoryModel {
   String? tranID;
   String? type;
-  int? amount;
+  dynamic amount; // Change to dynamic to accept both int and String
   String? channel;
   String? created;
   String? remark;
 
   HistoryModel(
-      {this.tranID, this.type, this.amount, this.channel, this.created});
+      {this.tranID,
+      this.type,
+      this.amount,
+      this.channel,
+      this.created,
+      this.remark});
 
   HistoryModel.fromJson(Map<String, dynamic> json) {
     tranID = json['tranID'];

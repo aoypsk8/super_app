@@ -13,16 +13,12 @@ import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
-import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/qr_controller.dart';
-import 'package:super_app/controllers/tempA_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
-import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/scanqr/qr_scanner.dart';
 import 'package:super_app/views/web/openWebView.dart';
-import 'package:super_app/widget/button.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/pull_refresh.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -69,20 +65,6 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
     });
   }
 
-  List<String> imageUrls = [
-    "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
-    "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
-    "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
-    "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
-    "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
-  ];
-  List<String> imageUrlsDropping = [
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-  ];
   List<String> loveItUrls = [
     "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
     "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
@@ -200,7 +182,10 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                               homeController
                                                   .TPlus_theme.value) {
                                             url = url.replaceFirst(
-                                                "Icons/", "Icons/y");
+                                                "icons/", "icons/y");
+                                          } else {
+                                            url = url!.replaceFirst(
+                                                "icons/", "icons/");
                                           }
 
                                           return InkWell(
@@ -274,120 +259,10 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                   ],
                                 ),
                               ),
-
-                              // PrimaryButton(
-                              //     title: 'fetchServicesmMenu',
-                              //     onPressed: () {
-                              //       homeController.fetchServicesmMenu();
-                              //     }),
-                              // PrimaryButton(
-                              //     title: 'OTP TESTING',
-                              //     onPressed: () {
-                              //       Get.toNamed('/otpTransfer');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'Get Payment List',
-                              //     onPressed: () {
-                              //       Get.to(ListsPaymentScreen(
-                              //         description: 'select_payment',
-                              //         stepBuild: '4/5',
-                              //         title: homeController.getMenuTitle(),
-                              //         onSelectedPayment: () {
-                              //           paymentController
-                              //               .reqCashOut(
-                              //                   transID: controller.rxtransid.value,
-                              //                   amount: controller.rxPaymentAmount.value,
-                              //                   toAcc: controller.rxaccnumber.value,
-                              //                   chanel: homeController
-                              //                       .menudetail.value.groupNameEN,
-                              //                   provider:
-                              //                       controller.tempAdetail.value.code,
-                              //                   remark: controller.rxNote.value)
-                              //               .then(
-                              //                 (value) => {
-                              //                   if (value)
-                              //                     {Get.to(() => ConfirmTempAScreen())}
-                              //                 },
-                              //               );
-                              //           return Container();
-                              //         },
-                              //       ));
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'Visa Master Card',
-                              //     onPressed: () {
-                              //       Get.toNamed('/visaMasterCard');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'OTP Email',
-                              //     onPressed: () {
-                              //       Get.toNamed('/otpTransferEmail');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'Transfer',
-                              //     onPressed: () {
-                              //       Get.toNamed('/transfer');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'Cash Out',
-                              //     onPressed: () {
-                              //       Get.toNamed('/cashOut');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'finance',
-                              //     onPressed: () {
-                              //       Get.toNamed('/finance');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'tempA',
-                              //     onPressed: () async {
-                              //       Get.toNamed('/templateA');
-
-                              // Get.to(ReusableResultScreen(
-                              //     fromAccountImage: 'https://mmoney.la/AppLite/PartnerIcon/electricLogo.png',
-                              //     fromAccountName: 'fromAccountName',
-                              //     fromAccountNumber: 'fromAccountNumber',
-                              //     toAccountImage: 'https://mmoney.la/AppLite/PartnerIcon/electricLogo.png',
-                              //     toAccountName: 'toAccountName',
-                              //     toAccountNumber: 'toAccountNumber',
-                              //     toTitleProvider: 'toTitleProvider',
-                              //     amount: '1000',
-                              //     fee: '0',
-                              //     transactionId: 'transactionId',
-                              //     note: 'note',
-                              //     timestamp: '2025-01-29 09:47:10'));
-
-                              // Get.to(ScreenshotPage());
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'XJaidee',
-                              //     onPressed: () {
-                              //       Get.toNamed('/xjaidee');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'X-Proof',
-                              //     onPressed: () {
-                              //       Get.toNamed('/proof');
-                              //     }),
                             ],
                           ),
                         ),
                       ),
-                      // PrimaryButton(
-                      //     title: 'XJaidee',
-                      //     onPressed: () {
-                      //       Get.toNamed('/xjaidee');
-                      //     }),
                       const SizedBox(height: 20),
                       Container(
                         color: color_fff,
@@ -444,32 +319,32 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         ),
                       ),
                       const SizedBox(height: 15),
-                      Container(
-                        color: color_fff,
-                        width: Get.width,
-                        padding: const EdgeInsets.only(top: 15, bottom: 25),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextFont(
-                                text: "Dropping Like It's Hot!",
-                                color: cr_4139,
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              Divider(
-                                color: Theme.of(context).primaryColor,
-                                thickness: 2,
-                                endIndent: 310,
-                              ),
-                              const SizedBox(height: 20),
-                              buildLoveit(),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   color: color_fff,
+                      //   width: Get.width,
+                      //   padding: const EdgeInsets.only(top: 15, bottom: 25),
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                      //     child: Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         TextFont(
+                      //           text: "Dropping Like It's Hot!",
+                      //           color: cr_4139,
+                      //           fontSize: 9.5,
+                      //           fontWeight: FontWeight.w500,
+                      //         ),
+                      //         Divider(
+                      //           color: Theme.of(context).primaryColor,
+                      //           thickness: 2,
+                      //           endIndent: 310,
+                      //         ),
+                      //         const SizedBox(height: 20),
+                      //         buildLoveit(),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                       const SizedBox(height: 20),
                     ],
                   )
@@ -617,13 +492,13 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                 });
               },
             ),
-            items: imageUrls.map<Widget>((entry) {
+            items: homeController.recommend.value.detail!.map<Widget>((entry) {
               return Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: Theme.of(context).primaryColor,
                   image: DecorationImage(
-                    image: NetworkImage(entry),
+                    image: NetworkImage(entry.imgUrl!),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -636,7 +511,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
           // Indicator for the carousel
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(imageUrls.length, (index) {
+            children: List.generate(
+                homeController.recommend.value.detail!.length, (index) {
               return _current == index
                   ? Container(
                       width: 6.0.w,
@@ -686,14 +562,14 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                 });
               },
             ),
-            items: imageUrlsDropping.map<Widget>((entry) {
+            items: homeController.hotproduct.value.detail!.map<Widget>((entry) {
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Theme.of(context).primaryColor,
                   image: DecorationImage(
-                    image: NetworkImage(entry),
+                    image: NetworkImage(entry.imgUrl!),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -706,7 +582,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
           // Indicator for the carousel
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(imageUrlsDropping.length, (index) {
+            children: List.generate(
+                homeController.hotproduct.value.detail!.length, (index) {
               return _currentDropping == index
                   ? Container(
                       width: 6.0.w,

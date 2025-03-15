@@ -321,5 +321,20 @@
   "transfer_to_bank":"Input withdrawal transaction",
   "please_pay": "Please pay",
   "otp_send_to": "The OTP code has been sent to the number : @phone",
-  "ref_otp": "The Ref OTP code : @refotp"
+  "ref_otp": "The Ref OTP code : @refotp",
+  "continue_as": "Continue as",
+  "recent_login": "Recent Login",
+  "login_with_biometric": "Login with Biometric",
+  "enter_your_username": "Enter your username",
+  "enter_your_password": "Enter your password",
+  "sign_in_with": "Sign In With",
+  "confirm_otp": "Confirm OTP",
+  "create_password": "Create password",
+  "new_password": "New password",
+  "secure_your_account": "Secure your account",
+  "enter_new_password": "Enter new password",
+  "confirm_new_password": "Confirm new password",
+  "confirm_password": "Confirm password",
+  "change_theme": "Change theme",
+  "all_transaction": "All Transaction"
 }

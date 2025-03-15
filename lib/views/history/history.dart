@@ -123,7 +123,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               fontWeight: FontWeight.w500,
                                               fontSize: 16,
                                               color: data.type == 'OUT'
-                                                  ? cr_b326
+                                                  ? Theme.of(context)
+                                                      .primaryColor
                                                   : Colors.green,
                                               poppin: true,
                                             ),
@@ -131,7 +132,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               text: '.00LAK',
                                               fontWeight: FontWeight.w500,
                                               color: data.type == 'OUT'
-                                                  ? cr_b326
+                                                  ? Theme.of(context)
+                                                      .primaryColor
                                                   : Colors.green,
                                               poppin: true,
                                               fontSize: 11,

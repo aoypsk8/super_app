@@ -78,7 +78,7 @@ class _ServicePageState extends State<ServicePage> {
                       width: 13.w,
                       height: 3,
                       decoration: BoxDecoration(
-                        color: cr_ef33,
+                        color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(3),
                       ),
                     ),

@@ -190,9 +190,9 @@ class _MyQrScreenState extends State<MyQrScreen> {
               ),
               qrController.rxQrDynamicAmout.value == ''
                   ? TextFont(
-                      text: "Scan me",
+                      text: "Scan_me",
                       poppin: true,
-                      color: cr_ef33,
+                      color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.w700,
                     )
                   : Row(
@@ -201,13 +201,13 @@ class _MyQrScreenState extends State<MyQrScreen> {
                         TextFont(
                           text: qrController.rxQrDynamicAmout.value,
                           poppin: true,
-                          color: cr_ef33,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w700,
                         ),
                         const SizedBox(width: 5),
                         TextFont(
                           text: 'kip',
-                          color: cr_ef33,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w700,
                         ),
                       ],
@@ -218,7 +218,7 @@ class _MyQrScreenState extends State<MyQrScreen> {
                   : TextFont(
                       text: qrController.rxNote.value,
                       poppin: true,
-                      color: cr_ef33,
+                      color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.w700,
                     ),
               const SizedBox(height: 5),
@@ -309,7 +309,7 @@ class _MyQrScreenState extends State<MyQrScreen> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: cr_ef33.withOpacity(0.5),
+                    color: Theme.of(context).primaryColor.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(50),
                   ),
                   padding: EdgeInsets.all(2),
@@ -360,7 +360,7 @@ class _MyQrScreenState extends State<MyQrScreen> {
               ],
             ),
           ),
-          Divider(color: cr_ef33),
+          Divider(color: Theme.of(context).primaryColor),
         ],
       ),
     );
@@ -379,16 +379,17 @@ class _MyQrScreenState extends State<MyQrScreen> {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: cr_fdeb,
+                color: Theme.of(context).primaryColor.withOpacity(0.05),
                 borderRadius: BorderRadius.circular(50),
-                border: Border.all(color: cr_ef33, width: 1),
+                border:
+                    Border.all(color: Theme.of(context).primaryColor, width: 1),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SvgPicture.asset(
                   MyIcon.ic_save_qr,
-                  color: cr_ef33,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),
@@ -402,16 +403,17 @@ class _MyQrScreenState extends State<MyQrScreen> {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: cr_fdeb,
+                color: Theme.of(context).primaryColor.withOpacity(0.05),
                 borderRadius: BorderRadius.circular(50),
-                border: Border.all(color: cr_ef33, width: 1),
+                border:
+                    Border.all(color: Theme.of(context).primaryColor, width: 1),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SvgPicture.asset(
                   MyIcon.ic_share_qr,
-                  color: cr_ef33,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),
@@ -425,16 +427,17 @@ class _MyQrScreenState extends State<MyQrScreen> {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: cr_fdeb,
+                color: Theme.of(context).primaryColor.withOpacity(0.05),
                 borderRadius: BorderRadius.circular(50),
-                border: Border.all(color: cr_ef33, width: 1),
+                border:
+                    Border.all(color: Theme.of(context).primaryColor, width: 1),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SvgPicture.asset(
                   MyIcon.ic_edit_qr,
-                  color: cr_ef33,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),

@@ -57,7 +57,7 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: BuildAppBar(title: "Add Visa/MasterCard"),
+      appBar: BuildAppBar(title: "Add Credit / Debit Card"),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
@@ -212,6 +212,7 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        const SizedBox(height: 5),
                         Transform.scale(
                           scale: 1.2,
                           child: Checkbox(

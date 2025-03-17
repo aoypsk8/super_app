@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
-import 'package:super_app/controllers/tempA_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/widget/buildAppBar.dart';
+import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -18,26 +17,49 @@ class ListsPaymentScreen extends StatefulWidget {
   final String description;
   final String title;
 
-  ListsPaymentScreen(
-      {super.key,
-      required this.onSelectedPayment,
-      required this.stepBuild,
-      required this.description,
-      required this.title});
+  ListsPaymentScreen({
+    super.key,
+    required this.onSelectedPayment,
+    required this.stepBuild,
+    required this.description,
+    required this.title,
+  });
 
   @override
   State<ListsPaymentScreen> createState() => _ListsPaymentScreenState();
 }
 
 class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
-  final homeController = Get.find<HomeController>();
+  final homeController = Get.put(HomeController());
   final paymentController = Get.put(PaymentController());
-  final controller = Get.put(TempAController());
+
+  int? selectedIndex;
+  late Worker _paymentMethodListener;
 
   @override
   void initState() {
     super.initState();
-    paymentController.getPaymentMethods(homeController.menutitle.value);
+    paymentController.getPaymentMethods(widget.description);
+    _paymentMethodListener = ever(paymentController.paymentMethods, (_) {
+      if (!mounted) return;
+      if (paymentController.paymentMethods.isNotEmpty) {
+        int mainCardIndex =
+            paymentController.paymentMethods.indexWhere((e) => e.maincard);
+        if (mainCardIndex != -1) {
+          selectedIndex = mainCardIndex;
+        } else {
+          selectedIndex = 0;
+        }
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _paymentMethodListener
+        .dispose(); // Remove the listener when widget is disposed
+    super.dispose();
   }
 
   @override
@@ -56,8 +78,12 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
                 child: AnimationLimiter(
                   child: ListView.builder(
                     padding: const EdgeInsets.all(8.0),
-                    itemCount: paymentController.paymentMethods.length + 1,
+                    itemCount: paymentController.paymentMethods.length,
                     itemBuilder: (context, index) {
+                      final isMainCard =
+                          paymentController.paymentMethods[index].maincard;
+                      final isSelected = selectedIndex == index;
+
                       return AnimationConfiguration.staggeredList(
                         position: index,
                         duration: const Duration(milliseconds: 500),
@@ -66,92 +92,71 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
                           child: FadeInAnimation(
                             child: GestureDetector(
                               onTap: () {
-                                if (index <
-                                    paymentController.paymentMethods.length) {
-                                  final paymentType = paymentController
-                                      .paymentMethods[index].paymentType;
-                                  final cardIndex = paymentController
-                                      .paymentMethods[index].id
-                                      .toString();
-                                  final uuid = paymentController
-                                      .paymentMethods[index].uuid;
-                                  widget.onSelectedPayment(
-                                      paymentType, cardIndex, uuid);
-                                } else {
-                                  widget.onSelectedPayment('Other', '', '');
-                                }
+                                setState(() {
+                                  selectedIndex = index;
+                                });
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 20, horizontal: 10),
                                 margin: const EdgeInsets.symmetric(vertical: 5),
                                 decoration: BoxDecoration(
-                                  color: Colors.grey.shade200,
+                                  color: isSelected
+                                      ? Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(0.1)
+                                      : color_f4f4,
                                   border: Border.all(
-                                    color: Colors.grey.shade300,
-                                    width: 1,
+                                    color: isSelected
+                                        ? Theme.of(context)
+                                            .primaryColor
+                                            .withOpacity(0.5)
+                                        : color_f4f4,
+                                    width: isSelected ? 1.5 : 0.5,
                                   ),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Row(
                                   children: [
-                                    index <
-                                            paymentController
-                                                .paymentMethods.length
-                                        ? ClipOval(
-                                            child: Image.network(
-                                              paymentController
-                                                  .paymentMethods[index].logo,
-                                              fit: BoxFit.fill,
-                                              width: 15.w,
-                                            ),
-                                          )
-                                        : Icon(Iconsax.add),
-                                    SizedBox(width: 10),
+                                    ClipOval(
+                                      child: Image.network(
+                                        paymentController
+                                            .paymentMethods[index].logo,
+                                        fit: BoxFit.fill,
+                                        width: 15.w,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          if (index <
-                                                  paymentController
-                                                      .paymentMethods.length &&
-                                              paymentController
-                                                  .paymentMethods[index]
-                                                  .maincard)
+                                          if (isMainCard)
                                             TextFont(
-                                              text: 'Primary',
+                                              text: 'Primary Card',
                                               poppin: true,
-                                              color: color_primary_light,
-                                              fontSize: 10,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           TextFont(
-                                            text: index <
-                                                    paymentController
-                                                        .paymentMethods.length
-                                                ? paymentController
-                                                    .paymentMethods[index].title
-                                                    .toString()
-                                                : 'Use Another Card',
+                                            text: paymentController
+                                                .paymentMethods[index].title
+                                                .toString(),
                                             poppin: true,
                                             fontWeight: FontWeight.w500,
-                                            color: index <
-                                                    paymentController
-                                                        .paymentMethods.length
-                                                ? Colors.black
-                                                : Colors.blueAccent,
+                                            color: Colors.black,
                                           ),
-                                          if (index <
-                                              paymentController
-                                                  .paymentMethods.length)
-                                            TextFont(
-                                              text: paymentController
-                                                  .paymentMethods[index]
-                                                  .description
-                                                  .toString(),
-                                              poppin: true,
-                                              color: Colors.grey.shade600,
-                                            ),
+                                          TextFont(
+                                            text: paymentController
+                                                .paymentMethods[index]
+                                                .description
+                                                .toString(),
+                                            poppin: true,
+                                            color: Colors.grey.shade600,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -167,6 +172,29 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
                 ),
               ),
             ],
+          ),
+        ),
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.only(top: 20),
+          decoration: BoxDecoration(
+            color: color_fff,
+            border: Border.all(color: color_ddd),
+          ),
+          child: buildBottomAppbar(
+            bgColor: Theme.of(context).primaryColor,
+            title: 'Next',
+            func: selectedIndex != null
+                ? () {
+                    final paymentType = paymentController
+                        .paymentMethods[selectedIndex!].paymentType;
+                    final cardIndex = paymentController
+                        .paymentMethods[selectedIndex!].id
+                        .toString();
+                    final uuid =
+                        paymentController.paymentMethods[selectedIndex!].uuid;
+                    widget.onSelectedPayment(paymentType, cardIndex, uuid);
+                  }
+                : () {},
           ),
         ),
       ),

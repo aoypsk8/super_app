@@ -267,50 +267,50 @@ class TempAController extends GetxController {
   //!
   //! VISA - MASTER CARD Template A
   //!------------------------------------------------------------------------------
-  paymentprocessVisaWithoutstoredCardUniqueID(
-      String amount, Menulists menudetail) async {
-    var data;
-    var url;
-    var response;
-    List<String> urlSplit =
-        homeController.menudetail.value.url?.split(";") ?? [];
-    url = urlSplit[2];
-    data = {
-      "AccName": rxaccname.value,
-      "TransactionID": rxtransid.value,
-      "AccNo": rxaccnumber.value,
-      "Amount": amount,
-      "EWid": tempAdetail.value.eWid,
-      "ProCode": tempAdetail.value.code,
-      "PhoneUser": storage.read('msisdn'),
-      "Title": homeController.menudetail.value.groupNameEN,
-      "Remark": ''
-    };
-    response = await DioClient.postEncrypt(url, data, key: 'lmm');
+  // paymentprocessVisaWithoutstoredCardUniqueID(
+  //     String amount, Menulists menudetail) async {
+  //   var data;
+  //   var url;
+  //   var response;
+  //   List<String> urlSplit =
+  //       homeController.menudetail.value.url?.split(";") ?? [];
+  //   url = urlSplit[2];
+  //   data = {
+  //     "AccName": rxaccname.value,
+  //     "TransactionID": rxtransid.value,
+  //     "AccNo": rxaccnumber.value,
+  //     "Amount": amount,
+  //     "EWid": tempAdetail.value.eWid,
+  //     "ProCode": tempAdetail.value.code,
+  //     "PhoneUser": storage.read('msisdn'),
+  //     "Title": homeController.menudetail.value.groupNameEN,
+  //     "Remark": ''
+  //   };
+  //   response = await DioClient.postEncrypt(url, data, key: 'lmm');
 
-    //! save log
-    await saveLogTempA(data, response, amount);
-    if (response['ResultCode'] == '200') {
-      rxtimestamp.value = response['CreateDate'];
-      rxPaymentAmount.value = amount;
-      enableBottom.value = true;
-      Get.to(() => ReusableResultScreen(
-          isUSD: true,
-          fromAccountImage: userController.userProfilemodel.value.profileImg!,
-          fromAccountName: userController.profileName.value,
-          fromAccountNumber: userController.userProfilemodel.value.msisdn!,
-          toAccountImage: tempAdetail.value.logo!,
-          toAccountName: rxaccname.value,
-          toAccountNumber: rxaccnumber.value,
-          toTitleProvider: tempAdetail.value.title!,
-          amount: rxPaymentAmount.value,
-          fee: rxFee.value,
-          transactionId: rxtransid.value,
-          note: rxNote.value,
-          timestamp: rxtimestamp.value));
-    } else {
-      enableBottom.value = true;
-      DialogHelper.showErrorDialogNew(description: response['ResultCode']);
-    }
-  }
+  //   //! save log
+  //   await saveLogTempA(data, response, amount);
+  //   if (response['ResultCode'] == '200') {
+  //     rxtimestamp.value = response['CreateDate'];
+  //     rxPaymentAmount.value = amount;
+  //     enableBottom.value = true;
+  //     Get.to(() => ReusableResultScreen(
+  //         isUSD: true,
+  //         fromAccountImage: userController.userProfilemodel.value.profileImg!,
+  //         fromAccountName: userController.profileName.value,
+  //         fromAccountNumber: userController.userProfilemodel.value.msisdn!,
+  //         toAccountImage: tempAdetail.value.logo!,
+  //         toAccountName: rxaccname.value,
+  //         toAccountNumber: rxaccnumber.value,
+  //         toTitleProvider: tempAdetail.value.title!,
+  //         amount: rxPaymentAmount.value,
+  //         fee: rxFee.value,
+  //         transactionId: rxtransid.value,
+  //         note: rxNote.value,
+  //         timestamp: rxtimestamp.value));
+  //   } else {
+  //     enableBottom.value = true;
+  //     DialogHelper.showErrorDialogNew(description: response['ResultCode']);
+  //   }
+  // }
 }

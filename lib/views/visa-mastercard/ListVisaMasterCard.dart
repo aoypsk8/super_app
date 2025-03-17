@@ -54,12 +54,13 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
     );
   }
 
+  // payment methods
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
         backgroundColor: color_fff,
-        appBar: BuildAppBar(title: "Visa Master Card"),
+        appBar: BuildAppBar(title: "Credit / Debit Card"),
         body: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(

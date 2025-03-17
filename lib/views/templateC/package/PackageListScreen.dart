@@ -204,23 +204,23 @@ class _PackageListScreenState extends State<PackageListScreen>
                           onSelectedPayment:
                               (paymentType, cardIndex, uuid) async {
                             if (paymentType == "Other") {
-                              homeController.RxamountUSD.value =
-                                  await homeController.convertRate(
-                                      tempCcontroler
-                                          .tempCpackagedetail.value.amount!);
-                              tempCcontroler.rxTransID.value =
-                                  "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
-                              Get.to(PaymentVisaMasterCard(
-                                function: () {
-                                  tempCcontroler
-                                      .paymentPackageVisaWithoutstoredCardUniqueID(
-                                    homeController.menudetail.value,
-                                  );
-                                },
-                                trainID: tempCcontroler.rxTransID.value,
-                                description: tempCcontroler.rxNote.value,
-                                amount: tempCcontroler.rxTotalAmount.value,
-                              ));
+                              // homeController.RxamountUSD.value =
+                              //     await homeController.convertRate(
+                              //         tempCcontroler
+                              //             .tempCpackagedetail.value.amount!);
+                              // tempCcontroler.rxTransID.value =
+                              //     "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                              // Get.to(PaymentVisaMasterCard(
+                              //   function: () {
+                              //     tempCcontroler
+                              //         .paymentPackageVisaWithoutstoredCardUniqueID(
+                              //       homeController.menudetail.value,
+                              //     );
+                              //   },
+                              //   trainID: tempCcontroler.rxTransID.value,
+                              //   description: tempCcontroler.rxNote.value,
+                              //   amount: tempCcontroler.rxTotalAmount.value,
+                              // ));
                             } else if (paymentType == 'MMONEY') {
                               navigateToConfirmScreen(paymentType);
                             } else {
@@ -329,23 +329,23 @@ class _PackageListScreenState extends State<PackageListScreen>
                             onSelectedPayment:
                                 (paymentType, cardIndex, uuid) async {
                               if (paymentType == "Other") {
-                                homeController.RxamountUSD.value =
-                                    await homeController.convertRate(
-                                        tempCcontroler
-                                            .tempCpackagedetail.value.amount!);
-                                tempCcontroler.rxTransID.value =
-                                    "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
-                                Get.to(PaymentVisaMasterCard(
-                                  function: () {
-                                    tempCcontroler
-                                        .paymentPackageVisaWithoutstoredCardUniqueID(
-                                      homeController.menudetail.value,
-                                    );
-                                  },
-                                  trainID: tempCcontroler.rxTransID.value,
-                                  description: tempCcontroler.rxNote.value,
-                                  amount: tempCcontroler.rxTotalAmount.value,
-                                ));
+                                // homeController.RxamountUSD.value =
+                                //     await homeController.convertRate(
+                                //         tempCcontroler
+                                //             .tempCpackagedetail.value.amount!);
+                                // tempCcontroler.rxTransID.value =
+                                //     "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                                // Get.to(PaymentVisaMasterCard(
+                                //   function: () {
+                                //     tempCcontroler
+                                //         .paymentPackageVisaWithoutstoredCardUniqueID(
+                                //       homeController.menudetail.value,
+                                //     );
+                                //   },
+                                //   trainID: tempCcontroler.rxTransID.value,
+                                //   description: tempCcontroler.rxNote.value,
+                                //   amount: tempCcontroler.rxTotalAmount.value,
+                                // ));
                               } else if (paymentType == 'MMONEY') {
                                 navigateToConfirmScreen(paymentType);
                               } else {

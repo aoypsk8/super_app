@@ -322,72 +322,72 @@ class FinanceController extends GetxController {
     }
   }
 
-  void paymentProcessVisaWithoutstoredCardUniqueID(Menulists menudetail) async {
-    userController.fetchBalance();
-    var url;
-    var data;
-    rxFee.value = financeModelDetail.value.fee!;
-    List<String> urlSplit =
-        homeController.menudetail.value.url.toString().split(";");
-    url = urlSplit[3];
-    data = {
-      "Id": financeModelDetail.value.id,
-      "TranID": rxTransID.value,
-      "AccNo": rxAccNo.value,
-      "PhoneUser": storage.read('msisdn'),
-      "AccName": rxAccName.value,
-      "Amount": rxPaymentAmount.value,
-      "Fee": rxFee.value,
-      "Remark": rxNote.value,
-      "token": rxAccessToken.value
-    };
-    var response = await DioClient.postEncrypt(url, data,
-        key: 'backup', bearer: rxAccessToken.value);
-    logPaymentReq = data;
-    logPaymentRes = response;
-    logController.insertAllLog(
-      homeController.menudetail.value.groupNameEN.toString(),
-      rxTransID.value,
-      financeModelDetail.value.logo!,
-      financeModelDetail.value.title!,
-      rxAccNo.value,
-      rxAccName.value,
-      rxPaymentAmount.value,
-      0,
-      rxFee.value,
-      rxNote.value,
-      logVerify,
-      logPaymentReq,
-      logPaymentRes,
-    );
-    if (response['code'] == 0) {
-      rxTimeStamp.value = response["created"];
-      rxPaymentAmount.value = response['amount'].toString();
-      saveHistoryFinnace(rxAccNo.value, rxAccName.value);
-      enableBottom.value = true;
-      Get.to(ReusableResultScreen(
-        isUSD: true,
-        fromAccountImage: userController.userProfilemodel.value.profileImg ??
-            MyConstant.profile_default,
-        fromAccountName: userController.profileName.value,
-        fromAccountNumber: userController.rxMsisdn.value,
-        toAccountImage: MyConstant.profile_default,
-        toAccountName: rxAccName.value,
-        toAccountNumber: rxAccNo.value,
-        toTitleProvider: '',
-        amount: rxPaymentAmount.toString(),
-        fee: fn.format(double.parse(rxFee.value)),
-        transactionId: rxTransID.value,
-        note: rxNote.value,
-        timestamp: rxTimeStamp.value,
-      ));
-    } else {
-      enableBottom.value = true;
-      DialogHelper.showErrorWithFunctionDialog(
-          description: response['msg'],
-          onClose: () {
-            Get.close(userController.pageclose.value);
-          });
-    }
-  }
+  // void paymentProcessVisaWithoutstoredCardUniqueID(Menulists menudetail) async {
+  //   userController.fetchBalance();
+  //   var url;
+  //   var data;
+  //   rxFee.value = financeModelDetail.value.fee!;
+  //   List<String> urlSplit =
+  //       homeController.menudetail.value.url.toString().split(";");
+  //   url = urlSplit[3];
+  //   data = {
+  //     "Id": financeModelDetail.value.id,
+  //     "TranID": rxTransID.value,
+  //     "AccNo": rxAccNo.value,
+  //     "PhoneUser": storage.read('msisdn'),
+  //     "AccName": rxAccName.value,
+  //     "Amount": rxPaymentAmount.value,
+  //     "Fee": rxFee.value,
+  //     "Remark": rxNote.value,
+  //     "token": rxAccessToken.value
+  //   };
+  //   var response = await DioClient.postEncrypt(url, data,
+  //       key: 'backup', bearer: rxAccessToken.value);
+  //   logPaymentReq = data;
+  //   logPaymentRes = response;
+  //   logController.insertAllLog(
+  //     homeController.menudetail.value.groupNameEN.toString(),
+  //     rxTransID.value,
+  //     financeModelDetail.value.logo!,
+  //     financeModelDetail.value.title!,
+  //     rxAccNo.value,
+  //     rxAccName.value,
+  //     rxPaymentAmount.value,
+  //     0,
+  //     rxFee.value,
+  //     rxNote.value,
+  //     logVerify,
+  //     logPaymentReq,
+  //     logPaymentRes,
+  //   );
+  //   if (response['code'] == 0) {
+  //     rxTimeStamp.value = response["created"];
+  //     rxPaymentAmount.value = response['amount'].toString();
+  //     saveHistoryFinnace(rxAccNo.value, rxAccName.value);
+  //     enableBottom.value = true;
+  //     Get.to(ReusableResultScreen(
+  //       isUSD: true,
+  //       fromAccountImage: userController.userProfilemodel.value.profileImg ??
+  //           MyConstant.profile_default,
+  //       fromAccountName: userController.profileName.value,
+  //       fromAccountNumber: userController.rxMsisdn.value,
+  //       toAccountImage: MyConstant.profile_default,
+  //       toAccountName: rxAccName.value,
+  //       toAccountNumber: rxAccNo.value,
+  //       toTitleProvider: '',
+  //       amount: rxPaymentAmount.toString(),
+  //       fee: fn.format(double.parse(rxFee.value)),
+  //       transactionId: rxTransID.value,
+  //       note: rxNote.value,
+  //       timestamp: rxTimeStamp.value,
+  //     ));
+  //   } else {
+  //     enableBottom.value = true;
+  //     DialogHelper.showErrorWithFunctionDialog(
+  //         description: response['msg'],
+  //         onClose: () {
+  //           Get.close(userController.pageclose.value);
+  //         });
+  //   }
+  // }
 }

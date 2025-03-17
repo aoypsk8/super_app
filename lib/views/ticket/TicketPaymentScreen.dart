@@ -181,23 +181,23 @@ class _TicketPaymentScreenState extends State<TicketPaymentScreen> {
                   title: homeController.getMenuTitle(),
                   onSelectedPayment: (paymentType, cardIndex, uuid) async {
                     if (paymentType == "Other") {
-                      homeController.RxamountUSD.value =
-                          await homeController.convertRate(
-                              ticketController.ticketDetail.value.price!);
-                      ticketController.rxTransID.value =
-                          "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
-                      Get.to(PaymentVisaMasterCard(
-                        function: () {
-                          ticketController
-                              .paymentProcessVisaWithoutstoredCardUniqueID(
-                            homeController.menudetail.value,
-                          );
-                        },
-                        trainID: ticketController.rxTransID.value,
-                        description: ticketController.rxNote.value,
-                        amount:
-                            int.parse(ticketController.rxPaymentAmount.value),
-                      ));
+                      // homeController.RxamountUSD.value =
+                      //     await homeController.convertRate(
+                      //         ticketController.ticketDetail.value.price!);
+                      // ticketController.rxTransID.value =
+                      //     "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                      // Get.to(PaymentVisaMasterCard(
+                      //   function: () {
+                      //     ticketController
+                      //         .paymentProcessVisaWithoutstoredCardUniqueID(
+                      //       homeController.menudetail.value,
+                      //     );
+                      //   },
+                      //   trainID: ticketController.rxTransID.value,
+                      //   description: ticketController.rxNote.value,
+                      //   amount:
+                      //       int.parse(ticketController.rxPaymentAmount.value),
+                      // ));
                     } else if (paymentType == 'MMONEY') {
                       navigateToConfirmScreen(paymentType);
                     } else {

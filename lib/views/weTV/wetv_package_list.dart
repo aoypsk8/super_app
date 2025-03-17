@@ -275,21 +275,21 @@ class buildWeTvCard extends StatelessWidget {
           title: homeController.getMenuTitle(),
           onSelectedPayment: (paymentType, cardIndex, uuid) async {
             if (paymentType == "Other") {
-              homeController.RxamountUSD.value = await homeController
-                  .convertRate(weTVController.wetvdetail.value.price!);
-              weTVController.rxTransID.value =
-                  "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
-              Get.to(PaymentVisaMasterCard(
-                function: () {
-                  weTVController.wetvpaymentVisaWithoutstoredCardUniqueID(
-                    weTVController.wetvdetail.value.price!,
-                    homeController.menudetail.value,
-                  );
-                },
-                trainID: weTVController.rxTransID.value,
-                description: weTVController.rxNote.value,
-                amount: weTVController.wetvdetail.value.price!,
-              ));
+              // homeController.RxamountUSD.value = await homeController
+              //     .convertRate(weTVController.wetvdetail.value.price!);
+              // weTVController.rxTransID.value =
+              //     "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+              // Get.to(PaymentVisaMasterCard(
+              //   function: () {
+              //     weTVController.wetvpaymentVisaWithoutstoredCardUniqueID(
+              //       weTVController.wetvdetail.value.price!,
+              //       homeController.menudetail.value,
+              //     );
+              //   },
+              //   trainID: weTVController.rxTransID.value,
+              //   description: weTVController.rxNote.value,
+              //   amount: weTVController.wetvdetail.value.price!,
+              // ));
             } else if (paymentType == 'MMONEY') {
               navigateToConfirmScreen(paymentType);
             } else {

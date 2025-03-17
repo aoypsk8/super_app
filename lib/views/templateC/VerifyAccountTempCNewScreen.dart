@@ -160,23 +160,23 @@ class _VerifyAccountTempCNewScreenState
                                 onSelectedPayment:
                                     (paymentType, cardIndex, uuid) async {
                                   if (paymentType == "Other") {
-                                    homeController.RxamountUSD.value =
-                                        await homeController.convertRate(
-                                            tempCcontroler.rxTotalAmount.value);
-                                    tempCcontroler.rxTransID.value =
-                                        "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
-                                    Get.to(PaymentVisaMasterCard(
-                                      function: () {
-                                        tempCcontroler
-                                            .paymentPrepaidVisaWithoutstoredCardUniqueID(
-                                          homeController.menudetail.value,
-                                        );
-                                      },
-                                      trainID: tempCcontroler.rxTransID.value,
-                                      description: tempCcontroler.rxNote.value,
-                                      amount:
-                                          tempCcontroler.rxTotalAmount.value,
-                                    ));
+                                    // homeController.RxamountUSD.value =
+                                    //     await homeController.convertRate(
+                                    //         tempCcontroler.rxTotalAmount.value);
+                                    // tempCcontroler.rxTransID.value =
+                                    //     "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                                    // Get.to(PaymentVisaMasterCard(
+                                    //   function: () {
+                                    //     tempCcontroler
+                                    //         .paymentPrepaidVisaWithoutstoredCardUniqueID(
+                                    //       homeController.menudetail.value,
+                                    //     );
+                                    //   },
+                                    //   trainID: tempCcontroler.rxTransID.value,
+                                    //   description: tempCcontroler.rxNote.value,
+                                    //   amount:
+                                    //       tempCcontroler.rxTotalAmount.value,
+                                    // ));
                                   } else if (paymentType == 'MMONEY') {
                                     navigateToConfirmScreen(paymentType);
                                   } else {

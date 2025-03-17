@@ -135,5 +135,7 @@ class MyIcon {
   static String ic_sim_bw = 'assets/icons/ic_sim_bw.svg';
   static String ic_sim_color = 'assets/icons/ic_sim_color.svg';
   static String deleteX_round = 'assets/icons/deleteX_round.svg';
+  static String ic_contact_line = 'assets/icons/ic_contact_line.svg';
+  static String ic_phone_otp = 'assets/icons/ic_phone_otp.png';
   // static String ic_trash = 'assets/icons/ic_trash.svg';
 }

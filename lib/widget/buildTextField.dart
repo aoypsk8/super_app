@@ -148,17 +148,18 @@ class buildEmailValidate extends StatelessWidget {
 }
 
 class buildPhoneEmailValidate extends StatelessWidget {
-  const buildPhoneEmailValidate({
-    super.key,
-    required this.controller,
-    required this.label,
-    required this.name,
-    required this.hintText,
-    this.icons,
-    this.suffixIcon,
-    this.suffixonTapFuc,
-    this.fillcolor = color_fafa,
-  });
+  const buildPhoneEmailValidate(
+      {super.key,
+      required this.controller,
+      required this.label,
+      required this.name,
+      required this.hintText,
+      this.icons,
+      this.suffixIcon,
+      this.suffixonTapFuc,
+      this.fillcolor = color_fafa,
+      this.textType = TextInputType.text,
+      this.borderColor = color_ddd});
 
   final TextEditingController controller;
   final String name;
@@ -168,72 +169,71 @@ class buildPhoneEmailValidate extends StatelessWidget {
   final Color fillcolor;
   final Widget? suffixIcon;
   final Function()? suffixonTapFuc;
+  final TextInputType textType;
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.0),
       borderSide: BorderSide(
-        color: color_ddd,
+        color: borderColor,
         width: 1.5,
       ),
     );
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextFont(text: label),
-          SizedBox(height: 4),
-          FormBuilderTextField(
-            name: name,
-            controller: controller,
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.black,
-              fontFamily: 'PoppinsRegular',
-            ),
-            decoration: InputDecoration(
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-              hintText: hintText.tr,
-              fillColor: fillcolor,
-              filled: true,
-              prefixIcon:
-                  icons != null ? Icon(icons, color: Colors.black) : null,
-              suffixIcon: suffixonTapFuc != null
-                  ? Container(
-                      margin: EdgeInsets.only(right: 5),
-                      child: InkWell(
-                        onTap: suffixonTapFuc,
-                        child: suffixIcon,
-                      ),
-                    )
-                  : null,
-              counter: SizedBox.shrink(),
-              enabledBorder: border,
-              focusedBorder: border,
-              errorStyle: GoogleFonts.notoSansLao(color: Colors.red),
-              focusedErrorBorder: border,
-              errorBorder: border,
-            ),
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(
-                errorText: 'This field is required.',
-              ),
-              ((value) {
-                if (value == null || value.isEmpty) {
-                  return null; // Handled by `required` validator
-                }
-                if (!value.contains('@') && !value.startsWith('20')) {
-                  return 'Phone numbers must start with 20XXXXXXXX.';
-                }
-                return null; // No error
-              }),
-            ]),
-            keyboardType: TextInputType.text,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFont(text: label),
+        SizedBox(height: 8),
+        FormBuilderTextField(
+          name: name,
+          controller: controller,
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.black,
+            fontFamily: 'PoppinsRegular',
           ),
-        ],
-      ),
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+            hintText: hintText.tr,
+            hintStyle: TextStyle(color: color_777),
+            fillColor: fillcolor,
+            filled: true,
+            prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
+            suffixIcon: suffixonTapFuc != null
+                ? Container(
+                    margin: EdgeInsets.only(right: 5),
+                    child: InkWell(
+                      onTap: suffixonTapFuc,
+                      child: suffixIcon,
+                    ),
+                  )
+                : null,
+            counter: SizedBox.shrink(),
+            enabledBorder: border,
+            focusedBorder: border,
+            errorStyle: GoogleFonts.notoSansLao(color: Colors.red),
+            focusedErrorBorder: border,
+            errorBorder: border,
+          ),
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(
+              errorText: 'This field is required.',
+            ),
+            ((value) {
+              if (value == null || value.isEmpty) {
+                return null; // Handled by `required` validator
+              }
+              if (!value.contains('@') && !value.startsWith('20')) {
+                return 'Phone numbers must start with 20XXXXXXXX.';
+              }
+              return null; // No error
+            }),
+          ]),
+          keyboardType: textType,
+        ),
+      ],
     );
   }
 }

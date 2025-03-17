@@ -95,4 +95,14 @@ class TelecomsrvController extends GetxController {
       );
     }
   }
+
+  reqOtp(String reqMsisdn, String reqType) async {
+    var url = '${MyConstant.mservicesUrl}/RequestOTP';
+    var body = {
+      "msisdn": reqMsisdn,
+      "otpType": reqType,
+      "language": 'en',
+    };
+    await DioClient.postEncrypt(url, body);
+  }
 }

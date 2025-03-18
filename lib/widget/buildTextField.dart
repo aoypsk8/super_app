@@ -238,6 +238,101 @@ class buildPhoneEmailValidate extends StatelessWidget {
   }
 }
 
+class buildEmailValidateV2 extends StatelessWidget {
+  const buildEmailValidateV2({
+    super.key,
+    required this.controller,
+    required this.label,
+    required this.name,
+    required this.hintText,
+    this.icons,
+    this.max,
+    this.suffixIcon,
+    this.suffixonTapFuc,
+    this.fillcolor = color_fafa,
+    this.bordercolor = color_ddd,
+    this.textType = TextInputType.number,
+    this.isEmail = true,
+  });
+
+  final TextEditingController controller;
+  final String name;
+  final String label;
+  final String hintText;
+  final IconData? icons;
+  final int? max;
+  final Color fillcolor;
+  final Color bordercolor;
+  final Widget? suffixIcon;
+  final TextInputType? textType;
+  final Function()? suffixonTapFuc;
+  final bool isEmail;
+
+  @override
+  Widget build(BuildContext context) {
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(
+        color: bordercolor,
+        width: 1.5,
+      ),
+    );
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFont(text: label),
+          SizedBox(
+            height: 4,
+          ),
+          FormBuilderTextField(
+            name: name,
+            controller: controller,
+            keyboardType: textType,
+            style: GoogleFonts.poppins(
+              color: cr_7070,
+              fontSize: 12.5.sp,
+            ),
+            decoration: InputDecoration(
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              hintText: hintText.tr,
+              hintStyle: GoogleFonts.poppins(
+                color: cr_7070.withOpacity(0.8),
+                fontSize: 12.5.sp,
+              ),
+              fillColor: fillcolor,
+              filled: true,
+              counter: SizedBox.shrink(),
+              enabledBorder: border,
+              focusedBorder: border,
+              //! error border
+              errorStyle: GoogleFonts.notoSansLao(color: Colors.red),
+              focusedErrorBorder: border,
+              errorBorder: border,
+            ),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(
+                errorText: 'This field is required.',
+              ),
+              if (isEmail)
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return null;
+                  }
+                  if (!value.contains('@gmail.com')) {
+                    return ' must be @gmail.com';
+                  }
+                  return null; // No error
+                },
+            ]),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class buildTextField extends StatelessWidget {
   const buildTextField({
     super.key,
@@ -421,15 +516,19 @@ class _buildPasswordFieldState extends State<buildPasswordField> {
           FormBuilderTextField(
             name: widget.name,
             controller: widget.controller,
-            style: GoogleFonts.notoSansLao(fontSize: 13.sp, color: Colors.black),
+            style:
+                GoogleFonts.notoSansLao(fontSize: 13.sp, color: Colors.black),
             obscureText: _obscureText, // Password hidden by default
             enabled: widget.isEditable,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: widget.hintText.tr,
               hintStyle: languageCode == 'lo'
-                  ? GoogleFonts.notoSansLao(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp)
-                  : GoogleFonts.poppins(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp),
+                  ? GoogleFonts.notoSansLao(
+                      color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp)
+                  : GoogleFonts.poppins(
+                      color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp),
               fillColor: widget.fillcolor,
               filled: true,
               suffixIcon: IconButton(

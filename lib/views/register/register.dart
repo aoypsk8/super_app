@@ -85,9 +85,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               if (_formKey.currentState!.validate()) {
                                 userController.rxMsisdn.value = _username.text;
                                 if (await userController.checkHaveWalletBO()) {
-                                  DialogHelper.showErrorDialogNew(description: 'You already have an account.');
+                                  DialogHelper.showErrorDialogNew(
+                                      description:
+                                          'You already have an account.');
                                 } else {
-                                  userController.requestOTP(_username.text, "register");
+                                  userController.requestOTP(
+                                      _username.text, "register");
                                 }
                               }
                             },

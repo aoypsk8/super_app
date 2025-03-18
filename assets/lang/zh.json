@@ -309,5 +309,16 @@
   "transfer_laoQR": "Transfer LaoQR",
   "select_package": "Select Package",
   "select_payment": "Select Payment",
-  "select_lists_item": "Select a payment item"
+  "select_lists_item": "Select a payment item",
+  "purchase": "购买",
+  "choose_ESIM": "选择 E-SIM",
+  "buy_ESIM": "购买 E-SIM",
+  "vertify_kyc": "验证 KYC",
+  "please_upload_images": "请上传图片",
+  "Take Picture": "拍照",
+  "Pick from Gallery": "从相册选择",
+  "save_pic_and_close": "保存图片并关闭",
+  "If you forget to save this QR code, you can see the QR code from this email.": "如果您忘记保存此二维码，您可以从此电子邮件中查看二维码。",
+  "other_service_v": "其他服务",
+  "choose_other_service": "选择其他服务"
 }

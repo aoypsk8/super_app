@@ -32,6 +32,7 @@ class HomeController extends GetxController {
 
 // USD AMOUNT
   RxDouble RxamountUSD = 0.0.obs;
+  RxInt RxrateUSDKIP = 0.obs;
   //version
   RxString appVersion = ''.obs;
 
@@ -215,7 +216,11 @@ class HomeController extends GetxController {
   convertRate(int amountkip) async {
     var response = await DioClient.postEncrypt(
         '${MyConstant.urlVisa}/ConvertRate', {'amount': amountkip});
-    return response['usd'];
+    if (response['code'] == 0) {
+      print(response);
+      RxrateUSDKIP.value = response['rate'];
+      return response['usd'];
+    }
   }
 
   fetchads() async {

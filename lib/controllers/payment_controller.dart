@@ -239,48 +239,48 @@ class PaymentController extends GetxController {
     }
   }
 
-  // Future<bool> paymentCardWithoutstoredCardUniqueID(
-  //   String trainID,
-  //   String numberController,
-  //   String expiryController,
-  //   String cvvController,
-  //   String nameController,
-  //   String cardType,
-  //   String description,
-  //   int amount,
-  //   bool remember,
-  // ) async {
-  //   var url = "/CallBack_Visa_JDB/NonUi";
-  //   var body = {
-  //     "cardNumber": numberController,
-  //     "cardExpiryMMYY": expiryController,
-  //     "cvvCode": cvvController,
-  //     "payerName": nameController,
-  //     "channel": "MMONEYX",
-  //     "owner": "MMONEYX",
-  //     "lmm_tranid": trainID,
-  //     "description": description,
-  //     "amountkip": amount,
-  //     "walletnumber": userController.rxMsisdn.value,
-  //     "paymentTypeFromApp": cardType,
-  //     "remeberCard": remember
-  //   };
-  //   var response = await DioClient.postEncrypt(url, body);
-  //   logController.insertCashOutbyVisaMasterCardLog(
-  //     trainID,
-  //     userController.rxMsisdn.value,
-  //     homeController.menudetail.value.groupNameEN,
-  //     response,
-  //   );
-  //   if (response['success'] == true) {
-  //     return true;
-  //   } else {
-  //     DialogHelper.showErrorWithFunctionDialog(
-  //         description: 'please_check_cvv_code',
-  //         onClose: () {
-  //           Get.close(4);
-  //         });
-  //     return false;
-  //   }
-  // }
+  Future<bool> paymentCardWithoutstoredCardUniqueID(
+    String trainID,
+    String numberController,
+    String expiryController,
+    String cvvController,
+    String nameController,
+    String cardType,
+    String description,
+    int amount,
+    bool remember,
+  ) async {
+    var url = "/CallBack_Visa_JDB/NonUi";
+    var body = {
+      "cardNumber": numberController,
+      "cardExpiryMMYY": expiryController,
+      "cvvCode": cvvController,
+      "payerName": nameController,
+      "channel": "MMONEYX",
+      "owner": "MMONEYX",
+      "lmm_tranid": trainID,
+      "description": description,
+      "amountkip": amount,
+      "walletnumber": userController.rxMsisdn.value,
+      "paymentTypeFromApp": cardType,
+      "remeberCard": remember
+    };
+    var response = await DioClient.postEncrypt(url, body);
+    logController.insertCashOutbyVisaMasterCardLog(
+      trainID,
+      userController.rxMsisdn.value,
+      homeController.menudetail.value.groupNameEN,
+      response,
+    );
+    if (response['success'] == true) {
+      return true;
+    } else {
+      DialogHelper.showErrorWithFunctionDialog(
+          description: 'please_check_cvv_code',
+          onClose: () {
+            Get.close(4);
+          });
+      return false;
+    }
+  }
 }

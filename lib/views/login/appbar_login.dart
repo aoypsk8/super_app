@@ -8,6 +8,7 @@ import 'package:super_app/services/language_service.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myIcon.dart';
 import 'package:super_app/views/login/temp/temp_userprofile_model.dart';
+import 'package:super_app/views/other_service/other_service.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -26,12 +27,16 @@ class AppbarLogin extends StatelessWidget {
               _buildIconButton(
                 icon: 'assets/images/assistant.png',
                 text: 'help',
+                func: () {},
               ),
               SizedBox(width: 10),
               _buildIconButton(
                 icon: MyIcon.ic_more,
                 text: 'other_service',
                 isSvg: true,
+                func: () {
+                  Get.to(OtherService());
+                },
               ),
               // InkWell(
               //   onTap: () {
@@ -52,7 +57,8 @@ class AppbarLogin extends StatelessWidget {
           ),
         ),
         InkWell(
-          onTap: () => _showLanguageDialog(context), // ✅ Moved function inside AppbarLogin
+          onTap: () => _showLanguageDialog(
+              context), // ✅ Moved function inside AppbarLogin
           child: Column(
             children: [
               Container(
@@ -135,7 +141,8 @@ class AppbarLogin extends StatelessWidget {
               _buildLanguageOption(context, 'English', 'en', languageService),
               _buildLanguageOption(context, 'Lao', 'lo', languageService),
               _buildLanguageOption(context, 'Chinese', 'zh', languageService),
-              _buildLanguageOption(context, 'Vietnamese', 'vi', languageService),
+              _buildLanguageOption(
+                  context, 'Vietnamese', 'vi', languageService),
             ],
           ),
         );
@@ -143,14 +150,17 @@ class AppbarLogin extends StatelessWidget {
     );
   }
 
-  Widget _buildLanguageOption(BuildContext context, String languageName, String languageCode, LanguageService languageService) {
+  Widget _buildLanguageOption(BuildContext context, String languageName,
+      String languageCode, LanguageService languageService) {
     return ListTile(
       leading: SvgPicture.asset(getSvgIcon(languageCode)),
       title: TextFont(
         text: languageName,
         color: cr_7070,
       ),
-      trailing: languageService.locale.languageCode == languageCode ? Icon(Icons.check, color: Theme.of(context).primaryColor) : null,
+      trailing: languageService.locale.languageCode == languageCode
+          ? Icon(Icons.check, color: Theme.of(context).primaryColor)
+          : null,
       onTap: () {
         languageService.changeLanguage(languageCode);
         Get.back(); // Close the bottom sheet after selecting a language
@@ -158,21 +168,29 @@ class AppbarLogin extends StatelessWidget {
     );
   }
 
-  Widget _buildIconButton({required String icon, required String text, bool isSvg = false}) {
-    return Column(
-      children: [
-        Container(
-          height: 40.sp,
-          width: 40.sp,
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(color: color_fdeb, borderRadius: BorderRadius.circular(50)),
-          child: isSvg ? SvgPicture.asset(icon) : Image.asset(icon),
-        ),
-        TextFont(
-          text: text,
-          fontSize: 8,
-        ),
-      ],
+  Widget _buildIconButton(
+      {required String icon,
+      required String text,
+      bool isSvg = false,
+      required VoidCallback func}) {
+    return InkWell(
+      onTap: func,
+      child: Column(
+        children: [
+          Container(
+            height: 40.sp,
+            width: 40.sp,
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                color: color_fdeb, borderRadius: BorderRadius.circular(50)),
+            child: isSvg ? SvgPicture.asset(icon) : Image.asset(icon),
+          ),
+          TextFont(
+            text: text,
+            fontSize: 8,
+          ),
+        ],
+      ),
     );
   }
 }

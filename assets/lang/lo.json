@@ -320,5 +320,16 @@
   "transfer_laoQR": "ປ້ອນລາຍການໂອນ",
   "select_package": "ເລືອກແພັດເກັດ",
   "select_payment": "ເລືອກບັນຊີ",
-  "select_lists_item": "ເລືອກລາຍການຊຳລະ"
+  "select_lists_item": "ເລືອກລາຍການຊຳລະ",
+  "purchase": "ຊຳລະເງິນ",
+  "choose_ESIM": "ເລືອກ E-SIM",
+  "buy_ESIM": "ຊື້ E-SIM",
+  "vertify_kyc": "ຢືນຢັນໂຕຕົນ",
+  "please_upload_images": "ກະລຸນາຖ່າຍອັບໂຫລດຮູບພາບ",
+  "Take Picture": "ຖ່າຍຮູບ",
+  "Pick from Gallery": "ເລືອກຮູບ",
+  "save_pic_and_close": "ບັນທຶກຂໍ້ມູນ ແລະ ປິດ",
+  "If you forget to save this QR code, you can see the QR code from this email.": "ຖ້າທ່ານລືມບັນທືກ QR code ນີ້, ທ່ານສາມາດເຂົ້າໄປເບີ່ງຢູ່ເມລຂອງທ່ານ.",
+  "other_service_v":"ບໍລິການອື່ນໆ",
+  "choose_other_service":"ເລືອກບໍລິການອື່ນໆ"
 }

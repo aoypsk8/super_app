@@ -309,5 +309,16 @@
   "transfer_laoQR": "Transfer LaoQR",
   "select_package": "Select Package",
   "select_payment": "Select Payment",
-  "select_lists_item": "Select a payment item"
+  "select_lists_item": "Select a payment item",
+  "purchase": "Mua",
+  "choose_ESIM": "Chọn E-SIM",
+  "buy_ESIM": "Mua E-SIM",
+  "vertify_kyc": "Xác minh KYC",
+  "please_upload_images": "Vui lòng tải lên hình ảnh",
+  "Take Picture": "Chụp ảnh",
+  "Pick from Gallery": "Chọn từ Thư viện",
+  "save_pic_and_close": "Lưu ảnh và Đóng",
+  "If you forget to save this QR code, you can see the QR code from this email.": "Nếu bạn quên lưu mã QR này, bạn có thể xem mã QR từ email này.",
+  "other_service_v": "Dịch vụ khác",
+  "choose_other_service": "Chọn Dịch vụ khác"
 }

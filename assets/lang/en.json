@@ -318,5 +318,18 @@
   "select_package": "Select Package",
   "select_payment": "Select Payment",
   "select_lists_item": "Select a payment item",
-  "input_amount": "Input Amount"
+  "input_amount": "Input Amount",
+  "purchase": "Purchase",
+  "choose_ESIM": "Choose E-SIM",
+  "buy_ESIM": "Buy E-SIM",
+  "vertify_kyc": "Vertify KYC",
+  "please_upload_images": "Please Upload Images",
+  "Take Picture": "Take a picture",
+  "Pick from Gallery": "Pick up a picture",
+  "save_pic_and_close": "Save Picture and Close",
+  "If you forget to save this QR code, you can see the QR code from this email.": "If you forget to save this QR code, you can see the QR code from this email.",
+  "other_service_v":"Other Service",
+  "choose_other_service":"Choose Other Service"
+
+
 }

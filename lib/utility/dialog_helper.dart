@@ -340,9 +340,9 @@ class DialogHelper {
           child: GestureDetector(
             onTap: () {
               if (onClose != null) {
-                onClose();
                 Get.back();
                 hide();
+                onClose();
               } else {
                 Get.until((route) => route.isFirst);
                 Get.back();

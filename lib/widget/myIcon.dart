@@ -137,5 +137,10 @@ class MyIcon {
   static String deleteX_round = 'assets/icons/deleteX_round.svg';
   static String ic_contact_line = 'assets/icons/ic_contact_line.svg';
   static String ic_phone_otp = 'assets/icons/ic_phone_otp.png';
+  static String bg_tel_detail = 'assets/background/bg_tel_detail.svg';
+  static String ic_star = 'assets/icons/ic_star.svg';
+  static String ic_coin = 'assets/icons/ic_coin.svg';
+  static String ic_tel_internet = 'assets/icons/ic_tel_internet.svg';
+  static String ic_tel_internet_bw = 'assets/icons/ic_tel_internet_bw.svg';
   // static String ic_trash = 'assets/icons/ic_trash.svg';
 }

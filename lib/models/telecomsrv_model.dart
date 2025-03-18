@@ -191,3 +191,72 @@ class PhoneListModel {
     return data;
   }
 }
+
+class TelQueryPackage {
+  String? packageName;
+  String? qtaValue;
+  String? qtaUsed;
+  String? qtaRemaining;
+  dynamic doublePercent;
+  String? stringPercent;
+  String? dateStamp;
+  String? tempDate;
+  String? remainingDay;
+  String? remainingDayPercent;
+  String? internetData;
+  int? priority;
+  int? speed;
+  bool? isCurrentNormal;
+
+  TelQueryPackage(
+      {this.packageName,
+      this.qtaValue,
+      this.qtaUsed,
+      this.qtaRemaining,
+      this.doublePercent,
+      this.stringPercent,
+      this.dateStamp,
+      this.tempDate,
+      this.remainingDay,
+      this.remainingDayPercent,
+      this.internetData,
+      this.priority,
+      this.speed,
+      this.isCurrentNormal});
+
+  TelQueryPackage.fromJson(Map<String, dynamic> json) {
+    packageName = json['packageName'];
+    qtaValue = json['qtaValue'];
+    qtaUsed = json['qtaUsed'];
+    qtaRemaining = json['qtaRemaining'];
+    doublePercent = json['doublePercent'];
+    stringPercent = json['stringPercent'];
+    dateStamp = json['dateStamp'];
+    tempDate = json['tempDate'];
+    remainingDay = json['remainingDay'];
+    remainingDayPercent = json['remainingDayPercent'];
+    internetData = json['internetData'];
+    priority = json['priority'];
+    speed = json['speed'];
+    isCurrentNormal = json['isCurrentNormal'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['packageName'] = this.packageName;
+    data['qtaValue'] = this.qtaValue;
+    data['qtaUsed'] = this.qtaUsed;
+    data['qtaRemaining'] = this.qtaRemaining;
+    data['doublePercent'] = this.doublePercent;
+    data['stringPercent'] = this.stringPercent;
+    data['dateStamp'] = this.dateStamp;
+    data['tempDate'] = this.tempDate;
+    data['remainingDay'] = this.remainingDay;
+    data['remainingDayPercent'] = this.remainingDayPercent;
+    data['internetData'] = this.internetData;
+    data['priority'] = this.priority;
+    data['speed'] = this.speed;
+    data['isCurrentNormal'] = this.isCurrentNormal;
+    return data;
+  }
+}

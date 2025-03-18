@@ -267,6 +267,77 @@ class DioClient {
     }
   }
 
+  static Future<dynamic> postNoLoading(
+    String url,
+    dynamic body, {
+    String key = 'lite',
+    bool loading = false,
+  }) async {
+    // final storage = GetStorage();
+    //dio.interceptors.add(PrettyDioLogger(request: true, requestHeader: true, requestBody: true, responseBody: true, error: true));
+    dio.options.headers.clear();
+    if (loading) Loading.show();
+    try {
+      if (key == 'redeem') {
+        dio.options.headers
+            .addAll({'Authorization': 'Basic bG1tYXBpOmxtbXhAMjAyNCE='});
+      }
+      if (key == 'appkey') {
+        dio.options.headers.addAll({"appkey": appkey});
+      }
+      if (key == 'lite') {
+        dio.options.headers.addAll({"mlitekeys": mlitekeys});
+      }
+      if (key == 'point') {
+        dio.options.headers.addAll({"lmmkey": MyKey.lmmkeyPoint});
+      }
+      if (key == 'lmmkey') {
+        dio.options.headers.addAll({"lmmkey": MyKey.lmmkeyApp});
+      }
+      if (key == 'backup') {
+        dio.options.headers.addAll({"lmmkey": MyKey.keyBackup});
+      }
+      if (key == 'notify') {
+        dio.options.headers.addAll({"authorization": MyKey.keyNotify});
+      }
+      if (key == 'visa') {
+        dio.options.headers.addAll({"lmmkey": MyKey.keyVisa});
+      }
+      if (key == 'mservices') {
+        dio.options.headers
+            .addAll({"authorization": "Bearer ${MyKey.mservicesKey}"});
+      }
+      if (key == 'lmmkeyPro') {
+        dio.options.headers.addAll({"lmmkey": MyKey.lmmkeyPro});
+      } else if (key == 'nokey') {
+        //Todo
+      } else {
+        dio.options.headers.addAll({
+          "lmm-token": MyConstant.desRoute == "UAT"
+              ? AppUrl.lmmTokenUAT
+              : AppUrl.lmmTokenPRO
+        });
+      }
+
+      // logger.d('dioClient req GET === $url');
+      var response = await dio.post(url, data: body);
+      // logger.d('dioClient res GET === ${response.data}');
+      if (loading) Loading.hide();
+      if (response.statusCode == 200) {
+        return response.data;
+      } else if (response.statusCode == 401) {
+        print('home');
+      } else if (response.statusCode == 299) {
+        DialogHelper.showErrorDialogNew(description: response.data);
+      } else {
+        DialogHelper.showErrorDialogNew(description: response.statusMessage!);
+      }
+    } catch (e) {
+      if (loading) Loading.hide();
+      HandleApiError.dioError(e);
+    }
+  }
+
   static Future<dynamic> delete(String url, dynamic body,
       {String key = 'lite'}) async {
     try {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -12,6 +13,7 @@ import 'package:super_app/controllers/telecomsrv_controller.dart';
 import 'package:super_app/models/telecomsrv_model.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/views/telecom/tel_package_detail.dart';
 import 'package:super_app/widget/mask_msisdn.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/pull_refresh.dart';
@@ -31,11 +33,12 @@ class _TelecomServicesState extends State<TelecomServices> {
   final telecomsrv = Get.put(TelecomsrvController());
   final fn = NumberFormat("#,###", "en_US");
   bool isHidden = true;
+  final storage = GetStorage();
 
   refresh() async {
-    await telecomsrv.getAirtime();
+    await telecomsrv.getAirtime(await storage.read('msisdn'));
     await telecomsrv.getNetworktype();
-    await telecomsrv.getPackage();
+    await telecomsrv.queryTelPackage(await storage.read('msisdn'));
     await telecomsrv.phoneList();
     refreshController.refreshCompleted();
   }
@@ -229,7 +232,11 @@ class _TelecomServicesState extends State<TelecomServices> {
 
   Widget phoneCard(int i, PhoneListModel e, bool main, double radius) {
     return InkWell(
-      onTap: () {},
+      onTap: () => Get.to(() => TelPackageDetail(
+            msisdn: e.phoneNumber!,
+            i: i + 2,
+            networkType: e.networkType!,
+          )),
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20, bottom: 8, top: 12),
         margin: EdgeInsets.only(bottom: 10),
@@ -381,96 +388,108 @@ class _TelecomServicesState extends State<TelecomServices> {
   }
 
   Widget cardSIM() {
-    return Flex(
-      direction: Axis.horizontal,
-      children: [
-        Row(
-          children: [
-            SvgPicture.asset(MyIcon.ic_sim_round),
-            SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          isHidden = !isHidden;
-                        });
-                      },
-                      child: Row(
-                        children: [
-                          TextFont(
-                            text: isHidden
-                                ? maskMsisdnX(telecomsrv
-                                        .phoneListModel.isNotEmpty
-                                    ? telecomsrv.phoneListModel[0].phoneNumber!
-                                    : telecomsrv.msisdn.value)
-                                : telecomsrv.phoneListModel.isNotEmpty
-                                    ? telecomsrv.phoneListModel[0].phoneNumber!
-                                    : telecomsrv.msisdn.value,
-                            poppin: true,
-                            fontWeight: FontWeight.w400,
-                            color: color_fff,
-                            fontSize: 11,
-                          ),
-                          SizedBox(width: 15),
-                          Icon(
-                            isHidden ? Icons.visibility_off : Icons.visibility,
-                            size: 4.w,
-                            color: color_fff,
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    TextFont(
-                      text: 'ເບີຫລັກ',
-                      color: color_fff,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    SizedBox(width: 6),
-                    TextFont(
-                      text:
-                          '(${telecomsrv.phoneListModel.isNotEmpty ? telecomsrv.phoneListModel[0].networkType! : ''})',
-                      fontSize: 8,
-                      poppin: true,
-                      color: color_fff,
-                      fontWeight: FontWeight.w300,
-                    )
-                  ],
-                )
-              ],
-            )
-          ],
-        ),
-        Expanded(
-            flex: 1,
-            child: InkWell(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+    return InkWell(
+      onTap: () => Get.to(() => TelPackageDetail(
+            msisdn: telecomsrv.phoneListModel[0].phoneNumber!,
+            i: 0,
+            networkType: telecomsrv.phoneListModel[0].networkType!,
+          )),
+      child: Flex(
+        direction: Axis.horizontal,
+        children: [
+          Row(
+            children: [
+              SvgPicture.asset(MyIcon.ic_sim_round),
+              SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextFont(
-                    text: '₭ ${fn.format(int.parse(telecomsrv.airtime.value))}',
-                    poppin: true,
-                    fontWeight: FontWeight.w600,
-                    color: color_fff,
-                    fontSize: 13,
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            isHidden = !isHidden;
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            TextFont(
+                              text: isHidden
+                                  ? maskMsisdnX(
+                                      telecomsrv.phoneListModel.isNotEmpty
+                                          ? telecomsrv
+                                              .phoneListModel[0].phoneNumber!
+                                          : telecomsrv.msisdn.value)
+                                  : telecomsrv.phoneListModel.isNotEmpty
+                                      ? telecomsrv
+                                          .phoneListModel[0].phoneNumber!
+                                      : telecomsrv.msisdn.value,
+                              poppin: true,
+                              fontWeight: FontWeight.w400,
+                              color: color_fff,
+                              fontSize: 11,
+                            ),
+                            SizedBox(width: 15),
+                            Icon(
+                              isHidden
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              size: 4.w,
+                              color: color_fff,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    color: color_fff,
-                    size: 7.w,
+                  Row(
+                    children: [
+                      TextFont(
+                        text: 'ເບີຫລັກ',
+                        color: color_fff,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      SizedBox(width: 6),
+                      TextFont(
+                        text:
+                            '(${telecomsrv.phoneListModel.isNotEmpty ? telecomsrv.phoneListModel[0].networkType! : ''})',
+                        fontSize: 8,
+                        poppin: true,
+                        color: color_fff,
+                        fontWeight: FontWeight.w300,
+                      )
+                    ],
                   )
                 ],
-              ),
-            ))
-      ],
+              )
+            ],
+          ),
+          Expanded(
+              flex: 1,
+              child: InkWell(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextFont(
+                      text:
+                          '₭ ${fn.format(int.parse(telecomsrv.mainAirtime.value))}',
+                      poppin: true,
+                      fontWeight: FontWeight.w600,
+                      color: color_fff,
+                      fontSize: 13,
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: color_fff,
+                      size: 7.w,
+                    )
+                  ],
+                ),
+              ))
+        ],
+      ),
     );
   }
 

@@ -9,21 +9,26 @@ import 'package:super_app/utility/myconstant.dart';
 class TelecomsrvController extends GetxController {
   Rx<NetworktypeModel> networktypeModel = NetworktypeModel().obs;
   Rx<AirtimeModel> airtimeModel = AirtimeModel().obs;
-  Rx<PackageModel> inusePackageModel = PackageModel().obs;
-  RxList<PackageModel> packageModel = <PackageModel>[].obs;
+  Rx<TelQueryPackage> inusePackageModel = TelQueryPackage().obs;
   RxList<PhoneListModel> phoneListModel = <PhoneListModel>[].obs;
+  RxList<TelQueryPackage> telQueryPackage = <TelQueryPackage>[].obs;
   RxString msisdn = '2055xxxxxx'.obs;
+  RxString mainAirtime = '0'.obs;
   RxString airtime = '0'.obs;
+  RxString inHouseAirtime = '0'.obs;
+  RxString point = '0'.obs;
   final storage = GetStorage();
   //slide up control
   PanelController panelController = PanelController();
+  //package detail
+  RxString msisdnDetail = ''.obs;
 
   @override
   void onReady() async {
     super.onReady();
     await getNetworktype();
-    await getAirtime();
-    await getPackage();
+    await getAirtime(await storage.read('msisdn'));
+    await queryTelPackage(await storage.read('msisdn'));
     await phoneList();
   }
 
@@ -34,15 +39,14 @@ class TelecomsrvController extends GetxController {
     networktypeModel.value = NetworktypeModel.fromJson(res);
   }
 
-  getAirtime() async {
-    var url =
-        '${MyConstant.mservicesUrl}/CheckBalance?msisdn=${await storage.read('msisdn')}';
+  getAirtime(String msisdn) async {
+    var url = '${MyConstant.mservicesUrl}/CheckBalance?msisdn=$msisdn';
     var res = await DioClient.getNoLoading(url);
     airtimeModel.value = AirtimeModel.fromJson(res);
-    checkAirtime();
+    checkAirtimeType();
   }
 
-  checkAirtime() {
+  checkAirtimeType() async {
     String type = '';
     switch (airtimeModel.value.networkType) {
       case 'G':
@@ -53,21 +57,34 @@ class TelecomsrvController extends GetxController {
         type = 'C_MAIN_ACCOUNT';
     }
 
-    airtime.value = airtimeModel.value.balances!
+    var balance = airtimeModel.value.balances!
         .firstWhere((i) => i.balanceType == type)
+        .balance
+        .toString();
+    if (airtimeModel.value.msisdn == await storage.read('msisdn')) {
+      mainAirtime.value = balance;
+    }
+    airtime.value = balance;
+
+    inHouseAirtime.value = airtimeModel.value.balances!
+        .firstWhere(
+          (i) => i.balanceType == 'C_ONNET_OFFNET_BON_2103',
+          orElse: () => Balances(balance: '0'),
+        )
         .balance
         .toString();
   }
 
-  getPackage() async {
+  queryTelPackage(String msisdn) async {
     var url =
-        '${MyConstant.mservicesUrl}/QueryPackage?msisdn=${await storage.read('msisdn')}&language=en';
+        '${MyConstant.mservicesUrl}/QueryPackage?msisdn=$msisdn&language=en';
     var res = await DioClient.getNoLoading(url);
-    packageModel.value =
-        (res as List).map((e) => PackageModel.fromJson(e)).toList();
-    //set value to chart
-    if (packageModel.isNotEmpty) {
-      inusePackageModel.value = packageModel.first;
+    telQueryPackage.value =
+        (res as List).map((e) => TelQueryPackage.fromJson(e)).toList();
+    if (telQueryPackage.isNotEmpty) {
+      if (msisdn == await storage.read('msisdn')) {
+        inusePackageModel.value = telQueryPackage.first;
+      }
     }
   }
 
@@ -103,6 +120,51 @@ class TelecomsrvController extends GetxController {
       "otpType": reqType,
       "language": 'en',
     };
-    await DioClient.postEncrypt(url, body);
+    await DioClient.postNoLoading(url, body, key: 'mservices');
+  }
+
+  confirmOtp(String reqMsisdn, String reqType, String otp) async {
+    var url = '${MyConstant.mservicesUrl}/ConfirmOTP';
+    var body = {
+      "msisdn": reqMsisdn,
+      "otp": otp,
+      "type": reqType,
+      "language": "en"
+    };
+    var res = await DioClient.postNoLoading(url, body,
+        loading: true, key: 'mservices');
+    if (res['resultStatus'] == 'True') {
+      return true;
+    } else {
+      DialogHelper.showErrorDialogNew(
+        title: res['resultDesc'].toString(),
+        description: '',
+      );
+    }
+  }
+
+  addPhone(
+    String addMsisdn,
+  ) async {
+    var url = '${MyConstant.mservicesUrl}/ManageUser';
+    var body = {
+      "main_msisdn": await storage.read('msisdn'),
+      "destrination_msisdn": addMsisdn,
+      "language": 'en',
+    };
+    var res = await DioClient.postNoLoading(url, body,
+        loading: true, key: 'mservices');
+    if (res != null) {
+      phoneList();
+      Get.back();
+    }
+  }
+
+  getPoint(String msisdn) async {
+    var url = '${MyConstant.mservicesUrl}/CheckPoint?msisdn=$msisdn';
+    var res = await DioClient.getNoLoading(url, key: 'mservices');
+    if (res['resultCode'] == '200') {
+      point.value = res['point'];
+    }
   }
 }

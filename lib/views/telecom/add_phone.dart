@@ -8,7 +8,9 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/telecomsrv_controller.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/myIcon.dart';
@@ -25,29 +27,40 @@ class _AddPhonePageState extends State<AddPhonePage> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   late PageController pageViewController;
+  final telecomsrv = Get.put(TelecomsrvController());
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   int currentPage = 0;
-  late Stream<int> myStream;
+  Stream<int>? myStream;
+  int countdown = 30;
+  bool isCounting = false;
+  String otpType = 'Manage User';
 
   @override
   void initState() {
     super.initState();
-    activeCounter();
     pageViewController = PageController();
   }
 
   @override
   void dispose() {
+    isCounting = false;
     super.dispose();
     otpController.dispose();
     phoneController.dispose();
   }
 
-  activeCounter() {
+  void activeCounter() {
+    if (isCounting) return;
+    isCounting = true;
+    telecomsrv.reqOtp(phoneController.text, otpType);
     setState(() {
-      myStream = Stream<int>.periodic(Duration(seconds: 1), (x) => 30 - x)
-          .take(31)
-          .asBroadcastStream();
+      myStream =
+          Stream<int>.periodic(Duration(seconds: 1), (x) => countdown - x)
+              .take(countdown + 1)
+              .asBroadcastStream();
+      myStream!.last.then((_) {
+        isCounting = false;
+      });
     });
   }
 
@@ -93,7 +106,10 @@ class _AddPhonePageState extends State<AddPhonePage> {
         builder: (context, snapshot) {
           return !snapshot.hasData || snapshot.data == 0
               ? InkWell(
-                  onTap: () => activeCounter(),
+                  onTap: () {
+                    telecomsrv.reqOtp(phoneController.text, otpType);
+                    activeCounter();
+                  },
                   child: TextFont(
                     text: 'ຂໍ OTP ໃໝ່',
                     color: cr_red,
@@ -139,15 +155,14 @@ class _AddPhonePageState extends State<AddPhonePage> {
                   color: color_2929,
                   fontWeight: FontWeight.w500),
               showCursor: false,
-              // backgroundColor: Colors.grey[200].withOpacity(0.7),
               keyboardType: TextInputType.number,
               onChanged: (value) {},
               onCompleted: (value) {
-                // _confirmOTP(value);
+                var res =
+                    telecomsrv.confirmOtp(phoneController.text, otpType, value);
+                if (res != null) telecomsrv.addPhone(phoneController.text);
               },
-
               pinTheme: PinTheme(
-                // shape: ,
                 selectedColor: cr_red,
                 inactiveColor: cr_eded,
                 activeFillColor: cr_eded,
@@ -169,7 +184,7 @@ class _AddPhonePageState extends State<AddPhonePage> {
             ),
           ),
           SizedBox(
-            height: 40,
+            height: 30,
           ),
           streamBuilder
         ],
@@ -305,7 +320,7 @@ class _AddPhonePageState extends State<AddPhonePage> {
         title: currentPage == 0 ? 'ຖັດໄປ' : 'ກັບຄືນ',
         textColor: currentPage == 0 ? color_fff : color_blackE72,
         borderColor: currentPage == 0 ? cr_ef33 : color_blackE72,
-        func: () {
+        func: () async {
           if (currentPage == 1) {
             pageViewController.animateToPage(currentPage - 1,
                 duration: const Duration(milliseconds: 300),
@@ -313,6 +328,14 @@ class _AddPhonePageState extends State<AddPhonePage> {
           } else {
             _formKey.currentState!.save();
             if (_formKey.currentState!.validate()) {
+              if (phoneController.text == await storage.read('msisdn')) {
+                DialogHelper.showErrorDialogNew(
+                  title: 'ຂໍອະໄພ, ບໍ່ສາມາດເພິ່ມເບີຕົວເອງໄດ້',
+                  description: '',
+                );
+                return null;
+              }
+              activeCounter();
               pageViewController.animateToPage(currentPage + 1,
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut);

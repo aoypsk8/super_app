@@ -35,6 +35,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final box = GetStorage();
+  final HomeController homeController = Get.find();
   final userController = Get.find<UserController>();
   final themeService = Get.find<ThemeService>();
   final _confirmPassword = TextEditingController();
@@ -654,7 +655,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             onPressed: () {
                               Navigator.of(dialogContext).pop(false);
                             },
-                            child: TextFont(text: 'Cancel', color: color_777),
+                            child: TextFont(text: 'cancel', color: color_777),
                           ),
                           TextButton(
                             onPressed: () async {
@@ -673,7 +674,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               }
                             },
                             child: TextFont(
-                              text: 'Confirm',
+                              text: 'confirm',
                               color: Theme.of(dialogContext).primaryColor,
                               fontWeight: FontWeight.bold,
                             ),

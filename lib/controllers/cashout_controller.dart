@@ -83,7 +83,7 @@ class CashOutController extends GetxController {
       enableBottom.value = true;
       Get.to(
         () => ReusableConfirmScreen(
-          appbarTitle: "confirm_payment",
+          appbarTitle: homeController.getMenuTitle(),
           function: () {
             enableBottom.value = false;
             confirmPayment();

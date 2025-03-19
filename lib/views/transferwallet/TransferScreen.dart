@@ -65,9 +65,13 @@ class _TransferScreenState extends State<TransferScreen>
     _balanceAmount = 0;
     _toWallet.text = transferController.destinationMsisdn.value;
 
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
-      setState(() {});
+      if (_tabController.indexIsChanging || _tabController.index != indexTabs) {
+        setState(() {
+          indexTabs = _tabController.index;
+        });
+      }
     });
     super.initState();
   }
@@ -459,16 +463,6 @@ class _TransferScreenState extends State<TransferScreen>
                           : cr_7070,
                     ),
                   ),
-                  Tab(
-                    child: TextFont(
-                      text: '',
-                    ),
-                  ),
-                  Tab(
-                    child: TextFont(
-                      text: '',
-                    ),
-                  ),
                 ],
                 indicatorColor: Theme.of(context).colorScheme.onPrimary,
               ),
@@ -482,8 +476,6 @@ class _TransferScreenState extends State<TransferScreen>
                     buildFavoriteTransfer(
                       updateParentValue: _updateParentValue,
                     ),
-                    const SizedBox(),
-                    const SizedBox(),
                   ],
                 ),
               ),

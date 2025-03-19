@@ -41,14 +41,23 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
+    // Initialize TabController and listen for changes
     _tabController = TabController(length: 2, vsync: this);
-    setState(() {
-      if (homeController.rxBgCard.value == '') {
-        _backgroundImage = null;
-      } else {
-        _backgroundImage = File(homeController.rxBgCard.value);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging || _tabController.index != indexTabs) {
+        setState(() {
+          indexTabs = _tabController.index;
+        });
       }
     });
+
+    // Set background image without using setState in initState
+    if (homeController.rxBgCard.value == '') {
+      _backgroundImage = null;
+    } else {
+      _backgroundImage = File(homeController.rxBgCard.value);
+    }
   }
 
   @override
@@ -283,15 +292,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 20, bottom: 10),
+                              padding:
+                                  const EdgeInsets.only(top: 20, bottom: 10),
                               child: IntrinsicHeight(
                                 child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   // crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     GestureDetector(
                                       onTap: () => Get.to(ImagepreviewScreen(
-                                          imageUrl: userController.userProfilemodel.value.profileImg!,
+                                          imageUrl: userController
+                                              .userProfilemodel
+                                              .value
+                                              .profileImg!,
                                           title: 'profile')),
                                       child: Container(
                                         width: 15.w,
@@ -306,10 +320,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           ),
                                         ),
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(50.0),
+                                          borderRadius:
+                                              BorderRadius.circular(50.0),
                                           child: Image.network(
-                                            userController.userProfilemodel.value.profileImg != null
-                                                ? userController.userProfilemodel.value.profileImg!
+                                            userController.userProfilemodel
+                                                        .value.profileImg !=
+                                                    null
+                                                ? userController
+                                                    .userProfilemodel
+                                                    .value
+                                                    .profileImg!
                                                 : MyConstant.profile_default,
                                           ),
                                         ),
@@ -317,10 +337,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     ),
                                     const SizedBox(width: 10),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.baseline,
                                           textBaseline: TextBaseline.alphabetic,
                                           children: [
                                             TextFont(
@@ -330,19 +352,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                             ),
                                             const SizedBox(width: 3),
                                             TextFont(
-                                              text: "${userController.userProfilemodel.value.name ?? ''}!",
+                                              text:
+                                                  "${userController.userProfilemodel.value.name ?? ''}!",
                                               fontWeight: FontWeight.w600,
                                               color: color_fff,
                                             )
                                           ],
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 2.5),
+                                          padding:
+                                              const EdgeInsets.only(top: 2.5),
                                           child: Row(
                                             children: [
                                               TextFont(
                                                 text: maskMsisdn(
-                                                  userController.userProfilemodel.value.msisdn ?? '2000000',
+                                                  userController
+                                                          .userProfilemodel
+                                                          .value
+                                                          .msisdn ??
+                                                      '2000000',
                                                   showMsisdn: showMsisdn,
                                                 ),
                                                 fontSize: 14,
@@ -359,7 +387,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                 },
                                                 child: Icon(
                                                   size: 16.sp,
-                                                  showMsisdn ? Iconsax.eye : Iconsax.eye_slash,
+                                                  showMsisdn
+                                                      ? Iconsax.eye
+                                                      : Iconsax.eye_slash,
                                                   color: color_fff,
                                                 ),
                                               ),
@@ -390,7 +420,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         padding: EdgeInsets.all(1),
                                         decoration: BoxDecoration(
                                           color: cr_ef33,
-                                          borderRadius: BorderRadius.circular(100),
+                                          borderRadius:
+                                              BorderRadius.circular(100),
                                         ),
                                         constraints: BoxConstraints(
                                           minWidth: 10,
@@ -407,20 +438,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                       Container(
                         color: cr_black.withOpacity(0.05),
-                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                         child: TabBar(
                           controller: _tabController,
                           indicatorSize: TabBarIndicatorSize.tab,
-                          onTap: (index) => setState(() {
-                            indexTabs = index;
-                          }),
+                          onTap: (index) {
+                            setState(() {
+                              indexTabs = index;
+                            });
+                          },
                           dividerColor: Colors.transparent,
                           tabs: [
                             Tab(
                               child: TextFont(
                                 text: 'recommend',
                                 fontWeight: FontWeight.w600,
-                                // color: indexTabs == 0 ? Theme.of(context).colorScheme.onPrimary : cr_7070,
                                 color: indexTabs == 0 ? color_fff : cr_7070,
                               ),
                             ),
@@ -428,12 +461,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               child: TextFont(
                                 text: 'telecom_service',
                                 fontWeight: FontWeight.w600,
-                                // color: indexTabs == 1 ? Theme.of(context).colorScheme.onPrimary : cr_7070,
                                 color: indexTabs == 1 ? color_fff : cr_7070,
                               ),
                             ),
                           ],
-                          indicatorColor: Theme.of(context).colorScheme.onPrimary,
+                          indicatorColor:
+                              Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
                     ],
@@ -488,7 +521,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               _buildLanguageOption(context, 'English', 'en', languageService),
               _buildLanguageOption(context, 'Lao', 'lo', languageService),
               _buildLanguageOption(context, 'Chinese', 'zh', languageService),
-              _buildLanguageOption(context, 'Vietnamese', 'vi', languageService),
+              _buildLanguageOption(
+                  context, 'Vietnamese', 'vi', languageService),
             ],
           ),
         );
@@ -496,8 +530,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildLanguageOption(
-      BuildContext context, String languageName, String languageCode, LanguageService languageService) {
+  Widget _buildLanguageOption(BuildContext context, String languageName,
+      String languageCode, LanguageService languageService) {
     return ListTile(
       title: TextFont(
         text: languageName,

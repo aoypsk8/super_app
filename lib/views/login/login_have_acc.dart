@@ -24,10 +24,7 @@ import 'package:super_app/widget/textfont.dart';
 class LoginHaveAccount extends StatefulWidget {
   final Map<String, dynamic> user; // Accept user data
 
-  LoginHaveAccount({
-    super.key,
-    required this.user, // Required parameter
-  });
+  LoginHaveAccount({super.key, required this.user});
 
   @override
   State<LoginHaveAccount> createState() => _LoginHaveAccountState();
@@ -130,8 +127,7 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
                                       radius: 80.sp,
                                       backgroundColor: Colors.transparent,
                                       backgroundImage: CachedNetworkImageProvider(
-                                        widget.user['image_profile'] ??
-                                            'https://profile.mmoney.la/ImageProfile/default_profile.jpg',
+                                        widget.user['image_profile'] ?? 'https://mmoney.la/AppLite/Users/mmoney.png',
                                       ),
                                     ),
                                   ),

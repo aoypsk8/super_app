@@ -194,7 +194,7 @@
   "south": "Southern",
   "code": "Code",
   "duration": "Duration",
-  "day": "day",
+  "day": "days",
   "dynamic_qr": "Dynamic QR",
   "create_dynamic_qr": "Create Dynamic QR",
   "myqr": "My QR",
@@ -346,7 +346,11 @@
   "Terms_&_Policy": "Terms & Policy",
   "save_success": "Save successful!",
   "check_detail": "Check details",
-  "transfer_to_bank": "Transfer to bank"
+  "transfer_to_bank": "Transfer to bank",
+  "the_most_sold": "Best Seller",
+  "all_promotion": "All Promotions",
+  "data_use": "Usable Data",
+  "date_time_use": "Validity Period"
 
 
 }

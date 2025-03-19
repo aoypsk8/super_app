@@ -93,7 +93,7 @@ class _PackageListScreenState extends State<PackageListScreen>
             tabs: [
               Tab(
                 child: TextFont(
-                  text: 'ຂາຍດີທີ່ສຸດ',
+                  text: 'the_most_sold',
                   fontWeight: FontWeight.w600,
                   color: indexTabs == 0
                       ? Theme.of(context).colorScheme.onPrimary
@@ -102,7 +102,7 @@ class _PackageListScreenState extends State<PackageListScreen>
               ),
               Tab(
                 child: TextFont(
-                  text: 'ໂປຣໂມຊັ່ນທັງໝົດ',
+                  text: 'all_promotion',
                   fontWeight: FontWeight.w600,
                   color: indexTabs == 1
                       ? Theme.of(context).colorScheme.onPrimary
@@ -250,7 +250,7 @@ class _PackageListScreenState extends State<PackageListScreen>
                   });
         },
         packagename: tempCcontroler.tempCpackagemodel[index].packageName!,
-        code: "ຊື້ແພັກເກັດ",
+        code: "purchase",
         gb: false,
         package: true,
         discountBool: tempCcontroler.tempCpackagemodel[index].discount != 0
@@ -378,7 +378,7 @@ class _PackageListScreenState extends State<PackageListScreen>
                 );
           },
           packagename: tempCcontroler.tempCpackagemodel[index].packageName!,
-          code: "ຊື້ແພັກເກັດ",
+          code: "purchase",
           gb: false,
           package: true,
           discountBool: tempCcontroler.tempCpackagemodel[index].discount != 0

@@ -106,10 +106,6 @@ class CardWidgetBorrowing extends StatelessWidget {
                                     children: [
                                       TextFont(
                                         color: color_fff,
-                                        text: "ດາຕ້າໃຊ້ໄດ້",
-                                      ),
-                                      TextFont(
-                                        color: color_fff,
                                         text: detail,
                                       ),
                                       TextFont(
@@ -123,7 +119,7 @@ class CardWidgetBorrowing extends StatelessWidget {
                                       ),
                                       TextFont(
                                         color: color_fff,
-                                        text: "ໄລຍະກຳນົດ",
+                                        text: "date_time",
                                       ),
                                       TextFont(
                                         color: color_fff,
@@ -131,7 +127,7 @@ class CardWidgetBorrowing extends StatelessWidget {
                                       ),
                                       TextFont(
                                         color: color_fff,
-                                        text: "ວັນ",
+                                        text: "day",
                                       ),
                                     ],
                                   )

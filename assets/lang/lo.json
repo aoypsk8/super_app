@@ -348,5 +348,10 @@
   "Terms_&_Policy": "ນະໂຍບາຍບໍລິການ",
   "save_success": "ບັນທຶກສຳເລັດ!",
   "check_detail": "ກວດສອບລາຍລະອຽດ",
-  "transfer_to_bank": "ໂອນເງີນໄປທະນາຄານ"
+  "transfer_to_bank": "ໂອນເງີນໄປທະນາຄານ",
+  "the_most_sold":"ຂາຍດີທີ່ສຸດ",
+  "all_promotion":"ໂປຣໂມຊັ່ນທັງໝົດ",
+  "data_use": "ດາຕ້າໃຊ້ໄດ້", 
+  "date_time_use" :"ໄລຍະກຳນົດ"
+
 }

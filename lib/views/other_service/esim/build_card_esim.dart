@@ -101,7 +101,7 @@ class CardWidgetESIM extends StatelessWidget {
                             ),
                             TextFont(
                               color: color_fff,
-                              text: code,
+                              text: "Free Call : $code",
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                             ),

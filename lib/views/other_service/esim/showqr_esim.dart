@@ -126,17 +126,12 @@ class _ShowQRESIMScreenState extends State<ShowQRESIMScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               TextFont(
-                text: esimController.RxTitle.value,
+                text: esimController.esimDetailModelRes.first.phoneNumber,
                 fontSize: 12,
                 poppin: true,
               ),
               TextFont(
-                text: esimController.RxDescription.value,
-                fontSize: 12,
-                poppin: true,
-              ),
-              TextFont(
-                text: esimController.RxPhoneNumber.value,
+                text: esimController.esimDetailModelRes.first.phoneNumber,
                 poppin: true,
                 fontSize: 15,
                 color: Theme.of(context).primaryColor,
@@ -146,7 +141,8 @@ class _ShowQRESIMScreenState extends State<ShowQRESIMScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFont(
-                    text: '${fn.format(esimController.RxPrice.value)} KIP',
+                    text:
+                        '${fn.format(esimController.esimDetailModelRes.first.price)} KIP',
                     poppin: true,
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.w500,
@@ -174,8 +170,9 @@ class _ShowQRESIMScreenState extends State<ShowQRESIMScreen> {
                           padding: const EdgeInsets.all(9.0),
                           child: PrettyQr(
                             size: 70.w,
-                            data:
-                                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                            data: esimController.esimDetailModelRes.first.qr
+                                    .trim() ??
+                                "N/A",
                             errorCorrectLevel: QrErrorCorrectLevel.H,
                             typeNumber: null,
                             roundEdges: false,

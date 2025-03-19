@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:super_app/controllers/esim_controller.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/utility/color.dart';
@@ -36,10 +37,12 @@ class _PaymentVisaMasterCardState extends State<PaymentVisaMasterCard> {
   final _formKey = GlobalKey<FormState>();
   final HomeController homeController = Get.find();
   String cardType = 'MASTERCARD';
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
   final TextEditingController _expiryController = TextEditingController();
   final TextEditingController _cvvController = TextEditingController();
+  final esimController = Get.put(ESIMController());
   bool isChecked = false;
   // Function to detect card type
   String detectCardType(String cardNumber) {
@@ -83,6 +86,7 @@ class _PaymentVisaMasterCardState extends State<PaymentVisaMasterCard> {
             });
             _formKey.currentState!.save();
             if (_formKey.currentState!.validate()) {
+              esimController.RxMail.value = _emailController.text;
               if (isChecked) {
                 if (await paymentController
                     .paymentCardWithoutstoredCardUniqueID(
@@ -170,6 +174,17 @@ class _PaymentVisaMasterCardState extends State<PaymentVisaMasterCard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      const SizedBox(height: 20),
+                      buildEmailValidateV2(
+                        controller: _emailController,
+                        fillcolor: color_f4f4,
+                        bordercolor: color_f4f4,
+                        isEmail: true,
+                        label: 'email',
+                        name: 'email',
+                        hintText: '@gmail.com',
+                        textType: TextInputType.emailAddress,
+                      ),
                       const SizedBox(height: 20),
                       buildNumberFiledValidate(
                         controller: _nameController,

@@ -103,6 +103,7 @@ dependencies:
   # slider
   syncfusion_flutter_sliders: ^28.2.5
   local_auth: ^2.3.0
+  # image_gallery_saver: ^2.0.3
 
   # cache
   flutter_cache: ^0.1.0

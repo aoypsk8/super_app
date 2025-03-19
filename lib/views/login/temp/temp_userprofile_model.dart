@@ -63,12 +63,13 @@ class TempUserProfileStorage {
   }
 
   // Update only the last login time
-  void updateLastLogin(String username) {
+  void updateLastLogin(String username, image_profile) {
     List<dynamic> users = box.read('user_profiles') ?? [];
     int index = users.indexWhere((e) => e['username'] == username);
 
     if (index != -1) {
       users[index]['last_login'] = DateTime.now().toIso8601String();
+      users[index]['image_profile'] = image_profile;
       box.write('user_profiles', users);
     }
   }

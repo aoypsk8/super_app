@@ -16,6 +16,7 @@ import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/image_preview.dart';
 import 'package:super_app/views/main/home_recommend.dart';
 import 'package:super_app/views/notification/notification_box.dart';
+import 'package:super_app/views/webview/webapp_webview.dart';
 import 'package:super_app/widget/mask_msisdn.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -49,6 +50,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         setState(() {
           indexTabs = _tabController.index;
         });
+      }
+    });
+    setState(() {
+      if (homeController.rxBgCard.value == '') {
+        _backgroundImage = null;
+      } else {
+        _backgroundImage = File(homeController.rxBgCard.value);
       }
     });
 
@@ -475,7 +483,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
           ),
-
+          TextButton(
+              onPressed: () => Get.to(WebappWebviewScreen(isMenu: true)),
+              child: TextFont(text: 'NewMenu')),
+          Obx(
+            () => TextFont(
+                text: 'token : ${userController.rxToken.value}',
+                color: color_1a1,
+                maxLines: 3),
+          ),
           //! detail tabbar
           Expanded(
             child: TabBarView(

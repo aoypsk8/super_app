@@ -31,6 +31,7 @@ import 'package:super_app/views/register/register_form.dart';
 import 'package:super_app/views/reusable_template/reusable_otp.dart';
 import 'package:super_app/views/reusable_template/reusable_result.dart';
 import 'package:super_app/widget/reusableResultWithCode.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class UserController extends GetxController with WidgetsBindingObserver {
   final storage = GetStorage();
@@ -593,6 +594,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
       if (res['status']) {
         storage.write('msisdn', msisdn);
         storage.write('token', res['token']);
+        rxToken.value = res['token'];
         if (reqOTPprocess) {
           requestOTP(msisdn, 'login');
         } else {
@@ -604,6 +606,26 @@ class UserController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  Future<bool> loginRefreshTokenWebview(msisdn, password) async {
+    bool status = false;
+    var url = '${MyConstant.urlSuperAppLogin}/LoginToSuperApp';
+    var data = {"msisdn": msisdn, "password": 'LMM!$password'};
+
+    var res = await DioClient.postEncrypt(url, data);
+    if (res != null) {
+      if (res['status']) {
+        storage.write('msisdn', msisdn);
+        storage.write('token', res['token']);
+        rxToken.value = res['token']; // ✅ Update token globally
+        status = true;
+      } else {
+        DialogHelper.showErrorDialogNew(description: res["resultDesc"]);
+      }
+    }
+    return status; // ✅ Return success or failure
+  }
+
+  RxBool isWebview = false.obs;
   Future<bool> checktokenSuperApp() async {
     try {
       getCurrentLocation();
@@ -645,7 +667,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  loginProcess(msisdn) async {
+  loginProcess(msisdn, {bool isWebview = false}) async {
     rxMsisdn.value = msisdn;
     await storage.write('msisdn', msisdn);
     await insertLoginLog();
@@ -710,6 +732,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
   Future<void> handleOTPProcessSuccess(String msisdn, String type) async {
     switch (type) {
       case "login":
+        storage.remove('biometric');
+        storage.remove('biometric_password');
         loginProcess(msisdn);
         break;
 
@@ -788,7 +812,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
           TempUserProfile(username: username, fullname: fullname, imageProfile: imageProfile, lastLogin: now);
       userStorage.addOrUpdateTempUserProfile(newUser);
     } else {
-      userStorage.updateLastLogin(username);
+      userStorage.updateLastLogin(username, imageProfile);
     }
   }
 

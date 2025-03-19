@@ -40,7 +40,7 @@ class _Vertify_kyc_ESIMState extends State<Vertify_kyc_ESIM> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: BuildAppBar(title: "verify_kyc"),
+      appBar: BuildAppBar(title: "vertify_kyc"),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
@@ -74,7 +74,7 @@ class _Vertify_kyc_ESIMState extends State<Vertify_kyc_ESIM> {
                     fillcolor: color_f4f4,
                     bordercolor: color_f4f4,
                     isEmail: true,
-                    label: 'Email',
+                    label: 'email',
                     name: 'email',
                     hintText: '@gmail.com',
                     textType: TextInputType.emailAddress,

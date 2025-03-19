@@ -84,7 +84,17 @@ class _TelPackageDetailState extends State<TelPackageDetail> {
     return Padding(
       padding: EdgeInsets.only(top: 60),
       child: Column(
-        children: [simProfile()],
+        children: [
+          simProfile(),
+          SizedBox(height: 20),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextFont(
+              text: 'ລາຍການແພັກເກັດ',
+            ),
+          ),
+          Expanded(child: package())
+        ],
       ),
     );
   }
@@ -162,14 +172,6 @@ class _TelPackageDetailState extends State<TelPackageDetail> {
         ),
         SizedBox(height: 20),
         balance(),
-        SizedBox(height: 20),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: TextFont(
-            text: 'ລາຍການແພັກເກັດ',
-          ),
-        ),
-        package()
       ],
     );
   }
@@ -182,10 +184,10 @@ class _TelPackageDetailState extends State<TelPackageDetail> {
       children: [
         ...telecomsrv.telQueryPackage.mapIndexed((i, e) {
           return Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             margin: EdgeInsets.only(bottom: 14),
             decoration: ShapeDecoration(
-              color: i == 0 ? cr_red : color_fff,
+              color: e.isCurrentNormal! ? cr_red : color_fff,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -200,7 +202,7 @@ class _TelPackageDetailState extends State<TelPackageDetail> {
             ),
             child: Row(
               children: [
-                SvgPicture.asset(i == 0
+                SvgPicture.asset(e.isCurrentNormal!
                     ? MyIcon.ic_tel_internet
                     : MyIcon.ic_tel_internet_bw),
                 SizedBox(width: 10),
@@ -212,15 +214,15 @@ class _TelPackageDetailState extends State<TelPackageDetail> {
                         Expanded(
                             flex: 1,
                             child: TextFont(
-                              text: i == 0 ? 'ກຳລັງນຳໃຊ້' : 'ລໍຖ້າ',
-                              color: i == 0 ? color_fff : color_777,
+                              text: e.isCurrentNormal! ? 'ກຳລັງນຳໃຊ້' : 'ລໍຖ້າ',
+                              color: e.isCurrentNormal! ? color_fff : color_777,
                               fontSize: 10,
                             )),
                         Expanded(
                             flex: 2,
                             child: TextFont(
                               text: e.packageName!,
-                              color: i == 0 ? color_fff : cr_4139,
+                              color: e.isCurrentNormal! ? color_fff : cr_4139,
                               fontSize: 9,
                               textAlign: TextAlign.end,
                               poppin: true,
@@ -228,12 +230,33 @@ class _TelPackageDetailState extends State<TelPackageDetail> {
                       ],
                     ),
                     LinearPercentIndicator(
-                      lineHeight: 3.5,
-                      percent: 1,
-                      padding: EdgeInsets.all(3),
-                      // progressColor: Color(0xffF0AF4C),
-                      progressColor: Color(0xff166036),
+                      lineHeight: 5.3,
+                      percent: e.doublePercent.toDouble() > 1
+                          ? 1.0
+                          : e.doublePercent.toDouble(),
+                      progressColor: Color(0xffF0AF4C),
+                      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 1),
                       backgroundColor: Color(0xffFBEEE6),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: TextFont(
+                          text: '${e.qtaUsed}/${e.qtaValue}MB',
+                          color: e.isCurrentNormal! ? color_fff : cr_4139,
+                          fontSize: 9,
+                          textAlign: TextAlign.start,
+                          poppin: true,
+                        )),
+                        Expanded(
+                            child: TextFont(
+                          text: e.dateStamp!,
+                          color: e.isCurrentNormal! ? color_fff : cr_4139,
+                          fontSize: 9,
+                          textAlign: TextAlign.end,
+                          poppin: true,
+                        ))
+                      ],
                     ),
                   ],
                 ))
@@ -324,8 +347,8 @@ class _TelPackageDetailState extends State<TelPackageDetail> {
     return Align(
       alignment: Alignment.topCenter,
       child: TextFont(
-        text: 'ເພິ່ມໝາຍເລກໂທລະສັບ',
-        fontWeight: FontWeight.w500,
+        text: 'ລາຍລະອຽດ',
+        fontWeight: FontWeight.bold,
       ),
     );
   }

@@ -1,19 +1,25 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/telecomsrv_controller.dart';
+import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/telecomsrv_model.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/views/service/service.dart';
 import 'package:super_app/views/telecom/tel_package_detail.dart';
+import 'package:super_app/views/web/openWebView.dart';
 import 'package:super_app/widget/mask_msisdn.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/pull_refresh.dart';
@@ -31,6 +37,8 @@ class TelecomServices extends StatefulWidget {
 class _TelecomServicesState extends State<TelecomServices> {
   RefreshController refreshController = RefreshController();
   final telecomsrv = Get.put(TelecomsrvController());
+  final UserController userController = Get.find();
+  final HomeController homeController = Get.find();
   final fn = NumberFormat("#,###", "en_US");
   bool isHidden = true;
   final storage = GetStorage();
@@ -56,13 +64,181 @@ class _TelecomServicesState extends State<TelecomServices> {
             body: PullRefresh(
               refreshController: refreshController,
               onRefresh: () => refresh(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [dashboard()],
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      dashboard(),
+                      SizedBox(height: 8),
+                      menu(),
+                      menu(),
+                      menu(),
+                      menu(),
+                      menu(),
+                      menu(),
+                      menu(),
+                      menu(),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
         ));
+  }
+
+  Widget menu() {
+    return Container(
+      color: color_fff,
+      child: homeController.menuModel.isNotEmpty
+          ? Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFont(
+                        text: 'ບໍລິການໂທລະຄົມ',
+                        fontWeight: FontWeight.w600,
+                      ),
+                      Container(
+                        width: 10.w,
+                        height: 3,
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFEF3328),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  menuIcon()
+                ],
+              ),
+            )
+          : Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Lottie.asset(
+                  MyIcon.animation_load,
+                  repeat: true,
+                ),
+              ),
+            ),
+    );
+  }
+
+  Widget menuIcon() {
+    return AlignedGridView.count(
+      itemCount: homeController.menuModel.skip(1).first.menulists!.length,
+      crossAxisCount: 4,
+      mainAxisSpacing: 17,
+      crossAxisSpacing: 20,
+      shrinkWrap: true,
+      primary: false,
+      physics: NeverScrollableScrollPhysics(),
+      itemBuilder: (BuildContext context, int index) {
+        if (index == homeController.menuModel.first.menulists!.length) {
+          return InkWell(
+            onTap: () async {},
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SizedBox(height: 6),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                  ),
+                  child: SvgPicture.asset(
+                    MyIcon.ic_more,
+                    width: 5.5.w,
+                    height: 8.5.w,
+                  ),
+                ),
+                SizedBox(height: 10),
+                TextFont(
+                  text: 'more',
+                  fontSize: 9.5,
+                  fontWeight: FontWeight.w400,
+                  maxLines: 2,
+                  color: cr_4139,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        }
+
+        var result = homeController.menuModel.first.menulists![index];
+        String? url = result.logo;
+        String? updatedUrl = url!.replaceFirst(
+          'https://mmoney.la',
+          'https://gateway.ltcdev.la/AppImage',
+        );
+
+        return InkWell(
+          onTap: () async {
+            await homeController.clear();
+            if (!userController.isCheckToken.value) {
+              userController.isCheckToken.value = true;
+              userController.checktoken(name: 'menu').then((value) {
+                if (userController.isLogin.value) {
+                  if (result.template != '/') {
+                    homeController.menutitle.value = result.groupNameEN!;
+                    homeController.menudetail.value = result;
+                    if (result.template == "webview") {
+                      Get.to(
+                        OpenWebView(
+                            url:
+                                homeController.menudetail.value.url.toString()),
+                      );
+                    } else {
+                      Get.toNamed('/${result.template}');
+                    }
+                  } else {
+                    DialogHelper.showErrorDialogNew(
+                      description: 'Not available',
+                    );
+                  }
+                }
+              });
+              userController.isCheckToken.value = false;
+            }
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SizedBox(height: 6),
+              SvgPicture.network(
+                updatedUrl,
+                placeholderBuilder: (BuildContext context) => Container(
+                  padding: const EdgeInsets.all(5.0),
+                  child: const CircularProgressIndicator(),
+                ),
+                width: 8.5.w,
+                height: 8.5.w,
+              ),
+              SizedBox(height: 10),
+              TextFont(
+                text: getLocalizedGroupName(result),
+                fontSize: 9.5,
+                fontWeight: FontWeight.w400,
+                maxLines: 2,
+                color: cr_4139,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget floatingPanel() {
@@ -165,7 +341,7 @@ class _TelecomServicesState extends State<TelecomServices> {
                   )
               ],
             ),
-            child: phoneCard(i, e, true, 8),
+            child: phoneCard(i, e, true, 8, true),
           ),
         )
       ],
@@ -199,7 +375,7 @@ class _TelecomServicesState extends State<TelecomServices> {
         ...telecomsrv.phoneListModel
             .skip(1)
             .take(2)
-            .mapIndexed((i, e) => phoneCard(i, e, false, 12)),
+            .mapIndexed((i, e) => phoneCard(i, e, false, 12, false)),
         btnPhone()
       ],
     );
@@ -230,7 +406,8 @@ class _TelecomServicesState extends State<TelecomServices> {
     );
   }
 
-  Widget phoneCard(int i, PhoneListModel e, bool main, double radius) {
+  Widget phoneCard(
+      int i, PhoneListModel e, bool main, double radius, bool all) {
     return InkWell(
       onTap: () => Get.to(() => TelPackageDetail(
             msisdn: e.phoneNumber!,
@@ -322,11 +499,18 @@ class _TelecomServicesState extends State<TelecomServices> {
               ],
             ),
             Spacer(),
-            Icon(
-              Icons.chevron_right_rounded,
-              size: 7.w,
-              color: color_777,
-            )
+            if (i == 0 && all)
+              Icon(
+                Icons.check_circle_rounded,
+                size: 6.w,
+                color: cr_red,
+              ),
+            if (!all)
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 6.5.w,
+                color: color_777,
+              )
           ],
         ),
       ),

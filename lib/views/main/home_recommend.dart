@@ -65,17 +65,17 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
     });
   }
 
-  List<String> loveItUrls = [
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-  ];
+  // List<String> loveItUrls = [
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  // ];
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -146,34 +146,35 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                           if (index ==
                                               homeController.menuModel.first
                                                   .menulists!.length) {
-                                            return InkWell(
-                                              onTap: () async {},
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 6),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                      horizontal: 12,
-                                                    ),
-                                                    child: SvgPicture.asset(
-                                                      MyIcon.ic_more,
-                                                      width: 5.5.w,
-                                                      height: 8.5.w,
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 10),
-                                                  TextFont(
-                                                    text: 'more',
-                                                    fontSize: 9.5,
-                                                    fontWeight: FontWeight.w400,
-                                                    maxLines: 2,
-                                                    color: cr_4139,
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                            return const SizedBox();
+                                            // return InkWell(
+                                            //   onTap: () async {},
+                                            //   child: Column(
+                                            //     children: [
+                                            //       SizedBox(height: 6),
+                                            //       Padding(
+                                            //         padding: const EdgeInsets
+                                            //             .symmetric(
+                                            //           horizontal: 12,
+                                            //         ),
+                                            //         child: SvgPicture.asset(
+                                            //           MyIcon.ic_more,
+                                            //           width: 5.5.w,
+                                            //           height: 8.5.w,
+                                            //         ),
+                                            //       ),
+                                            //       SizedBox(height: 10),
+                                            //       TextFont(
+                                            //         text: 'more',
+                                            //         fontSize: 9.5,
+                                            //         fontWeight: FontWeight.w400,
+                                            //         maxLines: 2,
+                                            //         color: cr_4139,
+                                            //         textAlign: TextAlign.center,
+                                            //       ),
+                                            //     ],
+                                            //   ),
+                                            // );
                                           }
 
                                           var result = homeController.menuModel
@@ -611,96 +612,96 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
     );
   }
 
-  Container buildLoveit() {
-    return Container(
-      child: Column(
-        children: [
-          CarouselSlider(
-            carouselController: carouselController,
-            options: CarouselOptions(
-              height: MediaQuery.of(context).size.height * 0.45,
-              enableInfiniteScroll: true,
-              reverse: false,
-              autoPlay: true,
-              autoPlayCurve: Curves.fastOutSlowIn,
-              enlargeCenterPage: true,
-              enlargeFactor: 0,
-              scrollDirection: Axis.horizontal,
-              viewportFraction: 1,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _currentLoveit = index;
-                });
-              },
-            ),
-            items: List.generate((loveItUrls.length / 4).ceil(), (index) {
-              int start = index * 4;
-              int end = start + 4;
-              List<String> sublist = loveItUrls.sublist(
-                  start, end > loveItUrls.length ? loveItUrls.length : end);
-              return GridView.builder(
-                padding: const EdgeInsets.all(5),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1,
-                ),
-                itemCount: sublist.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 1,
-                          blurRadius: 5,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                      image: DecorationImage(
-                        image: NetworkImage(sublist[index]),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate((loveItUrls.length / 4).ceil(), (index) {
-              return _currentLoveit == index
-                  ? Container(
-                      width: 6.0.w,
-                      height: 1.5.w,
-                      margin: const EdgeInsets.only(left: 6.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    )
-                  : Container(
-                      width: 1.5.w,
-                      height: 1.5.w,
-                      margin: const EdgeInsets.only(left: 6.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: cr_ecec,
-                      ),
-                    );
-            }),
-          ),
-        ],
-      ),
-    );
-  }
+  // Container buildLoveit() {
+  //   return Container(
+  //     child: Column(
+  //       children: [
+  //         CarouselSlider(
+  //           carouselController: carouselController,
+  //           options: CarouselOptions(
+  //             height: MediaQuery.of(context).size.height * 0.45,
+  //             enableInfiniteScroll: true,
+  //             reverse: false,
+  //             autoPlay: true,
+  //             autoPlayCurve: Curves.fastOutSlowIn,
+  //             enlargeCenterPage: true,
+  //             enlargeFactor: 0,
+  //             scrollDirection: Axis.horizontal,
+  //             viewportFraction: 1,
+  //             onPageChanged: (index, reason) {
+  //               setState(() {
+  //                 _currentLoveit = index;
+  //               });
+  //             },
+  //           ),
+  //           items: List.generate((loveItUrls.length / 4).ceil(), (index) {
+  //             int start = index * 4;
+  //             int end = start + 4;
+  //             List<String> sublist = loveItUrls.sublist(
+  //                 start, end > loveItUrls.length ? loveItUrls.length : end);
+  //             return GridView.builder(
+  //               padding: const EdgeInsets.all(5),
+  //               shrinkWrap: true,
+  //               physics: const NeverScrollableScrollPhysics(),
+  //               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //                 crossAxisCount: 2,
+  //                 crossAxisSpacing: 10,
+  //                 mainAxisSpacing: 10,
+  //                 childAspectRatio: 1,
+  //               ),
+  //               itemCount: sublist.length,
+  //               itemBuilder: (context, index) {
+  //                 return Container(
+  //                   padding: const EdgeInsets.all(10),
+  //                   decoration: BoxDecoration(
+  //                     color: Colors.white,
+  //                     borderRadius: BorderRadius.circular(16),
+  //                     boxShadow: [
+  //                       BoxShadow(
+  //                         color: Colors.grey.withOpacity(0.2),
+  //                         spreadRadius: 1,
+  //                         blurRadius: 5,
+  //                         offset: const Offset(0, 2),
+  //                       ),
+  //                     ],
+  //                     image: DecorationImage(
+  //                       image: NetworkImage(sublist[index]),
+  //                       fit: BoxFit.cover,
+  //                     ),
+  //                   ),
+  //                 );
+  //               },
+  //             );
+  //           }).toList(),
+  //         ),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: List.generate((loveItUrls.length / 4).ceil(), (index) {
+  //             return _currentLoveit == index
+  //                 ? Container(
+  //                     width: 6.0.w,
+  //                     height: 1.5.w,
+  //                     margin: const EdgeInsets.only(left: 6.0),
+  //                     decoration: BoxDecoration(
+  //                       borderRadius: BorderRadius.circular(20),
+  //                       color: Theme.of(context).primaryColor,
+  //                     ),
+  //                   )
+  //                 : Container(
+  //                     width: 1.5.w,
+  //                     height: 1.5.w,
+  //                     margin: const EdgeInsets.only(left: 6.0),
+  //                     decoration: BoxDecoration(
+  //                       shape: BoxShape.circle,
+  //                       color: cr_ecec,
+  //                     ),
+  //                   );
+  //           }),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 String getLocalizedGroupName(result) {

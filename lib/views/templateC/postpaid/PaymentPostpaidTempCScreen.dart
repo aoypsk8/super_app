@@ -368,7 +368,7 @@ class _PaymentPostpaidTempCScreenState
                                     tempCcontroler.enableBottom.value = true,
                                     Get.to(ListsPaymentScreen(
                                       description: homeController
-                                          .menudetail.value.groupNameEN!,
+                                          .menudetail.value.appid!,
                                       stepBuild: '5/6',
                                       title: homeController.getMenuTitle(),
                                       onSelectedPayment:

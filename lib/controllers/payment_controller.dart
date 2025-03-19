@@ -25,7 +25,7 @@ class PaymentController extends GetxController {
 
   RxBool loading = false.obs;
 
-  getPaymentMethods(String service) async {
+  getPaymentMethods(int service) async {
     print(service);
     var url = "/SuperApi/Info/PaymentList";
     var body = {
@@ -63,7 +63,7 @@ class PaymentController extends GetxController {
     var response = await DioClient.postEncrypt(loading: true, url, body);
     if (response['success'] == true) {
       loading.value = false;
-      await getPaymentMethods('all');
+      await getPaymentMethods(-1);
       DialogHelper.showSuccessWithMascot(
         onClose: () => {Get.back()},
         title: 'save_success',
@@ -82,7 +82,7 @@ class PaymentController extends GetxController {
     var response = await DioClient.postEncrypt(loading: true, url, body);
     if (response['code'] == "0") {
       loading.value = false;
-      getPaymentMethods('all');
+      getPaymentMethods(-1);
       return true;
     } else {
       DialogHelper.showErrorDialogNew(description: response['resultDesc']);
@@ -97,7 +97,7 @@ class PaymentController extends GetxController {
     var response = await DioClient.postEncrypt(loading: true, url, body);
     if (response['code'] == "0") {
       loading.value = false;
-      getPaymentMethods('all');
+      getPaymentMethods(-1);
       return true;
     } else {
       loading.value = false;

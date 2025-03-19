@@ -154,8 +154,8 @@ class _VerifyAccountTempCNewScreenState
                             {
                               tempCcontroler.enableBottom.value = true,
                               Get.to(ListsPaymentScreen(
-                                description: homeController
-                                    .menudetail.value.groupNameEN!,
+                                description:
+                                    homeController.menudetail.value.appid!,
                                 stepBuild: '5/6',
                                 title: homeController.getMenuTitle(),
                                 onSelectedPayment:

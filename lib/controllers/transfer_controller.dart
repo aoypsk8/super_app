@@ -126,7 +126,7 @@ class TransferController extends GetxController {
         } else {
           enableBottom.value = true;
           Get.to(ListsPaymentScreen(
-            description: homeController.menudetail.value.groupNameEN!,
+            description: homeController.menudetail.value.appid!,
             stepBuild: '2/3',
             title: homeController.getMenuTitle(),
             onSelectedPayment: (paymentType, cardIndex, uuid) {

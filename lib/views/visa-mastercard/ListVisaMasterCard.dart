@@ -27,7 +27,7 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
   @override
   void initState() {
     super.initState();
-    paymentController.getPaymentMethods('all');
+    paymentController.getPaymentMethods(-1);
   }
 
   int? selectedCardIndex = 0;

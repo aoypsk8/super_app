@@ -107,7 +107,7 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
                 if (_formKey.currentState!.validate()) {
                   Get.to(
                     ListsPaymentScreen(
-                      description: "LQR",
+                      description: 0,
                       stepBuild: '2/3',
                       title: homeController.getMenuTitle(),
                       onSelectedPayment: (paymentType, cardIndex, uuid) async {

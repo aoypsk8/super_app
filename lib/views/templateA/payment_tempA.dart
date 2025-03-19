@@ -78,7 +78,7 @@ class PaymentTempAScreen extends StatelessWidget {
               // Get.to(() => ListsPaymentTempAScreen());
               Get.to(
                 ListsPaymentScreen(
-                  description: homeController.menudetail.value.groupNameEN!,
+                  description: homeController.menudetail.value.appid!,
                   stepBuild: '4/5',
                   title: homeController.getMenuTitle(),
                   onSelectedPayment: (paymentType, cardIndex, uuid) {

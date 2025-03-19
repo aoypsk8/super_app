@@ -14,7 +14,7 @@ class ListsPaymentScreen extends StatefulWidget {
   final void Function(String paymentType, String cardDetail, String uuid)
       onSelectedPayment;
   final String stepBuild;
-  final String description;
+  final int description;
   final String title;
 
   ListsPaymentScreen({
@@ -72,8 +72,7 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Column(
             children: [
-              buildStepProcess(
-                  title: widget.stepBuild, desc: widget.description),
+              buildStepProcess(title: widget.stepBuild, desc: "select_payment"),
               Expanded(
                 child: AnimationLimiter(
                   child: ListView.builder(

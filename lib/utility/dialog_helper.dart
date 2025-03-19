@@ -370,6 +370,7 @@ class DialogHelper {
                         text: title,
                         fontWeight: FontWeight.w400,
                         color: cr_2929,
+                        maxLines: 5,
                         fontSize: 12,
                       ),
                       const SizedBox(height: 20),

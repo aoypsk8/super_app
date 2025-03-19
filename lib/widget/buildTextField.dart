@@ -2,6 +2,7 @@
 
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
@@ -421,15 +422,19 @@ class _buildPasswordFieldState extends State<buildPasswordField> {
           FormBuilderTextField(
             name: widget.name,
             controller: widget.controller,
-            style: GoogleFonts.notoSansLao(fontSize: 13.sp, color: Colors.black),
+            style:
+                GoogleFonts.notoSansLao(fontSize: 13.sp, color: Colors.black),
             obscureText: _obscureText, // Password hidden by default
             enabled: widget.isEditable,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: widget.hintText.tr,
               hintStyle: languageCode == 'lo'
-                  ? GoogleFonts.notoSansLao(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp)
-                  : GoogleFonts.poppins(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp),
+                  ? GoogleFonts.notoSansLao(
+                      color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp)
+                  : GoogleFonts.poppins(
+                      color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp),
               fillColor: widget.fillcolor,
               filled: true,
               suffixIcon: IconButton(
@@ -740,6 +745,126 @@ class buildAccountingFiledVaidate extends StatelessWidget {
             ),
             // onChanged: (val) {},
             inputFormatters: [ThousandsFormatter()],
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(),
+            ]),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class buildLoanFiledValidate extends StatelessWidget {
+  const buildLoanFiledValidate({
+    super.key,
+    required this.controller,
+    required this.label,
+    required this.name,
+    required this.hintText,
+    this.icons,
+    this.max,
+    this.suffixIcon,
+    this.suffixonTapFuc,
+    this.focus,
+    this.fillcolor = color_fafa,
+    this.bordercolor = color_ddd,
+    this.suffixWidgetData,
+    this.suffixWidget = false,
+    this.enable = true,
+  });
+
+  final TextEditingController controller;
+  final String name;
+  final String label;
+  final String hintText;
+  final IconData? icons;
+  final int? max;
+  final IconData? suffixIcon;
+  final Function()? suffixonTapFuc;
+  final FocusNode? focus;
+  final Color fillcolor;
+  final Color bordercolor;
+  final bool suffixWidget;
+  final bool enable;
+  final Widget? suffixWidgetData;
+
+  @override
+  Widget build(BuildContext context) {
+    String languageCode = Get.locale?.languageCode ?? 'lo';
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(color: bordercolor, width: 1.5),
+    );
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFont(text: label),
+          SizedBox(height: 4),
+          FormBuilderTextField(
+            enabled: enable,
+            name: name,
+            controller: controller,
+            focusNode: focus,
+            keyboardType: TextInputType.number,
+            maxLength: 10,
+
+            style: languageCode == 'lo'
+                ? GoogleFonts.notoSansLao(
+                    color: cr_7070,
+                    fontSize: 12.5.sp,
+                  )
+                : GoogleFonts.poppins(
+                    color: cr_7070,
+                    fontSize: 12.5.sp,
+                  ),
+            decoration: InputDecoration(
+              disabledBorder: border,
+
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              hintText: hintText.tr,
+              fillColor: fillcolor,
+              hintStyle: languageCode == 'lo'
+                  ? GoogleFonts.notoSansLao(
+                      color: cr_7070.withOpacity(0.8),
+                      fontSize: 12.5.sp,
+                    )
+                  : GoogleFonts.poppins(
+                      color: cr_7070.withOpacity(0.8),
+                      fontSize: 12.5.sp,
+                    ),
+              filled: true,
+              prefixIcon:
+                  icons != null ? Icon(icons, color: Colors.black) : null,
+              suffixIcon: suffixonTapFuc != null
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (suffixWidget == true && suffixWidgetData != null)
+                          suffixWidgetData!,
+                        if (suffixIcon != null)
+                          GestureDetector(
+                            onTap: suffixonTapFuc,
+                            child: Icon(suffixIcon, color: Colors.black),
+                          ),
+                      ],
+                    )
+                  : null,
+
+              enabledBorder: border,
+              focusedBorder: border,
+              //! hiden counter lenght text
+              counter: SizedBox.shrink(),
+
+              //! error border
+              errorStyle: GoogleFonts.notoSansLao(color: Colors.red),
+              focusedErrorBorder: border,
+              errorBorder: border,
+            ),
+            // onChanged: (val) {},
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(),
             ]),
@@ -1075,6 +1200,121 @@ class BuildTextAreaValidate extends StatelessWidget {
               counter: const SizedBox.shrink(),
               enabledBorder: border,
               focusedBorder: border,
+              //! error border
+              errorStyle: GoogleFonts.notoSansLao(color: Colors.red),
+              focusedErrorBorder: border,
+              errorBorder: border,
+            ),
+            validator: Isvalidate
+                ? FormBuilderValidators.compose([
+                    FormBuilderValidators.required(),
+                  ])
+                : null,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BuildTextAreaValidate1 extends StatelessWidget {
+  BuildTextAreaValidate1({
+    Key? key,
+    required this.controller,
+    this.label = '',
+    required this.name,
+    this.hintText = '',
+    this.icon,
+    this.iconColor = color_777,
+    this.max,
+    this.suffixIcon,
+    this.suffixonTapFuc,
+    this.fillcolor = color_f2f2,
+    this.inputHeight = 50.0,
+    this.Isvalidate = false,
+    this.enable = true,
+  });
+
+  final TextEditingController controller;
+  final String name;
+  final String label;
+  final String hintText;
+  final IconData? icon;
+  final Color iconColor;
+  final int? max;
+  final Color fillcolor;
+  final Widget? suffixIcon;
+  final Function()? suffixonTapFuc;
+  final double inputHeight;
+  final bool Isvalidate;
+  final bool enable;
+
+  final storage = GetStorage();
+
+  @override
+  Widget build(BuildContext context) {
+    String languageCode = Get.locale?.languageCode ?? 'lo';
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: const BorderSide(color: color_f4f4, width: 1.5),
+    );
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          label != ''
+              ? Column(
+                  children: [
+                    TextFont(text: label),
+                    const SizedBox(height: 4),
+                  ],
+                )
+              : const SizedBox(height: 4),
+          FormBuilderTextField(
+            enabled: enable,
+            name: name,
+            controller: controller,
+            keyboardType: TextInputType.multiline,
+            maxLines: 3,
+            maxLength: max == null ? null : max,
+            style: languageCode == 'lo'
+                ? GoogleFonts.notoSansLao(
+                    color: cr_7070,
+                    fontSize: 12.5.sp,
+                  )
+                : GoogleFonts.poppins(
+                    color: cr_7070,
+                    fontSize: 12.5.sp,
+                  ),
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(12),
+              hintText: hintText.tr,
+              hintStyle: languageCode == 'lo'
+                  ? GoogleFonts.notoSansLao(
+                      color: cr_7070,
+                      fontSize: 12.5.sp,
+                    )
+                  : GoogleFonts.poppins(
+                      color: cr_7070,
+                      fontSize: 12.5.sp,
+                    ),
+              fillColor: fillcolor,
+              filled: true,
+              prefixIcon: icon != null ? Icon(icon, color: iconColor) : null,
+              suffixIcon: suffixonTapFuc != null
+                  ? Container(
+                      margin: const EdgeInsets.only(right: 5),
+                      child: InkWell(
+                        onTap: suffixonTapFuc,
+                        child: suffixIcon,
+                      ),
+                    )
+                  : null,
+              //! hidden counter length text
+              counter: const SizedBox.shrink(),
+              enabledBorder: border,
+              focusedBorder: border,
+              disabledBorder: border,
               //! error border
               errorStyle: GoogleFonts.notoSansLao(color: Colors.red),
               focusedErrorBorder: border,

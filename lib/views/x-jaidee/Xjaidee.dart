@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/user_controller.dart';
+import 'package:super_app/controllers/xjaidee_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/x-jaidee/input_amountScreen.dart';
+import 'package:super_app/views/x-jaidee/xjaidee_approve.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +20,27 @@ class XJaidee extends StatefulWidget {
 }
 
 class _XJaideeState extends State<XJaidee> {
+  final XjaideeController controller = Get.put(XjaideeController());
+  final UserController userController =
+      Get.find<UserController>(); // Get userController
+  bool isApproveVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkApprovalVisibility(); // Ensures it runs after the first frame is built
+      controller.FetchHistory();
+    });
+  }
+
+  Future<void> checkApprovalVisibility() async {
+    bool result = await controller.ShowMenu();
+    setState(() {
+      isApproveVisible = result;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,20 +130,25 @@ class _XJaideeState extends State<XJaidee> {
                                 title: "Policy",
                                 description:
                                     "1. Registration is required to register through the mobile phone number of the customer who registered in accordance with the rules to open an M-Money wallet account, which has to be active and reachable. Users can register to use:\n • Register and fill in the information, KYC manually according to the methods and procedures set by the company in this service.\n2. After the registration is completed, the user must set a secure personal password according to the company's instructions, which is a 6-digit number, then wait for confirmation from the system to start using the service.Using M-Money Wallet Services\n 1. Top Up Wallet\n Users of M-Money Wallet can top-up their wallet at: (1) the LTC Service Center, (2) the participating Banks, (3) the Agent Stores that the Company has periodically listed (4) Direct Sale staff. Minimum top up is 10,000 Kip (ten thousand kip).",
-                                onClose: () {
+                                onClose: () async {
+                                  if (Get.isDialogOpen!) {
+                                    Get.back();
+                                  }
+                                  await controller.CheckCredit();
                                   Get.to(() => InputAmountXJaideeScreen());
                                 },
                               );
                             },
                             title: 'ຢືມສິນເຊື່ອ',
                           ),
-                          buildButton(
-                            icon: MyIcon.ic_load_approve,
-                            ontap: () {
-                              print("object");
-                            },
-                            title: 'ອານຸມັດສິນເຊື່ອ',
-                          ),
+                          if (isApproveVisible)
+                            buildButton(
+                              icon: MyIcon.ic_load_approve,
+                              title: 'ອານຸມັດສິນເຊື່ອ',
+                              ontap: () {
+                                Get.to(() => XjaideeApproveScreen());
+                              },
+                            ),
                           buildButton(
                             icon: MyIcon.ic_load_cancel,
                             ontap: () {
@@ -139,15 +168,29 @@ class _XJaideeState extends State<XJaidee> {
                   ),
                   const SizedBox(height: 15),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          child: buildHistoryLoad(),
-                        );
-                      },
-                    ),
+                    child: Obx(() {
+                      return controller.loanHistory.isEmpty
+                          ? Center(child: Text("No loan history found"))
+                          : ListView.builder(
+                              padding: const EdgeInsets.all(10),
+                              itemCount: controller.loanHistory.length,
+                              itemBuilder: (context, index) {
+                                var loan = controller.loanHistory.reversed
+                                    .toList()[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: BuildHistoryLoad(
+                                    creditAmount: loan["credit_amount"],
+                                    monthToRepay: loan["month_to_repay"],
+                                    percentage: loan["percentage"],
+                                    monthlyPayment: loan["monthly_payment"],
+                                    dateOfBorrow: loan["date_of_borrow"],
+                                    status: loan["status"],
+                                  ),
+                                );
+                              },
+                            );
+                    }),
                   ),
                 ],
               ),
@@ -159,13 +202,30 @@ class _XJaideeState extends State<XJaidee> {
   }
 }
 
-class buildHistoryLoad extends StatelessWidget {
-  const buildHistoryLoad({
-    super.key,
-  });
+class BuildHistoryLoad extends StatelessWidget {
+  final int creditAmount;
+  final String monthToRepay;
+  final String percentage;
+  final String monthlyPayment;
+  final String dateOfBorrow;
+  final String status;
+
+  const BuildHistoryLoad({
+    Key? key,
+    required this.creditAmount,
+    required this.monthToRepay,
+    required this.percentage,
+    required this.monthlyPayment,
+    required this.dateOfBorrow,
+    required this.status,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Determine the status text and color
+    String statusText = status == "2" ? "ລໍຖ້າອະນຸມັດ" : "ຊຳລະຄົບແລ້ວ";
+    Color statusColor = status == "2" ? cr_b692 : Colors.red;
+
     return Container(
       width: Get.width,
       decoration: BoxDecoration(
@@ -207,7 +267,7 @@ class buildHistoryLoad extends StatelessWidget {
                     Row(
                       children: [
                         TextFont(
-                          text: '3.000.000',
+                          text: NumberFormat("#,###").format(creditAmount),
                           fontSize: 13,
                         ),
                         const SizedBox(width: 5),
@@ -219,7 +279,7 @@ class buildHistoryLoad extends StatelessWidget {
                     ),
                     TextFont(
                       text: DateFormat('dd MMM, yyyy HH:mm').format(
-                        DateTime.parse("2023-01-01 12:00:00"),
+                        DateFormat("dd MMM yyyy hh:mm a").parse(dateOfBorrow),
                       ),
                       fontSize: 10,
                     ),
@@ -228,9 +288,9 @@ class buildHistoryLoad extends StatelessWidget {
               ],
             ),
             TextFont(
-              text: 'ຊຳລະຄົບແລ້ວ',
+              text: statusText,
               fontSize: 12,
-              color: color_3086,
+              color: statusColor,
             ),
           ],
         ),

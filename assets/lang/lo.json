@@ -370,5 +370,7 @@
   "change_theme": "ປ່ຽນ theme",
   "all_transaction": "ການເຄື່ອນໄຫວທັງໝົດ",
   "scan_me": "Scan me",
-  "loading_complete": "ໂຫລດສຳເລັດ"
+  "loading_complete": "ໂຫລດສຳເລັດ",
+  "Select Language":"ເລືອກພາສາ",
+  "save":"ບັນທຶກ"
 }

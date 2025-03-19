@@ -359,5 +359,7 @@
   "change_theme": "Thay đổi giao diện",
   "all_transaction": "Tất cả giao dịch",
   "scan_me": "扫描我",
-  "loading_complete": "Tải xong"
+  "loading_complete": "Tải xong",
+  "Select Language": "Chọn ngôn ngữ",
+  "save": "Lưu"
 }

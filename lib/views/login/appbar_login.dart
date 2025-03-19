@@ -9,6 +9,7 @@ import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myIcon.dart';
 import 'package:super_app/views/login/temp/temp_userprofile_model.dart';
 import 'package:super_app/views/other_service/other_service.dart';
+import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
@@ -109,19 +110,17 @@ class AppbarLogin extends StatelessWidget {
     }
   }
 
-  /// ✅ Moved `_showLanguageDialog()` inside AppbarLogin
   void _showLanguageDialog(BuildContext context) {
     final languageService = Get.find<LanguageService>();
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
+            color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(16),
               topRight: Radius.circular(16),
@@ -131,18 +130,55 @@ class AppbarLogin extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFont(
-                text: 'Select Language',
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: cr_7070,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: Get.width / 7,
+                    height: 5,
+                    decoration: BoxDecoration(
+                        color: cr_ecec,
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                ],
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextFont(
+                    text: 'Select Language',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    color: cr_7070,
+                    poppin: true,
+                  ),
+                  SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: () => Get.back(),
+                    child: Icon(Icons.close, color: Colors.black54),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Divider(color: color_ecec),
               _buildLanguageOption(context, 'English', 'en', languageService),
-              _buildLanguageOption(context, 'Lao', 'lo', languageService),
+              _buildLanguageOption(context, 'ລາວ', 'lo', languageService),
               _buildLanguageOption(context, 'Chinese', 'zh', languageService),
               _buildLanguageOption(
                   context, 'Vietnamese', 'vi', languageService),
+              SizedBox(height: 20),
+              SizedBox(
+                width: Get.width,
+                child: buildBottomAppbar(
+                  paddingbottom: 0,
+                  bgColor: Theme.of(context).primaryColor,
+                  title: 'save',
+                  func: () {
+                    Get.back();
+                  },
+                ),
+              ),
             ],
           ),
         );
@@ -152,19 +188,62 @@ class AppbarLogin extends StatelessWidget {
 
   Widget _buildLanguageOption(BuildContext context, String languageName,
       String languageCode, LanguageService languageService) {
-    return ListTile(
-      leading: SvgPicture.asset(getSvgIcon(languageCode)),
-      title: TextFont(
-        text: languageName,
-        color: cr_7070,
-      ),
-      trailing: languageService.locale.languageCode == languageCode
-          ? Icon(Icons.check, color: Theme.of(context).primaryColor)
-          : null,
+    bool isSelected = languageService.locale.languageCode == languageCode;
+
+    return GestureDetector(
       onTap: () {
         languageService.changeLanguage(languageCode);
-        Get.back(); // Close the bottom sheet after selecting a language
+        Get.back();
       },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 6),
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+        decoration: BoxDecoration(
+          color: color_f4f4,
+          border: isSelected
+              ? Border.all(color: cr_ef33)
+              : Border.all(color: Colors.transparent),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            languageCode == 'en'
+                ? SvgPicture.asset(
+                    MyIcon.flat_usa,
+                    width: 7.w,
+                    height: 7.w,
+                  )
+                : languageCode == 'lo'
+                    ? SvgPicture.asset(
+                        MyIcon.flat_lao,
+                        width: 7.w,
+                        height: 7.w,
+                      )
+                    : languageCode == 'zh'
+                        ? SvgPicture.asset(
+                            MyIcon.flat_ch,
+                            width: 7.w,
+                            height: 7.w,
+                          )
+                        : SvgPicture.asset(
+                            MyIcon.flat_vietnames,
+                            width: 7.w,
+                            height: 7.w,
+                          ),
+            SizedBox(width: 10),
+            Expanded(
+              child: TextFont(
+                text: languageName,
+                fontWeight: FontWeight.w400,
+                fontSize: 12,
+                color: cr_2929,
+                noto: languageCode == 'lo' ? true : false,
+              ),
+            ),
+            if (isSelected) Icon(Icons.check, color: cr_ef33),
+          ],
+        ),
+      ),
     );
   }
 

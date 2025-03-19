@@ -359,5 +359,7 @@
   "change_theme": "更改主题",
   "all_transaction": "所有交易",
   "scan_me": "扫描我",
-  "loading_complete": "加载完成"
+  "loading_complete": "加载完成",
+  "Select Language": "选择语言",
+  "save": "保存"
 }

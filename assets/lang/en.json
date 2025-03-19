@@ -369,5 +369,7 @@
   "change_theme": "Change theme",
   "all_transaction": "All Transaction",
   "scan_me":"Scan me",
-  "loading_complete":"Loading complete"
+  "loading_complete":"Loading complete",
+  "Select Language":"Select Language",
+  "save":"Save"
 }

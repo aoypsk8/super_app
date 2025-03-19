@@ -39,7 +39,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final userController = Get.find<UserController>();
   final themeService = Get.find<ThemeService>();
   final _confirmPassword = TextEditingController();
-  final HomeController homeController = Get.find();
   @override
   void initState() {
     super.initState();

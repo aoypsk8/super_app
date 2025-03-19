@@ -159,9 +159,11 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
                                       .replaceAll(RegExp(r'[^\w\s]+'), ''));
                           qrController.rxNote.value = _note.text;
                           qrController.rxTotalAmount.value =
-                              qrController.rxPaymentAmount.value +
-                                  qrController.rxFee.value;
+                              qrController.rxPaymentAmount.value;
                           await qrController.QueryFee();
+                          qrController.rxTotalAmount.value =
+                              qrController.rxPaymentAmount.value +
+                                  qrController.rxFeeConsumer.value;
                           paymentController
                               .reqCashOut(
                             transID: qrController.rxTransID.value,
@@ -525,8 +527,10 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
             qrController.qrModel.value.logoUrl ?? MyConstant.profile_default,
         toAccountName: qrController.qrModel.value.shopName.toString(),
         toAccountNumber: qrController.qrModel.value.provider.toString(),
-        amount: qrController.rxTotalAmount.value.toString(),
-        fee: qrController.rxFee.value.toString(),
+        amount: qrController.rxPaymentAmount.value.toString(),
+        fee: paymentType == 'MMONEY'
+            ? qrController.rxFee.value.toString()
+            : qrController.rxFeeConsumer.value.toString(),
         note: qrController.rxNote.value,
       ),
     );

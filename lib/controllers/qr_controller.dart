@@ -438,6 +438,7 @@ class QrController extends GetxController {
       "PhoneUser": storage.read('msisdn'),
       "Provider": qrModel.value.provider!,
     });
+    print(response);
     rxFee.value = int.parse(response['FeeAmount'].toString());
     rxFeeConsumer.value = int.parse(response['FeeAmount_Consumer'].toString());
   }

@@ -100,7 +100,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
             backgroundColor: Theme.of(context).primaryColor,
             shape: CircleBorder(),
             child: Icon(
-              Iconsax.scan,
+              Icons.qr_code_scanner_outlined,
               color: Theme.of(context).colorScheme.secondary,
               size: 30,
             ),

@@ -350,7 +350,10 @@
   "the_most_sold": "Best Seller",
   "all_promotion": "All Promotions",
   "data_use": "Usable Data",
-  "date_time_use": "Validity Period"
+  "date_time_use": "Validity Period",
+  "input_cvv_code":"Input CVV codes",
+  "fill_cvv":"Please fill CVV",
+  "change_theme":"Change Theme"
 
 
 }

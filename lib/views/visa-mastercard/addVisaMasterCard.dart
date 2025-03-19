@@ -40,6 +40,8 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
         RegExp(r'^222[1-9]|^22[3-9][0-9]|^2[3-6][0-9]{2}|^27[0-1][0-9]|^2720')
             .hasMatch(cardNumber)) {
       return 'MasterCard';
+    } else if (RegExp(r'^62').hasMatch(cardNumber)) {
+      return 'UNIONPAY';
     }
     return 'Unknown';
   }

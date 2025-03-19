@@ -199,7 +199,7 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
                                                             .paymentMethods[
                                                                 index]
                                                             .title ==
-                                                        "MMoneyX"
+                                                        "MMONEY"
                                                     ? null
                                                     : () => confirmDelete(
                                                         paymentController
@@ -214,7 +214,7 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
                                                             .paymentMethods[
                                                                 index]
                                                             .paymentType ==
-                                                        "Wallet"
+                                                        "MMONEY"
                                                     ? SizedBox.shrink()
                                                     : SvgPicture.asset(
                                                         MyIcon.ic_trash,
@@ -228,7 +228,33 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
                                             cardHolderName: paymentController
                                                 .paymentMethods[index].accname,
                                             logo: paymentController
-                                                .paymentMethods[index].logo,
+                                                        .paymentMethods[index]
+                                                        .paymentType ==
+                                                    'MMONEY'
+                                                ? paymentController
+                                                    .paymentMethods[index].logo
+                                                : paymentController
+                                                            .paymentMethods[
+                                                                index]
+                                                            .paymentType ==
+                                                        'VISA'
+                                                    ? "https://mmoney.la/Payment/visa.jpg"
+                                                    : paymentController
+                                                                .paymentMethods[
+                                                                    index]
+                                                                .paymentType ==
+                                                            'MASTERCARD'
+                                                        ? "https://mmoney.la/Payment/mastercard.png"
+                                                        : paymentController
+                                                                    .paymentMethods[
+                                                                        index]
+                                                                    .paymentType ==
+                                                                'UNIONPAY'
+                                                            ? "https://mmoney.la/Payment/unionpay.png"
+                                                            : paymentController
+                                                                .paymentMethods[
+                                                                    index]
+                                                                .logo,
                                             accountNumber: paymentController
                                                 .paymentMethods[index]
                                                 .description,
@@ -339,7 +365,9 @@ class MoneyCardWidget extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(100),
                                 child: Image.network(
                                   logo,
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.cover,
+                                  width: 15.w,
+                                  height: 15.w,
                                 ),
                               ),
                             ),

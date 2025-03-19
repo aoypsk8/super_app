@@ -352,6 +352,9 @@
   "the_most_sold":"ຂາຍດີທີ່ສຸດ",
   "all_promotion":"ໂປຣໂມຊັ່ນທັງໝົດ",
   "data_use": "ດາຕ້າໃຊ້ໄດ້", 
-  "date_time_use" :"ໄລຍະກຳນົດ"
+  "date_time_use" :"ໄລຍະກຳນົດ",
+  "input_cvv_code":"ປ້ອນຂໍ້ມູນ CVV ຂອງບັດ",
+  "fill_cvv":"ປ້ອນລະຫັດ CVV",
+  "change_theme":"ປ່ຽນ Theme"
 
 }

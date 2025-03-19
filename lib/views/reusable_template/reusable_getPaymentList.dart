@@ -120,10 +120,35 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
                                   children: [
                                     ClipOval(
                                       child: Image.network(
-                                        paymentController
-                                            .paymentMethods[index].logo,
-                                        fit: BoxFit.fill,
+                                        paymentController.paymentMethods[index]
+                                                    .paymentType ==
+                                                'MMONEY'
+                                            ? paymentController
+                                                .paymentMethods[index].logo
+                                            : paymentController
+                                                        .paymentMethods[index]
+                                                        .paymentType ==
+                                                    'VISA'
+                                                ? "https://mmoney.la/Payment/visa.jpg"
+                                                : paymentController
+                                                            .paymentMethods[
+                                                                index]
+                                                            .paymentType ==
+                                                        'MASTERCARD'
+                                                    ? "https://mmoney.la/Payment/mastercard.png"
+                                                    : paymentController
+                                                                .paymentMethods[
+                                                                    index]
+                                                                .paymentType ==
+                                                            'UNIONPAY'
+                                                        ? "https://mmoney.la/Payment/unionpay.png"
+                                                        : paymentController
+                                                            .paymentMethods[
+                                                                index]
+                                                            .logo,
+                                        fit: BoxFit.cover,
                                         width: 15.w,
+                                        height: 15.w,
                                       ),
                                     ),
                                     const SizedBox(width: 10),

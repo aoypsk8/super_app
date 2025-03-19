@@ -341,6 +341,9 @@
   "the_most_sold": "Bán chạy nhất",
   "all_promotion": "Tất cả khuyến mãi",
   "data_use": "Dữ liệu có thể sử dụng",
-  "date_time_use": "Thời hạn sử dụng"
+  "date_time_use": "Thời hạn sử dụng",
+  "input_cvv_code": "Nhập mã CVV",
+  "fill_cvv": "Vui lòng nhập CVV",
+  "change_theme":"Change Theme"
 
 }

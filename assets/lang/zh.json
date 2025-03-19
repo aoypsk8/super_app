@@ -341,6 +341,9 @@
   "the_most_sold": "最畅销",
   "all_promotion": "所有促销",
   "data_use": "可用数据",
-  "date_time_use": "有效期"
+  "date_time_use": "有效期",
+  "input_cvv_code": "输入 CVV 代码",
+  "fill_cvv": "请填写 CVV",
+  "change_theme":"Change Theme"
 
 }

@@ -66,7 +66,7 @@ class PaymentController extends GetxController {
       await getPaymentMethods('all');
       DialogHelper.showSuccessWithMascot(
         onClose: () => {Get.back()},
-        title: 'ບັນທຶກສຳເລັດ!',
+        title: 'save_success',
       );
       return true;
     } else {

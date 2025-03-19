@@ -329,7 +329,24 @@
   "save_pic_and_close": "Save Picture and Close",
   "If you forget to save this QR code, you can see the QR code from this email.": "If you forget to save this QR code, you can see the QR code from this email.",
   "other_service_v":"Other Service",
-  "choose_other_service":"Choose Other Service"
+  "choose_other_service":"Choose Other Service",
+  "please_pay": "Please make a payment",
+  "lastest_order": "Latest order",
+  "input_phone_number": "Please enter your phone number",
+  "choose_package": "Choose a package",
+  "all_cards": "All cards",
+  "add_credit/debit_card": "Add Credit / Debit Card",
+  "please_check": "Please check",
+  "please_check_the_box_first": "Please check the box first",
+  "M_moneyX_payment_protection": "M moneyX payment protection",
+  "Cardholder_Name": "Cardholder Name",
+  "Card_Number": "Card Number",
+  "Expiry_Date_MMYY": "Expiry Date (MM/YY)",
+  "I_agree_to_the": "I agree to the",
+  "Terms_&_Policy": "Terms & Policy",
+  "save_success": "Save successful!",
+  "check_detail": "Check details",
+  "transfer_to_bank": "Transfer to bank"
 
 
 }

@@ -320,5 +320,22 @@
   "save_pic_and_close": "Lưu ảnh và Đóng",
   "If you forget to save this QR code, you can see the QR code from this email.": "Nếu bạn quên lưu mã QR này, bạn có thể xem mã QR từ email này.",
   "other_service_v": "Dịch vụ khác",
-  "choose_other_service": "Chọn Dịch vụ khác"
+  "choose_other_service": "Chọn Dịch vụ khác",
+  "please_pay": "Vui lòng thanh toán",
+  "lastest_order": "Đơn hàng mới nhất",
+  "input_phone_number": "Vui lòng nhập số điện thoại",
+  "choose_package": "Chọn gói",
+  "all_cards": "Tất cả thẻ",
+  "add_credit/debit_card": "Thêm thẻ tín dụng / thẻ ghi nợ",
+  "please_check": "Vui lòng kiểm tra",
+  "please_check_the_box_first": "Vui lòng đánh dấu vào ô trước",
+  "M_moneyX_payment_protection": "Bảo vệ thanh toán M moneyX",
+  "Cardholder_Name": "Tên chủ thẻ",
+  "Card_Number": "Số thẻ",
+  "Expiry_Date_MMYY": "Ngày hết hạn (MM/YY)",
+  "I_agree_to_the": "Tôi đồng ý với",
+  "Terms_&_Policy": "Điều khoản & Chính sách",
+  "save_success": "Lưu thành công!",
+  "check_detail": "Kiểm tra chi tiết",
+  "transfer_to_bank": "Chuyển khoản ngân hàng"
 }

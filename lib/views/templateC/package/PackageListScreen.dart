@@ -1,13 +1,11 @@
 // ignore_for_file: invalid_use_of_protected_member, use_build_context_synchronously
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/temp_c_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
-import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
@@ -15,10 +13,7 @@ import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/widget/RoundedRectangleTabIndicator';
 import 'package:super_app/widget/buildAppBar.dart';
-import 'package:super_app/widget/buildBottomAppbar.dart';
-import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/build_card_borrowing.dart';
-import 'package:super_app/widget/build_pay_visa.dart';
 import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/input_cvv.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -198,7 +193,8 @@ class _PackageListScreenState extends State<PackageListScreen>
                       {
                         tempCcontroler.enableBottom.value = true,
                         Get.to(ListsPaymentScreen(
-                          description: 'select_payment',
+                          description:
+                              homeController.menudetail.value.groupNameEN!,
                           stepBuild: '5/6',
                           title: homeController.getMenuTitle(),
                           onSelectedPayment:
@@ -323,7 +319,8 @@ class _PackageListScreenState extends State<PackageListScreen>
                         tempCcontroler.enableBottom.value = true,
                         Get.to(
                           ListsPaymentScreen(
-                            description: 'select_payment',
+                            description:
+                                homeController.menudetail.value.groupNameEN!,
                             stepBuild: '5/6',
                             title: homeController.getMenuTitle(),
                             onSelectedPayment:

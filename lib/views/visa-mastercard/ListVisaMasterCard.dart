@@ -4,6 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
@@ -22,6 +23,7 @@ class VisaMasterCard extends StatefulWidget {
 
 class _VisaMasterCardState extends State<VisaMasterCard> {
   final paymentController = Get.put(PaymentController());
+  final homeController = Get.find<HomeController>();
   @override
   void initState() {
     super.initState();
@@ -60,7 +62,7 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
     return Obx(
       () => Scaffold(
         backgroundColor: color_fff,
-        appBar: BuildAppBar(title: "Credit / Debit Card"),
+        appBar: BuildAppBar(title: homeController.menutitle.value),
         body: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
@@ -80,7 +82,7 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              TextFont(text: "All Cards"),
+                              TextFont(text: "all_cards"),
                               GestureDetector(
                                 onTap: () {
                                   Get.to(AddVisaMasterCard());

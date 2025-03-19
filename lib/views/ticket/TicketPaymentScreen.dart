@@ -175,8 +175,7 @@ class _TicketPaymentScreenState extends State<TicketPaymentScreen> {
                       await randomNumber().fucRandomNumber();
               Get.to(
                 ListsPaymentScreen(
-                  description:
-                      homeController.menudetail.value.groupNameEN.toString(),
+                  description: homeController.menudetail.value.groupNameEN!,
                   stepBuild: '2/3',
                   title: homeController.getMenuTitle(),
                   onSelectedPayment: (paymentType, cardIndex, uuid) async {

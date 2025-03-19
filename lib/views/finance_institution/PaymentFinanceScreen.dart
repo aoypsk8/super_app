@@ -237,8 +237,7 @@ class _PaymentFinanceScreenState extends State<PaymentFinanceScreen> {
                       _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '');
                   Get.to(
                     ListsPaymentScreen(
-                      description: homeController.menudetail.value.groupNameEN
-                          .toString(),
+                      description: homeController.menudetail.value.groupNameEN!,
                       stepBuild: '4/5',
                       title: homeController.getMenuTitle(),
                       onSelectedPayment: (paymentType, cardIndex, uuid) async {

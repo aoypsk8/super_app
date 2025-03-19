@@ -57,7 +57,7 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: BuildAppBar(title: "Add Credit / Debit Card"),
+      appBar: BuildAppBar(title: "add_credit/debit_card"),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
@@ -85,8 +85,8 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
             } else {
               DialogHelper.showErrorWithFunctionDialog(
                 closeTitle: "close",
-                title: "Please Check",
-                description: "Please check box first",
+                title: "please_check",
+                description: "please_check_the_box_first",
                 onClose: () {
                   Get.back();
                 },
@@ -236,7 +236,7 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               TextFont(
-                                text: 'I agree to the ',
+                                text: 'I agree to the',
                                 color: color_1a1,
                                 fontSize: 10,
                               ),

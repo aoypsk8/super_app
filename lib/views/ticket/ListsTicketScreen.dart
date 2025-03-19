@@ -59,9 +59,12 @@ class _ListsTicketScreenState extends State<ListsTicketScreen> {
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Iconsax.lamp,
-                color: cr_ef33,
+              child: Opacity(
+                opacity: 0.7,
+                child: Icon(
+                  Icons.history,
+                  color: cr_ef33,
+                ),
               ),
             ),
           ),

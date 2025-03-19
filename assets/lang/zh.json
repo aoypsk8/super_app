@@ -320,5 +320,22 @@
   "save_pic_and_close": "保存图片并关闭",
   "If you forget to save this QR code, you can see the QR code from this email.": "如果您忘记保存此二维码，您可以从此电子邮件中查看二维码。",
   "other_service_v": "其他服务",
-  "choose_other_service": "选择其他服务"
+  "choose_other_service": "选择其他服务",
+  "please_pay": "请付款",
+  "lastest_order": "最新订单",
+  "input_phone_number": "请输入您的电话号码",
+  "choose_package": "选择套餐",
+  "all_cards": "所有银行卡",
+  "add_credit/debit_card": "添加信用卡/借记卡",
+  "please_check": "请检查",
+  "please_check_the_box_first": "请先勾选此框",
+  "M_moneyX_payment_protection": "M moneyX 支付保护",
+  "Cardholder_Name": "持卡人姓名",
+  "Card_Number": "银行卡号",
+  "Expiry_Date_MMYY": "到期日期 (MM/YY)",
+  "I_agree_to_the": "我同意",
+  "Terms_&_Policy": "条款和政策",
+  "save_success": "保存成功！",
+  "check_detail": "检查详情",
+  "transfer_to_bank": "转账到银行"
 }

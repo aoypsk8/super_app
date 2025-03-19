@@ -270,7 +270,7 @@ class buildWeTvCard extends StatelessWidget {
       onTap: () {
         weTVController.wetvdetail.value = e;
         Get.to(ListsPaymentScreen(
-          description: 'select_payment',
+          description: homeController.menudetail.value.groupNameEN!,
           stepBuild: '2/3',
           title: homeController.getMenuTitle(),
           onSelectedPayment: (paymentType, cardIndex, uuid) async {

@@ -182,7 +182,7 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
           ),
           child: buildBottomAppbar(
             bgColor: Theme.of(context).primaryColor,
-            title: 'Next',
+            title: 'next',
             func: selectedIndex != null
                 ? () {
                     final paymentType = paymentController

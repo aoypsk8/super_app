@@ -331,5 +331,22 @@
   "save_pic_and_close": "ບັນທຶກຂໍ້ມູນ ແລະ ປິດ",
   "If you forget to save this QR code, you can see the QR code from this email.": "ຖ້າທ່ານລືມບັນທືກ QR code ນີ້, ທ່ານສາມາດເຂົ້າໄປເບີ່ງຢູ່ເມລຂອງທ່ານ.",
   "other_service_v":"ບໍລິການອື່ນໆ",
-  "choose_other_service":"ເລືອກບໍລິການອື່ນໆ"
+  "choose_other_service":"ເລືອກບໍລິການອື່ນໆ",
+  "please_pay": "ກະລຸນາຊຳລະເງີນ",
+  "lastest_order": "ລາຍການສັ່ງຊື້ລ່າສຸດ",
+  "input_phone_number": "ກະລຸນາປ້ອນເບີໂທລະສັບ",
+  "choose_package": "ເລືອກແພັດເກັດ",
+  "all_cards": "ບັດທັງຫມົດ",
+  "add_credit/debit_card": "ເພີ່ມບັດ Credit / Debit Card",
+  "please_check": "ກະລຸນາກວດສອບ",
+  "please_check_the_box_first": "ກະລຸນາກວດເບິ່ງກ່ອງກ່ອນ",
+  "M_moneyX_payment_protection": "M moneyX payment protection",
+  "Cardholder_Name": "ຊື່ຜູ້ຖືບັດ",
+  "Card_Number": "ລະຫັດບັດ",
+  "Expiry_Date_MMYY": "ວັນເດືອນປີຫມົດອາຍຸ (ດດ/ປປ)",
+  "I_agree_to_the": "ຂ້ອຍເຫັນດີກັບ ",
+  "Terms_&_Policy": "ນະໂຍບາຍບໍລິການ",
+  "save_success": "ບັນທຶກສຳເລັດ!",
+  "check_detail": "ກວດສອບລາຍລະອຽດ",
+  "transfer_to_bank": "ໂອນເງີນໄປທະນາຄານ"
 }

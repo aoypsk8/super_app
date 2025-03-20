@@ -48,7 +48,8 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
   }
 
   loadCalendar() async {
-    await calendarController.fetchCalendarMonthList(now.year.toString(), now.month.toString());
+    await calendarController.fetchCalendarMonthList(
+        now.year.toString(), now.month.toString());
   }
 
   loginWithBiometric() async {
@@ -68,7 +69,8 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
         );
         if (isAuthenticated) {
           String pwd = storage.read('biometric_password') ?? '';
-          userController.loginSuperApp(widget.user['username'], pwd, reqOTPprocess: false);
+          userController.loginSuperApp(widget.user['username'], pwd,
+              reqOTPprocess: false);
         }
       } catch (e) {
         print("Biometric authentication error: $e");
@@ -98,7 +100,8 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
                 behavior: HitTestBehavior.opaque,
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 15),
                     child: FormBuilder(
                       key: _formKey,
                       child: Column(
@@ -108,7 +111,8 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
                               SizedBox(
                                 width: 60.w,
                                 height: 60.w,
-                                child: Lottie.asset('assets/animation/circle.json'),
+                                child: Lottie.asset(
+                                    'assets/animation/circle.json'),
                               ),
                               Positioned(
                                 top: 0,
@@ -121,13 +125,18 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
                                     height: 45.w,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      border: Border.all(color: color_primary_light.withOpacity(0.2), width: 5),
+                                      border: Border.all(
+                                          color: color_primary_light
+                                              .withOpacity(0.2),
+                                          width: 5),
                                     ),
                                     child: CircleAvatar(
                                       radius: 80.sp,
                                       backgroundColor: Colors.transparent,
-                                      backgroundImage: CachedNetworkImageProvider(
-                                        widget.user['image_profile'] ?? 'https://mmoney.la/AppLite/Users/mmoney.png',
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(
+                                        widget.user['image_profile'] ??
+                                            'https://mmoney.la/AppLite/Users/mmoney.png',
                                       ),
                                     ),
                                   ),
@@ -142,7 +151,8 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
                             noto: true,
                           ),
                           TextFont(
-                            text: maskPhoneNumber(widget.user['username']) ?? 'No Account',
+                            text: maskPhoneNumber(widget.user['username']) ??
+                                'No Account',
                             fontSize: 18,
                             poppin: true,
                           ),
@@ -152,7 +162,10 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
                           //   color: Colors.grey,
                           //   poppin: true,
                           // ),
-                          buildPasswordField(controller: _password, label: 'password', name: 'password'),
+                          buildPasswordField(
+                              controller: _password,
+                              label: 'password',
+                              name: 'password'),
 
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,7 +190,8 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
                               func: () {
                                 _formKey.currentState!.save();
                                 if (_formKey.currentState!.validate()) {
-                                  userController.loginSuperApp(widget.user['username'], _password.text,
+                                  userController.loginSuperApp(
+                                      widget.user['username'], _password.text,
                                       reqOTPprocess: false);
                                 }
                               },
@@ -206,7 +220,8 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomDateBar(calendarController: calendarController, now: now),
+      bottomNavigationBar:
+          BottomDateBar(calendarController: calendarController, now: now),
     );
   }
 
@@ -225,7 +240,7 @@ class _LoginHaveAccountState extends State<LoginHaveAccount> {
             children: [
               SvgPicture.asset(MyIconOld.ic_face, color: color_777),
               SizedBox(width: 10.sp),
-              TextFont(text: 'login_with_biometic', color: color_777)
+              TextFont(text: 'login_with_biometric', color: color_777)
             ],
           ),
         ),

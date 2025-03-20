@@ -375,5 +375,8 @@
   "are_you_sure_to_acctive_this_phon_number":"Are you sure you want to activate this phone number?",
   "if_you_active_this_phone_number_this_phone_number_will_active_and_begin_the_internet_when_you_active_success":"If you activate this phone number, it will start using the internet from the moment you successfully activate it!",
   "you_need_to_active_this_phone_number_before_suing":"You need to activate this phone number before using it",
-  "active_this_phone_number_here":"Activate this phone number here"
+  "active_this_phone_number_here":"Activate this phone number here",
+  "data_borrow":"Data Borrow",
+  "airtime_borrow":"Airtime Borrow",
+  "all_lists": "All lists"
 }

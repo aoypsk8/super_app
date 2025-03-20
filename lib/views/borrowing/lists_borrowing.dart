@@ -62,7 +62,7 @@ class _ListsBorrowingState extends State<ListsBorrowing> {
               padding: const EdgeInsets.all(10),
               child: buildStepProcess(
                 title: '',
-                desc: 'ລາຍການທັງໝົດ',
+                desc: 'all_lists',
               ),
             ),
             Expanded(
@@ -114,8 +114,8 @@ class _ListsBorrowingState extends State<ListsBorrowing> {
                                           onTap: () {
                                             DialogHelper.showBorrowPopup(
                                               borrow: data.type == 'airtime'
-                                                  ? "ຢືມມູນຄ່າໂທ"
-                                                  : "ຢືມເນັດ",
+                                                  ? "airtime_borrow".tr
+                                                  : "data_borrow".tr,
                                               amount: data.type == 'airtime'
                                                   ? "${fn.format(int.parse(data.amount.replaceAll(RegExp(r'[^0-9]'), '')))} LAK"
                                                   : "${data.amount}GB",

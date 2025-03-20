@@ -123,9 +123,9 @@ class LoanCard extends StatelessWidget {
           CircleAvatar(
             backgroundColor: Colors.grey.shade200,
             radius: 25,
-            backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
-                ? NetworkImage(imageUrl!)
-                : AssetImage(MyConstant.profile_default) as ImageProvider,
+            backgroundImage: (imageUrl != null && imageUrl!.isNotEmpty)
+                ? NetworkImage(imageUrl!) as ImageProvider
+                : NetworkImage(MyConstant.profile_default),
           ),
           SizedBox(width: 10),
           Expanded(

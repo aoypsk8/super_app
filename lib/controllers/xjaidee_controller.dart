@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
-
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:super_app/controllers/log_controller.dart';
@@ -10,6 +8,7 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/xjaidee_model.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import '../services/api/dio_client.dart';
+import '../views/x-jaidee/input_amountScreen.dart';
 import 'home_controller.dart';
 
 class XjaideeController extends GetxController {
@@ -46,26 +45,8 @@ class XjaideeController extends GetxController {
   RxString rxContact = ''.obs;
   RxString rxDescription = ''.obs;
 
-  //!
-  //! QRY RECENT
-  //!------------------------------------------------------------------------------
-  // fetchrecent(Menulists menudetail) async {
-  //   List<String> urlSplit = menudetail.url.toString().split(";");
-  //   var response = await DioClient.postEncrypt(
-  //       loading: false,
-  //       urlSplit[3],
-  //       {
-  //         "Msisdn": storage.read('msisdn'),
-  //         "ProviderID": tempBdetail.value.providerID
-  //       },
-  //       key: 'lmm');
-  //   recenttampB.value = response
-  //       .map<RecentTempBModel>((json) => RecentTempBModel.fromJson(json))
-  //       .toList();
-  // }
-
   fetchDetails() async {
-    var url = "http://localhost:4100/api/GetDataUsers";
+    var url = "http://192.168.100.226:4100/api/GetDataUsers";
     var data = {
       "msisdn": userController.rxMsisdn.value,
     };
@@ -86,7 +67,7 @@ class XjaideeController extends GetxController {
   //   ! Show Menu
   // !------------------------------------------------------------------------------
   ShowMenu() async {
-    var url = "http://localhost:4100/api/CheckApprove";
+    var url = "http://192.168.100.226:4100/api/CheckApprove";
     var data = {
       "msisdn": userController.rxMsisdn.value,
     };
@@ -98,10 +79,10 @@ class XjaideeController extends GetxController {
     }
   }
 
-  //   ! Show Menu
+  //   ! Check credit
   // !------------------------------------------------------------------------------
   CheckCredit() async {
-    var url = "http://localhost:4100/api/CheckCredit";
+    var url = "http://192.168.100.226:4100/api/CheckCredit";
     var data = {
       "msisdn": userController.rxMsisdn.value,
     };
@@ -114,10 +95,36 @@ class XjaideeController extends GetxController {
     }
   }
 
+  //   ! Check can or cant
+  // !------------------------------------------------------------------------------
+  CheckPayment() async {
+    var url = "http://192.168.100.226:4100/api/CheckPayment";
+    var data = {
+      "msisdn": userController.rxMsisdn.value,
+    };
+    var response = await DioClient.post(url, data);
+    if (response['status'] == true) {
+      DialogHelper.showDialogPolicy(
+        title: "Policy",
+        description:
+            "1. Registration is required to register through the mobile phone number of the customer who registered in accordance with the rules to open an M-Money wallet account, which has to be active and reachable. Users can register to use:\n • Register and fill in the information, KYC manually according to the methods and procedures set by the company in this service.\n2. After the registration is completed, the user must set a secure personal password according to the company's instructions, which is a 6-digit number, then wait for confirmation from the system to start using the service.Using M-Money Wallet Services\n 1. Top Up Wallet\n Users of M-Money Wallet can top-up their wallet at: (1) the LTC Service Center, (2) the participating Banks, (3) the Agent Stores that the Company has periodically listed (4) Direct Sale staff. Minimum top up is 10,000 Kip (ten thousand kip).",
+        onClose: () async {
+          if (Get.isDialogOpen!) {
+            Get.back();
+          }
+          await CheckCredit();
+          Get.to(() => InputAmountXJaideeScreen());
+        },
+      );
+    } else {
+      DialogHelper.showErrorDialogNew(description: 'ກະລຸນາປິດສິນເຊື່ອກ່ອນ!');
+    }
+  }
+
   //   ! Save Info
   // !------------------------------------------------------------------------------
   SaveInfo() async {
-    var url = "http://localhost:4100/api/Credit";
+    var url = "http://192.168.100.226:4100/api/Credit";
     var data = {
       "amount": paymentAmount.value,
       "month_to_repay": months.value,
@@ -146,7 +153,7 @@ class XjaideeController extends GetxController {
   //   ! Save Info
   // !------------------------------------------------------------------------------
   FetchHistory() async {
-    var url = "http://localhost:4100/api/HistoryCredit";
+    var url = "http://192.168.100.226:4100/api/HistoryCredit";
     var data = {
       "msisdn": userController.rxMsisdn.value,
     };
@@ -158,14 +165,14 @@ class XjaideeController extends GetxController {
     }
   }
 
-  //   ! Save Info
+  //   ! Load list
   // !------------------------------------------------------------------------------
   FetchListloan() async {
     try {
       isLoading.value = true;
       await Future.delayed(
           Duration(milliseconds: 100)); // Delay to prevent UI rebuild issue
-      var url = "http://localhost:4100/api/ShowApproveCredit";
+      var url = "http://192.168.100.226:4100/api/ShowApproveCredit";
       var response = await DioClient.post(url, null);
 
       if (response['status'] == true) {
@@ -181,74 +188,21 @@ class XjaideeController extends GetxController {
     }
   }
 
-  //!
-  //! PAYMENT
-  //!------------------------------------------------------------------------------
-  // paymentProcess(Menulists menudetail) async {
-  //   if (userController.totalBalance.value >= int.parse(rxPaymentAmount.value)) {
-  //     var data;
-  //     var url;
-  //     var response;
-  //     rxFee.value = tempBdetail.value.fee.toString();
-  //     //! Confirm CashOut
-  //     if (await paymentController.confirmCashOut()) {
-  //       //! Insert DB
-  //       List<String> urlSplit = menudetail.url.toString().split(";");
-  //       url = urlSplit[2];
-  //       data = {
-  //         "TranID": rxTransID.value,
-  //         "ProviderID": tempBdetail.value.providerID.toString(),
-  //         "leasid": tempBdetail.value.leasID.toString(),
-  //         "Acc": rxAccNo.value,
-  //         "AccName": rxAccName.value,
-  //         "Amount": int.parse(rxPaymentAmount.value).toStringAsFixed(0),
-  //         "PhoneUser": storage.read('msisdn'),
-  //         "Remark": rxNote.value,
-  //         "Name_Code": tempBdetail.value.nameCode.toString(),
-  //         "Fee": tempBdetail.value.fee
-  //       };
-  //       response = await DioClient.postEncrypt(url, data, key: 'lmm');
-  //       //! save log
-  //       await saveLogPayment(data, response);
-  //       if (response['ResultCode'] == '200') {
-  //         //? save parameter to result screen
-  //         rxTimeStamp.value = response['CreateDate'];
-  //         rxPaymentAmount.value = response['Amount'];
-  //         enableBottom.value = true;
-  //         Get.to(() => const ResultTempBscreen());
-  //       } else {
-  //         enableBottom.value = true;
-  //         DialogHelper.showErrorWithFunctionDialog(
-  //             description: response['ResultDesc'],
-  //             onClose: () {
-  //               Get.close(userController.pageclose.value + 1);
-  //             });
-  //       }
-  //     }
-  //   } else {
-  //     enableBottom.value = true;
-  //     //! balance < payment
-  //     DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
-  //   }
-  // }
-
-  // Future<void> saveLogPayment(data, response) async {
-  //   logPaymentReq = data;
-  //   logPaymentRes = response;
-  //   await logController.insertAllLog(
-  //     homeController.menudetail.value.groupNameEN.toString(),
-  //     rxTransID.value,
-  //     tempBdetail.value.logo,
-  //     tempBdetail.value.nameCode!,
-  //     rxAccNo.value,
-  //     rxAccName.value,
-  //     rxPaymentAmount.value,
-  //     0,
-  //     rxFee.value,
-  //     rxNote.value,
-  //     logVerify,
-  //     logPaymentReq,
-  //     logPaymentRes,
-  //   );
-  // }
+  //  Update
+  // !------------------------------------------------------------------------------
+  Future<bool> Update(
+      {required String creditId, required String status}) async {
+    var url = "http://192.168.100.226:4100/api/ApproveCredit";
+    var data = {
+      "credit_id": creditId,
+      "status": status,
+      "msisdn": userController.rxMsisdn.value,
+    };
+    var response = await DioClient.post(url, data);
+    if (response['status'] == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

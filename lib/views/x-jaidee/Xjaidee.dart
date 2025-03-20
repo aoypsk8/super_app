@@ -8,6 +8,7 @@ import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/x-jaidee/input_amountScreen.dart';
 import 'package:super_app/views/x-jaidee/xjaidee_approve.dart';
+import 'package:super_app/views/x-jaidee/xjaidee_paymentScreen.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 import 'package:intl/intl.dart';
@@ -125,19 +126,8 @@ class _XJaideeState extends State<XJaidee> {
                         children: [
                           buildButton(
                             icon: MyIcon.ic_load_xjaidee,
-                            ontap: () {
-                              DialogHelper.showDialogPolicy(
-                                title: "Policy",
-                                description:
-                                    "1. Registration is required to register through the mobile phone number of the customer who registered in accordance with the rules to open an M-Money wallet account, which has to be active and reachable. Users can register to use:\n • Register and fill in the information, KYC manually according to the methods and procedures set by the company in this service.\n2. After the registration is completed, the user must set a secure personal password according to the company's instructions, which is a 6-digit number, then wait for confirmation from the system to start using the service.Using M-Money Wallet Services\n 1. Top Up Wallet\n Users of M-Money Wallet can top-up their wallet at: (1) the LTC Service Center, (2) the participating Banks, (3) the Agent Stores that the Company has periodically listed (4) Direct Sale staff. Minimum top up is 10,000 Kip (ten thousand kip).",
-                                onClose: () async {
-                                  if (Get.isDialogOpen!) {
-                                    Get.back();
-                                  }
-                                  await controller.CheckCredit();
-                                  Get.to(() => InputAmountXJaideeScreen());
-                                },
-                              );
+                            ontap: () async {
+                              await controller.CheckPayment();
                             },
                             title: 'ຢືມສິນເຊື່ອ',
                           ),
@@ -152,7 +142,7 @@ class _XJaideeState extends State<XJaidee> {
                           buildButton(
                             icon: MyIcon.ic_load_cancel,
                             ontap: () {
-                              print("object");
+                              Get.to(() => XjaideePaymentscreen());
                             },
                             title: 'ປິດສິນເຊື່ອ',
                           )
@@ -223,8 +213,30 @@ class BuildHistoryLoad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Determine the status text and color
-    String statusText = status == "2" ? "ລໍຖ້າອະນຸມັດ" : "ຊຳລະຄົບແລ້ວ";
-    Color statusColor = status == "2" ? cr_b692 : Colors.red;
+    String statusText;
+    Color statusColor;
+
+    switch (status) {
+      case "1":
+        statusText = "ປະຕິເສດ"; // Rejected
+        statusColor = Colors.red;
+        break;
+      case "2":
+        statusText = "ລໍຖ້າອະນຸມັດ"; // Waiting for approval
+        statusColor = cr_b692;
+        break;
+      case "3":
+        statusText = "ກຳລັງຊຳລະ"; // Approved
+        statusColor = cr_7070;
+        break;
+      case "4":
+        statusText = "ຊຳລະຄົບແລ້ວ"; // Completed
+        statusColor = Colors.green;
+        break;
+      default:
+        statusText = "ບໍ່ຮູ້ສະຖານະ"; // Unknown status
+        statusColor = Colors.grey;
+    }
 
     return Container(
       width: Get.width,

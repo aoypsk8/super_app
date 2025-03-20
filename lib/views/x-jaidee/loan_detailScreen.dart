@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:super_app/controllers/xjaidee_controller.dart';
+import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/image_preview.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildTextField.dart';
@@ -16,6 +20,7 @@ class LoanDetailScreen extends StatefulWidget {
 }
 
 class _LoanDetailScreenState extends State<LoanDetailScreen> {
+  final XjaideeController xjaidee = Get.find<XjaideeController>();
   String formatCurrency(dynamic amount) {
     try {
       double value = double.tryParse(amount.toString()) ?? 0.0;
@@ -69,14 +74,11 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
               child: Container(
                 padding: EdgeInsets.all(4),
                 child: CircleAvatar(
-                  radius: 100, // Bigger Profile Image
-                  backgroundColor: Colors.grey.shade300,
-                  backgroundImage:
-                      imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
-                  child: imageUrl.isEmpty
-                      ? Icon(Icons.person,
-                          size: 80, color: Colors.grey.shade600)
-                      : null,
+                  backgroundColor: Colors.grey.shade200,
+                  radius: 100,
+                  backgroundImage: (imageUrl != null && imageUrl!.isNotEmpty)
+                      ? NetworkImage(imageUrl!) as ImageProvider
+                      : NetworkImage(MyConstant.profile_default),
                 ),
               ),
             ),
@@ -198,6 +200,17 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
             const SizedBox(height: 10),
             buildLoanFiledValidate(
               enable: false,
+              controller:
+                  TextEditingController(text: "${widget.loan['percentage']} %"),
+              label: 'ເປີເຊັນການຜ່ອນຊຳລະ',
+              name: '',
+              hintText: '',
+              fillcolor: color_f4f4,
+              bordercolor: color_f4f4,
+            ),
+            const SizedBox(height: 10),
+            buildLoanFiledValidate(
+              enable: false,
               controller: TextEditingController(
                 text: formatCurrency(widget.loan['monthly_payment']),
               ),
@@ -222,7 +235,22 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    DialogHelper.showErrorDialog(
+                      description:
+                          "ທ່ານຕ້ອງການຍົກເລີກການອານຸມັດກູ້ຢືມສິນເຊື່ອຫລືບໍ?",
+                      onConfirm: () async {
+                        bool isSuccess = await xjaidee.Update(
+                            creditId: widget.loan['credit_id'].toString(),
+                            status: "1");
+                        if (isSuccess) {
+                          DialogHelper.showSuccessDialog(
+                              description:
+                                  "ທ່ານໄດ້ຍົກເລີກການອານຸມັດກູ້ຢືມສິນເຊື່ອສຳເລັດ");
+                        }
+                      },
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
@@ -237,8 +265,14 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    print("Description:");
+                  onPressed: () async {
+                    bool isSuccess = await xjaidee.Update(
+                        creditId: widget.loan['credit_id'].toString(),
+                        status: "3");
+                    if (isSuccess) {
+                      DialogHelper.showSuccessDialog(
+                          description: "ທ່ານໄດ້ອານຸມັດກູ້ຢືມສິນເຊື່ອສຳເລັດ");
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,

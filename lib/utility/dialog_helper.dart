@@ -12,6 +12,124 @@ import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class DialogHelper {
+  static void showErrorDialog({
+    String title = 'Ooops.',
+    String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.',
+    required VoidCallback onConfirm,
+  }) {
+    Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false,
+        child: Dialog(
+          surfaceTintColor: color_fff,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    ClipPath(
+                      clipper: CustomShape(), // Custom clipper class
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xffFCD9DB),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                          ),
+                        ),
+                        height: 120,
+                      ),
+                    ),
+                    SvgPicture.asset(
+                      MyIcon.dialog_warning_red,
+                      height: 75,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                TextFont(
+                  text: title,
+                  poppin: true,
+                  fontWeight: FontWeight.bold,
+                  color: color_436,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: TextFont(
+                          text: description,
+                          textAlign: TextAlign.center,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xff636E72),
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: color_c4c4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                              ),
+                              onPressed: () => Get.back(), // Close dialog
+                              child: TextFont(
+                                text: 'close',
+                                textAlign: TextAlign.center,
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: color_ed1,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                              ),
+                              onPressed: () {
+                                Get.back(); // Close dialog first
+                                onConfirm(); // Execute confirmation action
+                              },
+                              child: TextFont(
+                                text: 'confirm',
+                                textAlign: TextAlign.center,
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   static void showErrorDialogNew({
     String title = 'Umm, Sorry!!',
     String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.',

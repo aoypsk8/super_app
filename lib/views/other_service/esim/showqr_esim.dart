@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
@@ -17,6 +18,8 @@ import 'package:super_app/views/web/openWebView.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class ShowQRESIMScreen extends StatefulWidget {
   const ShowQRESIMScreen({super.key});
@@ -127,6 +130,7 @@ class _ShowQRESIMScreenState extends State<ShowQRESIMScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFont(
@@ -154,14 +158,50 @@ class _ShowQRESIMScreenState extends State<ShowQRESIMScreen> {
                   ),
                 ],
               ),
-              TextFont(
-                text: esimController.esimDetailModelRes.first.phoneNumber,
-                poppin: true,
-                fontSize: 15,
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.w700,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFont(
+                    text: esimController.esimDetailModelRes.first.phoneNumber,
+                    poppin: true,
+                    fontSize: 15,
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  const SizedBox(width: 5),
+                  GestureDetector(
+                    onTap: () {
+                      Clipboard.setData(
+                        ClipboardData(
+                          text: esimController
+                              .esimDetailModelRes.first.phoneNumber,
+                        ),
+                      );
+                      showTopSnackBar(
+                        Overlay.of(context),
+                        snackBarPosition: SnackBarPosition.bottom,
+                        displayDuration: const Duration(milliseconds: 1000),
+                        CustomSnackBar.success(
+                          icon: const Icon(Icons.check_circle,
+                              color: Color.fromARGB(161, 255, 255, 255),
+                              size: 120),
+                          message: "Phone number copied",
+                          textAlign: TextAlign.left,
+                          maxLines: 3,
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      Icons.copy,
+                      color: Theme.of(context).primaryColor,
+                      size: 10.sp,
+                    ),
+                  ),
+                ],
               ),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFont(
@@ -181,6 +221,7 @@ class _ShowQRESIMScreenState extends State<ShowQRESIMScreen> {
               ),
               const SizedBox(height: 10),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
@@ -220,12 +261,26 @@ class _ShowQRESIMScreenState extends State<ShowQRESIMScreen> {
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
               ),
+              TextFont(
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                text: "you_need_to_active_this_phone_number_before_suing",
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                color: cr_0e19.withOpacity(0.6),
+              ),
               InkWell(
                 onTap: () {
-                  Get.to(OpenWebView(url: "https://onegrab.laotel.com/"));
+                  DialogHelper.dialogRecurringConfirm(
+                    title: "are_you_sure_to_acctive_this_phon_number",
+                    description:
+                        "if_you_active_this_phone_number_this_phone_number_will_active_and_begin_the_internet_when_you_active_success",
+                    onOk: () {},
+                  );
+                  // Get.to(OpenWebView(url: "https://onegrab.laotel.com/"));
                 },
                 child: TextFont(
-                  text: "Active this phone number here : ",
+                  text: "active_this_phone_number_here",
                   fontSize: 13,
                   underline: true,
                   fontWeight: FontWeight.bold,

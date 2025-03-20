@@ -361,5 +361,10 @@
   "scan_me": "扫描我",
   "loading_complete": "加载完成",
   "Select Language": "选择语言",
-  "save": "保存"
+  "save": "保存",
+  "are_you_sure_to_acctive_this_phon_number":"您确定要激活此电话号码吗？",
+  "if_you_active_this_phone_number_this_phone_number_will_active_and_begin_the_internet_when_you_active_success":"如果您激活此电话号码，它将从您成功激活的那一刻开始使用互联网！",
+  "you_need_to_active_this_phone_number_before_suing":"您需要在使用之前激活此电话号码",
+  "active_this_phone_number_here":"在这里激活此电话号码"
+  
 }

@@ -372,5 +372,9 @@
   "scan_me": "Scan me",
   "loading_complete": "ໂຫລດສຳເລັດ",
   "Select Language":"ເລືອກພາສາ",
-  "save":"ບັນທຶກ"
+  "save":"ບັນທຶກ",
+  "are_you_sure_to_acctive_this_phon_number":"ທ່ານຕ້ອງການເປີດນຳໃຊ້ເບີນີ້ແທ້ບໍ ?",
+  "if_you_active_this_phone_number_this_phone_number_will_active_and_begin_the_internet_when_you_active_success":"ຖ້າທ່ານເບີນຳໃຊ້ເບີນີ້ແລ້ວເບີນີ້ຈະເລີມນຳໃຊ້ອິນເຕີເນັດໄປຕັ້ງແຕ່ມື້ທີ່ທ່ານເປີດນຳໃຊ້ !",
+  "you_need_to_active_this_phone_number_before_suing":"ທ່ານຕ້ອງເປີດເບີນີ້ກ່ອນການນຳໃຊ້",
+  "active_this_phone_number_here":"ເປີດນຳໃຊ້ທີ່ເວັບນີ້"
 }

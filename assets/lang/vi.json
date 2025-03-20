@@ -361,5 +361,9 @@
   "scan_me": "扫描我",
   "loading_complete": "Tải xong",
   "Select Language": "Chọn ngôn ngữ",
-  "save": "Lưu"
+  "save": "Lưu",
+  "are_you_sure_to_acctive_this_phon_number":"Bạn có chắc chắn muốn kích hoạt số điện thoại này không?",
+  "if_you_active_this_phone_number_this_phone_number_will_active_and_begin_the_internet_when_you_active_success":"Nếu bạn kích hoạt số điện thoại này, nó sẽ bắt đầu sử dụng internet từ thời điểm bạn kích hoạt thành công!",
+  "you_need_to_active_this_phone_number_before_suing":"Bạn cần kích hoạt số điện thoại này trước khi sử dụng",
+  "active_this_phone_number_here":"Kích hoạt số điện thoại này tại đây"
 }

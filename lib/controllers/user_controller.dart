@@ -595,6 +595,7 @@ class UserController extends GetxController with WidgetsBindingObserver {
         storage.write('msisdn', msisdn);
         storage.write('token', res['token']);
         rxToken.value = res['token'];
+        print(rxToken.value);
         if (reqOTPprocess) {
           requestOTP(msisdn, 'login');
         } else {

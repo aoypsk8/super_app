@@ -263,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            decoration: _backgroundImage != null
+            decoration: _backgroundImage == null
                 ? BoxDecoration(
                     color: color_fff,
                     image: DecorationImage(

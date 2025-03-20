@@ -54,18 +54,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       }
     });
     setState(() {
-      if (homeController.rxBgCard.value == '') {
+      if (homeController.rxBgBanner.value == '') {
         _backgroundImage = null;
       } else {
-        _backgroundImage = File(homeController.rxBgCard.value);
+        _backgroundImage = File(homeController.rxBgBanner.value);
       }
     });
 
     // Set background image without using setState in initState
-    if (homeController.rxBgCard.value == '') {
+    if (homeController.rxBgBanner.value == '') {
       _backgroundImage = null;
     } else {
-      _backgroundImage = File(homeController.rxBgCard.value);
+      _backgroundImage = File(homeController.rxBgBanner.value);
     }
   }
 
@@ -273,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            decoration: _backgroundImage != null
+            decoration: _backgroundImage == null
                 ? BoxDecoration(
                     color: color_fff,
                     image: DecorationImage(

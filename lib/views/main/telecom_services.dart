@@ -120,7 +120,17 @@ class _TelecomServicesState extends State<TelecomServices> {
                     ],
                   ),
                   SizedBox(height: 20),
-                  menuIcon()
+                  homeController.menuModel.skip(1).isNotEmpty
+                      ? menuIcon()
+                      : Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Lottie.asset(
+                              MyIcon.animation_load,
+                              repeat: true,
+                            ),
+                          ),
+                        ),
                 ],
               ),
             )

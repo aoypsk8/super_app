@@ -27,6 +27,7 @@ class HomeController extends GetxController {
   final box = GetStorage();
   RxString rxBgCard = ''.obs;
   RxString rxBgBill = ''.obs;
+  RxString rxBgBanner = ''.obs;
   RxString urlwebview = ''.obs;
   RxBool TPlus_theme = false.obs;
 
@@ -103,13 +104,20 @@ class HomeController extends GetxController {
   checkAppUpdate() async {
     var url = '${MyConstant.urlLtcdev}/AppInfo/Info';
     var res = await DioClient.getNoLoading(url);
+    print(res);
+    // bgimage
+    // bgbill
+    // banner
     rxAppinfo.value = AppInfoModel.fromJson(res);
     final imageCardFile =
         await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_card');
     if (imageCardFile != null) rxBgCard.value = imageCardFile.path;
     final imageBillFile =
-        await downloadBackgroundImg(rxAppinfo.value.bgimage!, 'image_bill');
+        await downloadBackgroundImg(rxAppinfo.value.bgbill!, 'image_bill');
     if (imageBillFile != null) rxBgBill.value = imageBillFile.path;
+    final imageBannerFile =
+        await downloadBackgroundImg(rxAppinfo.value.banner!, 'image_banner');
+    if (imageBannerFile != null) rxBgBanner.value = imageBannerFile.path;
   }
 
   Future<File?> downloadBackgroundImg(String imageUrl, String type) async {

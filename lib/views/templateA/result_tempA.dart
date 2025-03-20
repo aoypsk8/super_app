@@ -37,7 +37,8 @@ class ResultTempAScreen extends StatefulWidget {
   State<ResultTempAScreen> createState() => _ResultTempAScreenState();
 }
 
-class _ResultTempAScreenState extends State<ResultTempAScreen> with SingleTickerProviderStateMixin {
+class _ResultTempAScreenState extends State<ResultTempAScreen>
+    with SingleTickerProviderStateMixin {
   final screenshotController = ScreenshotController();
   final GlobalKey _globalKey = GlobalKey();
   final storage = GetStorage();
@@ -76,9 +77,11 @@ class _ResultTempAScreenState extends State<ResultTempAScreen> with SingleTicker
     try {
       await Future.delayed(Duration(milliseconds: 500));
       if (_globalKey.currentContext != null) {
-        RenderRepaintBoundary boundary = _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+        RenderRepaintBoundary boundary = _globalKey.currentContext!
+            .findRenderObject() as RenderRepaintBoundary;
         ui.Image image = await boundary.toImage();
-        ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+        ByteData? byteData =
+            await image.toByteData(format: ui.ImageByteFormat.png);
         if (byteData != null) {
           String picturesPath = "${DateTime.now().millisecondsSinceEpoch}.jpg";
           final result = await SaverGallery.saveImage(
@@ -163,34 +166,52 @@ class _ResultTempAScreenState extends State<ResultTempAScreen> with SingleTicker
                               children: [
                                 backgroudDetailBill(),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                                  padding: const EdgeInsets.only(
+                                      left: 15, right: 15, top: 15),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       buildTextSuccess(),
                                       SizedBox(height: 10),
                                       Container(
                                         decoration: BoxDecoration(
                                           color: cr_fdeb,
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         ),
                                         child: Column(
                                           children: [
                                             //! from - to account
                                             buildAccountDetails(
                                                 context: context,
-                                                imageUrl: userController.userProfilemodel.value.profileImg ?? '',
+                                                imageUrl: userController
+                                                        .userProfilemodel
+                                                        .value
+                                                        .profileImg ??
+                                                    '',
                                                 type: 'from',
-                                                accName: userController.profileName.value,
-                                                accNo: userController.userProfilemodel.value.msisdn!),
-                                            buildDotLine(color: Theme.of(context).primaryColor),
+                                                accName: userController
+                                                    .profileName.value,
+                                                accNo: userController
+                                                    .userProfilemodel
+                                                    .value
+                                                    .msisdn!),
+                                            buildDotLine(
+                                                color: Theme.of(context)
+                                                    .primaryColor),
                                             buildAccountDetails(
                                                 context: context,
-                                                imageUrl: controller.tempAdetail.value.logo ?? '',
+                                                imageUrl: controller.tempAdetail
+                                                        .value.logo ??
+                                                    '',
                                                 type: 'to',
-                                                accName: controller.rxaccname.value,
-                                                accNo: controller.rxaccnumber.value,
-                                                titleProvider: controller.tempAdetail.value.title!),
+                                                accName:
+                                                    controller.rxaccname.value,
+                                                accNo: controller
+                                                    .rxaccnumber.value,
+                                                titleProvider: controller
+                                                    .tempAdetail.value.title!),
                                           ],
                                         ),
                                       ),
@@ -204,7 +225,8 @@ class _ResultTempAScreenState extends State<ResultTempAScreen> with SingleTicker
                                       Row(
                                         children: [
                                           TextFont(
-                                            text: controller.rxPaymentAmount.value,
+                                            text: controller
+                                                .rxPaymentAmount.value,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20,
                                             color: cr_b326,
@@ -220,12 +242,18 @@ class _ResultTempAScreenState extends State<ResultTempAScreen> with SingleTicker
                                         ],
                                       ),
                                       const SizedBox(height: 10),
-                                      buildTextDetail(title: "fee", detail: controller.rxFee.value, money: true),
+                                      buildTextDetail(
+                                          title: "fee",
+                                          detail: controller.rxFee.value,
+                                          money: true),
                                       const SizedBox(height: 5),
-                                      buildTextDetail(title: "transaction_id", detail: controller.rxtransid.value),
+                                      buildTextDetail(
+                                          title: "transaction_id",
+                                          detail: controller.rxtransid.value),
                                       const SizedBox(height: 5),
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
                                               child: buildTextDetail(
@@ -236,15 +264,18 @@ class _ResultTempAScreenState extends State<ResultTempAScreen> with SingleTicker
                                           )),
                                           Expanded(
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
                                               children: [
                                                 PrettyQr(
                                                   image: AssetImage(
                                                     MyIcon.ic_logo_x,
                                                   ),
                                                   size: 35.w,
-                                                  data: controller.rxtransid.value,
-                                                  errorCorrectLevel: QrErrorCorrectLevel.H,
+                                                  data: controller
+                                                      .rxtransid.value,
+                                                  errorCorrectLevel:
+                                                      QrErrorCorrectLevel.H,
                                                   typeNumber: null,
                                                   roundEdges: false,
                                                 ),
@@ -309,7 +340,8 @@ class _ResultTempAScreenState extends State<ResultTempAScreen> with SingleTicker
             ),
             TextFont(
               text: DateFormat('dd MMMM yyyy HH:mm:ss').format(
-                DateTime.parse(controller.rxtimestamp.value.replaceAll('/', '-')),
+                DateTime.parse(
+                    controller.rxtimestamp.value.replaceAll('/', '-')),
               ),
               fontWeight: FontWeight.w400,
               fontSize: 9.5,
@@ -376,10 +408,13 @@ class _ResultTempAScreenState extends State<ResultTempAScreen> with SingleTicker
                         height: 50.sp,
                         child: CircleAvatar(
                           backgroundImage: CachedNetworkImageProvider(imageUrl),
-                          backgroundColor: Colors.transparent, // Optional: Set a background color
+                          backgroundColor: Colors
+                              .transparent, // Optional: Set a background color
                         ),
                       ),
-                      SizedBox(width: 8), // Optional spacing between image and column
+                      SizedBox(
+                          width:
+                              8), // Optional spacing between image and column
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

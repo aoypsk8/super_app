@@ -50,7 +50,7 @@ class _TelecomServicesState extends State<TelecomServices> {
     await telecomsrv.queryTelPackage(await storage.read('msisdn'));
     await telecomsrv.phoneList();
     // await telecomsrv.fetchMainMenu();
-    await homeController.fetchServicesmMenu();
+    await homeController.fetchServicesmMenu(userController.rxMsisdn.value);
     refreshController.refreshCompleted();
   }
 
@@ -191,79 +191,70 @@ class _TelecomServicesState extends State<TelecomServices> {
       primary: false,
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
-        if (index == homeController.menuModel.first.menulists!.length) {
-          return InkWell(
-            onTap: () async {},
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                SizedBox(height: 6),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                  ),
-                  child: SvgPicture.asset(
-                    MyIcon.ic_more,
-                    width: 5.5.w,
-                    height: 8.5.w,
-                  ),
-                ),
-                SizedBox(height: 10),
-                TextFont(
-                  text: 'more',
-                  fontSize: 9.5,
-                  fontWeight: FontWeight.w400,
-                  maxLines: 2,
-                  color: cr_4139,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          );
-        }
-
-        var result = homeController.menuModel.first.menulists![index];
+        // var result = homeController.menuModel.skip(1).first.menulists![index];
+        var result = homeController.menuModel.skip(1).first.menulists![index];
         String? url = result.logo;
-        String? updatedUrl = url!.replaceFirst(
-          'https://mmoney.la',
-          'https://gateway.ltcdev.la/AppImage',
-        );
+        if (url != null && homeController.TPlus_theme.value) {
+          url = url.replaceFirst("icons/", "icons/y");
+        } else {
+          url = url!.replaceFirst("icons/", "icons/");
+        }
 
         return InkWell(
           onTap: () async {
             await homeController.clear();
             if (!userController.isCheckToken.value) {
-              userController.isCheckToken.value = true;
-              userController.checktoken(name: 'menu').then((value) {
-                if (userController.isLogin.value) {
-                  if (result.template != '/') {
-                    homeController.menutitle.value = result.groupNameEN!;
-                    homeController.menudetail.value = result;
-                    if (result.template == "webview") {
-                      Get.to(
-                        OpenWebView(
-                            url:
-                                homeController.menudetail.value.url.toString()),
-                      );
-                    } else {
-                      Get.toNamed('/${result.template}');
-                    }
-                  } else {
-                    DialogHelper.showErrorDialogNew(
-                      description: 'Not available',
+              bool isValidToken = await userController.checktokenSuperApp();
+              if (isValidToken) {
+                if (result.template != '/') {
+                  homeController.menutitle.value = result.groupNameEN!;
+                  homeController.menudetail.value = result;
+                  if (result.template == "webview") {
+                    Get.to(
+                      OpenWebView(
+                          url: homeController.menudetail.value.url.toString()),
                     );
+                  } else {
+                    Get.toNamed('/${result.template}');
                   }
+                } else {
+                  DialogHelper.showErrorDialogNew(
+                    description: 'Not available',
+                  );
                 }
-              });
-              userController.isCheckToken.value = false;
+              }
             }
+            // if (!userController.isCheckToken.value) {
+            //   userController.isCheckToken.value = true;
+            //   userController.checktoken(name: 'menu').then((value) {
+            //     if (userController.isLogin.value) {
+            //       if (result.template != '/') {
+            //         homeController.menutitle.value = result.groupNameEN!;
+            //         homeController.menudetail.value = result;
+            //         if (result.template == "webview") {
+            //           Get.to(
+            //             OpenWebView(
+            //                 url:
+            //                     homeController.menudetail.value.url.toString()),
+            //           );
+            //         } else {
+            //           Get.toNamed('/${result.template}');
+            //         }
+            //       } else {
+            //         DialogHelper.showErrorDialogNew(
+            //           description: 'Not available',
+            //         );
+            //       }
+            //     }
+            //   });
+            //   userController.isCheckToken.value = false;
           },
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
               SizedBox(height: 6),
               SvgPicture.network(
-                updatedUrl,
+                url,
                 placeholderBuilder: (BuildContext context) => Container(
                   padding: const EdgeInsets.all(5.0),
                   child: const CircularProgressIndicator(),
@@ -826,11 +817,13 @@ class _TelecomServicesState extends State<TelecomServices> {
               ),
             ),
             SizedBox(width: 10),
-            TextFont(
-              text: 'ກຳລັງນຳໃຊ້',
-              fontSize: 9,
-              color: color_ddd,
-              fontWeight: FontWeight.w500,
+            Expanded(
+              child: TextFont(
+                text: 'ກຳລັງນຳໃຊ້',
+                fontSize: 9,
+                color: color_ddd,
+                fontWeight: FontWeight.w500,
+              ),
             )
           ],
         ),
@@ -839,35 +832,39 @@ class _TelecomServicesState extends State<TelecomServices> {
           children: [
             SvgPicture.asset(MyIcon.ic_internet_round),
             SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFont(
-                  text: telecomsrv.inusePackageModel.value.packageName ??
-                      'available',
-                  poppin: true,
-                  fontWeight: FontWeight.w400,
-                  color: color_fff,
-                  fontSize: 10,
-                ),
-                Row(
-                  children: [
-                    TextFont(
-                      text: 'ໄລຍະເວລາ',
-                      color: color_fff,
-                      fontSize: 9,
-                    ),
-                    SizedBox(width: 6),
-                    TextFont(
-                      text: telecomsrv.inusePackageModel.value.dateStamp ??
-                          'available',
-                      color: color_fff,
-                      fontSize: 9,
-                      poppin: true,
-                    )
-                  ],
-                )
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFont(
+                    text: telecomsrv.inusePackageModel.value.packageName ??
+                        'available',
+                    poppin: true,
+                    fontWeight: FontWeight.w400,
+                    color: color_fff,
+                    fontSize: 10,
+                  ),
+                  Row(
+                    children: [
+                      TextFont(
+                        text: 'ໄລຍະເວລາ',
+                        color: color_fff,
+                        fontSize: 9,
+                      ),
+                      SizedBox(width: 6),
+                      Expanded(
+                        child: TextFont(
+                          text: telecomsrv.inusePackageModel.value.dateStamp ??
+                              'available',
+                          color: color_fff,
+                          fontSize: 9,
+                          poppin: true,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             )
           ],
         )

@@ -15,6 +15,7 @@ import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/image_preview.dart';
 import 'package:super_app/views/main/home_recommend.dart';
+import 'package:super_app/views/main/telecom_services.dart';
 import 'package:super_app/views/notification/notification_box.dart';
 import 'package:super_app/views/webview/webapp_webview.dart';
 import 'package:super_app/widget/mask_msisdn.dart';
@@ -483,22 +484,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
           ),
-          TextButton(
-              onPressed: () => Get.to(WebappWebviewScreen(isMenu: true)),
-              child: TextFont(text: 'NewMenu')),
-          Obx(
-            () => TextFont(
-                text: 'token : ${userController.rxToken.value}',
-                color: color_1a1,
-                maxLines: 3),
-          ),
+          // TextButton(
+          //     onPressed: () => Get.to(WebappWebviewScreen(isMenu: true)),
+          //     child: TextFont(text: 'NewMenu')),
+          // Obx(
+          //   () => TextFont(
+          //       text: 'token : ${userController.rxToken.value}',
+          //       color: color_1a1,
+          //       maxLines: 3),
+          // ),
           //! detail tabbar
           Expanded(
             child: TabBarView(
               controller: _tabController,
               children: [
-                HomeRecommendScreen(), // HomeRecommend Component is here
-                Text("hi1231231"), // HomeTelecom Component is here
+                HomeRecommendScreen(),
+                TelecomServices(),
               ],
             ),
           ),

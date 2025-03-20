@@ -127,7 +127,6 @@ class _VerifyAccountTempCNewScreenState
             isEnabled: tempCcontroler.enableBottom.value,
             title: tempCcontroler.rxPrepaidShow.value ? 'confirm' : 'next',
             func: () {
-              tempCcontroler.rxTransID.value = '';
               tempCcontroler.enableBottom.value = false;
               tempCcontroler.rxNote.value = tempCcontroler
                   .tempCservicedetail.value.description

@@ -72,7 +72,6 @@ class PaymentTempAScreen extends StatelessWidget {
                   description: 'Minimum payment must than 1,000 Kip.');
             } else {
               controller.rxNote.value = _note.text;
-              controller.rxtransid.value = '';
               controller.rxPaymentAmount.value =
                   _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '');
               controller.enableBottom.value = true;

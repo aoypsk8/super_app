@@ -168,7 +168,6 @@ class _TicketPaymentScreenState extends State<TicketPaymentScreen> {
           bgColor: Theme.of(context).primaryColor,
           title: 'next',
           func: () async {
-            ticketController.rxTransID.value = '';
             if (userController.mainBalance.value >=
                 ticketController.ticketDetail.value.price!) {
               ticketController.rxTransID.value =

@@ -151,7 +151,6 @@ class _PackageListScreenState extends State<PackageListScreen>
       padding: const EdgeInsets.only(bottom: 20),
       child: CardWidgetBorrowing(
         onTap: () {
-          tempCcontroler.rxTransID.value = '';
           tempCcontroler.enableBottom.value = false;
           tempCcontroler.rxCouponAmount.value = 0;
           tempCcontroler.rxPaymentAmount.value = int.parse(tempCcontroler
@@ -277,7 +276,6 @@ class _PackageListScreenState extends State<PackageListScreen>
         child: CardWidgetBorrowing(
           onTap: () {
             tempCcontroler.rxCouponAmount.value = 0;
-            tempCcontroler.rxTransID.value = '';
             tempCcontroler.rxPaymentAmount.value = int.parse(tempCcontroler
                 .tempCpackagemodel[index].amount
                 .toString()

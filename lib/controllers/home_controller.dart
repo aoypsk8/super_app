@@ -90,13 +90,13 @@ class HomeController extends GetxController {
     // Return the title based on the language code
     switch (languageCode) {
       case 'lo':
-        return menudetail.value.groupNameLA! ?? '';
+        return menudetail.value.groupNameLA ?? 'Default LA';
       case 'zh':
-        return menudetail.value.groupNameCH! ?? '';
+        return menudetail.value.groupNameCH ?? 'Default CH';
       case 'vi':
-        return menudetail.value.groupNameVT! ?? '';
+        return menudetail.value.groupNameVT ?? 'Default VT';
       default:
-        return menudetail.value.groupNameEN! ?? '';
+        return menudetail.value.groupNameEN ?? 'Default EN';
     }
   }
 

@@ -343,7 +343,6 @@ class _PaymentPostpaidTempCScreenState
                             description:
                                 'Minimum payment must than 1,000 Kip.');
                       } else {
-                        tempCcontroler.rxTransID.value = '';
                         tempCcontroler.rxNote.value = _note.text;
                         tempCcontroler.rxPaymentAmount.value = int.parse(
                             _paymentAmount.text

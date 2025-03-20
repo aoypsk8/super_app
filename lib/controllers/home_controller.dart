@@ -140,9 +140,9 @@ class HomeController extends GetxController {
   }
 
   fetchServicesmMenu(msisdn) async {
-    bool TPlusIcons = box.read("isDarkMode");
+    bool TPlusIcons = await box.read("isDarkMode") ?? false;
     print(TPlusIcons);
-    TPlus_theme.value = TPlusIcons || false;
+    TPlus_theme.value = TPlusIcons;
     try {
       var response = await DioClient.postEncrypt(
           loading: false, '/SuperApi/Info/Menus', {"msisdn": msisdn});

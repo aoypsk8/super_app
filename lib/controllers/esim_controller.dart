@@ -42,14 +42,15 @@ class ESIMController extends GetxController {
   }
 
   Future<void> esimProcess(String data, String time, int price,
-      String free_call, String mail) async {
+      String free_call, String mail, String trainID) async {
     try {
       var BodyData = {
         "data": data.toString(),
         "time": time.toString(),
         "price": price,
         "freeCall": free_call.toString(),
-        "mail": mail
+        "mail": mail,
+        "lmm_tranid": trainID.toString()
       };
       var responseUpload = await DioClient.postEncrypt(
         '/ESIM/UpdateAndGetRow',

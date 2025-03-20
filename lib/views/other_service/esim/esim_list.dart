@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:super_app/controllers/esim_controller.dart';
 import 'package:super_app/controllers/home_controller.dart';
+import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/views/other_service/esim/build_card_esim.dart';
 import 'package:super_app/widget/buildAppBar.dart';
@@ -67,7 +68,9 @@ class _EsimCardScreenState extends State<EsimCardScreen> {
                       amount: esimController.esimModel[index].price.toString(),
                       detail:
                           "${esimController.esimModel[index].data} / ${esimController.esimModel[index].time}",
-                      onTap: () {
+                      onTap: () async {
+                        esimController.RxTransID.value =
+                            'XX${await randomNumber().fucRandomNumber()}';
                         esimController.RxUSD.value = double.parse((double.parse(
                                     esimController.esimModel[index].price
                                         .toString()) /
@@ -77,11 +80,13 @@ class _EsimCardScreenState extends State<EsimCardScreen> {
                         Get.to(PaymentVisaMasterCard(
                           function: () {
                             esimController.esimProcess(
-                                esimController.esimModel[index].data,
-                                esimController.esimModel[index].time,
-                                esimController.esimModel[index].price,
-                                esimController.esimModel[index].freeCall,
-                                esimController.RxMail.value);
+                              esimController.esimModel[index].data,
+                              esimController.esimModel[index].time,
+                              esimController.esimModel[index].price,
+                              esimController.esimModel[index].freeCall,
+                              esimController.RxMail.value,
+                              esimController.RxTransID.value,
+                            );
                           },
                           trainID: esimController.RxTransID.value,
                           description: "BUY E-SIM",

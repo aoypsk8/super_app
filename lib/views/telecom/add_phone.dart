@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:contacts_service/contacts_service.dart';
+// import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -236,51 +236,51 @@ class _AddPhonePageState extends State<AddPhonePage> {
                 ),
               ),
               onTap: () async {
-                if (await Permission.contacts.request().isGranted) {
-                  try {
-                    final Contact? contact =
-                        await ContactsService.openDeviceContactPicker();
-                    if (contact != null) {
-                      final Item phone = contact.phones!.first;
-                      String phoneNO = phone.value
-                          .toString()
-                          .trim()
-                          .replaceAll(' ', '')
-                          .replaceAll('-', '');
-                      if (phoneNO.startsWith('020')) {
-                        setState(() {
-                          phoneController.text =
-                              phoneNO.replaceAll("020", "20");
-                        });
-                      } else if (phoneNO.startsWith('+85620')) {
-                        setState(() {
-                          phoneController.text =
-                              phoneNO.replaceAll("+85620", "20");
-                        });
-                      } else if (phoneNO.startsWith('85620')) {
-                        setState(() {
-                          phoneController.text =
-                              phoneNO.replaceAll("85620", "20");
-                        });
-                      } else {
-                        setState(() {
-                          phoneController.text = phoneNO;
-                        });
-                      }
-                    }
-                    setState(() {
-                      // _contactName = contact!.displayName.toString();
-                    });
-                  } on FormOperationException catch (e) {
-                    switch (e.errorCode) {
-                      case FormOperationErrorCode.FORM_OPERATION_CANCELED:
-                      case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
-                      case FormOperationErrorCode.FORM_OPERATION_UNKNOWN_ERROR:
-                      default:
-                      // print(e.toString());
-                    }
-                  }
-                }
+                // if (await Permission.contacts.request().isGranted) {
+                //   try {
+                //     final Contact? contact =
+                //         await ContactsService.openDeviceContactPicker();
+                //     if (contact != null) {
+                //       final Item phone = contact.phones!.first;
+                //       String phoneNO = phone.value
+                //           .toString()
+                //           .trim()
+                //           .replaceAll(' ', '')
+                //           .replaceAll('-', '');
+                //       if (phoneNO.startsWith('020')) {
+                //         setState(() {
+                //           phoneController.text =
+                //               phoneNO.replaceAll("020", "20");
+                //         });
+                //       } else if (phoneNO.startsWith('+85620')) {
+                //         setState(() {
+                //           phoneController.text =
+                //               phoneNO.replaceAll("+85620", "20");
+                //         });
+                //       } else if (phoneNO.startsWith('85620')) {
+                //         setState(() {
+                //           phoneController.text =
+                //               phoneNO.replaceAll("85620", "20");
+                //         });
+                //       } else {
+                //         setState(() {
+                //           phoneController.text = phoneNO;
+                //         });
+                //       }
+                //     }
+                //     setState(() {
+                //       // _contactName = contact!.displayName.toString();
+                //     });
+                //   } on FormOperationException catch (e) {
+                //     switch (e.errorCode) {
+                //       case FormOperationErrorCode.FORM_OPERATION_CANCELED:
+                //       case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
+                //       case FormOperationErrorCode.FORM_OPERATION_UNKNOWN_ERROR:
+                //       default:
+                //       // print(e.toString());
+                //     }
+                //   }
+                // }
               },
             )
           ],

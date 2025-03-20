@@ -13,6 +13,7 @@ import 'package:super_app/controllers/esim_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/web/openWebView.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -125,10 +126,33 @@ class _ShowQRESIMScreenState extends State<ShowQRESIMScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextFont(
-                text: esimController.esimDetailModelRes.first.phoneNumber,
-                fontSize: 12,
-                poppin: true,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFont(
+                    text: esimController.esimDetailModelRes.first.data,
+                    fontSize: 12,
+                    poppin: true,
+                  ),
+                  TextFont(
+                    text: " / ",
+                    fontSize: 12,
+                  ),
+                  TextFont(
+                    text: esimController.esimDetailModelRes.first.time,
+                    fontSize: 12,
+                    poppin: true,
+                  ),
+                  TextFont(
+                    text: " / ",
+                    fontSize: 12,
+                  ),
+                  TextFont(
+                    text: esimController.esimDetailModelRes.first.freeCall,
+                    fontSize: 12,
+                    poppin: true,
+                  ),
+                ],
               ),
               TextFont(
                 text: esimController.esimDetailModelRes.first.phoneNumber,
@@ -194,7 +218,18 @@ class _ShowQRESIMScreenState extends State<ShowQRESIMScreen> {
               TextFont(
                 text: esimController.RxMail.value,
                 fontSize: 13,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w400,
+              ),
+              InkWell(
+                onTap: () {
+                  Get.to(OpenWebView(url: "https://onegrab.laotel.com/"));
+                },
+                child: TextFont(
+                  text: "Active this phone number here : ",
+                  fontSize: 13,
+                  underline: true,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),

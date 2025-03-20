@@ -148,17 +148,18 @@ class buildEmailValidate extends StatelessWidget {
 }
 
 class buildPhoneEmailValidate extends StatelessWidget {
-  const buildPhoneEmailValidate({
-    super.key,
-    required this.controller,
-    required this.label,
-    required this.name,
-    required this.hintText,
-    this.icons,
-    this.suffixIcon,
-    this.suffixonTapFuc,
-    this.fillcolor = color_fafa,
-  });
+  const buildPhoneEmailValidate(
+      {super.key,
+      required this.controller,
+      required this.label,
+      required this.name,
+      required this.hintText,
+      this.icons,
+      this.suffixIcon,
+      this.suffixonTapFuc,
+      this.fillcolor = color_fafa,
+      this.textType = TextInputType.text,
+      this.borderColor = color_ddd});
 
   final TextEditingController controller;
   final String name;
@@ -168,13 +169,111 @@ class buildPhoneEmailValidate extends StatelessWidget {
   final Color fillcolor;
   final Widget? suffixIcon;
   final Function()? suffixonTapFuc;
+  final TextInputType textType;
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.0),
       borderSide: BorderSide(
-        color: color_ddd,
+        color: borderColor,
+        width: 1.5,
+      ),
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFont(text: label),
+        SizedBox(height: 8),
+        FormBuilderTextField(
+          name: name,
+          controller: controller,
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.black,
+            fontFamily: 'PoppinsRegular',
+          ),
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+            hintText: hintText.tr,
+            hintStyle: TextStyle(color: color_777),
+            fillColor: fillcolor,
+            filled: true,
+            prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
+            suffixIcon: suffixonTapFuc != null
+                ? Container(
+                    margin: EdgeInsets.only(right: 5),
+                    child: InkWell(
+                      onTap: suffixonTapFuc,
+                      child: suffixIcon,
+                    ),
+                  )
+                : null,
+            counter: SizedBox.shrink(),
+            enabledBorder: border,
+            focusedBorder: border,
+            errorStyle: GoogleFonts.notoSansLao(color: Colors.red),
+            focusedErrorBorder: border,
+            errorBorder: border,
+          ),
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(
+              errorText: 'This field is required.',
+            ),
+            ((value) {
+              if (value == null || value.isEmpty) {
+                return null; // Handled by `required` validator
+              }
+              if (!value.contains('@') && !value.startsWith('20')) {
+                return 'Phone numbers must start with 20XXXXXXXX.';
+              }
+              return null; // No error
+            }),
+          ]),
+          keyboardType: textType,
+        ),
+      ],
+    );
+  }
+}
+
+class buildEmailValidateV2 extends StatelessWidget {
+  const buildEmailValidateV2({
+    super.key,
+    required this.controller,
+    required this.label,
+    required this.name,
+    required this.hintText,
+    this.icons,
+    this.max,
+    this.suffixIcon,
+    this.suffixonTapFuc,
+    this.fillcolor = color_fafa,
+    this.bordercolor = color_ddd,
+    this.textType = TextInputType.number,
+    this.isEmail = true,
+  });
+
+  final TextEditingController controller;
+  final String name;
+  final String label;
+  final String hintText;
+  final IconData? icons;
+  final int? max;
+  final Color fillcolor;
+  final Color bordercolor;
+  final Widget? suffixIcon;
+  final TextInputType? textType;
+  final Function()? suffixonTapFuc;
+  final bool isEmail;
+
+  @override
+  Widget build(BuildContext context) {
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(
+        color: bordercolor,
         width: 1.5,
       ),
     );
@@ -183,35 +282,31 @@ class buildPhoneEmailValidate extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFont(text: label),
-          SizedBox(height: 4),
+          SizedBox(
+            height: 4,
+          ),
           FormBuilderTextField(
             name: name,
             controller: controller,
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.black,
-              fontFamily: 'PoppinsRegular',
+            keyboardType: textType,
+            style: GoogleFonts.poppins(
+              color: cr_7070,
+              fontSize: 12.5.sp,
             ),
             decoration: InputDecoration(
               contentPadding:
                   EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: hintText.tr,
+              hintStyle: GoogleFonts.poppins(
+                color: cr_7070.withOpacity(0.8),
+                fontSize: 12.5.sp,
+              ),
               fillColor: fillcolor,
               filled: true,
-              prefixIcon:
-                  icons != null ? Icon(icons, color: Colors.black) : null,
-              suffixIcon: suffixonTapFuc != null
-                  ? Container(
-                      margin: EdgeInsets.only(right: 5),
-                      child: InkWell(
-                        onTap: suffixonTapFuc,
-                        child: suffixIcon,
-                      ),
-                    )
-                  : null,
               counter: SizedBox.shrink(),
               enabledBorder: border,
               focusedBorder: border,
+              //! error border
               errorStyle: GoogleFonts.notoSansLao(color: Colors.red),
               focusedErrorBorder: border,
               errorBorder: border,
@@ -220,17 +315,17 @@ class buildPhoneEmailValidate extends StatelessWidget {
               FormBuilderValidators.required(
                 errorText: 'This field is required.',
               ),
-              ((value) {
-                if (value == null || value.isEmpty) {
-                  return null; // Handled by `required` validator
-                }
-                if (!value.contains('@') && !value.startsWith('20')) {
-                  return 'Phone numbers must start with 20XXXXXXXX.';
-                }
-                return null; // No error
-              }),
+              if (isEmail)
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return null;
+                  }
+                  if (!value.contains('@gmail.com')) {
+                    return ' must be @gmail.com';
+                  }
+                  return null; // No error
+                },
             ]),
-            keyboardType: TextInputType.text,
           ),
         ],
       ),
@@ -421,15 +516,19 @@ class _buildPasswordFieldState extends State<buildPasswordField> {
           FormBuilderTextField(
             name: widget.name,
             controller: widget.controller,
-            style: GoogleFonts.notoSansLao(fontSize: 13.sp, color: Colors.black),
+            style:
+                GoogleFonts.notoSansLao(fontSize: 13.sp, color: Colors.black),
             obscureText: _obscureText, // Password hidden by default
             enabled: widget.isEditable,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: widget.hintText.tr,
               hintStyle: languageCode == 'lo'
-                  ? GoogleFonts.notoSansLao(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp)
-                  : GoogleFonts.poppins(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp),
+                  ? GoogleFonts.notoSansLao(
+                      color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp)
+                  : GoogleFonts.poppins(
+                      color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp),
               fillColor: widget.fillcolor,
               filled: true,
               suffixIcon: IconButton(
@@ -898,13 +997,8 @@ class buildDropDown_return_Value_Name_Validate extends StatelessWidget {
             ]),
             items: dataObject.map((data) {
               int months = int.parse(data[colName].toString());
-              int years = months ~/ 12;
-              int remainingMonths = months % 12;
-              String displayText = years > 0
-                  ? (remainingMonths > 0
-                      ? "$years Year${years > 1 ? 's' : ''} $remainingMonths Month${remainingMonths > 1 ? 's' : ''}"
-                      : "$years Year${years > 1 ? 's' : ''}")
-                  : "$months Month${months > 1 ? 's' : ''}";
+
+              String displayText = "$months ເດືອນ";
               return DropdownMenuItem(
                 value:
                     '${data[valName].toString()}-${data[colName].toString()}',

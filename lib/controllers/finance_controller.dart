@@ -9,10 +9,14 @@ import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/finance_account_model.dart';
 import 'package:super_app/models/finance_model.dart';
+import 'package:super_app/models/menu_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:intl/intl.dart';
+import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/finance_institution/PaymentFinanceScreen.dart';
+import 'package:super_app/views/reusable_template/reusable_result.dart';
 
 class FinanceController extends GetxController {
   final HomeController homeController = Get.find();
@@ -35,6 +39,7 @@ class FinanceController extends GetxController {
   RxString rxNote = ''.obs;
   RxString rxFee = '0'.obs;
   RxString rxPaymentAmount = ''.obs;
+  final RxBool enableBottom = true.obs;
 
   //! Log
   var logVerify;
@@ -42,17 +47,27 @@ class FinanceController extends GetxController {
   var logPaymentRes;
 
   fetchInstitution() async {
-    List<String> urlSplit = homeController.menudetail.value.url.toString().split(";");
+    List<String> urlSplit =
+        homeController.menudetail.value.url.toString().split(";");
     var url = urlSplit[0];
-    var response = await DioClient.postEncrypt(loading: false, url, key: 'backup', {});
-    financeModel.value = response.map<FinanceModel>((json) => FinanceModel.fromJson(json)).toList();
+    var response =
+        await DioClient.postEncrypt(loading: false, url, key: 'backup', {});
+    financeModel.value = response
+        .map<FinanceModel>((json) => FinanceModel.fromJson(json))
+        .toList();
   }
 
   getToken() async {
-    List<String> urlSplit = homeController.menudetail.value.url.toString().split(";");
+    List<String> urlSplit =
+        homeController.menudetail.value.url.toString().split(";");
     var url = urlSplit[1];
     // var url = "/Finance/token";
-    var body = {'client_id': storage.read('msisdn'), 'client_secret': '77a6891ea6af486f90f7ccd1a6bf77d5', 'username': 'MmoneyX', 'password': '1@qqasx3\$dfi'};
+    var body = {
+      'client_id': storage.read('msisdn'),
+      'client_secret': '77a6891ea6af486f90f7ccd1a6bf77d5',
+      'username': 'MmoneyX',
+      'password': '1@qqasx3\$dfi'
+    };
     var response = await DioClient.postEncrypt(
       url,
       body,
@@ -65,8 +80,10 @@ class FinanceController extends GetxController {
   }
 
   verifyAccount() async {
-    rxTransID.value = homeController.menudetail.value.description! + await randomNumber().fucRandomNumber();
-    List<String> urlSplit = homeController.menudetail.value.url.toString().split(";");
+    rxTransID.value = homeController.menudetail.value.description! +
+        await randomNumber().fucRandomNumber();
+    List<String> urlSplit =
+        homeController.menudetail.value.url.toString().split(";");
     var url = urlSplit[2];
     // var url = "/Finance/verify";
     var body = {
@@ -83,7 +100,7 @@ class FinanceController extends GetxController {
       financeAccModel.value = FinanceAccountModel.fromJson(response);
       rxAccNo.value = financeAccModel.value.accno!;
       rxAccName.value = financeAccModel.value.name!;
-      Get.toNamed("/paymentFinace");
+      Get.to(PaymentFinanceScreen());
     } else {
       DialogHelper.showErrorDialogNew(description: response["msg"]);
     }
@@ -108,7 +125,8 @@ class FinanceController extends GetxController {
         financeModelDetail.value.title,
       );
       if (response["resultCode"] == 0) {
-        List<String> urlSplit = homeController.menudetail.value.url.toString().split(";");
+        List<String> urlSplit =
+            homeController.menudetail.value.url.toString().split(";");
         url = urlSplit[3];
         // url = "/Finance/confirm";
         data = {
@@ -127,12 +145,13 @@ class FinanceController extends GetxController {
         // logController.insertBeforePayment(
         //     homeController.menudetail.value.groupNameEN, data);
 
-        var response = await DioClient.postEncrypt(url, data, key: 'backup', bearer: rxAccessToken.value);
+        var response = await DioClient.postEncrypt(url, data,
+            key: 'backup', bearer: rxAccessToken.value);
         //! save log
         logPaymentReq = data;
         logPaymentRes = response;
         logController.insertAllLog(
-          "homeController.menudetail.value.groupNameEN.toString()",
+          homeController.menudetail.value.groupNameEN.toString(),
           rxTransID.value,
           financeModelDetail.value.logo!,
           financeModelDetail.value.title!,
@@ -151,7 +170,22 @@ class FinanceController extends GetxController {
           rxTimeStamp.value = response["created"];
           rxPaymentAmount.value = response['amount'].toString();
           saveHistoryFinnace(rxAccNo.value, rxAccName.value);
-          Get.toNamed("/resultFinace");
+          Get.to(ReusableResultScreen(
+            fromAccountImage:
+                userController.userProfilemodel.value.profileImg ??
+                    MyConstant.profile_default,
+            fromAccountName: userController.profileName.value,
+            fromAccountNumber: userController.rxMsisdn.value,
+            toAccountImage: MyConstant.profile_default,
+            toAccountName: rxAccName.value,
+            toAccountNumber: rxAccNo.value,
+            toTitleProvider: '',
+            amount: rxPaymentAmount.toString(),
+            fee: fn.format(double.parse(rxFee.value)),
+            transactionId: rxTransID.value,
+            note: rxNote.value,
+            timestamp: rxTimeStamp.value,
+          ));
         } else {
           DialogHelper.showErrorWithFunctionDialog(
               description: response['msg'],
@@ -181,11 +215,14 @@ class FinanceController extends GetxController {
       ];
       await box.write('historyFinance', json.encode(myData0));
     } else {
-      List<Map<String, dynamic>> myData = (json.decode(myDataString) as List).map((item) => item as Map<String, dynamic>).toList();
+      List<Map<String, dynamic>> myData = (json.decode(myDataString) as List)
+          .map((item) => item as Map<String, dynamic>)
+          .toList();
       bool exists = false;
       for (var item in myData) {
         if (item['msisdn'] == msisdn) {
-          item['timeStamp'] = DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
+          item['timeStamp'] =
+              DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
           exists = true;
           break;
         }
@@ -200,4 +237,157 @@ class FinanceController extends GetxController {
       await box.write('historyFinance', json.encode(myData));
     }
   }
+
+  void paymentProcessVisa(
+      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    userController.fetchBalance();
+    var url;
+    var data;
+    var response;
+    rxFee.value = financeModelDetail.value.fee!;
+    rxTransID.value =
+        "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+
+    if (await paymentController.paymentByVisaMasterCard(
+      rxTransID.value,
+      rxNote.value,
+      int.parse(rxPaymentAmount.value),
+      storedCardUniqueID,
+      cvvCode,
+    )) {
+      List<String> urlSplit =
+          homeController.menudetail.value.url.toString().split(";");
+      url = urlSplit[3];
+      data = {
+        "Id": financeModelDetail.value.id,
+        "TranID": rxTransID.value,
+        "AccNo": rxAccNo.value,
+        "PhoneUser": storage.read('msisdn'),
+        "AccName": rxAccName.value,
+        "Amount": rxPaymentAmount.value,
+        "Fee": rxFee.value,
+        "Remark": rxNote.value,
+        "token": rxAccessToken.value
+      };
+      var response = await DioClient.postEncrypt(url, data,
+          key: 'backup', bearer: rxAccessToken.value);
+      logPaymentReq = data;
+      logPaymentRes = response;
+      logController.insertAllLog(
+        homeController.menudetail.value.groupNameEN.toString(),
+        rxTransID.value,
+        financeModelDetail.value.logo!,
+        financeModelDetail.value.title!,
+        rxAccNo.value,
+        rxAccName.value,
+        rxPaymentAmount.value,
+        0,
+        rxFee.value,
+        rxNote.value,
+        logVerify,
+        logPaymentReq,
+        logPaymentRes,
+      );
+      if (response['code'] == 0) {
+        rxTimeStamp.value = response["created"];
+        rxPaymentAmount.value = response['amount'].toString();
+        saveHistoryFinnace(rxAccNo.value, rxAccName.value);
+        enableBottom.value = true;
+        Get.to(ReusableResultScreen(
+          isUSD: true,
+          fromAccountImage: userController.userProfilemodel.value.profileImg ??
+              MyConstant.profile_default,
+          fromAccountName: userController.profileName.value,
+          fromAccountNumber: userController.rxMsisdn.value,
+          toAccountImage: MyConstant.profile_default,
+          toAccountName: rxAccName.value,
+          toAccountNumber: rxAccNo.value,
+          toTitleProvider: '',
+          amount: rxPaymentAmount.toString(),
+          fee: fn.format(double.parse(rxFee.value)),
+          transactionId: rxTransID.value,
+          note: rxNote.value,
+          timestamp: rxTimeStamp.value,
+        ));
+      } else {
+        enableBottom.value = true;
+        DialogHelper.showErrorWithFunctionDialog(
+            description: response['msg'],
+            onClose: () {
+              Get.close(userController.pageclose.value);
+            });
+      }
+    } else {
+      enableBottom.value = true;
+    }
+  }
+
+  // void paymentProcessVisaWithoutstoredCardUniqueID(Menulists menudetail) async {
+  //   userController.fetchBalance();
+  //   var url;
+  //   var data;
+  //   rxFee.value = financeModelDetail.value.fee!;
+  //   List<String> urlSplit =
+  //       homeController.menudetail.value.url.toString().split(";");
+  //   url = urlSplit[3];
+  //   data = {
+  //     "Id": financeModelDetail.value.id,
+  //     "TranID": rxTransID.value,
+  //     "AccNo": rxAccNo.value,
+  //     "PhoneUser": storage.read('msisdn'),
+  //     "AccName": rxAccName.value,
+  //     "Amount": rxPaymentAmount.value,
+  //     "Fee": rxFee.value,
+  //     "Remark": rxNote.value,
+  //     "token": rxAccessToken.value
+  //   };
+  //   var response = await DioClient.postEncrypt(url, data,
+  //       key: 'backup', bearer: rxAccessToken.value);
+  //   logPaymentReq = data;
+  //   logPaymentRes = response;
+  //   logController.insertAllLog(
+  //     homeController.menudetail.value.groupNameEN.toString(),
+  //     rxTransID.value,
+  //     financeModelDetail.value.logo!,
+  //     financeModelDetail.value.title!,
+  //     rxAccNo.value,
+  //     rxAccName.value,
+  //     rxPaymentAmount.value,
+  //     0,
+  //     rxFee.value,
+  //     rxNote.value,
+  //     logVerify,
+  //     logPaymentReq,
+  //     logPaymentRes,
+  //   );
+  //   if (response['code'] == 0) {
+  //     rxTimeStamp.value = response["created"];
+  //     rxPaymentAmount.value = response['amount'].toString();
+  //     saveHistoryFinnace(rxAccNo.value, rxAccName.value);
+  //     enableBottom.value = true;
+  //     Get.to(ReusableResultScreen(
+  //       isUSD: true,
+  //       fromAccountImage: userController.userProfilemodel.value.profileImg ??
+  //           MyConstant.profile_default,
+  //       fromAccountName: userController.profileName.value,
+  //       fromAccountNumber: userController.rxMsisdn.value,
+  //       toAccountImage: MyConstant.profile_default,
+  //       toAccountName: rxAccName.value,
+  //       toAccountNumber: rxAccNo.value,
+  //       toTitleProvider: '',
+  //       amount: rxPaymentAmount.toString(),
+  //       fee: fn.format(double.parse(rxFee.value)),
+  //       transactionId: rxTransID.value,
+  //       note: rxNote.value,
+  //       timestamp: rxTimeStamp.value,
+  //     ));
+  //   } else {
+  //     enableBottom.value = true;
+  //     DialogHelper.showErrorWithFunctionDialog(
+  //         description: response['msg'],
+  //         onClose: () {
+  //           Get.close(userController.pageclose.value);
+  //         });
+  //   }
+  // }
 }

@@ -7,6 +7,7 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/cashout_model.dart';
 import 'package:super_app/models/payment_method_mode.dart';
 import 'package:super_app/services/api/dio_client.dart';
+import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/checksum_util.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
@@ -24,9 +25,13 @@ class PaymentController extends GetxController {
 
   RxBool loading = false.obs;
 
-  getPaymentMethods() async {
+  getPaymentMethods(int service) async {
+    print(service);
     var url = "/SuperApi/Info/PaymentList";
-    var body = {"owner": "2052768833"};
+    var body = {
+      "owner": userController.userProfilemodel.value.msisdn,
+      "service": service
+    };
     var response = await DioClient.postEncrypt(loading: false, url, body);
     if (response != null && response is List) {
       paymentMethods.value = response
@@ -37,13 +42,47 @@ class PaymentController extends GetxController {
     }
   }
 
-  updatePaymentMethod(String owner, String payment_type) async {
+  addPaymentMethod(String numberController, String expiryController,
+      String cvvController, String nameController, String cardType) async {
+    var url = "/CallBack_Visa_JDB/NonUi";
+    var body = {
+      "cardNumber": numberController,
+      "cardExpiryMMYY": expiryController,
+      "cvvCode": cvvController,
+      "payerName": nameController,
+      "channel": "MMONEYX",
+      "owner": "MMONEYX",
+      "lmm_tranid": 'XAX${await randomNumber().fucRandomNumber()}',
+      "description": "Add Card",
+      "amountkip": 1000,
+      "walletnumber": userController.rxMsisdn.value,
+      "paymentTypeFromApp": cardType,
+      "remeberCard": true,
+      "refund": true
+    };
+    var response = await DioClient.postEncrypt(loading: true, url, body);
+    if (response['success'] == true) {
+      loading.value = false;
+      await getPaymentMethods(-1);
+      DialogHelper.showSuccessWithMascot(
+        onClose: () => {Get.back()},
+        title: 'save_success',
+      );
+      return true;
+    } else {
+      DialogHelper.showErrorDialogNew(description: response['data']);
+      loading.value = false;
+      return false;
+    }
+  }
+
+  updatePaymentMethod(String owner, int id) async {
     var url = "/SuperApi/Info/UpdatePaymentList";
-    var body = {"owner": owner, "payment_type": payment_type};
+    var body = {"owner": owner, "id": id};
     var response = await DioClient.postEncrypt(loading: true, url, body);
     if (response['code'] == "0") {
       loading.value = false;
-      getPaymentMethods();
+      getPaymentMethods(-1);
       return true;
     } else {
       DialogHelper.showErrorDialogNew(description: response['resultDesc']);
@@ -52,13 +91,13 @@ class PaymentController extends GetxController {
     }
   }
 
-  deletePaymentMethod(String owner, String payment_type) async {
+  deletePaymentMethod(String owner, int id) async {
     var url = "/SuperApi/Info/DeletePaymentList";
-    var body = {"owner": owner, "payment_type": payment_type};
+    var body = {"owner": owner, "id": id};
     var response = await DioClient.postEncrypt(loading: true, url, body);
     if (response['code'] == "0") {
       loading.value = false;
-      getPaymentMethods();
+      getPaymentMethods(-1);
       return true;
     } else {
       loading.value = false;
@@ -106,6 +145,7 @@ class PaymentController extends GetxController {
     };
     var response = await DioClient.postEncrypt(url, body,
         key: 'openkey', token: rxTokenCashOut.value);
+
     if (response['resultCode'] == "0000") {
       reqCashOutModel.value = RequestCashoutModel.fromJson(response);
       isSuccess = true;
@@ -124,6 +164,7 @@ class PaymentController extends GetxController {
     var response;
     var url = "${MyConstant.urlCashOut}/CashOut";
     var body = jsonEncode(reqCashOutModel.value);
+    print(body);
     response = await DioClient.postEncrypt(url, body,
         key: 'openkey', token: rxTokenCashOut.value);
     logController.insertCashOutLog(
@@ -162,5 +203,84 @@ class PaymentController extends GetxController {
     var response =
         await DioClient.postEncrypt('${MyConstant.urlGateway}/CashOut', data);
     return response;
+  }
+
+  Future<bool> paymentByVisaMasterCard(
+      trainID, description, amountkip, storedCardUniqueID, cvvCode) async {
+    var url = "/CallBack_Visa_JDB/NonUi";
+    var body = {
+      "lmm_tranid": trainID,
+      "channel": "MMONEYX",
+      "owner": "MMONEYX",
+      "description": description,
+      "amountkip": amountkip,
+      "walletnumber": userController.rxMsisdn.value,
+      "storedCardUniqueID": storedCardUniqueID,
+      "cvvCode": cvvCode
+    };
+    var response = await DioClient.postEncrypt(url, body);
+    logController.insertCashOutbyVisaMasterCardLog(
+      trainID,
+      userController.rxMsisdn.value,
+      homeController.menudetail.value.groupNameEN,
+      response,
+    );
+    if (response['success'] == true) {
+      print("object successs");
+      return true;
+    } else {
+      print("object faile");
+      DialogHelper.showErrorWithFunctionDialog(
+          description: 'please_check_cvv_code',
+          onClose: () {
+            Get.close(4);
+          });
+      return false;
+    }
+  }
+
+  Future<bool> paymentCardWithoutstoredCardUniqueID(
+    String trainID,
+    String numberController,
+    String expiryController,
+    String cvvController,
+    String nameController,
+    String cardType,
+    String description,
+    int amount,
+    bool remember,
+  ) async {
+    var url = "/CallBack_Visa_JDB/NonUi";
+    var body = {
+      "cardNumber": numberController,
+      "cardExpiryMMYY": expiryController,
+      "cvvCode": cvvController,
+      "payerName": nameController,
+      "channel": "MMONEYX",
+      "owner": "MMONEYX",
+      "lmm_tranid": trainID,
+      "description": description,
+      "amountkip": amount,
+      "walletnumber": userController.rxMsisdn.value,
+      "paymentTypeFromApp": cardType,
+      "remeberCard": remember
+    };
+    var response = await DioClient.postEncrypt(url, body);
+    logController.insertCashOutbyVisaMasterCardLog(
+      trainID,
+      userController.rxMsisdn.value,
+      homeController.menudetail.value.groupNameEN,
+      response,
+    );
+    if (response['success'] == true) {
+      return true;
+    } else {
+      DialogHelper.showErrorWithFunctionDialog(
+          description: 'please_check_cvv_code',
+          onClose: () {
+            Get.close(4);
+          });
+      return false;
+    }
   }
 }

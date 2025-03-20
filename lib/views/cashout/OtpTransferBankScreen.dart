@@ -208,7 +208,6 @@ class _OtpTransferBankScreenState extends State<OtpTransferBankScreen> {
   }
 
   Future _otpProcess(String otp) async {
-    cashOutController.loading.value = true;
     cashOutController.confirmOtpPayment(pinController.text);
   }
 }

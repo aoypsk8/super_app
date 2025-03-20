@@ -13,6 +13,7 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/web/openWebView.dart';
+import 'package:super_app/views/webview/webapp_webview.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/pull_refresh.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -51,7 +52,8 @@ class _ServicePageState extends State<ServicePage> {
               var menuModelItem = homeController.menuModel[menuIndex];
               return Container(
                 margin: EdgeInsets.only(bottom: 10),
-                padding: EdgeInsets.only(right: 26, left: 26, top: 12, bottom: 15),
+                padding:
+                    EdgeInsets.only(right: 26, left: 26, top: 12, bottom: 15),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
@@ -77,7 +79,7 @@ class _ServicePageState extends State<ServicePage> {
                       width: 13.w,
                       height: 3,
                       decoration: BoxDecoration(
-                        color: cr_ef33,
+                        color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(3),
                       ),
                     ),
@@ -94,53 +96,67 @@ class _ServicePageState extends State<ServicePage> {
                         itemBuilder: (BuildContext context, int index) {
                           var result = menuModelItem.menulists![index];
                           String? url = result.logo;
-                          String? updatedUrl = url!.replaceFirst(
-                            'https://mmoney.la',
-                            'https://gateway.ltcdev.la/AppImage',
-                          );
+                          if (url != null && homeController.TPlus_theme.value) {
+                            url = url.replaceFirst("icons/", "icons/y");
+                          } else {
+                            url = url!.replaceFirst("icons/", "icons/");
+                          }
+
                           return InkWell(
                             onTap: () async {
-                              // await homeController.clear();
-                              // print(result.template);
-                              // if (!userController.isCheckToken.value) {
-                              //   userController.isCheckToken.value = true;
-                              //   if (result.template == "proof") {
-                              //     homeController.menutitle.value = result.groupNameEN!;
-                              //     homeController.menudetail.value = result;
-                              //     qrController.fetchProofLists();
+                              await homeController.clear();
+                              if (!userController.isCheckToken.value) {
+                                userController.isCheckToken.value = true;
+                                if (result.template == "proof") {
+                                  homeController.menutitle.value =
+                                      result.groupNameEN!;
+                                  homeController.menudetail.value = result;
+                                  qrController.fetchProofLists();
 
-                              //     Get.toNamed('/${result.template}');
-                              //   } else {
-                              //     userController.checktoken(name: 'menu').then((value) {
-                              //       if (userController.isLogin.value) {
-                              //         if (result.template != '/') {
-                              //           homeController.menutitle.value = result.groupNameEN!;
-                              //           homeController.menudetail.value = result;
-                              //           if (result.template == "webview") {
-                              //             Get.to(
-                              //               OpenWebView(url: homeController.menudetail.value.url.toString()),
-                              //             );
-                              //           } else {
-                              //             Get.toNamed('/${result.template}');
-                              //           }
-                              //         } else {
-                              //           DialogHelper.showErrorDialogNew(
-                              //             description: 'Not available',
-                              //           );
-                              //         }
-                              //       }
-                              //     });
-                              //   }
-                              //   userController.isCheckToken.value = false;
-                              // }
+                                  Get.toNamed('/${result.template}');
+                                } else {
+                                  userController.isRenewToken.value = true;
+                                  bool isValidToken =
+                                      await userController.checktokenSuperApp();
+                                  if (isValidToken) {
+                                    if (result.template != '/') {
+                                      homeController.menutitle.value =
+                                          result.groupNameEN!;
+                                      homeController.menudetail.value = result;
+                                      if (result.template == "webview") {
+                                        // Get.to(
+                                        //   OpenWebView(
+                                        //       url: homeController
+                                        //           .menudetail.value.url
+                                        //           .toString()),
+                                        // );
+                                        Get.to(
+                                          WebappWebviewScreen(
+                                            urlWidget: homeController
+                                                .menudetail.value.url
+                                                .toString(),
+                                          ),
+                                        );
+                                      } else {
+                                        Get.toNamed('/${result.template}');
+                                      }
+                                    } else {
+                                      DialogHelper.showErrorDialogNew(
+                                          description: 'Not available');
+                                    }
+                                  }
+                                }
+                                userController.isCheckToken.value = false;
+                              }
                             },
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 SizedBox(height: 6),
                                 SvgPicture.network(
-                                  updatedUrl,
-                                  placeholderBuilder: (BuildContext context) => Container(
+                                  url!,
+                                  placeholderBuilder: (BuildContext context) =>
+                                      Container(
                                     padding: const EdgeInsets.all(5.0),
                                     child: const CircularProgressIndicator(),
                                   ),

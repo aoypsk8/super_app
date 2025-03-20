@@ -119,11 +119,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           children: [
                                             TextFont(
                                               text:
-                                                  '${data.type == 'OUT' ? '-' : '+'}${fn.format(double.parse('${data.amount}'))}',
+                                                  '${data.type == 'OUT' ? '-' : '+'}${fn.format(data.amount is int ? data.amount.toDouble() : data.amount)}',
                                               fontWeight: FontWeight.w500,
                                               fontSize: 16,
                                               color: data.type == 'OUT'
-                                                  ? cr_b326
+                                                  ? Theme.of(context)
+                                                      .primaryColor
                                                   : Colors.green,
                                               poppin: true,
                                             ),
@@ -131,9 +132,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               text: '.00LAK',
                                               fontWeight: FontWeight.w500,
                                               color: data.type == 'OUT'
-                                                  ? cr_b326
+                                                  ? Theme.of(context)
+                                                      .primaryColor
                                                   : Colors.green,
                                               poppin: true,
+                                              fontSize: 11,
                                             ),
                                           ],
                                         ),
@@ -198,32 +201,40 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Widget getIcon(HistoryModel data) {
-    switch (data.channel) {
-      case 'Mobile':
+    // Debugging Output
+    print("Channel (Processed): '${data.channel?.trim().toUpperCase()}'");
+    switch (data.channel?.trim().toUpperCase()) {
+      case 'MOBILE':
         return SvgPicture.asset(MyIcon.ic_telecom);
-      case 'Transfer':
+      case 'TRANSFER':
         return SvgPicture.asset(
             data.type == "OUT" ? MyIcon.ic_cashout : MyIcon.ic_cashout);
       case 'QR':
         return SvgPicture.asset(MyIcon.ic_cashout);
-      case 'Leasing':
+      case 'LEASING':
         return SvgPicture.asset(MyIcon.ic_leasing);
-      case 'Water':
+      case 'WATER':
         return SvgPicture.asset(MyIcon.ic_water);
-      case 'Electric':
+      case 'ELECTRIC':
         return SvgPicture.asset(MyIcon.ic_electric);
-      case 'Bank':
+      case 'BANK':
         return SvgPicture.asset(MyIcon.ic_bank);
-      case 'CashBack':
+      case 'CASHBACK':
         return SvgPicture.asset(MyIcon.ic_cashout);
-      case 'Promotion':
+      case 'PROMOTION':
         return SvgPicture.asset(MyIcon.ic_cashout);
-      // case 'FeeCharge':
-      //   return SvgPicture.asset(MyIcon.ic_f);
-      // case 'Payroll':
-      //   return SvgPicture.asset(MyIcon.his_cashin);
-      // case 'Lottery':
-      //   return SvgPicture.asset(MyIcon.his_lotto);
+      case 'SCNLOTTO':
+        return SvgPicture.asset(MyIcon.ic_cashout);
+      case 'FEECHARGE':
+        return SvgPicture.asset(MyIcon.ic_cashout);
+      case 'LABNET':
+        return SvgPicture.asset(MyIcon.ic_cashout);
+      case 'CASH-IN':
+        return SvgPicture.asset(MyIcon.ic_cashout);
+      case 'PAYROLL':
+        return SvgPicture.asset(MyIcon.ic_cashout);
+      case 'WETV':
+        return SvgPicture.asset(MyIcon.ic_cashout);
       default:
         return SvgPicture.asset(MyIcon.ic_more);
     }

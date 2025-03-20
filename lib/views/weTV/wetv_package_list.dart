@@ -9,12 +9,17 @@ import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/controllers/wetv_controller.dart';
 import 'package:super_app/models/wetv_model.dart';
+import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
-import 'package:super_app/views/weTV/confirm_weTV.dart';
+import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/widget/buildAppBar.dart';
+import 'package:super_app/widget/build_pay_visa.dart';
 import 'package:super_app/widget/build_step_process.dart';
+import 'package:super_app/widget/input_cvv.dart';
 import 'package:super_app/widget/textfont.dart';
 import 'package:intl/intl.dart';
 
@@ -265,12 +270,44 @@ class buildWeTvCard extends StatelessWidget {
       onTap: () {
         weTVController.wetvdetail.value = e;
         Get.to(ListsPaymentScreen(
-          description: 'select_payment',
+          description: homeController.menudetail.value.appid!,
           stepBuild: '2/3',
           title: homeController.getMenuTitle(),
-          onSelectedPayment: () {
-            Get.to(() => ConfirmWeTVScreen());
-            return Container();
+          onSelectedPayment: (paymentType, cardIndex, uuid) async {
+            if (paymentType == "Other") {
+              // homeController.RxamountUSD.value = await homeController
+              //     .convertRate(weTVController.wetvdetail.value.price!);
+              // weTVController.rxTransID.value =
+              //     "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+              // Get.to(PaymentVisaMasterCard(
+              //   function: () {
+              //     weTVController.wetvpaymentVisaWithoutstoredCardUniqueID(
+              //       weTVController.wetvdetail.value.price!,
+              //       homeController.menudetail.value,
+              //     );
+              //   },
+              //   trainID: weTVController.rxTransID.value,
+              //   description: weTVController.rxNote.value,
+              //   amount: weTVController.wetvdetail.value.price!,
+              // ));
+            } else if (paymentType == 'MMONEY') {
+              navigateToConfirmScreen(paymentType);
+            } else {
+              homeController.RxamountUSD.value = await homeController
+                  .convertRate(weTVController.wetvdetail.value.price!);
+              String? cvv = await showDynamicQRDialog(context, () {});
+              if (cvv != null && cvv.isNotEmpty && cvv.length >= 3) {
+                navigateToConfirmScreen(
+                  paymentType,
+                  cvv,
+                  uuid,
+                );
+              } else {
+                DialogHelper.showErrorDialogNew(
+                  description: "please_input_cvv",
+                );
+              }
+            }
           },
         ));
       },
@@ -311,5 +348,48 @@ class buildWeTvCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void navigateToConfirmScreen(String paymentType,
+      [String cvv = '', String storedCardUniqueID = '']) {
+    Get.to(() => ReusableConfirmScreen(
+          isUSD: paymentType != 'MMONEY',
+          appbarTitle: "confirm_payment",
+          isEnabled: weTVController.enableBottom,
+          function: () {
+            weTVController.enableBottom.value = false;
+            if (paymentType == 'MMONEY') {
+              var amount = weTVController.wetvdetail.value.price
+                  .toString()
+                  .replaceAll(new RegExp(r'[^\w\s]+'), '');
+              weTVController.wetvpayment(amount);
+            } else {
+              var amount = weTVController.wetvdetail.value.price
+                  .toString()
+                  .replaceAll(new RegExp(r'[^\w\s]+'), '');
+              weTVController.wetvpaymentVisa(
+                amount,
+                homeController.menudetail.value,
+                storedCardUniqueID,
+                cvv,
+              );
+            }
+          },
+          stepProcess: "3/3",
+          stepTitle: "check_detail",
+          fromAccountImage: userController.userProfilemodel.value.profileImg ??
+              MyConstant.profile_default,
+          fromAccountName:
+              '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+          fromAccountNumber:
+              userController.userProfilemodel.value.msisdn.toString(),
+          toAccountImage: weTVController.wetvdetail.value.logo ?? '',
+          toAccountName: weTVController.title.value, // Fixed swapped values
+          toAccountNumber:
+              "${weTVController.wetvdetail.value.day.toString()} Days",
+          amount: weTVController.wetvdetail.value.price.toString(),
+          fee: weTVController.rxFee.value, // Prevent null error
+          note: weTVController.rxNote.value,
+        ));
   }
 }

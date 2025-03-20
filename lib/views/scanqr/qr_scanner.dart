@@ -25,7 +25,8 @@ class QRScannerScreen extends StatelessWidget {
               final List<Barcode> barcodes = capture.barcodes;
               for (final barcode in barcodes) {
                 if (!isProcessing && barcode.rawValue != null) {
-                  isProcessing = true; // Set flag to true to prevent duplicates.
+                  isProcessing =
+                      true; // Set flag to true to prevent duplicates.
                   String code = barcode.rawValue!;
                   Get.back(result: code); // Send scanned data back.
                   break;
@@ -48,7 +49,8 @@ class QRScannerScreen extends StatelessWidget {
                   height: 85.w,
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.1),
-                    border: Border.all(color: Theme.of(context).primaryColor, width: 4),
+                    border: Border.all(
+                        color: Theme.of(context).primaryColor, width: 4),
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
@@ -115,7 +117,8 @@ class QRScannerScreen extends StatelessWidget {
   /// Scan QR code from an image
   Future<String?> _scanQRCodeFromImage(String imagePath) async {
     try {
-      final BarcodeCapture? capture = await scannerController.analyzeImage(imagePath);
+      final BarcodeCapture? capture =
+          await scannerController.analyzeImage(imagePath);
       if (capture != null && capture.barcodes.isNotEmpty) {
         return capture.barcodes.first.rawValue;
       }

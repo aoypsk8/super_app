@@ -34,37 +34,39 @@ class _buildHistoryCashOutRecentState extends State<buildHistoryCashOutRecent> {
   @override
   void initState() {
     super.initState();
-
     Future.delayed(Duration(milliseconds: 200), () {
       _loadData();
     });
-    cashOutController.fetchRecentBank();
     _loadData();
   }
 
   _loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jsonData = prefs.getString('historyCashout');
+
     if (jsonData != null) {
       List<dynamic> data = json.decode(jsonData);
       if (data.isNotEmpty) {
-        print("HistoryCashout data exists: $data");
-        // Sort data alphabetically by 'AccName'
-        List<Map<String, dynamic>> sortedData =
-            List<Map<String, dynamic>>.from(data).take(5).toList();
-        var searchResult = sortedData.firstWhere(
-          (item) => item['id'] == cashOutController.rxCodeBank.value,
-          orElse: () => {}, // Return null if no match is found
-        );
+        List<Map<String, dynamic>> historyList =
+            List<Map<String, dynamic>>.from(data).take(20).toList();
+        String searchId = cashOutController.rxCodeBank.value.toString().trim();
+        List<Map<String, dynamic>> filteredHistory = historyList
+            .where((item) => item['id'].toString().trim() == searchId)
+            .toList();
         setState(() {
-          historyData = searchResult != null ? [searchResult] : [];
+          historyData = filteredHistory;
         });
       } else {
-        print("HistoryCashout is empty.");
+        setState(() {
+          historyData = [];
+        });
       }
     } else {
-      print("No HistoryCashout data found in localStorage.");
+      setState(() {
+        historyData = [];
+      });
     }
+    print("Final historyData: $historyData");
   }
 
   void _saveFavoriteCashout(
@@ -195,8 +197,8 @@ class _buildHistoryCashOutRecentState extends State<buildHistoryCashOutRecent> {
                       },
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 10, top: 5),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: EdgeInsets.only(
+                            left: 10, right: 10, top: 5, bottom: 10),
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(color: cr_ecec),
@@ -222,7 +224,7 @@ class _buildHistoryCashOutRecentState extends State<buildHistoryCashOutRecent> {
                                         children: [
                                           TextFont(
                                             text: historyData[index]['AccName'],
-                                            fontSize: 9,
+                                            fontSize: 12,
                                             color: cr_2929,
                                             fontWeight: FontWeight.w400,
                                           ),
@@ -230,7 +232,7 @@ class _buildHistoryCashOutRecentState extends State<buildHistoryCashOutRecent> {
                                             text: maskAccountNumber(
                                                 historyData[index]['AccNo']
                                                     .toString()),
-                                            fontSize: 9,
+                                            fontSize: 11,
                                             color: cr_7070,
                                             fontWeight: FontWeight.w400,
                                           ),

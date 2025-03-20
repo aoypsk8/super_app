@@ -7,8 +7,10 @@ import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/TicketHistoryModel.dart';
 import 'package:super_app/models/TicketListsModel.dart';
+import 'package:super_app/models/menu_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:intl/intl.dart';
+import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/reusableResultWithCode.dart';
 import '../utility/dialog_helper.dart';
@@ -31,7 +33,7 @@ class TicketController extends GetxController {
   RxString rxPaymentAmount = ''.obs;
   RxString rxNote = ''.obs;
   RxString rxticketCode = ''.obs;
-
+  final RxBool enableBottom = true.obs;
   var logPaymentReq;
   var logPaymentRes;
 
@@ -174,4 +176,148 @@ class TicketController extends GetxController {
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     }
   }
+
+  paymentProcessVisa(
+      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    userController.fetchBalance();
+    var data;
+    var url;
+    var response;
+    rxFee.value = '0';
+    rxTransID.value =
+        "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+    if (await paymentController.paymentByVisaMasterCard(
+      rxTransID.value,
+      ticketDetail.value.tickid,
+      ticketDetail.value.price,
+      storedCardUniqueID,
+      cvvCode,
+    )) {
+      // //? Insert DB
+      List<String> urlSplit =
+          homeController.menudetail.value.url.toString().split(";");
+      url = urlSplit[1];
+      data = {
+        "TranID": rxTransID.value,
+        "weid": ticketDetail.value.tickid,
+        "amount": ticketDetail.value.price,
+        "PhoneUser": storage.read('msisdn'),
+      };
+      var response = await DioClient.postEncrypt(urlSplit[1], data);
+      //! save log
+      logPaymentReq = data;
+      logPaymentRes = response;
+      logController.insertAllLog(
+        homeController.menudetail.value.groupNameEN.toString(),
+        rxTransID.value,
+        '',
+        homeController.menudetail.value.groupNameEN.toString(),
+        '',
+        '',
+        ticketDetail.value.price.toString(),
+        0,
+        '0',
+        ticketDetail.value.title,
+        null,
+        logPaymentReq,
+        logPaymentRes,
+      );
+      if (response['ResultCode'] == '200') {
+        rxticketCode.value = response["Code"].toString();
+        rxPaymentAmount.value = response['Price'].toString();
+        rxTimeStamp.value =
+            DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
+        enableBottom.value = true;
+        Get.to(ReusableResultWithCode(
+          isUSD: true,
+          fromAccountImage: userController.userProfilemodel.value.profileImg ??
+              MyConstant.profile_default,
+          fromAccountName: userController.profileName.value,
+          fromAccountNumber: userController.rxMsisdn.value,
+          toAccountImage: ticketDetail.value.logo ?? MyConstant.profile_default,
+          toAccountName: ticketDetail.value.title!,
+          toAccountNumber: ticketDetail.value.title!,
+          amount: ticketDetail.value.price.toString(),
+          fee: rxFee.toString(),
+          transactionId: rxTransID.value,
+          timestamp: rxTimeStamp.value,
+          code: rxticketCode.value,
+          fromHistory: false,
+        ));
+      } else {
+        enableBottom.value = true;
+        DialogHelper.showErrorWithFunctionDialog(
+            description: response['ResultDesc'],
+            onClose: () {
+              Get.close(userController.pageclose.value);
+            });
+      }
+    } else {
+      enableBottom.value = true;
+    }
+  }
+
+  // paymentProcessVisaWithoutstoredCardUniqueID(Menulists menudetail) async {
+  //   userController.fetchBalance();
+  //   var data;
+  //   rxFee.value = '0';
+  //   // //? Insert DB
+  //   List<String> urlSplit =
+  //       homeController.menudetail.value.url.toString().split(";");
+  //   data = {
+  //     "TranID": rxTransID.value,
+  //     "weid": ticketDetail.value.tickid,
+  //     "amount": ticketDetail.value.price,
+  //     "PhoneUser": storage.read('msisdn'),
+  //   };
+  //   var response = await DioClient.postEncrypt(urlSplit[1], data);
+  //   //! save log
+  //   logPaymentReq = data;
+  //   logPaymentRes = response;
+  //   logController.insertAllLog(
+  //     homeController.menudetail.value.groupNameEN.toString(),
+  //     rxTransID.value,
+  //     '',
+  //     homeController.menudetail.value.groupNameEN.toString(),
+  //     '',
+  //     '',
+  //     ticketDetail.value.price.toString(),
+  //     0,
+  //     '0',
+  //     ticketDetail.value.title,
+  //     null,
+  //     logPaymentReq,
+  //     logPaymentRes,
+  //   );
+  //   if (response['ResultCode'] == '200') {
+  //     rxticketCode.value = response["Code"].toString();
+  //     rxPaymentAmount.value = response['Price'].toString();
+  //     rxTimeStamp.value =
+  //         DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
+  //     enableBottom.value = true;
+  //     Get.to(ReusableResultWithCode(
+  //       isUSD: true,
+  //       fromAccountImage: userController.userProfilemodel.value.profileImg ??
+  //           MyConstant.profile_default,
+  //       fromAccountName: userController.profileName.value,
+  //       fromAccountNumber: userController.rxMsisdn.value,
+  //       toAccountImage: ticketDetail.value.logo ?? MyConstant.profile_default,
+  //       toAccountName: ticketDetail.value.title!,
+  //       toAccountNumber: ticketDetail.value.title!,
+  //       amount: ticketDetail.value.price.toString(),
+  //       fee: rxFee.toString(),
+  //       transactionId: rxTransID.value,
+  //       timestamp: rxTimeStamp.value,
+  //       code: rxticketCode.value,
+  //       fromHistory: false,
+  //     ));
+  //   } else {
+  //     enableBottom.value = true;
+  //     DialogHelper.showErrorWithFunctionDialog(
+  //         description: response['ResultDesc'],
+  //         onClose: () {
+  //           Get.close(userController.pageclose.value);
+  //         });
+  //   }
+  // }
 }

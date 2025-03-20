@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
@@ -23,24 +23,23 @@ class VisaMasterCard extends StatefulWidget {
 
 class _VisaMasterCardState extends State<VisaMasterCard> {
   final paymentController = Get.put(PaymentController());
-
+  final homeController = Get.find<HomeController>();
   @override
   void initState() {
     super.initState();
-    paymentController.getPaymentMethods();
+    paymentController.getPaymentMethods(-1);
   }
 
   int? selectedCardIndex = 0;
 
-  void confirmDelete(String owner, String paymentType) {
+  void confirmDelete(String owner, int id) {
     DialogHelper.showErrorWithFunctionDialog(
       closeTitle: "ລົບ",
       title: "ຕ້ອງການລົບບັນຊີນີ້ບໍ່",
       description: "ການກະທຳນີ້ຈະບໍ່ສາມາດກູຄືນໄດ້!",
       withCancel: true,
       onClose: () async {
-        var deleteData =
-            await paymentController.deletePaymentMethod(owner, paymentType);
+        var deleteData = await paymentController.deletePaymentMethod(owner, id);
         Get.back();
         if (deleteData) {
           DialogHelper.showSuccessWithMascot(
@@ -57,12 +56,13 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
     );
   }
 
+  // payment methods
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
         backgroundColor: color_fff,
-        appBar: BuildAppBar(title: "Visa Master Card"),
+        appBar: BuildAppBar(title: homeController.menutitle.value),
         body: Padding(
           padding: const EdgeInsets.all(15),
           child: Column(
@@ -82,7 +82,7 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              TextFont(text: "All Cards"),
+                              TextFont(text: "all_cards"),
                               GestureDetector(
                                 onTap: () {
                                   Get.to(AddVisaMasterCard());
@@ -118,11 +118,10 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
                                 onTap: () async {
                                   paymentController.loading.value = true;
                                   await paymentController.updatePaymentMethod(
-                                    paymentController
-                                        .paymentMethods[index].owner,
-                                    paymentController
-                                        .paymentMethods[index].paymentType,
-                                  );
+                                      paymentController
+                                          .paymentMethods[index].owner,
+                                      paymentController
+                                          .paymentMethods[index].id);
                                   if (paymentController.loading.value) {
                                     showDialog(
                                       context: context,
@@ -200,7 +199,7 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
                                                             .paymentMethods[
                                                                 index]
                                                             .title ==
-                                                        "MMoneyX"
+                                                        "MMONEY"
                                                     ? null
                                                     : () => confirmDelete(
                                                         paymentController
@@ -210,12 +209,12 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
                                                         paymentController
                                                             .paymentMethods[
                                                                 index]
-                                                            .paymentType),
+                                                            .id),
                                                 child: paymentController
                                                             .paymentMethods[
                                                                 index]
                                                             .paymentType ==
-                                                        "Wallet"
+                                                        "MMONEY"
                                                     ? SizedBox.shrink()
                                                     : SvgPicture.asset(
                                                         MyIcon.ic_trash,
@@ -229,7 +228,33 @@ class _VisaMasterCardState extends State<VisaMasterCard> {
                                             cardHolderName: paymentController
                                                 .paymentMethods[index].accname,
                                             logo: paymentController
-                                                .paymentMethods[index].logo,
+                                                        .paymentMethods[index]
+                                                        .paymentType ==
+                                                    'MMONEY'
+                                                ? paymentController
+                                                    .paymentMethods[index].logo
+                                                : paymentController
+                                                            .paymentMethods[
+                                                                index]
+                                                            .paymentType ==
+                                                        'VISA'
+                                                    ? "https://mmoney.la/Payment/visa.jpg"
+                                                    : paymentController
+                                                                .paymentMethods[
+                                                                    index]
+                                                                .paymentType ==
+                                                            'MASTERCARD'
+                                                        ? "https://mmoney.la/Payment/mastercard.png"
+                                                        : paymentController
+                                                                    .paymentMethods[
+                                                                        index]
+                                                                    .paymentType ==
+                                                                'UNIONPAY'
+                                                            ? "https://mmoney.la/Payment/unionpay.png"
+                                                            : paymentController
+                                                                .paymentMethods[
+                                                                    index]
+                                                                .logo,
                                             accountNumber: paymentController
                                                 .paymentMethods[index]
                                                 .description,
@@ -340,7 +365,9 @@ class MoneyCardWidget extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(100),
                                 child: Image.network(
                                   logo,
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.cover,
+                                  width: 15.w,
+                                  height: 15.w,
                                 ),
                               ),
                             ),

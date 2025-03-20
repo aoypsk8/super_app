@@ -70,12 +70,17 @@
 	<!-- url luncher -->
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>sms</string>
-		<string>tel</string>
+	<string>sms</string>
+	<string>tel</string>
 	</array>
 
-	<key>NSUserNotificationUsageDescription</key>
-	<string>We need permission to send you notifications.</string>
+	<!-- Roate -->
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+
+
 
 
 	

@@ -22,14 +22,17 @@ class _InputAmountXJaideeScreenState extends State<InputAmountXJaideeScreen> {
   final TextEditingController _months = TextEditingController();
   final TextEditingController _monthlyPayment = TextEditingController();
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-  double _currentValue = 1000000;
+  double _currentValue = 500000;
   final double _min = 500000;
   final double _max = 5000000;
   final double _step = 500000;
   var dataMonths = [
-    {"month_id": 1, "Name": "3"},
-    {"month_id": 2, "Name": "6"},
-    {"month_id": 3, "Name": "12"},
+    {"month_id": 1, "Name": "1"},
+    {"month_id": 2, "Name": "2"},
+    {"month_id": 3, "Name": "3"},
+    {"month_id": 4, "Name": "4"},
+    {"month_id": 5, "Name": "5"},
+    {"month_id": 6, "Name": "6"},
   ];
 
   @override
@@ -54,8 +57,9 @@ class _InputAmountXJaideeScreenState extends State<InputAmountXJaideeScreen> {
   }
 
   void _updateMonthlyPayment() {
-    int months = int.tryParse(_months.text.split('-').last) ?? 3;
-    double monthlyPayment = _currentValue / months;
+    int months = int.tryParse(_months.text.split('-').last) ?? 1;
+    double monthlyPayment =
+        (_currentValue / months) + (_currentValue * 3 / 100);
     _monthlyPayment.text = fn.format(monthlyPayment);
   }
 
@@ -137,7 +141,7 @@ class _InputAmountXJaideeScreenState extends State<InputAmountXJaideeScreen> {
                   const SizedBox(height: 10),
                   buildDropDown_return_Value_Name_Validate(
                     controller: _months,
-                    label: 'ປ້ອນຈຳນວນເງີນທີ່ຈະຢືມສິນເຊື່ອ',
+                    label: 'ເລືອກໄລຍະທີ່ຈະຢືມສິນເຊື່ອ',
                     name: 'months',
                     hintText: 'Select your months',
                     dataObject: dataMonths,
@@ -158,7 +162,7 @@ class _InputAmountXJaideeScreenState extends State<InputAmountXJaideeScreen> {
                   buildAccountingFiledVaidate(
                     enable: false,
                     controller: _percent,
-                    label: 'ເປີເຊັນການຜ່ອນຊຳລະ',
+                    label: 'ດອກເບ້ຍຕໍ່ເດືອນ',
                     name: 'percent',
                     hintText: '3 %',
                     max: 9,
@@ -169,7 +173,7 @@ class _InputAmountXJaideeScreenState extends State<InputAmountXJaideeScreen> {
                   buildAccountingFiledVaidate(
                     enable: false,
                     controller: _monthlyPayment,
-                    label: 'ຈຳນວນເດືອນຜ່ອນຊຳລະ / ເດືອນ',
+                    label: 'ຈຳນວນເງິນຜ່ອນຊຳລະ / ເດືອນ',
                     name: 'monthly_payment',
                     hintText: '0 ກີບ',
                     max: 9,

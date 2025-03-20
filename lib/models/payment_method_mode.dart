@@ -1,4 +1,5 @@
 class PaymentMethod {
+  final int id;
   final String paymentType;
   final bool status;
   final int order;
@@ -8,8 +9,10 @@ class PaymentMethod {
   final String owner;
   final String accname;
   final bool maincard;
+  final String uuid;
 
   PaymentMethod({
+    required this.id,
     required this.paymentType,
     required this.status,
     required this.order,
@@ -19,11 +22,13 @@ class PaymentMethod {
     required this.owner,
     required this.accname,
     required this.maincard,
+    required this.uuid,
   });
 
   // Factory method to create a PaymentMethod object from JSON
   factory PaymentMethod.fromJson(Map<String, dynamic> json) {
     return PaymentMethod(
+      id: json['id'],
       paymentType: json['payment_type'],
       status: json['status'],
       order: json['order'],
@@ -31,14 +36,16 @@ class PaymentMethod {
       title: json['title'],
       description: json['description'],
       owner: json['owner'],
-      accname: json['accname'],
+      accname: json['accname'] ?? "",
       maincard: json['maincard'],
+      uuid: json['uuid'] ?? "",
     );
   }
 
   // Method to convert PaymentMethod object to JSON
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'payment_type': paymentType,
       'status': status,
       'order': order,
@@ -48,6 +55,7 @@ class PaymentMethod {
       'owner': owner,
       'accname': accname,
       'maincard': maincard,
+      'uuid': uuid,
     };
   }
 }

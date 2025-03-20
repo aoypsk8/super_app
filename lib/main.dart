@@ -18,6 +18,8 @@ import 'package:super_app/translations.dart';
 import 'package:super_app/views/main/bottom_nav.dart';
 import 'package:sizer/sizer.dart';
 
+import 'package:flutter/services.dart';
+
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +30,11 @@ void main() async {
   await AppTranslations.loadTranslations();
   Get.put(ThemeService());
 
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, // Only allow portrait mode
+  ]).then((_) {
+    runApp(MyApp());
+  });
 }
 
 final storage = GetStorage();
@@ -64,6 +70,7 @@ class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

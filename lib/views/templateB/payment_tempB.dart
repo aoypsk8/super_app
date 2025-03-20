@@ -11,17 +11,19 @@ import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
-import 'package:super_app/views/templateB/confirm_tempB.dart';
 import 'package:super_app/widget/buildAppBar.dart';
-import 'package:super_app/widget/buildButtonBottom.dart';
+import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
+import 'package:super_app/widget/build_pay_visa.dart';
 import 'package:super_app/widget/build_step_process.dart';
+import 'package:super_app/widget/input_cvv.dart';
 import 'package:super_app/widget/mounoy_textfield.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class PaymentTempBScreen extends StatelessWidget {
-  PaymentTempBScreen({Key? key}) : super(key: key);
+  PaymentTempBScreen({super.key});
 
   final controller = Get.find<TempBController>();
   final homeController = Get.find<HomeController>();
@@ -56,10 +58,11 @@ class PaymentTempBScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BuildButtonBottom(
+      bottomNavigationBar: buildBottomAppbar(
           title: 'next',
-          isActive: true,
+          isEnabled: controller.enableBottom.value,
           func: () async {
+            controller.enableBottom.value = false;
             _formKey.currentState!.save();
             if (_formKey.currentState!.validate()) {
               String sanitizedAmount =
@@ -67,25 +70,83 @@ class PaymentTempBScreen extends StatelessWidget {
               controller.rxNote.value = _note.text;
               controller.rxPaymentAmount.value = sanitizedAmount.toString();
               if (int.parse(sanitizedAmount) < 1000) {
+                controller.enableBottom.value = true;
                 DialogHelper.showErrorDialogNew(description: "morethan1000");
               } else {
-                if (userController.mainBalance.value >=
+                if (userController.totalBalance.value >=
                     int.parse(sanitizedAmount)) {
                   controller.rxTransID.value =
                       homeController.menudetail.value.description.toString() +
                           await randomNumber().fucRandomNumber();
+                  controller.enableBottom.value = true;
                   Get.to(
                     () => ListsPaymentScreen(
-                      description: 'select_payment',
+                      description: homeController.menudetail.value.appid!,
                       stepBuild: '4/5',
                       title: homeController.getMenuTitle(),
-                      onSelectedPayment: () {
-                        Get.to(() => const ConfirmTempBScreen());
-                        return Container();
+                      onSelectedPayment: (paymentType, cardIndex, uuid) async {
+                        paymentController
+                            .reqCashOut(
+                          transID: controller.rxTransID.value,
+                          amount: controller.rxPaymentAmount.value,
+                          toAcc: controller.rxAccNo.value,
+                          chanel: homeController.menudetail.value.groupNameEN,
+                          provider: controller.tempBdetail.value.nameCode,
+                          remark: controller.rxNote.value,
+                        )
+                            .then(
+                          (value) async {
+                            if (value) {
+                              if (paymentType == "Other") {
+                                // homeController.RxamountUSD.value =
+                                //     await homeController.convertRate(int.parse(
+                                //         controller.rxPaymentAmount.value));
+                                // controller.rxTransID.value =
+                                //     "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                                // //! Confirm CashOut
+                                // Get.to(PaymentVisaMasterCard(
+                                //   function: () {
+                                //     controller
+                                //         .paymentProcessVisaWithoutstoredCardUniqueID(
+                                //             homeController.menudetail.value);
+                                //   },
+                                //   trainID: controller.rxTransID.value,
+                                //   description: controller.rxNote.value,
+                                //   amount: int.parse(
+                                //       controller.rxPaymentAmount.value),
+                                // ));
+                              } else if (paymentType == 'MMONEY') {
+                                navigateToConfirmScreen(paymentType);
+                              } else {
+                                homeController.RxamountUSD.value =
+                                    await homeController.convertRate(int.parse(
+                                        controller.rxPaymentAmount.value));
+                                String? cvv =
+                                    await showDynamicQRDialog(context, () {});
+                                if (cvv != null &&
+                                    cvv.isNotEmpty &&
+                                    cvv.length >= 3) {
+                                  navigateToConfirmScreen(
+                                    paymentType,
+                                    cvv,
+                                    uuid,
+                                  );
+                                } else {
+                                  DialogHelper.showErrorDialogNew(
+                                    description: "please_input_cvv",
+                                  );
+                                }
+                              }
+                            } else {
+                              controller.enableBottom.value = true;
+                            }
+                          },
+                        );
                       },
                     ),
                   );
                 } else {
+                  controller.enableBottom.value = true;
                   DialogHelper.showErrorDialogNew(
                       description: 'Your balance not enough.');
                 }
@@ -185,5 +246,41 @@ class PaymentTempBScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void navigateToConfirmScreen(String paymentType,
+      [String cvv = '', String storedCardUniqueID = '']) {
+    Get.to(() => ReusableConfirmScreen(
+          isUSD: paymentType != 'MMONEY',
+          isEnabled: controller.enableBottom,
+          appbarTitle: "confirm_payment",
+          function: () {
+            if (paymentType == 'MMONEY') {
+              controller.isLoading.value = true;
+              controller.enableBottom.value = false;
+              controller.paymentProcess(homeController.menudetail.value);
+            } else {
+              controller.paymentProcessVisa(
+                homeController.menudetail.value,
+                storedCardUniqueID,
+                cvv,
+              );
+            }
+          },
+          stepProcess: "5/5",
+          stepTitle: "check_detail",
+          fromAccountImage: userController.userProfilemodel.value.profileImg ??
+              MyConstant.profile_default,
+          fromAccountName:
+              '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+          fromAccountNumber:
+              userController.userProfilemodel.value.msisdn.toString(),
+          toAccountImage: controller.tempBdetail.value.logo ?? '',
+          toAccountName: controller.rxAccName.value, // Fixed swapped values
+          toAccountNumber: controller.rxAccNo.value,
+          amount: controller.rxPaymentAmount.value,
+          fee: controller.tempBdetail.value.fee ?? '0', // Prevent null error
+          note: controller.rxNote.value,
+        ));
   }
 }

@@ -13,16 +13,13 @@ import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
-import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/qr_controller.dart';
-import 'package:super_app/controllers/tempA_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
-import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/scanqr/qr_scanner.dart';
 import 'package:super_app/views/web/openWebView.dart';
-import 'package:super_app/widget/button.dart';
+import 'package:super_app/views/webview/webapp_webview.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/pull_refresh.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -43,7 +40,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
   final qrController = Get.put(QrController());
   // final controller = Get.put(TempAController());
   RefreshController refreshController = RefreshController();
-  final CarouselSliderController carouselController = CarouselSliderController();
+  final CarouselSliderController carouselController =
+      CarouselSliderController();
 
   bool showAmount = false;
   int _current = 0;
@@ -68,31 +66,17 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
     });
   }
 
-  List<String> imageUrls = [
-    "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
-    "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
-    "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
-    "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
-    "https://blog.ipleaders.in/wp-content/uploads/2021/10/Advertisement-Media.jpg",
-  ];
-  List<String> imageUrlsDropping = [
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-  ];
-  List<String> loveItUrls = [
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-    "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
-  ];
+  // List<String> loveItUrls = [
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  //   "https://matrixmarketinggroup.com/wp-content/uploads/2021/12/Mcdonalds-Food-Ad.jpg",
+  // ];
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -102,25 +86,22 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
           width: 14.w,
           height: 14.w,
           child: FloatingActionButton(
-            onPressed: () {
-              // qrController.clear();
-              // if (!userController.isCheckToken.value) {
-              //   userController.isCheckToken.value = true;
-              //   userController.checktoken(name: 'menu').then((value) async {
-              //     if (userController.isLogin.value) {
-              //       final result = await Get.to(() => QRScannerScreen());
-              //       if (result != null) {
-              //         qrController.verifyQR(result);
-              //       }
-              //     }
-              //   });
-              //   userController.isCheckToken.value = false;
-              // }
+            onPressed: () async {
+              qrController.clear();
+              if (!userController.isCheckToken.value) {
+                bool isValidToken = await userController.checktokenSuperApp();
+                if (isValidToken) {
+                  final result = await Get.to(() => QRScannerScreen());
+                  if (result != null) {
+                    qrController.verifyQR(result);
+                  }
+                }
+              }
             },
             backgroundColor: Theme.of(context).primaryColor,
             shape: CircleBorder(),
             child: Icon(
-              Iconsax.scan,
+              Icons.qr_code_scanner_outlined,
               color: Theme.of(context).colorScheme.secondary,
               size: 30,
             ),
@@ -137,7 +118,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                 ? Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+                        padding:
+                            const EdgeInsets.only(top: 20, left: 15, right: 15),
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
@@ -148,70 +130,107 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(height: 5),
                                     Container(
                                       child: AlignedGridView.count(
-                                        itemCount: homeController.menuModel.first.menulists!.length + 1,
+                                        itemCount: homeController.menuModel
+                                                .first.menulists!.length +
+                                            1,
                                         crossAxisCount: 4,
                                         mainAxisSpacing: 17,
                                         crossAxisSpacing: 20,
                                         shrinkWrap: true,
                                         primary: false,
                                         physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (BuildContext context, int index) {
-                                          if (index == homeController.menuModel.first.menulists!.length) {
-                                            return InkWell(
-                                              onTap: () async {},
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 6),
-                                                  Padding(
-                                                    padding: const EdgeInsets.symmetric(
-                                                      horizontal: 12,
-                                                    ),
-                                                    child: SvgPicture.asset(
-                                                      MyIcon.ic_more,
-                                                      width: 5.5.w,
-                                                      height: 8.5.w,
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 10),
-                                                  TextFont(
-                                                    text: 'more',
-                                                    fontSize: 9.5,
-                                                    fontWeight: FontWeight.w400,
-                                                    maxLines: 2,
-                                                    color: cr_4139,
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          if (index ==
+                                              homeController.menuModel.first
+                                                  .menulists!.length) {
+                                            return const SizedBox();
+                                            // return InkWell(
+                                            //   onTap: () async {},
+                                            //   child: Column(
+                                            //     children: [
+                                            //       SizedBox(height: 6),
+                                            //       Padding(
+                                            //         padding: const EdgeInsets
+                                            //             .symmetric(
+                                            //           horizontal: 12,
+                                            //         ),
+                                            //         child: SvgPicture.asset(
+                                            //           MyIcon.ic_more,
+                                            //           width: 5.5.w,
+                                            //           height: 8.5.w,
+                                            //         ),
+                                            //       ),
+                                            //       SizedBox(height: 10),
+                                            //       TextFont(
+                                            //         text: 'more',
+                                            //         fontSize: 9.5,
+                                            //         fontWeight: FontWeight.w400,
+                                            //         maxLines: 2,
+                                            //         color: cr_4139,
+                                            //         textAlign: TextAlign.center,
+                                            //       ),
+                                            //     ],
+                                            //   ),
+                                            // );
                                           }
 
-                                          var result = homeController.menuModel.first.menulists![index];
+                                          var result = homeController.menuModel
+                                              .first.menulists![index];
                                           String? url = result.logo;
-                                          String? updatedUrl = url!.replaceFirst(
-                                            'https://mmoney.la',
-                                            'https://gateway.ltcdev.la/AppImage',
-                                          );
+                                          if (url != null &&
+                                              homeController
+                                                  .TPlus_theme.value) {
+                                            url = url.replaceFirst(
+                                                "icons/", "icons/y");
+                                          } else {
+                                            url = url!.replaceFirst(
+                                                "icons/", "icons/");
+                                          }
 
                                           return InkWell(
                                             onTap: () async {
-                                              userController.isRenewToken.value = true;
-                                              bool isValidToken = await userController.checktokenSuperApp();
+                                              userController
+                                                  .isRenewToken.value = true;
+                                              bool isValidToken =
+                                                  await userController
+                                                      .checktokenSuperApp();
                                               if (isValidToken) {
                                                 if (result.template != '/') {
-                                                  homeController.menutitle.value = result.groupNameEN!;
-                                                  homeController.menudetail.value = result;
-                                                  if (result.template == "webview") {
-                                                    Get.to(OpenWebView(
-                                                        url: homeController.menudetail.value.url.toString()));
+                                                  homeController
+                                                          .menutitle.value =
+                                                      result.groupNameEN!;
+                                                  homeController.menudetail
+                                                      .value = result;
+                                                  if (result.template ==
+                                                      "webview") {
+                                                    Get.to(
+                                                      WebappWebviewScreen(
+                                                        urlWidget:
+                                                            homeController
+                                                                .menudetail
+                                                                .value
+                                                                .url
+                                                                .toString(),
+                                                      ),
+                                                    );
+                                                    // Get.to(OpenWebView(
+                                                    //     url: homeController
+                                                    //         .menudetail
+                                                    //         .value
+                                                    //         .url
+                                                    //         .toString()));
                                                   } else {
-                                                    Get.toNamed('/${result.template}');
+                                                    Get.toNamed(
+                                                        '/${result.template}');
                                                   }
                                                 } else {
-                                                  DialogHelper.showErrorDialogNew(description: 'Not available');
+                                                  DialogHelper
+                                                      .showErrorDialogNew(
+                                                          description:
+                                                              'Not available');
                                                 }
                                               }
                                             },
@@ -220,17 +239,23 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                               children: [
                                                 SizedBox(height: 6),
                                                 SvgPicture.network(
-                                                  updatedUrl,
-                                                  placeholderBuilder: (BuildContext context) => Container(
-                                                    padding: const EdgeInsets.all(5.0),
-                                                    child: const CircularProgressIndicator(),
+                                                  url!,
+                                                  placeholderBuilder:
+                                                      (BuildContext context) =>
+                                                          Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
+                                                    child:
+                                                        const CircularProgressIndicator(),
                                                   ),
                                                   width: 8.5.w,
                                                   height: 8.5.w,
                                                 ),
                                                 SizedBox(height: 10),
                                                 TextFont(
-                                                  text: getLocalizedGroupName(result),
+                                                  text: getLocalizedGroupName(
+                                                      result),
                                                   fontSize: 9.5,
                                                   fontWeight: FontWeight.w400,
                                                   maxLines: 2,
@@ -246,120 +271,10 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                                   ],
                                 ),
                               ),
-
-                              // PrimaryButton(
-                              //     title: 'fetchServicesmMenu',
-                              //     onPressed: () {
-                              //       homeController.fetchServicesmMenu();
-                              //     }),
-                              // PrimaryButton(
-                              //     title: 'OTP TESTING',
-                              //     onPressed: () {
-                              //       Get.toNamed('/otpTransfer');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'Get Payment List',
-                              //     onPressed: () {
-                              //       Get.to(ListsPaymentScreen(
-                              //         description: 'select_payment',
-                              //         stepBuild: '4/5',
-                              //         title: homeController.getMenuTitle(),
-                              //         onSelectedPayment: () {
-                              //           paymentController
-                              //               .reqCashOut(
-                              //                   transID: controller.rxtransid.value,
-                              //                   amount: controller.rxPaymentAmount.value,
-                              //                   toAcc: controller.rxaccnumber.value,
-                              //                   chanel: homeController
-                              //                       .menudetail.value.groupNameEN,
-                              //                   provider:
-                              //                       controller.tempAdetail.value.code,
-                              //                   remark: controller.rxNote.value)
-                              //               .then(
-                              //                 (value) => {
-                              //                   if (value)
-                              //                     {Get.to(() => ConfirmTempAScreen())}
-                              //                 },
-                              //               );
-                              //           return Container();
-                              //         },
-                              //       ));
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'Visa Master Card',
-                              //     onPressed: () {
-                              //       Get.toNamed('/visaMasterCard');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'OTP Email',
-                              //     onPressed: () {
-                              //       Get.toNamed('/otpTransferEmail');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'Transfer',
-                              //     onPressed: () {
-                              //       Get.toNamed('/transfer');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'Cash Out',
-                              //     onPressed: () {
-                              //       Get.toNamed('/cashOut');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'finance',
-                              //     onPressed: () {
-                              //       Get.toNamed('/finance');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'tempA',
-                              //     onPressed: () async {
-                              //       Get.toNamed('/templateA');
-
-                              // Get.to(ReusableResultScreen(
-                              //     fromAccountImage: 'https://mmoney.la/AppLite/PartnerIcon/electricLogo.png',
-                              //     fromAccountName: 'fromAccountName',
-                              //     fromAccountNumber: 'fromAccountNumber',
-                              //     toAccountImage: 'https://mmoney.la/AppLite/PartnerIcon/electricLogo.png',
-                              //     toAccountName: 'toAccountName',
-                              //     toAccountNumber: 'toAccountNumber',
-                              //     toTitleProvider: 'toTitleProvider',
-                              //     amount: '1000',
-                              //     fee: '0',
-                              //     transactionId: 'transactionId',
-                              //     note: 'note',
-                              //     timestamp: '2025-01-29 09:47:10'));
-
-                              // Get.to(ScreenshotPage());
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'XJaidee',
-                              //     onPressed: () {
-                              //       Get.toNamed('/xjaidee');
-                              //     }),
-                              // const SizedBox(height: 20),
-                              // PrimaryButton(
-                              //     title: 'X-Proof',
-                              //     onPressed: () {
-                              //       Get.toNamed('/proof');
-                              //     }),
                             ],
                           ),
                         ),
                       ),
-                      PrimaryButton(
-                          title: 'XJaidee',
-                          onPressed: () {
-                            Get.toNamed('/xjaidee');
-                          }),
                       const SizedBox(height: 20),
                       Container(
                         color: color_fff,
@@ -371,7 +286,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               TextFont(
-                                text: "Deal for you, ມາລີນາ!",
+                                text:
+                                    "Deal for you, ${userController.userProfilemodel.value.name}!",
                                 color: cr_4139,
                                 fontSize: 9.5,
                                 fontWeight: FontWeight.w500,
@@ -416,32 +332,32 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         ),
                       ),
                       const SizedBox(height: 15),
-                      Container(
-                        color: color_fff,
-                        width: Get.width,
-                        padding: const EdgeInsets.only(top: 15, bottom: 25),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextFont(
-                                text: "Dropping Like It's Hot!",
-                                color: cr_4139,
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              Divider(
-                                color: Theme.of(context).primaryColor,
-                                thickness: 2,
-                                endIndent: 310,
-                              ),
-                              const SizedBox(height: 20),
-                              buildLoveit(),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   color: color_fff,
+                      //   width: Get.width,
+                      //   padding: const EdgeInsets.only(top: 15, bottom: 25),
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                      //     child: Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         TextFont(
+                      //           text: "Dropping Like It's Hot!",
+                      //           color: cr_4139,
+                      //           fontSize: 9.5,
+                      //           fontWeight: FontWeight.w500,
+                      //         ),
+                      //         Divider(
+                      //           color: Theme.of(context).primaryColor,
+                      //           thickness: 2,
+                      //           endIndent: 310,
+                      //         ),
+                      //         const SizedBox(height: 20),
+                      //         buildLoveit(),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                       const SizedBox(height: 20),
                     ],
                   )
@@ -509,7 +425,9 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                         border: Border.all(color: Colors.white, width: 1),
                       ),
                     )
-                        .animate(onPlay: (controller) => controller.repeat()) // 🔄 Loop animation
+                        .animate(
+                            onPlay: (controller) =>
+                                controller.repeat()) // 🔄 Loop animation
                         // .effect(duration: 100.ms) // Small padding to total duration
                         .effect(delay: 1000.ms, duration: 4000.ms)
                         .shimmer(blendMode: BlendMode.srcOver),
@@ -523,7 +441,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: cr_black.withOpacity(0.1),
-                        border: Border.all(color: color_fff.withOpacity(0.7), width: 1),
+                        border: Border.all(
+                            color: color_fff.withOpacity(0.7), width: 1),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -537,13 +456,16 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                           //     .effect(duration: 10.ms)
                           //     .effect(delay: 10.ms, duration: 4000.ms)
                           //     .shimmer(blendMode: BlendMode.dstIn),
-                          AnimatedBalanceWidget(balance: int.parse(userController.mainBalance.value.toString())),
+                          AnimatedBalanceWidget(
+                              balance: int.parse(
+                                  userController.mainBalance.value.toString())),
                           Divider(
                             color: Theme.of(context).primaryColor,
                             thickness: 3,
                             height: 3,
                           )
-                              .animate(onPlay: (controller) => controller.repeat())
+                              .animate(
+                                  onPlay: (controller) => controller.repeat())
                               .effect(duration: 10.ms)
                               .effect(delay: 10.ms, duration: 4000.ms)
                               .shimmer(blendMode: BlendMode.dstIn),
@@ -583,13 +505,13 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                 });
               },
             ),
-            items: imageUrls.map<Widget>((entry) {
+            items: homeController.recommend.value.detail!.map<Widget>((entry) {
               return Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: Theme.of(context).primaryColor,
                   image: DecorationImage(
-                    image: NetworkImage(entry),
+                    image: NetworkImage(entry.imgUrl!),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -602,7 +524,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
           // Indicator for the carousel
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(imageUrls.length, (index) {
+            children: List.generate(
+                homeController.recommend.value.detail!.length, (index) {
               return _current == index
                   ? Container(
                       width: 6.0.w,
@@ -652,14 +575,14 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
                 });
               },
             ),
-            items: imageUrlsDropping.map<Widget>((entry) {
+            items: homeController.hotproduct.value.detail!.map<Widget>((entry) {
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Theme.of(context).primaryColor,
                   image: DecorationImage(
-                    image: NetworkImage(entry),
+                    image: NetworkImage(entry.imgUrl!),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -672,7 +595,8 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
           // Indicator for the carousel
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(imageUrlsDropping.length, (index) {
+            children: List.generate(
+                homeController.hotproduct.value.detail!.length, (index) {
               return _currentDropping == index
                   ? Container(
                       width: 6.0.w,
@@ -699,95 +623,96 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
     );
   }
 
-  Container buildLoveit() {
-    return Container(
-      child: Column(
-        children: [
-          CarouselSlider(
-            carouselController: carouselController,
-            options: CarouselOptions(
-              height: MediaQuery.of(context).size.height * 0.45,
-              enableInfiniteScroll: true,
-              reverse: false,
-              autoPlay: true,
-              autoPlayCurve: Curves.fastOutSlowIn,
-              enlargeCenterPage: true,
-              enlargeFactor: 0,
-              scrollDirection: Axis.horizontal,
-              viewportFraction: 1,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _currentLoveit = index;
-                });
-              },
-            ),
-            items: List.generate((loveItUrls.length / 4).ceil(), (index) {
-              int start = index * 4;
-              int end = start + 4;
-              List<String> sublist = loveItUrls.sublist(start, end > loveItUrls.length ? loveItUrls.length : end);
-              return GridView.builder(
-                padding: const EdgeInsets.all(5),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1,
-                ),
-                itemCount: sublist.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 1,
-                          blurRadius: 5,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                      image: DecorationImage(
-                        image: NetworkImage(sublist[index]),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate((loveItUrls.length / 4).ceil(), (index) {
-              return _currentLoveit == index
-                  ? Container(
-                      width: 6.0.w,
-                      height: 1.5.w,
-                      margin: const EdgeInsets.only(left: 6.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    )
-                  : Container(
-                      width: 1.5.w,
-                      height: 1.5.w,
-                      margin: const EdgeInsets.only(left: 6.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: cr_ecec,
-                      ),
-                    );
-            }),
-          ),
-        ],
-      ),
-    );
-  }
+  // Container buildLoveit() {
+  //   return Container(
+  //     child: Column(
+  //       children: [
+  //         CarouselSlider(
+  //           carouselController: carouselController,
+  //           options: CarouselOptions(
+  //             height: MediaQuery.of(context).size.height * 0.45,
+  //             enableInfiniteScroll: true,
+  //             reverse: false,
+  //             autoPlay: true,
+  //             autoPlayCurve: Curves.fastOutSlowIn,
+  //             enlargeCenterPage: true,
+  //             enlargeFactor: 0,
+  //             scrollDirection: Axis.horizontal,
+  //             viewportFraction: 1,
+  //             onPageChanged: (index, reason) {
+  //               setState(() {
+  //                 _currentLoveit = index;
+  //               });
+  //             },
+  //           ),
+  //           items: List.generate((loveItUrls.length / 4).ceil(), (index) {
+  //             int start = index * 4;
+  //             int end = start + 4;
+  //             List<String> sublist = loveItUrls.sublist(
+  //                 start, end > loveItUrls.length ? loveItUrls.length : end);
+  //             return GridView.builder(
+  //               padding: const EdgeInsets.all(5),
+  //               shrinkWrap: true,
+  //               physics: const NeverScrollableScrollPhysics(),
+  //               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //                 crossAxisCount: 2,
+  //                 crossAxisSpacing: 10,
+  //                 mainAxisSpacing: 10,
+  //                 childAspectRatio: 1,
+  //               ),
+  //               itemCount: sublist.length,
+  //               itemBuilder: (context, index) {
+  //                 return Container(
+  //                   padding: const EdgeInsets.all(10),
+  //                   decoration: BoxDecoration(
+  //                     color: Colors.white,
+  //                     borderRadius: BorderRadius.circular(16),
+  //                     boxShadow: [
+  //                       BoxShadow(
+  //                         color: Colors.grey.withOpacity(0.2),
+  //                         spreadRadius: 1,
+  //                         blurRadius: 5,
+  //                         offset: const Offset(0, 2),
+  //                       ),
+  //                     ],
+  //                     image: DecorationImage(
+  //                       image: NetworkImage(sublist[index]),
+  //                       fit: BoxFit.cover,
+  //                     ),
+  //                   ),
+  //                 );
+  //               },
+  //             );
+  //           }).toList(),
+  //         ),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: List.generate((loveItUrls.length / 4).ceil(), (index) {
+  //             return _currentLoveit == index
+  //                 ? Container(
+  //                     width: 6.0.w,
+  //                     height: 1.5.w,
+  //                     margin: const EdgeInsets.only(left: 6.0),
+  //                     decoration: BoxDecoration(
+  //                       borderRadius: BorderRadius.circular(20),
+  //                       color: Theme.of(context).primaryColor,
+  //                     ),
+  //                   )
+  //                 : Container(
+  //                     width: 1.5.w,
+  //                     height: 1.5.w,
+  //                     margin: const EdgeInsets.only(left: 6.0),
+  //                     decoration: BoxDecoration(
+  //                       shape: BoxShape.circle,
+  //                       color: cr_ecec,
+  //                     ),
+  //                   );
+  //           }),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 String getLocalizedGroupName(result) {
@@ -840,7 +765,8 @@ class _AnimatedBalanceWidgetState extends State<AnimatedBalanceWidget> {
     for (int i = 0; i <= widget.balance; i += (widget.balance ~/ 30)) {
       await Future.delayed(Duration(milliseconds: 10)); // Adjust speed
 
-      if (!mounted || _isDisposed) return; // ✅ Prevent `setState()` after dispose
+      if (!mounted || _isDisposed)
+        return; // ✅ Prevent `setState()` after dispose
 
       setState(() {
         animatedValue = i;
@@ -864,7 +790,9 @@ class _AnimatedBalanceWidgetState extends State<AnimatedBalanceWidget> {
           textBaseline: TextBaseline.alphabetic,
           children: [
             Text(
-              showAmount ? fn.format(animatedValue) : "********", // Show animation or mask,
+              showAmount
+                  ? fn.format(animatedValue)
+                  : "********", // Show animation or mask,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,

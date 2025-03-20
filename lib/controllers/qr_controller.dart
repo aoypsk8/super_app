@@ -10,6 +10,7 @@ import 'package:super_app/controllers/transfer_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/history_detail_model.dart';
 import 'package:super_app/models/generate_qr_model.dart';
+import 'package:super_app/models/menu_model.dart';
 import 'package:super_app/models/qrmerchant_model.dart';
 import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/database_helper.dart';
@@ -49,6 +50,7 @@ class QrController extends GetxController {
   RxString rxRelativeTime = ''.obs;
 
   RxString rxTransrefCoupon = ''.obs;
+  final RxBool enableBottom = true.obs;
 
   //? Log
   var logVerify;
@@ -79,8 +81,15 @@ class QrController extends GetxController {
   generateQR_firstscreen(amount, qrtype, remark) async {
     String tranID = 'QR${await randomNumber().fucRandomNumber()}';
     var url = '${MyConstant.urlQR}/GenerateConsumerQR';
-    var data = {"TranID": tranID, "Amount": amount, "PhoneUser": storage.read('msisdn'), "QrType": qrtype, "Remark": remark};
-    var response = await DioClient.postEncrypt(url, data, key: 'lmmkey', loading: false);
+    var data = {
+      "TranID": tranID,
+      "Amount": amount,
+      "PhoneUser": storage.read('msisdn'),
+      "QrType": qrtype,
+      "Remark": remark
+    };
+    var response =
+        await DioClient.postEncrypt(url, data, key: 'lmmkey', loading: false);
 
     if (response["resultCode"] == "200") {
       rxNote.value = remark;
@@ -116,7 +125,13 @@ class QrController extends GetxController {
       rxTransID.value = 'QR${await randomNumber().fucRandomNumber()}';
       Logger().d('$rxTransID');
       var url = '${MyConstant.urlQR}/VerifyQR';
-      var data = {"transID": rxTransID.value, "PhoneUser": storage.read('msisdn'), "qrCode": qrCode, "type": MyConstant.desRoute, "version": homeController.appVersion.value};
+      var data = {
+        "transID": rxTransID.value,
+        "PhoneUser": storage.read('msisdn'),
+        "qrCode": qrCode,
+        "type": MyConstant.desRoute,
+        "version": homeController.appVersion.value
+      };
       var response = await DioClient.postEncrypt(url, data, key: 'lmmkey');
       print(response);
       if (response["resultCode"] == "200") {
@@ -127,9 +142,12 @@ class QrController extends GetxController {
           rxTransID.value = 'L${rxTransID.value}';
           rxQRcode.value = qrCode;
           qrModel.value = QrModel.fromJson(response);
-          if (response["qrType"] == "dynamic" || int.parse(qrModel.value.transAmount.toString()) > 0) {
-            rxPaymentAmount.value = int.parse(qrModel.value.transAmount.toString());
-            rxTotalAmount.value = int.parse(qrModel.value.transAmount.toString());
+          if (response["qrType"] == "dynamic" ||
+              int.parse(qrModel.value.transAmount.toString()) > 0) {
+            rxPaymentAmount.value =
+                int.parse(qrModel.value.transAmount.toString());
+            rxTotalAmount.value =
+                int.parse(qrModel.value.transAmount.toString());
             rxFee.value = int.parse(qrModel.value.fee!);
             rxFeeConsumer.value = int.parse(qrModel.value.feeAmountConsumer!);
           }
@@ -142,14 +160,18 @@ class QrController extends GetxController {
             homeController.menudetail.value.groupNameEN = "Transfer";
             if (response["qrType"] == "static") {
               if (response["merchantMobile"] == storage.read('msisdn')) {
-                DialogHelper.showErrorDialogNew(description: 'Can\'t scan own QR');
+                DialogHelper.showErrorDialogNew(
+                    description: 'Can\'t scan own QR');
               } else {
-                transferController.destinationMsisdn.value = response["merchantMobile"];
-                final menuWithAppId14 = homeController.menuModel.value.firstWhere(
+                transferController.destinationMsisdn.value =
+                    response["merchantMobile"];
+                final menuWithAppId14 =
+                    homeController.menuModel.value.firstWhere(
                   (menu) => menu.menulists!.any((item) => item.appid == 14),
                 );
                 if (menuWithAppId14 != null) {
-                  final matchedItem = menuWithAppId14.menulists!.firstWhere((item) => item.appid == 14);
+                  final matchedItem = menuWithAppId14.menulists!
+                      .firstWhere((item) => item.appid == 14);
                   homeController.menutitle.value = matchedItem.groupNameEN!;
                   homeController.menudetail.value = matchedItem;
                 }
@@ -159,7 +181,8 @@ class QrController extends GetxController {
               var desMsisdn = response["merchantMobile"];
               var transferAmount = response["transAmount"].toString();
               var transferNote = response["Remark"];
-              transferController.vertifyWallet(desMsisdn, transferAmount, transferNote);
+              transferController.vertifyWallet(
+                  desMsisdn, transferAmount, transferNote);
             }
           } else {
             homeController.menudetail.value.groupNameEN = "QR";
@@ -167,8 +190,10 @@ class QrController extends GetxController {
             qrModel.value = QrModel.fromJson(response);
             // await creditcardController.checkVisaPayment();
             if (response["qrType"] == "dynamic") {
-              rxPaymentAmount.value = int.parse(qrModel.value.transAmount.toString());
-              rxTotalAmount.value = int.parse(qrModel.value.transAmount.toString());
+              rxPaymentAmount.value =
+                  int.parse(qrModel.value.transAmount.toString());
+              rxTotalAmount.value =
+                  int.parse(qrModel.value.transAmount.toString());
             }
             // Get.to(() => const QrPaymentScreen());
           }
@@ -222,7 +247,8 @@ class QrController extends GetxController {
           "qrCode": rxQRcode.value,
           "Provider": qrModel.value.provider!,
           "Remark": rxNote.value,
-          "PhoneUser_Name": '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}'
+          "PhoneUser_Name":
+              '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}'
         };
         response = await DioClient.postEncrypt(url, data, key: 'lmmkey');
         //! save log
@@ -232,8 +258,11 @@ class QrController extends GetxController {
           rxTransID.value = response['transactionNo'];
           rxTimeStamp.value = response['CreatedDatetime'];
           rxTotalAmount.value = int.parse(response['transAmount']);
+          enableBottom.value = true;
           Get.to(ReusableResultScreen(
-            fromAccountImage: userController.userProfilemodel.value.profileImg ?? MyConstant.profile_default,
+            fromAccountImage:
+                userController.userProfilemodel.value.profileImg ??
+                    MyConstant.profile_default,
             fromAccountName: userController.profileName.value,
             fromAccountNumber: userController.rxMsisdn.value,
             toAccountImage: qrModel.value.logoUrl ?? MyConstant.profile_default,
@@ -247,6 +276,7 @@ class QrController extends GetxController {
             timestamp: rxTimeStamp.value,
           ));
         } else {
+          enableBottom.value = true;
           DialogHelper.showErrorWithFunctionDialog(
             description: response['resultDesc'],
             onClose: () {
@@ -255,6 +285,7 @@ class QrController extends GetxController {
           );
         }
       } else {
+        enableBottom.value = true;
         DialogHelper.showErrorWithFunctionDialog(
           description: response['resultDesc'],
           onClose: () {
@@ -289,7 +320,8 @@ class QrController extends GetxController {
         url = '${MyConstant.urlQR}/LaoConfirmQR';
         data = {
           "PhoneUser": storage.read('msisdn'),
-          "PhoneUser_Name": '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+          "PhoneUser_Name":
+              '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
           "transID": rxTransID.value,
           "qrType": qrModel.value.qrType,
           "refNo": qrModel.value.refNo,
@@ -312,8 +344,11 @@ class QrController extends GetxController {
           rxTimeStamp.value = response['CreatedDatetime'];
           rxTotalAmount.value = int.parse(response['transAmount']);
           rxFee.value = int.parse(response['fee']);
+          enableBottom.value = true;
           Get.to(ReusableResultScreen(
-            fromAccountImage: userController.userProfilemodel.value.profileImg ?? MyConstant.profile_default,
+            fromAccountImage:
+                userController.userProfilemodel.value.profileImg ??
+                    MyConstant.profile_default,
             fromAccountName: userController.profileName.value,
             fromAccountNumber: userController.rxMsisdn.value,
             toAccountImage: qrModel.value.logoUrl ?? MyConstant.profile_default,
@@ -327,6 +362,7 @@ class QrController extends GetxController {
             timestamp: rxTimeStamp.value,
           ));
         } else {
+          enableBottom.value = true;
           DialogHelper.showErrorWithFunctionDialog(
             description: response['resultDesc'],
             onClose: () {
@@ -336,6 +372,7 @@ class QrController extends GetxController {
         }
       }
     } else {
+      enableBottom.value = true;
       DialogHelper.showErrorWithFunctionDialog(
         description: 'Your balance not enough.',
         onClose: () {
@@ -357,7 +394,8 @@ class QrController extends GetxController {
       "tranID": rxTransID.value,
       "tranRef": transRef
     };
-    var response = await DioClient.postEncrypt(loading: false, url, data, key: 'point');
+    var response =
+        await DioClient.postEncrypt(loading: false, url, data, key: 'point');
 
     await logController.insertLog(
       'x_cashout_coupon',
@@ -400,7 +438,85 @@ class QrController extends GetxController {
       "PhoneUser": storage.read('msisdn'),
       "Provider": qrModel.value.provider!,
     });
+    print(response);
     rxFee.value = int.parse(response['FeeAmount'].toString());
     rxFeeConsumer.value = int.parse(response['FeeAmount_Consumer'].toString());
+  }
+
+  //!
+  //! PAYMENT LAO-QR
+  //!------------------------------------------------------------------------------
+  paymentLaoQRVisa(
+      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    var data;
+    var url;
+    var response;
+    if (qrModel.value.qrType! == "dynamic") {
+      rxFee.value = int.parse(qrModel.value.fee!);
+    } else {
+      await QueryFee();
+    }
+    if (await paymentController.paymentByVisaMasterCard(
+      rxTransID.value,
+      rxNote.value,
+      rxTotalAmount.value,
+      storedCardUniqueID,
+      cvvCode,
+    )) {
+      url = '${MyConstant.urlQR}/LaoConfirmQR';
+      data = {
+        "PhoneUser": storage.read('msisdn'),
+        "PhoneUser_Name":
+            '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+        "transID": rxTransID.value,
+        "qrType": qrModel.value.qrType,
+        "refNo": qrModel.value.refNo,
+        "merchantMobile": qrModel.value.merchantMobile,
+        "qr": rxQRcode.value,
+        "shopName": qrModel.value.shopName,
+        "amount": rxTotalAmount.value,
+        "Provider": qrModel.value.provider!,
+        "fee": rxFee.value,
+        "Remark": rxNote.value,
+        "fee_consumer": rxFeeConsumer.value,
+        "type": MyConstant.desRoute,
+        "paymentTypeId": qrModel.value.paymentTypeId
+      };
+      response = await DioClient.postEncrypt(url, data, key: 'lmmkey');
+      //! save log
+      await saveLogQR(data, response);
+
+      if (response['resultCode'] == "200") {
+        rxTransID.value = response['transID'];
+        rxTimeStamp.value = response['CreatedDatetime'];
+        rxTotalAmount.value = int.parse(response['transAmount']);
+        rxFee.value = int.parse(response['fee']);
+        enableBottom.value = true;
+        Get.to(ReusableResultScreen(
+          isUSD: true,
+          fromAccountImage: userController.userProfilemodel.value.profileImg ??
+              MyConstant.profile_default,
+          fromAccountName: userController.profileName.value,
+          fromAccountNumber: userController.rxMsisdn.value,
+          toAccountImage: qrModel.value.logoUrl ?? MyConstant.profile_default,
+          toAccountName: qrModel.value.shopName.toString(),
+          toAccountNumber: qrModel.value.provider.toString(),
+          toTitleProvider: '',
+          amount: rxPaymentAmount.value.toString(),
+          fee: rxFee.value.toString(),
+          transactionId: rxTransID.value,
+          note: rxNote.value,
+          timestamp: rxTimeStamp.value,
+        ));
+      } else {
+        enableBottom.value = true;
+        DialogHelper.showErrorWithFunctionDialog(
+          description: response['resultDesc'],
+          onClose: () {
+            Get.close(userController.pageclose.value + 1);
+          },
+        );
+      }
+    }
   }
 }

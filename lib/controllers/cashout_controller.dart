@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, unused_local_variable, prefer_typing_uninitialized_variables
 
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +13,7 @@ import 'package:super_app/models/ReqCashoutBankModel.dart';
 import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/cashout/OtpTransferBankScreen.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
 import 'package:super_app/views/reusable_template/reusable_result.dart';
 import '../../../services/api/dio_client.dart';
 import '../../../utility/dialog_helper.dart';
@@ -28,6 +28,8 @@ class CashOutController extends GetxController {
   RxList<RecentBankModel> recentModel = <RecentBankModel>[].obs;
   Rx<ReqCashoutBankModel> reqcashout = ReqCashoutBankModel().obs;
 
+  final RxBool enableBottom = true.obs;
+
   RxString rxTransID = ''.obs;
   RxString rxAccNo = ''.obs;
   RxString rxAccName = ''.obs;
@@ -39,14 +41,14 @@ class CashOutController extends GetxController {
   RxString rxCodeBank = ''.obs;
   RxString rxLogo = ''.obs;
 
-  RxBool loading = false.obs;
-
   //? Log
   var logVerify;
   var logPaymentReq;
   var logPaymentRes;
-
+// 00120010010092446
   fetchBankList() async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // await prefs.remove('historyCashout');
     List<String> urlSplit =
         homeController.menudetail.value.url.toString().split(";");
     var url = urlSplit[0];
@@ -56,65 +58,6 @@ class CashOutController extends GetxController {
     bankModel.value = response
         .map<ProviderBankModel>((json) => ProviderBankModel.fromJson(json))
         .toList();
-  }
-
-  fetchRecentBank() async {
-    try {
-      List<String> urlSplit =
-          homeController.menudetail.value.url.toString().split(";");
-      var url = urlSplit[1];
-      // var url = "/Bank/getRecent";
-      var response = await DioClient.postEncrypt(
-        loading: false,
-        url,
-        {
-          "Msisdn": storage.read('msisdn'),
-          "ReqID": bankDetail.value.requesterID,
-        },
-        key: 'lmm',
-      );
-      if (response != null && response.isNotEmpty) {
-        List<RecentBankModel> fetchedData = response
-            .map<RecentBankModel>((json) => RecentBankModel.fromJson(json))
-            .toList();
-        // Retrieve SharedPreferences instance
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.remove('historyCashout');
-        // Get favoriteCashout data from localStorage
-        String? favoriteDataString = prefs.getString('favoriteCashout');
-        List<dynamic> favoriteDataList = [];
-        if (favoriteDataString != null) {
-          favoriteDataList = jsonDecode(favoriteDataString);
-        }
-        // Create new data and update favorite status
-        for (var model in fetchedData) {
-          int favorite =
-              favoriteDataList.any((fav) => fav['AccNo'] == model.accNo)
-                  ? 1
-                  : 0;
-          Map<String, dynamic> newData = {
-            'AccNo': model.accNo,
-            'AccName': model.accName,
-            'id': rxCodeBank.value,
-            'favorite': favorite,
-            'logo': rxLogo.value
-          };
-          // Get existing historyCashout data
-          String? historyDataString = prefs.getString('historyCashout');
-          List<dynamic> historyDataList = [];
-          if (historyDataString != null) {
-            historyDataList = jsonDecode(historyDataString);
-          }
-          // Add new data to historyCashout
-          historyDataList.add(newData);
-          // Save updated historyCashout to localStorage
-          prefs.setString('historyCashout', jsonEncode(historyDataList));
-          print("New data added to historyCashout: $newData");
-        }
-      }
-    } catch (e) {
-      print("Error fetching recent bank data: $e");
-    }
   }
 
   verifyAcc(String accNo) async {
@@ -137,14 +80,38 @@ class CashOutController extends GetxController {
       rxAccName.value = response['accountName'];
       rxFee.value = response['fee'].toString();
       logVerify = response;
-      loading.value = false;
-      Get.toNamed('/cashOutConfirm');
+      enableBottom.value = true;
+      Get.to(
+        () => ReusableConfirmScreen(
+          appbarTitle: homeController.getMenuTitle(),
+          function: () {
+            enableBottom.value = false;
+            confirmPayment();
+          },
+          isEnabled: enableBottom,
+          stepProcess: "3/3",
+          stepTitle: "check_detail",
+          fromAccountImage: userController.userProfilemodel.value.profileImg ??
+              MyConstant.profile_default,
+          fromAccountName:
+              '${userController.userProfilemodel.value.name.toString()} ${userController.userProfilemodel.value.surname.toString()}',
+          fromAccountNumber:
+              userController.userProfilemodel.value.msisdn.toString(),
+          toAccountImage: rxLogo.value,
+          toAccountName: rxAccNo.toString(),
+          toAccountNumber: rxAccName.toString(),
+          amount: rxPaymentAmount.value,
+          fee: rxFee.value,
+          note: rxNote.value,
+        ),
+      );
     } else {
-      loading.value = false;
+      enableBottom.value = true;
       DialogHelper.showErrorDialogNew(description: response['resultdesc']);
     }
   }
 
+// 0921203798418
   confirmPayment() async {
     userController.fetchBalance();
     List<String> urlSplit =
@@ -155,7 +122,6 @@ class CashOutController extends GetxController {
     int payment_fee = int.parse(rxPaymentAmount.value.toString()) +
         int.parse(rxFee.value.toString());
     if (balance > payment_fee) {
-      //
       var data = {
         "bid": bankDetail.value.bID,
         "amount": rxPaymentAmount.value.toString(),
@@ -168,14 +134,40 @@ class CashOutController extends GetxController {
       // print(response.toString());
       if (response["resultcode"] == "200") {
         reqcashout.value = ReqCashoutBankModel.fromJson(response);
-        loading.value = false;
+        enableBottom.value = true;
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String? historyDataString = prefs.getString('historyCashout');
+        List<Map<String, dynamic>> historyDataList = [];
+        if (historyDataString != null && historyDataString.isNotEmpty) {
+          try {
+            historyDataList = (json.decode(historyDataString) as List)
+                .map((item) => item as Map<String, dynamic>)
+                .toList();
+          } catch (e) {
+            print('Error decoding historyCashout: $e');
+            return;
+          }
+        }
+        historyDataList.add({
+          'AccNo': rxAccNo.value,
+          'AccName': rxAccName.value,
+          'timeStamp': DateTime.now().toIso8601String(),
+          'id': rxCodeBank.value,
+          'logo': rxLogo.value
+        });
+        try {
+          prefs.setString('historyCashout', json.encode(historyDataList));
+          print('Transaction saved to history for ${rxAccNo.value}');
+        } catch (e) {
+          print('Error saving data: $e');
+        }
         Get.to(() => const OtpTransferBankScreen());
       } else {
-        loading.value = false;
+        enableBottom.value = true;
         DialogHelper.showErrorDialogNew(description: response['resultdesc']);
       }
     } else {
-      loading.value = false;
+      enableBottom.value = true;
       DialogHelper.showErrorDialogNew(description: 'Your balance not enough.');
     }
   }
@@ -226,7 +218,7 @@ class CashOutController extends GetxController {
     );
     if (response["resultcode"] == "200") {
       rxTimeStamp.value = response["CreateDate"];
-      loading.value = false;
+
       Get.to(ReusableResultScreen(
         fromAccountImage: userController.userProfilemodel.value.profileImg ??
             MyConstant.profile_default,
@@ -243,8 +235,65 @@ class CashOutController extends GetxController {
         timestamp: rxTimeStamp.value,
       ));
     } else {
-      loading.value = false;
       DialogHelper.showErrorDialogNew(description: response['resultdesc']);
     }
   }
 }
+// fetchRecentBank() async {
+  //   try {
+  //     List<String> urlSplit =
+  //         homeController.menudetail.value.url.toString().split(";");
+  //     var url = urlSplit[1];
+  //     // var url = "/Bank/getRecent";
+  //     var response = await DioClient.postEncrypt(
+  //       loading: false,
+  //       url,
+  //       {
+  //         "Msisdn": storage.read('msisdn'),
+  //         "ReqID": bankDetail.value.requesterID,
+  //       },
+  //       key: 'lmm',
+  //     );
+  //     if (response != null && response.isNotEmpty) {
+  //       List<RecentBankModel> fetchedData = response
+  //           .map<RecentBankModel>((json) => RecentBankModel.fromJson(json))
+  //           .toList();
+  //       // Retrieve SharedPreferences instance
+  //       SharedPreferences prefs = await SharedPreferences.getInstance();
+  //       await prefs.remove('historyCashout');
+  //       // Get favoriteCashout data from localStorage
+  //       String? favoriteDataString = prefs.getString('favoriteCashout');
+  //       List<dynamic> favoriteDataList = [];
+  //       if (favoriteDataString != null) {
+  //         favoriteDataList = jsonDecode(favoriteDataString);
+  //       }
+  //       // Create new data and update favorite status
+  //       for (var model in fetchedData) {
+  //         int favorite =
+  //             favoriteDataList.any((fav) => fav['AccNo'] == model.accNo)
+  //                 ? 1
+  //                 : 0;
+  //         Map<String, dynamic> newData = {
+  //           'AccNo': model.accNo,
+  //           'AccName': model.accName,
+  //           'id': rxCodeBank.value,
+  //           'favorite': favorite,
+  //           'logo': rxLogo.value
+  //         };
+  //         // Get existing historyCashout data
+  //         String? historyDataString = prefs.getString('historyCashout');
+  //         List<dynamic> historyDataList = [];
+  //         if (historyDataString != null) {
+  //           historyDataList = jsonDecode(historyDataString);
+  //         }
+  //         // Add new data to historyCashout
+  //         historyDataList.add(newData);
+  //         // Save updated historyCashout to localStorage
+  //         prefs.setString('historyCashout', jsonEncode(historyDataList));
+  //         print("New data added to historyCashout: $newData");
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print("Error fetching recent bank data: $e");
+  //   }
+  // }

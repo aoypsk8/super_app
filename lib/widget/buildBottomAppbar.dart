@@ -7,24 +7,27 @@ import 'package:super_app/widget/textfont.dart';
 
 // ignore: camel_case_types
 class buildBottomAppbar extends StatelessWidget {
-  buildBottomAppbar({
-    super.key,
-    required this.func,
-    required this.title,
-    this.radius = 6,
-    this.high = 4,
-    this.bgColor = cr_ef33,
-    this.margin = const EdgeInsets.symmetric(horizontal: 20),
-    this.fontWeight = FontWeight.w500,
-    this.noto = false,
-    this.share = false,
-    this.isEnabled = true,
-    this.paddingbottom = 0,
-  });
+  buildBottomAppbar(
+      {super.key,
+      required this.func,
+      required this.title,
+      this.radius = 6,
+      this.high = 4,
+      this.bgColor = cr_ef33,
+      this.margin = const EdgeInsets.symmetric(horizontal: 20),
+      this.fontWeight = FontWeight.w500,
+      this.noto = false,
+      this.share = false,
+      this.isEnabled = true,
+      this.paddingbottom = 0,
+      this.textColor = color_fff,
+      this.borderColor = cr_ef33});
   final String title;
   final double radius;
   final double high;
   final Color bgColor;
+  final Color textColor;
+  final Color borderColor;
   final Function() func;
   final EdgeInsetsGeometry margin;
   final bool? noto;
@@ -51,6 +54,7 @@ class buildBottomAppbar extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(radius),
+                  side: BorderSide(width: 1, color: borderColor),
                 ),
               ),
               child: Row(
@@ -58,7 +62,7 @@ class buildBottomAppbar extends StatelessWidget {
                 children: [
                   TextFont(
                     text: isEnabled ? title : 'loading...',
-                    color: color_fff,
+                    color: textColor,
                     fontWeight: fontWeight,
                     noto: noto ?? true,
                   ),

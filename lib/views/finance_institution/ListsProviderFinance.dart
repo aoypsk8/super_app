@@ -6,6 +6,7 @@ import 'package:super_app/controllers/finance_controller.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/views/finance_institution/VerifyAccountFinanceScreen.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -47,7 +48,7 @@ class _ListsProviderFinanceState extends State<ListsProviderFinance> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildStepProcess(title: "1/4", desc: "choose_institution"),
+              buildStepProcess(title: "1/5", desc: "choose_institution"),
               const SizedBox(height: 20),
               Expanded(
                 child: ListView.builder(
@@ -63,7 +64,7 @@ class _ListsProviderFinanceState extends State<ListsProviderFinance> {
                             onTap: () {
                               financeController.financeModelDetail.value =
                                   financeController.financeModel[index];
-                              Get.toNamed("/vertifyAccountFinace");
+                              Get.to(VerifyAccountFinanceScreen());
                             },
                             child: Container(
                               decoration: BoxDecoration(

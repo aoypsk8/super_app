@@ -23,7 +23,8 @@ class DialogHelper {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Dialog(
             surfaceTintColor: color_fff,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: Padding(
               padding: const EdgeInsets.all(0),
               child: Column(
@@ -43,7 +44,8 @@ class DialogHelper {
                     fontSize: 12,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     child: Column(
                       children: [
                         Padding(
@@ -70,7 +72,11 @@ class DialogHelper {
                                   elevation: 0, // Remove shadow
                                   padding: EdgeInsets.symmetric(vertical: 10)),
                               onPressed: onClose ?? (() => hide()),
-                              child: TextFont(text: 'close', textAlign: TextAlign.center, color: cr_3b3b, fontWeight: FontWeight.normal),
+                              child: TextFont(
+                                  text: 'close',
+                                  textAlign: TextAlign.center,
+                                  color: cr_3b3b,
+                                  fontWeight: FontWeight.normal),
                             ),
                           ),
                         ),
@@ -101,7 +107,8 @@ class DialogHelper {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Dialog(
             surfaceTintColor: color_fff,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: !withCancel
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
@@ -118,11 +125,13 @@ class DialogHelper {
                         fontSize: 12,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 35, vertical: 15),
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 0),
                               child: TextFont(
                                 text: description.tr,
                                 textAlign: TextAlign.center,
@@ -133,19 +142,26 @@ class DialogHelper {
                             ),
                             const SizedBox(height: 10),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 30),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
                               child: SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: cr_ef33,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                       ),
                                       elevation: 0, // Remove shadow
-                                      padding: EdgeInsets.symmetric(vertical: 10)),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10)),
                                   onPressed: onClose,
-                                  child: TextFont(text: closeTitle, textAlign: TextAlign.center, color: color_fff, fontWeight: FontWeight.normal),
+                                  child: TextFont(
+                                      text: closeTitle,
+                                      textAlign: TextAlign.center,
+                                      color: color_fff,
+                                      fontWeight: FontWeight.normal),
                                 ),
                               ),
                             ),
@@ -172,11 +188,13 @@ class DialogHelper {
                             fontSize: 12,
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 35, vertical: 15),
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 0),
                                   child: TextFont(
                                     text: description.tr,
                                     textAlign: TextAlign.center,
@@ -187,19 +205,26 @@ class DialogHelper {
                                 ),
                                 const SizedBox(height: 10),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30),
                                   child: SizedBox(
                                     width: double.infinity,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor: cr_ef33,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(100),
+                                            borderRadius:
+                                                BorderRadius.circular(100),
                                           ),
                                           elevation: 0, // Remove shadow
-                                          padding: EdgeInsets.symmetric(vertical: 10)),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10)),
                                       onPressed: onClose,
-                                      child: TextFont(text: closeTitle, textAlign: TextAlign.center, color: color_fff, fontWeight: FontWeight.normal),
+                                      child: TextFont(
+                                          text: closeTitle,
+                                          textAlign: TextAlign.center,
+                                          color: color_fff,
+                                          fontWeight: FontWeight.normal),
                                     ),
                                   ),
                                 ),
@@ -261,21 +286,23 @@ class DialogHelper {
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Dialog(
               surfaceTintColor: color_fff,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
               child: Padding(
                 padding: const EdgeInsets.all(0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40.0, vertical: 15),
                       child: Lottie.asset(
                         MyIcon.animation_success,
-                        repeat: false,
+                        repeat: autoClose ? false : true,
                         onLoaded: (composition) {
                           autoClose
                               ? Future.delayed(composition.duration * 2, () {
-                                  Get.back();
+                                  hide();
                                 })
                               : null;
                         },
@@ -313,9 +340,9 @@ class DialogHelper {
           child: GestureDetector(
             onTap: () {
               if (onClose != null) {
-                onClose();
                 Get.back();
                 hide();
+                onClose();
               } else {
                 Get.until((route) => route.isFirst);
                 Get.back();
@@ -326,14 +353,16 @@ class DialogHelper {
               padding: const EdgeInsets.symmetric(horizontal: 50),
               child: Dialog(
                 surfaceTintColor: color_fff,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
                 child: Padding(
                   padding: const EdgeInsets.all(0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40.0, vertical: 15),
                         child: Image.asset(MyIcon.ic_mascot_good),
                       ),
                       SizedBox(height: 10),
@@ -341,6 +370,7 @@ class DialogHelper {
                         text: title,
                         fontWeight: FontWeight.w400,
                         color: cr_2929,
+                        maxLines: 5,
                         fontSize: 12,
                       ),
                       const SizedBox(height: 20),
@@ -367,7 +397,8 @@ class DialogHelper {
         onWillPop: () async => false,
         child: Dialog(
           surfaceTintColor: color_fff,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Padding(
             padding: const EdgeInsets.all(0),
             child: Column(
@@ -386,7 +417,8 @@ class DialogHelper {
                   color: color_436,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 35, vertical: 10),
                   child: Column(
                     children: [
                       Padding(
@@ -411,9 +443,14 @@ class DialogHelper {
                                   padding: const EdgeInsets.all(10),
                                   decoration: ShapeDecoration(
                                     color: Color(0xFFEDF1F7),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
                                   ),
-                                  child: TextFont(text: 'cancel', textAlign: TextAlign.center, fontWeight: FontWeight.normal),
+                                  child: TextFont(
+                                      text: 'cancel',
+                                      textAlign: TextAlign.center,
+                                      fontWeight: FontWeight.normal),
                                 ),
                               ),
                             ),
@@ -429,9 +466,14 @@ class DialogHelper {
                                 padding: const EdgeInsets.all(10),
                                 decoration: ShapeDecoration(
                                   color: Color(0xFFF15244),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30)),
                                 ),
-                                child: TextFont(text: okTitle, textAlign: TextAlign.center, color: Colors.white, fontWeight: FontWeight.normal),
+                                child: TextFont(
+                                    text: okTitle,
+                                    textAlign: TextAlign.center,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
                               ),
                             ),
                           ),
@@ -449,13 +491,16 @@ class DialogHelper {
     );
   }
 
-  static void loading({String title = 'Uh oh.', String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.'}) {
+  static void loading(
+      {String title = 'Uh oh.',
+      String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.'}) {
     Get.dialog(
       WillPopScope(
         onWillPop: () async => false,
         child: Dialog(
           surfaceTintColor: color_fff,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -504,7 +549,8 @@ class DialogHelper {
                         // Center the image
                         Center(
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 20), // Adjust padding if needed
+                            padding: const EdgeInsets.only(
+                                top: 20), // Adjust padding if needed
                             child: Image.asset(
                               'assets/icons/problem.png',
                               height: 120,
@@ -517,7 +563,8 @@ class DialogHelper {
                           right: 0,
                           top: 0,
                           child: IconButton(
-                            icon: Icon(Icons.close, color: Colors.black54, size: 24),
+                            icon: Icon(Icons.close,
+                                color: Colors.black54, size: 24),
                             onPressed: () {
                               Get.back();
                             },
@@ -542,7 +589,8 @@ class DialogHelper {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 10),
                       ),
                       onPressed: () {
                         Get.back(); // Close the dialog
@@ -571,13 +619,19 @@ class DialogHelper {
     if (Get.isDialogOpen!) Get.back();
   }
 
-  static void showDialogPolicy({String title = 'Policy', String description = 'Policy Description.', Function()? onClose, bool isChecked = false}) {
+  static void showDialogPolicy({
+    String title = 'Policy',
+    String description = 'Policy Description.',
+    Function()? onClose,
+    bool isChecked = false,
+  }) {
     Get.dialog(
       WillPopScope(
         onWillPop: () async => false,
         child: Dialog(
           surfaceTintColor: color_fff,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: SingleChildScrollView(
             child: _PolicyDialogContent(
               title: title,
@@ -620,83 +674,102 @@ class __PolicyDialogContentState extends State<_PolicyDialogContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Column(
+    return Container(
+      width: Get.width * 0.8, // Optional, to make dialog width responsive
+      constraints: BoxConstraints(
+        maxHeight: Get.height * 0.8, // Limit dialog height to 80% of screen
+      ),
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        mainAxisSize: MainAxisSize.min, // Fit around content
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextFont(
-                    fontSize: 16,
-                    text: widget.title,
-                    fontWeight: FontWeight.w500,
-                    color: cr_090a,
-                  ),
-                  InkWell(
-                    onTap: () => Get.back(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: SvgPicture.asset(
-                        MyIcon.ic_deleteX,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               TextFont(
-                fontSize: 12,
-                maxLines: 100,
-                text: widget.description,
-                fontWeight: FontWeight.w300,
-                color: color_777,
+                fontSize: 16,
+                text: widget.title,
+                fontWeight: FontWeight.w500,
+                color: cr_090a,
+              ),
+              InkWell(
+                onTap: () => Get.back(),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: SvgPicture.asset(MyIcon.ic_deleteX),
+                ),
               ),
             ],
           ),
-        ),
-        Row(
-          children: [
-            Checkbox(
-              value: isChecked,
-              onChanged: (value) {
-                setState(() {
-                  isChecked = value ?? false;
-                });
-              },
+          const SizedBox(height: 10),
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: Get.height *
+                  0.5, // Limit description height to max 50% of screen height
             ),
-            Expanded(
+            child: SingleChildScrollView(
               child: TextFont(
                 fontSize: 12,
-                text: "ຂ້ອຍໄດ້ອ່ານນະໂຍບາຍ ແລະ ຍອມຮັບ",
-                fontWeight: FontWeight.w500,
+                maxLines: 1000, // No real limit, it will scroll
+                text: widget.description,
+                fontWeight: FontWeight.w300,
+                color: cr_090a,
               ),
             ),
-          ],
-        ),
-        SizedBox(
-          width: Get.width,
-          child: buildBottomAppbar(
-            bgColor: isChecked ? cr_ef33 : Colors.grey,
-            title: 'next',
-            func: () {
-              if (isChecked) {
-                if (widget.onClose != null) {
-                  widget.onClose!();
-                }
-              } else {
-                Get.snackbar(
-                  'Error',
-                  'Please accept the policy to proceed.',
-                  backgroundColor: cr_ef33,
-                  colorText: Colors.white,
-                );
-              }
-            },
           ),
-        ),
-      ],
+
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Checkbox(
+                value: isChecked,
+                onChanged: (value) {
+                  setState(() {
+                    isChecked = value ?? false;
+                  });
+                },
+                checkColor:
+                    Colors.white, // Color of the check mark (the tick inside)
+                fillColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return cr_ef33; // Checked box background color
+                  }
+                  return Colors.white; // Unchecked box background color
+                }),
+              ),
+              Expanded(
+                child: TextFont(
+                  fontSize: 12,
+                  text: "ຂ້ອຍໄດ້ອ່ານນະໂຍບາຍ ແລະ ຍອມຮັບ",
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+
+          // Bottom button
+          SizedBox(
+            width: Get.width,
+            child: buildBottomAppbar(
+              high: 0,
+              bgColor: isChecked ? cr_ef33 : Colors.grey,
+              title: 'next',
+              func: () {
+                if (isChecked) {
+                  widget.onClose?.call();
+                } else {
+                  Get.snackbar(
+                    'Error',
+                    'Please accept the policy to proceed.',
+                    backgroundColor: cr_ef33,
+                    colorText: Colors.white,
+                  );
+                }
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -712,7 +785,8 @@ class Loading {
         onWillPop: () async => false,
         child: Dialog(
           backgroundColor: Colors.transparent,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

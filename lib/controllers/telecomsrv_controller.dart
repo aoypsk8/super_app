@@ -12,6 +12,7 @@ class TelecomsrvController extends GetxController {
   Rx<TelQueryPackage> inusePackageModel = TelQueryPackage().obs;
   RxList<PhoneListModel> phoneListModel = <PhoneListModel>[].obs;
   RxList<TelQueryPackage> telQueryPackage = <TelQueryPackage>[].obs;
+  RxList<MainMenuInfo> mainMenuInfo = <MainMenuInfo>[].obs;
   RxString msisdn = '2055xxxxxx'.obs;
   RxString mainAirtime = '0'.obs;
   RxString airtime = '0'.obs;
@@ -19,7 +20,7 @@ class TelecomsrvController extends GetxController {
   RxString point = '0'.obs;
   final storage = GetStorage();
   //slide up control
-  PanelController panelController = PanelController();
+  final PanelController panelController = PanelController();
   //package detail
   RxString msisdnDetail = ''.obs;
 
@@ -30,6 +31,7 @@ class TelecomsrvController extends GetxController {
     await getAirtime(await storage.read('msisdn'));
     await queryTelPackage(await storage.read('msisdn'));
     await phoneList();
+    // await fetchMainMenu();
   }
 
   getNetworktype() async {
@@ -166,5 +168,13 @@ class TelecomsrvController extends GetxController {
     if (res['resultCode'] == '200') {
       point.value = res['point'];
     }
+  }
+
+  fetchMainMenu() async {
+    mainMenuInfo.value =
+        (await DioClient.getNoLoading('${MyConstant.mservicesUrl}/ListMainMenu')
+                as List)
+            .map((e) => MainMenuInfo.fromJson(e))
+            .toList();
   }
 }

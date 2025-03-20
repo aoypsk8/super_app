@@ -260,3 +260,92 @@ class TelQueryPackage {
     return data;
   }
 }
+
+class MainMenuInfo {
+  String? mainMenuKey;
+  String? mainMenuEng;
+  String? mainMenuLa;
+  String? coverPage1x1;
+  String? coverPage2x1;
+  String? coverPage3x1;
+  String? coverPage1x2;
+  String? coverPage1x3;
+  String? coverPage2x2;
+  String? coverPage2x3;
+  String? coverPage3x2;
+  String? coverPage3x3;
+  int? seq;
+  bool? isShow;
+  String? userId;
+  String? mainMenuChn;
+  String? mainMenuKor;
+  String? mainMenuVie;
+  bool? isTest;
+
+  MainMenuInfo(
+      {this.mainMenuKey,
+      this.mainMenuEng,
+      this.mainMenuLa,
+      this.coverPage1x1,
+      this.coverPage2x1,
+      this.coverPage3x1,
+      this.coverPage1x2,
+      this.coverPage1x3,
+      this.coverPage2x2,
+      this.coverPage2x3,
+      this.coverPage3x2,
+      this.coverPage3x3,
+      this.seq,
+      this.isShow,
+      this.userId,
+      this.mainMenuChn,
+      this.mainMenuKor,
+      this.mainMenuVie,
+      this.isTest});
+
+  MainMenuInfo.fromJson(Map<String, dynamic> json) {
+    mainMenuKey = json['mainMenuKey'];
+    mainMenuEng = json['mainMenuEng'];
+    mainMenuLa = json['mainMenuLa'];
+    coverPage1x1 = json['coverPage1x1'];
+    coverPage2x1 = json['coverPage2x1'];
+    coverPage3x1 = json['coverPage3x1'];
+    coverPage1x2 = json['coverPage1x2'];
+    coverPage1x3 = json['coverPage1x3'];
+    coverPage2x2 = json['coverPage2x2'];
+    coverPage2x3 = json['coverPage2x3'];
+    coverPage3x2 = json['coverPage3x2'];
+    coverPage3x3 = json['coverPage3x3'];
+    seq = json['seq'];
+    isShow = json['isShow'];
+    userId = json['userId'];
+    mainMenuChn = json['mainMenuChn'];
+    mainMenuKor = json['mainMenuKor'];
+    mainMenuVie = json['mainMenuVie'];
+    isTest = json['isTest'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['mainMenuKey'] = this.mainMenuKey;
+    data['mainMenuEng'] = this.mainMenuEng;
+    data['mainMenuLa'] = this.mainMenuLa;
+    data['coverPage1x1'] = this.coverPage1x1;
+    data['coverPage2x1'] = this.coverPage2x1;
+    data['coverPage3x1'] = this.coverPage3x1;
+    data['coverPage1x2'] = this.coverPage1x2;
+    data['coverPage1x3'] = this.coverPage1x3;
+    data['coverPage2x2'] = this.coverPage2x2;
+    data['coverPage2x3'] = this.coverPage2x3;
+    data['coverPage3x2'] = this.coverPage3x2;
+    data['coverPage3x3'] = this.coverPage3x3;
+    data['seq'] = this.seq;
+    data['isShow'] = this.isShow;
+    data['userId'] = this.userId;
+    data['mainMenuChn'] = this.mainMenuChn;
+    data['mainMenuKor'] = this.mainMenuKor;
+    data['mainMenuVie'] = this.mainMenuVie;
+    data['isTest'] = this.isTest;
+    return data;
+  }
+}

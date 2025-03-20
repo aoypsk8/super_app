@@ -173,8 +173,8 @@ class _WebappWebviewScreenState extends State<WebappWebviewScreen> {
   /// ✅ Initializes the WebView with the correct URL
   void _initializeWebView() {
     String url = widget.urlWidget;
-    var param = '?token=${userController.rxToken.value}&custPhone=${userController.rxMsisdn.value}';
-    // url += param;
+    var param = 'token=${userController.rxToken.value}&msisdn=${userController.rxMsisdn.value}';
+    url += param;
     debugPrint('WebView URL: $url');
 
     controller = WebViewController()

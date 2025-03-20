@@ -4,17 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:super_app/app_routes.dart';
+import 'package:super_app/onboarding_screen.dart';
 import 'package:super_app/services/blindings/initial_blinding.dart';
 import 'package:super_app/services/language_service.dart';
 import 'package:super_app/services/theme_service.dart';
 import 'package:super_app/splash_screen.dart';
 import 'package:super_app/test.dart';
+import 'package:super_app/test1.dart';
 import 'package:super_app/test_biometric.dart';
 import 'package:super_app/themes/dark_theme.dart';
 import 'package:super_app/themes/light_theme.dart';
 import 'package:super_app/translations.dart';
 import 'package:super_app/views/main/bottom_nav.dart';
 import 'package:sizer/sizer.dart';
+
+import 'package:flutter/services.dart';
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
@@ -26,12 +30,19 @@ void main() async {
   await AppTranslations.loadTranslations();
   Get.put(ThemeService());
 
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, // Only allow portrait mode
+  ]).then((_) {
+    runApp(MyApp());
+  });
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+final storage = GetStorage();
 
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
+  final onboarding = storage.read("onboarding") ?? false;
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, eviceType) {
@@ -46,7 +57,9 @@ class MyApp extends StatelessWidget {
         themeMode: Get.find<ThemeService>().theme,
         initialRoute: '/',
         getPages: AppRoutes.routes,
-        home: SplashScreen(),
+        // home: SplashScreen(),
+        // home: AnimationMenu(),
+        home: onboarding ? SplashScreen() : OnboardingScreen(),
         // home: BiometricAuthScreen(),
       );
     });

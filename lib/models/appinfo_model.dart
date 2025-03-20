@@ -8,8 +8,17 @@ class AppInfoModel {
   bool? forceupdate;
   String? bgimage;
   String? bgbill;
+  String? banner;
 
-  AppInfoModel({this.id, this.iosversion, this.androidversion, this.iosurl, this.androidurl, this.created, this.forceupdate, this.bgimage});
+  AppInfoModel(
+      {this.id,
+      this.iosversion,
+      this.androidversion,
+      this.iosurl,
+      this.androidurl,
+      this.created,
+      this.forceupdate,
+      this.bgimage});
 
   AppInfoModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -21,6 +30,7 @@ class AppInfoModel {
     forceupdate = json['forceupdate'];
     bgimage = json['bgimage'];
     bgbill = json['bgbill'];
+    banner = json['banner'];
   }
 
   Map<String, dynamic> toJson() {
@@ -34,6 +44,7 @@ class AppInfoModel {
     data['forceupdate'] = this.forceupdate;
     data['bgimage'] = this.bgimage;
     data['bgbill'] = this.bgbill;
+    data['banner'] = this.banner;
     return data;
   }
 }

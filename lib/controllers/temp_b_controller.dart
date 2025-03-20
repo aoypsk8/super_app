@@ -285,44 +285,44 @@ class TempBController extends GetxController {
   //!
   //! PAYMENT BY VISA MASTERCARD
   //!------------------------------------------------------------------------------
-  paymentProcessVisaWithoutstoredCardUniqueID(Menulists menudetail) async {
-    var data;
-    var url;
-    var response;
-    rxFee.value = tempBdetail.value.fee.toString();
+  // paymentProcessVisaWithoutstoredCardUniqueID(Menulists menudetail) async {
+  //   var data;
+  //   var url;
+  //   var response;
+  //   rxFee.value = tempBdetail.value.fee.toString();
 
-    //! Insert DB
-    List<String> urlSplit = menudetail.url.toString().split(";");
-    url = urlSplit[2];
-    data = {
-      "TranID": rxTransID.value,
-      "ProviderID": tempBdetail.value.providerID.toString(),
-      "leasid": tempBdetail.value.leasID.toString(),
-      "Acc": rxAccNo.value,
-      "AccName": rxAccName.value,
-      "Amount": int.parse(rxPaymentAmount.value).toStringAsFixed(0),
-      "PhoneUser": storage.read('msisdn'),
-      "Remark": rxNote.value,
-      "Name_Code": tempBdetail.value.nameCode.toString(),
-      "Fee": tempBdetail.value.fee
-    };
-    response = await DioClient.postEncrypt(url, data, key: 'lmm');
-    //! save log
-    await saveLogPayment(data, response);
-    if (response['ResultCode'] == '200') {
-      //? save parameter to result screen
-      rxTimeStamp.value = response['CreateDate'];
-      rxPaymentAmount.value = response['Amount'];
-      enableBottom.value = true;
-      Get.to(() => const ResultTempBscreen());
-    } else {
-      enableBottom.value = true;
-      DialogHelper.showErrorWithFunctionDialog(
-        description: response['ResultDesc'],
-        onClose: () {
-          Get.close(userController.pageclose.value + 1);
-        },
-      );
-    }
-  }
+  //   //! Insert DB
+  //   List<String> urlSplit = menudetail.url.toString().split(";");
+  //   url = urlSplit[2];
+  //   data = {
+  //     "TranID": rxTransID.value,
+  //     "ProviderID": tempBdetail.value.providerID.toString(),
+  //     "leasid": tempBdetail.value.leasID.toString(),
+  //     "Acc": rxAccNo.value,
+  //     "AccName": rxAccName.value,
+  //     "Amount": int.parse(rxPaymentAmount.value).toStringAsFixed(0),
+  //     "PhoneUser": storage.read('msisdn'),
+  //     "Remark": rxNote.value,
+  //     "Name_Code": tempBdetail.value.nameCode.toString(),
+  //     "Fee": tempBdetail.value.fee
+  //   };
+  //   response = await DioClient.postEncrypt(url, data, key: 'lmm');
+  //   //! save log
+  //   await saveLogPayment(data, response);
+  //   if (response['ResultCode'] == '200') {
+  //     //? save parameter to result screen
+  //     rxTimeStamp.value = response['CreateDate'];
+  //     rxPaymentAmount.value = response['Amount'];
+  //     enableBottom.value = true;
+  //     Get.to(() => const ResultTempBscreen());
+  //   } else {
+  //     enableBottom.value = true;
+  //     DialogHelper.showErrorWithFunctionDialog(
+  //       description: response['ResultDesc'],
+  //       onClose: () {
+  //         Get.close(userController.pageclose.value + 1);
+  //       },
+  //     );
+  //   }
+  // }
 }

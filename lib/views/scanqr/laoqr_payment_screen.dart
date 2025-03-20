@@ -12,13 +12,15 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/utility/myconstant.dart';
-import 'package:super_app/views/scanqr/ReusableConfirmTranfer.dart';
+import 'package:super_app/views/reusable_template/reusable_confirm.dart';
+import 'package:super_app/views/reusable_template/reusable_getPaymentList.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextField.dart';
 import 'package:super_app/widget/buildUserDetail.dart';
 import 'package:super_app/widget/build_DotLine.dart';
 import 'package:super_app/widget/build_step_process.dart';
+import 'package:super_app/widget/input_cvv.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class LaoQrPaymentScreen extends StatefulWidget {
@@ -44,13 +46,15 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
   @override
   void initState() {
     userController.increasepage();
+    Future.delayed(Duration(milliseconds: 500), () {
+      qrController.enableBottom.value = true;
+    });
     super.initState();
   }
 
   @override
   void dispose() {
     userController.decreasepage();
-    _paymentAmount.dispose();
     super.dispose();
   }
 
@@ -73,7 +77,7 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
                   FadeInDown(
                     duration: Durations.long4,
                     child:
-                        buildStepProcess(title: "1/2", desc: "transfer_laoQR"),
+                        buildStepProcess(title: "1/3", desc: "transfer_laoQR"),
                   ),
                   FadeInDown(
                     duration: Durations.long4,
@@ -97,68 +101,103 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
             child: buildBottomAppbar(
               bgColor: Theme.of(context).primaryColor,
               title: 'next',
+              isEnabled: qrController.enableBottom.value,
               func: () async {
                 _formKey.currentState!.save();
                 if (_formKey.currentState!.validate()) {
-                  qrController.rxPaymentAmount.value = int.parse(
-                      _paymentAmount.text.toString() == ''
-                          ? '0'
-                          : _paymentAmount.text
-                              .toString()
-                              .replaceAll(RegExp(r'[^\w\s]+'), ''));
-                  qrController.rxNote.value = _note.text;
-                  qrController.rxTotalAmount.value =
-                      qrController.rxPaymentAmount.value;
-                  await qrController.QueryFee();
-                  //!Check TransAmount+Fee < BalanceAmount
-                  var totalAmount = qrController.rxTotalAmount.value +
-                      qrController.rxFeeConsumer.value;
-                  if (totalAmount < userController.mainBalance.value) {
-                    paymentController
-                        .reqCashOut(
+                  Get.to(
+                    ListsPaymentScreen(
+                      description: 0,
+                      stepBuild: '2/3',
+                      title: homeController.getMenuTitle(),
+                      onSelectedPayment: (paymentType, cardIndex, uuid) async {
+                        if (paymentType == 'MMONEY') {
+                          qrController.rxTransID.value =
+                              'L${qrController.rxTransID.value}';
+                          qrController.rxPaymentAmount.value = int.parse(
+                              _paymentAmount.text.toString() == ''
+                                  ? '0'
+                                  : _paymentAmount.text
+                                      .toString()
+                                      .replaceAll(RegExp(r'[^\w\s]+'), ''));
+                          qrController.rxNote.value = _note.text;
+                          qrController.rxTotalAmount.value =
+                              qrController.rxPaymentAmount.value;
+                          await qrController.QueryFee();
+                          //!Check TransAmount+Fee < BalanceAmount
+                          var totalAmount = qrController.rxTotalAmount.value +
+                              qrController.rxFeeConsumer.value;
+                          if (totalAmount < userController.mainBalance.value) {
+                            paymentController
+                                .reqCashOut(
+                                    transID: qrController.rxTransID.value,
+                                    amount: qrController.rxTotalAmount.value,
+                                    toAcc:
+                                        qrController.qrModel.value.merchantName,
+                                    chanel: 'QR',
+                                    provider:
+                                        qrController.qrModel.value.provider,
+                                    remark: qrController.rxNote.value)
+                                .then((value) => {
+                                      if (value)
+                                        {navigateToConfirmScreen(paymentType)}
+                                    });
+                          } else {
+                            qrController.enableBottom.value = true;
+                            DialogHelper.showErrorDialogNew(
+                              description: 'Your balance not enough.',
+                            );
+                          }
+                        } else {
+                          qrController.rxTransID.value =
+                              'XXL${qrController.rxTransID.value}';
+                          qrController.rxPaymentAmount.value = int.parse(
+                              _paymentAmount.text.toString() == ''
+                                  ? '0'
+                                  : _paymentAmount.text
+                                      .toString()
+                                      .replaceAll(RegExp(r'[^\w\s]+'), ''));
+                          qrController.rxNote.value = _note.text;
+                          qrController.rxTotalAmount.value =
+                              qrController.rxPaymentAmount.value;
+                          await qrController.QueryFee();
+                          qrController.rxTotalAmount.value =
+                              qrController.rxPaymentAmount.value +
+                                  qrController.rxFeeConsumer.value;
+                          paymentController
+                              .reqCashOut(
                             transID: qrController.rxTransID.value,
                             amount: qrController.rxTotalAmount.value,
                             toAcc: qrController.qrModel.value.merchantName,
                             chanel: 'QR',
                             provider: qrController.qrModel.value.provider,
-                            remark: qrController.rxNote.value)
-                        .then((value) => {
-                              if (value)
-                                {
-                                  Get.to(ReusableConfirmTranfer(
-                                    fromProfile: userController.userProfilemodel
-                                            .value.profileImg ??
-                                        MyConstant.profile_default,
-                                    fromMsisdn: userController.rxMsisdn.value,
-                                    fromName: userController.profileName.value,
-                                    toProfile:
-                                        qrController.qrModel.value.logoUrl ??
-                                            MyConstant.profile_default,
-                                    toMsisdn: qrController
-                                        .qrModel.value.provider
-                                        .toString(),
-                                    toName: qrController.qrModel.value.shopName
-                                        .toString(),
-                                    amount: qrController.rxPaymentAmount.value
-                                        .toString(),
-                                    note: qrController.rxNote.value,
-                                    onTapFunction: () {
-                                      if (qrController.qrModel.value.provider ==
-                                          "LMM") {
-                                        qrController.paymentQR();
-                                      } else {
-                                        qrController.paymentLaoQR();
-                                      }
-                                      return Container();
-                                    },
-                                  ))
-                                }
-                            });
-                  } else {
-                    DialogHelper.showErrorDialogNew(
-                      description: 'Your balance not enough.',
-                    );
-                  }
+                            remark: qrController.rxNote.value,
+                          )
+                              .then((value) async {
+                            if (value) {
+                              homeController.RxamountUSD.value =
+                                  await homeController.convertRate(
+                                      qrController.rxTotalAmount.value);
+                              String? cvv =
+                                  await showDynamicQRDialog(context, () {});
+                              if (cvv != null && cvv.trim().length >= 3) {
+                                navigateToConfirmScreen(
+                                  paymentType,
+                                  cvv,
+                                  uuid,
+                                );
+                              } else {
+                                qrController.enableBottom.value = true;
+                                DialogHelper.showErrorDialogNew(
+                                  description: "please_input_cvv",
+                                );
+                              }
+                            }
+                          });
+                        }
+                      },
+                    ),
+                  );
                 }
               },
             ),
@@ -182,7 +221,8 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
               width: Get.width,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: cr_fdeb,
+                // color: cr_fdeb,
+                color: Theme.of(context).primaryColor.withOpacity(0.1),
               ),
               child: Column(
                 children: [
@@ -448,6 +488,50 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void navigateToConfirmScreen(String paymentType,
+      [String cvv = '', String storedCardUniqueID = '']) {
+    Get.to(
+      () => ReusableConfirmScreen(
+        isUSD: paymentType != 'MMONEY',
+        isEnabled: qrController.enableBottom,
+        appbarTitle: "confirm_payment",
+        function: () {
+          qrController.enableBottom.value = false;
+          if (paymentType == 'MMONEY') {
+            if (qrController.qrModel.value.provider == "LMM") {
+              qrController.paymentQR();
+            } else {
+              qrController.paymentLaoQR();
+            }
+          } else {
+            qrController.paymentLaoQRVisa(
+              homeController.menudetail.value,
+              storedCardUniqueID,
+              cvv,
+            );
+          }
+        },
+        stepProcess: "3/3",
+        stepTitle: "detail",
+        fromAccountImage: userController.userProfilemodel.value.profileImg ??
+            MyConstant.profile_default,
+        fromAccountName:
+            '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
+        fromAccountNumber:
+            userController.userProfilemodel.value.msisdn.toString(),
+        toAccountImage:
+            qrController.qrModel.value.logoUrl ?? MyConstant.profile_default,
+        toAccountName: qrController.qrModel.value.shopName.toString(),
+        toAccountNumber: qrController.qrModel.value.provider.toString(),
+        amount: qrController.rxPaymentAmount.value.toString(),
+        fee: paymentType == 'MMONEY'
+            ? qrController.rxFee.value.toString()
+            : qrController.rxFeeConsumer.value.toString(),
+        note: qrController.rxNote.value,
       ),
     );
   }

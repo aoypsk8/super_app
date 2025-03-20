@@ -1,6 +1,5 @@
 // ignore_for_file: invalid_use_of_protected_member
 import 'dart:convert';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -154,29 +153,30 @@ class _VerifyAccountTempCNewScreenState
                             {
                               tempCcontroler.enableBottom.value = true,
                               Get.to(ListsPaymentScreen(
-                                description: 'select_payment',
+                                description:
+                                    homeController.menudetail.value.appid!,
                                 stepBuild: '5/6',
                                 title: homeController.getMenuTitle(),
                                 onSelectedPayment:
                                     (paymentType, cardIndex, uuid) async {
                                   if (paymentType == "Other") {
-                                    homeController.RxamountUSD.value =
-                                        await homeController.convertRate(
-                                            tempCcontroler.rxTotalAmount.value);
-                                    tempCcontroler.rxTransID.value =
-                                        "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
-                                    Get.to(PaymentVisaMasterCard(
-                                      function: () {
-                                        tempCcontroler
-                                            .paymentPrepaidVisaWithoutstoredCardUniqueID(
-                                          homeController.menudetail.value,
-                                        );
-                                      },
-                                      trainID: tempCcontroler.rxTransID.value,
-                                      description: tempCcontroler.rxNote.value,
-                                      amount:
-                                          tempCcontroler.rxTotalAmount.value,
-                                    ));
+                                    // homeController.RxamountUSD.value =
+                                    //     await homeController.convertRate(
+                                    //         tempCcontroler.rxTotalAmount.value);
+                                    // tempCcontroler.rxTransID.value =
+                                    //     "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                                    // Get.to(PaymentVisaMasterCard(
+                                    //   function: () {
+                                    //     tempCcontroler
+                                    //         .paymentPrepaidVisaWithoutstoredCardUniqueID(
+                                    //       homeController.menudetail.value,
+                                    //     );
+                                    //   },
+                                    //   trainID: tempCcontroler.rxTransID.value,
+                                    //   description: tempCcontroler.rxNote.value,
+                                    //   amount:
+                                    //       tempCcontroler.rxTotalAmount.value,
+                                    // ));
                                   } else if (paymentType == 'MMONEY') {
                                     navigateToConfirmScreen(paymentType);
                                   } else {
@@ -461,52 +461,52 @@ class _VerifyAccountTempCNewScreenState
                     ),
                   ),
                   suffixonTapFuc: () async {
-                    if (await Permission.contacts.request().isGranted) {
-                      try {
-                        final Contact? contact =
-                            await ContactsService.openDeviceContactPicker();
-                        if (contact != null) {
-                          final Item phone = contact.phones!.first;
-                          String phoneNO = phone.value
-                              .toString()
-                              .trim()
-                              .replaceAll(' ', '')
-                              .replaceAll('-', '');
-                          if (phoneNO.startsWith('020')) {
-                            setState(() {
-                              _accoutNumber.text =
-                                  phoneNO.replaceAll("020", "20");
-                            });
-                          } else if (phoneNO.startsWith('+85620')) {
-                            setState(() {
-                              _accoutNumber.text =
-                                  phoneNO.replaceAll("+85620", "20");
-                            });
-                          } else if (phoneNO.startsWith('85620')) {
-                            setState(() {
-                              _accoutNumber.text =
-                                  phoneNO.replaceAll("85620", "20");
-                            });
-                          } else {
-                            setState(() {
-                              _accoutNumber.text = phoneNO;
-                            });
-                          }
-                        }
-                        setState(() {
-                          // _contactName = contact!.displayName.toString();
-                        });
-                      } on FormOperationException catch (e) {
-                        switch (e.errorCode) {
-                          case FormOperationErrorCode.FORM_OPERATION_CANCELED:
-                          case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
-                          case FormOperationErrorCode
-                                .FORM_OPERATION_UNKNOWN_ERROR:
-                          default:
-                          // print(e.toString());
-                        }
-                      }
-                    }
+                    // if (await Permission.contacts.request().isGranted) {
+                    //   try {
+                    //     final Contact? contact =
+                    //         await ContactsService.openDeviceContactPicker();
+                    //     if (contact != null) {
+                    //       final Item phone = contact.phones!.first;
+                    //       String phoneNO = phone.value
+                    //           .toString()
+                    //           .trim()
+                    //           .replaceAll(' ', '')
+                    //           .replaceAll('-', '');
+                    //       if (phoneNO.startsWith('020')) {
+                    //         setState(() {
+                    //           _accoutNumber.text =
+                    //               phoneNO.replaceAll("020", "20");
+                    //         });
+                    //       } else if (phoneNO.startsWith('+85620')) {
+                    //         setState(() {
+                    //           _accoutNumber.text =
+                    //               phoneNO.replaceAll("+85620", "20");
+                    //         });
+                    //       } else if (phoneNO.startsWith('85620')) {
+                    //         setState(() {
+                    //           _accoutNumber.text =
+                    //               phoneNO.replaceAll("85620", "20");
+                    //         });
+                    //       } else {
+                    //         setState(() {
+                    //           _accoutNumber.text = phoneNO;
+                    //         });
+                    //       }
+                    //     }
+                    //     setState(() {
+                    //       // _contactName = contact!.displayName.toString();
+                    //     });
+                    //   } on FormOperationException catch (e) {
+                    //     switch (e.errorCode) {
+                    //       case FormOperationErrorCode.FORM_OPERATION_CANCELED:
+                    //       case FormOperationErrorCode.FORM_COULD_NOT_BE_OPEN:
+                    //       case FormOperationErrorCode
+                    //             .FORM_OPERATION_UNKNOWN_ERROR:
+                    //       default:
+                    //       // print(e.toString());
+                    //     }
+                    //   }
+                    // }
                   },
                 ),
               ),

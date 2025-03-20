@@ -149,17 +149,18 @@ class buildEmailValidate extends StatelessWidget {
 }
 
 class buildPhoneEmailValidate extends StatelessWidget {
-  const buildPhoneEmailValidate({
-    super.key,
-    required this.controller,
-    required this.label,
-    required this.name,
-    required this.hintText,
-    this.icons,
-    this.suffixIcon,
-    this.suffixonTapFuc,
-    this.fillcolor = color_fafa,
-  });
+  const buildPhoneEmailValidate(
+      {super.key,
+      required this.controller,
+      required this.label,
+      required this.name,
+      required this.hintText,
+      this.icons,
+      this.suffixIcon,
+      this.suffixonTapFuc,
+      this.fillcolor = color_fafa,
+      this.textType = TextInputType.text,
+      this.borderColor = color_ddd});
 
   final TextEditingController controller;
   final String name;
@@ -169,13 +170,111 @@ class buildPhoneEmailValidate extends StatelessWidget {
   final Color fillcolor;
   final Widget? suffixIcon;
   final Function()? suffixonTapFuc;
+  final TextInputType textType;
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.0),
       borderSide: BorderSide(
-        color: color_ddd,
+        color: borderColor,
+        width: 1.5,
+      ),
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFont(text: label),
+        SizedBox(height: 8),
+        FormBuilderTextField(
+          name: name,
+          controller: controller,
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.black,
+            fontFamily: 'PoppinsRegular',
+          ),
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+            hintText: hintText.tr,
+            hintStyle: TextStyle(color: color_777),
+            fillColor: fillcolor,
+            filled: true,
+            prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
+            suffixIcon: suffixonTapFuc != null
+                ? Container(
+                    margin: EdgeInsets.only(right: 5),
+                    child: InkWell(
+                      onTap: suffixonTapFuc,
+                      child: suffixIcon,
+                    ),
+                  )
+                : null,
+            counter: SizedBox.shrink(),
+            enabledBorder: border,
+            focusedBorder: border,
+            errorStyle: GoogleFonts.notoSansLao(color: Colors.red),
+            focusedErrorBorder: border,
+            errorBorder: border,
+          ),
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(
+              errorText: 'This field is required.',
+            ),
+            ((value) {
+              if (value == null || value.isEmpty) {
+                return null; // Handled by `required` validator
+              }
+              if (!value.contains('@') && !value.startsWith('20')) {
+                return 'Phone numbers must start with 20XXXXXXXX.';
+              }
+              return null; // No error
+            }),
+          ]),
+          keyboardType: textType,
+        ),
+      ],
+    );
+  }
+}
+
+class buildEmailValidateV2 extends StatelessWidget {
+  const buildEmailValidateV2({
+    super.key,
+    required this.controller,
+    required this.label,
+    required this.name,
+    required this.hintText,
+    this.icons,
+    this.max,
+    this.suffixIcon,
+    this.suffixonTapFuc,
+    this.fillcolor = color_fafa,
+    this.bordercolor = color_ddd,
+    this.textType = TextInputType.number,
+    this.isEmail = true,
+  });
+
+  final TextEditingController controller;
+  final String name;
+  final String label;
+  final String hintText;
+  final IconData? icons;
+  final int? max;
+  final Color fillcolor;
+  final Color bordercolor;
+  final Widget? suffixIcon;
+  final TextInputType? textType;
+  final Function()? suffixonTapFuc;
+  final bool isEmail;
+
+  @override
+  Widget build(BuildContext context) {
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(
+        color: bordercolor,
         width: 1.5,
       ),
     );
@@ -184,35 +283,31 @@ class buildPhoneEmailValidate extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFont(text: label),
-          SizedBox(height: 4),
+          SizedBox(
+            height: 4,
+          ),
           FormBuilderTextField(
             name: name,
             controller: controller,
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.black,
-              fontFamily: 'PoppinsRegular',
+            keyboardType: textType,
+            style: GoogleFonts.poppins(
+              color: cr_7070,
+              fontSize: 12.5.sp,
             ),
             decoration: InputDecoration(
               contentPadding:
                   EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: hintText.tr,
+              hintStyle: GoogleFonts.poppins(
+                color: cr_7070.withOpacity(0.8),
+                fontSize: 12.5.sp,
+              ),
               fillColor: fillcolor,
               filled: true,
-              prefixIcon:
-                  icons != null ? Icon(icons, color: Colors.black) : null,
-              suffixIcon: suffixonTapFuc != null
-                  ? Container(
-                      margin: EdgeInsets.only(right: 5),
-                      child: InkWell(
-                        onTap: suffixonTapFuc,
-                        child: suffixIcon,
-                      ),
-                    )
-                  : null,
               counter: SizedBox.shrink(),
               enabledBorder: border,
               focusedBorder: border,
+              //! error border
               errorStyle: GoogleFonts.notoSansLao(color: Colors.red),
               focusedErrorBorder: border,
               errorBorder: border,
@@ -221,17 +316,17 @@ class buildPhoneEmailValidate extends StatelessWidget {
               FormBuilderValidators.required(
                 errorText: 'This field is required.',
               ),
-              ((value) {
-                if (value == null || value.isEmpty) {
-                  return null; // Handled by `required` validator
-                }
-                if (!value.contains('@') && !value.startsWith('20')) {
-                  return 'Phone numbers must start with 20XXXXXXXX.';
-                }
-                return null; // No error
-              }),
+              if (isEmail)
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return null;
+                  }
+                  if (!value.contains('@gmail.com')) {
+                    return ' must be @gmail.com';
+                  }
+                  return null; // No error
+                },
             ]),
-            keyboardType: TextInputType.text,
           ),
         ],
       ),

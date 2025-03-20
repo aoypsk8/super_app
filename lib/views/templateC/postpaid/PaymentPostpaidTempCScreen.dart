@@ -367,32 +367,33 @@ class _PaymentPostpaidTempCScreenState
                                   {
                                     tempCcontroler.enableBottom.value = true,
                                     Get.to(ListsPaymentScreen(
-                                      description: 'select_payment',
+                                      description: homeController
+                                          .menudetail.value.appid!,
                                       stepBuild: '5/6',
                                       title: homeController.getMenuTitle(),
                                       onSelectedPayment:
                                           (paymentType, cardIndex, uuid) async {
                                         if (paymentType == "Other") {
-                                          homeController.RxamountUSD.value =
-                                              await homeController.convertRate(
-                                                  tempCcontroler
-                                                      .rxTotalAmount.value);
-                                          tempCcontroler.rxTransID.value =
-                                              "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
-                                          Get.to(PaymentVisaMasterCard(
-                                            function: () {
-                                              tempCcontroler
-                                                  .paymentPostpaidVisaWithoutstoredCardUniqueID(
-                                                homeController.menudetail.value,
-                                              );
-                                            },
-                                            trainID:
-                                                tempCcontroler.rxTransID.value,
-                                            description:
-                                                tempCcontroler.rxNote.value,
-                                            amount: tempCcontroler
-                                                .rxTotalAmount.value,
-                                          ));
+                                          // homeController.RxamountUSD.value =
+                                          //     await homeController.convertRate(
+                                          //         tempCcontroler
+                                          //             .rxTotalAmount.value);
+                                          // tempCcontroler.rxTransID.value =
+                                          //     "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                                          // Get.to(PaymentVisaMasterCard(
+                                          //   function: () {
+                                          //     tempCcontroler
+                                          //         .paymentPostpaidVisaWithoutstoredCardUniqueID(
+                                          //       homeController.menudetail.value,
+                                          //     );
+                                          //   },
+                                          //   trainID:
+                                          //       tempCcontroler.rxTransID.value,
+                                          //   description:
+                                          //       tempCcontroler.rxNote.value,
+                                          //   amount: tempCcontroler
+                                          //       .rxTotalAmount.value,
+                                          // ));
                                         } else if (paymentType == 'MMONEY') {
                                           navigateToConfirmScreen(paymentType);
                                         } else {

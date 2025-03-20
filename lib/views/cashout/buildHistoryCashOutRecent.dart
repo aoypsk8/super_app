@@ -34,37 +34,39 @@ class _buildHistoryCashOutRecentState extends State<buildHistoryCashOutRecent> {
   @override
   void initState() {
     super.initState();
-
     Future.delayed(Duration(milliseconds: 200), () {
       _loadData();
     });
-    cashOutController.fetchRecentBank();
     _loadData();
   }
 
   _loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jsonData = prefs.getString('historyCashout');
+
     if (jsonData != null) {
       List<dynamic> data = json.decode(jsonData);
       if (data.isNotEmpty) {
-        print("HistoryCashout data exists: $data");
-        // Sort data alphabetically by 'AccName'
-        List<Map<String, dynamic>> sortedData =
+        List<Map<String, dynamic>> historyList =
             List<Map<String, dynamic>>.from(data).take(20).toList();
-        var searchResult = sortedData.firstWhere(
-          (item) => item['id'] == cashOutController.rxCodeBank.value,
-          orElse: () => {}, // Return null if no match is found
-        );
+        String searchId = cashOutController.rxCodeBank.value.toString().trim();
+        List<Map<String, dynamic>> filteredHistory = historyList
+            .where((item) => item['id'].toString().trim() == searchId)
+            .toList();
         setState(() {
-          historyData = searchResult != null ? [searchResult] : [];
+          historyData = filteredHistory;
         });
       } else {
-        print("HistoryCashout is empty.");
+        setState(() {
+          historyData = [];
+        });
       }
     } else {
-      print("No HistoryCashout data found in localStorage.");
+      setState(() {
+        historyData = [];
+      });
     }
+    print("Final historyData: $historyData");
   }
 
   void _saveFavoriteCashout(

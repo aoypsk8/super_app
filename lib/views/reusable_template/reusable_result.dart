@@ -71,6 +71,7 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
   final homeController = Get.find<HomeController>();
   final box = GetStorage();
   GlobalKey _repaintBoundaryKey = GlobalKey();
+  File? _backgroundImage;
 
   @override
   void initState() {
@@ -86,6 +87,21 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
         }
       });
     });
+    setState(() {
+      if (homeController.rxBgBill.value == '') {
+        _backgroundImage = null;
+      } else {
+        _backgroundImage = File(homeController.rxBgBill.value);
+      }
+    });
+
+    // Set background image without using setState in initState
+    if (homeController.rxBgBill.value == '') {
+      _backgroundImage = null;
+    } else {
+      _backgroundImage = File(homeController.rxBgBill.value);
+    }
+    print(_backgroundImage);
   }
 
   @override
@@ -145,9 +161,16 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                 right: 0,
                 bottom: 0,
                 child: Opacity(
-                  opacity: 0.9,
-                  child:
-                      Image.asset(MyIcon.bg_backgroundBill, fit: BoxFit.cover),
+                  opacity: 0.9, // Set the transparency
+                  child: _backgroundImage == null
+                      ? Image.asset(
+                          MyIcon.bg_backgroundBill, // Use asset when null
+                          fit: BoxFit.cover,
+                        )
+                      : Image.file(
+                          _backgroundImage!, // Use FileImage properly
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
               FooterLayout(

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/app_url.dart';
@@ -242,6 +241,10 @@ class DioClient {
       if (key == 'visa') {
         dio.options.headers.addAll({"lmmkey": MyKey.keyVisa});
       }
+      if (key == 'mservices') {
+        dio.options.headers
+            .addAll({"authorization": "Bearer ${MyKey.mservicesKey}"});
+      }
       if (key == 'lmmkeyPro') {
         dio.options.headers.addAll({"lmmkey": MyKey.lmmkeyPro});
       } else if (key == 'nokey') {
@@ -272,47 +275,20 @@ class DioClient {
     }
   }
 
-  static Future<dynamic> post(String url, dynamic body,
-      {String key = 'lite',
-      String bearer = '',
-      String msisdn = '',
-      String token = ''}) async {
-    final userController = Get.find<UserController>();
-    final storage = GetStorage();
+  static Future<dynamic> postNoLoading(
+    String url,
+    dynamic body, {
+    String key = 'lite',
+    bool loading = false,
+  }) async {
+    // final storage = GetStorage();
     //dio.interceptors.add(PrettyDioLogger(request: true, requestHeader: true, requestBody: true, responseBody: true, error: true));
     dio.options.headers.clear();
-    Loading.show();
+    if (loading) Loading.show();
     try {
-      if (key == 'callback_v1') {
-        // API key
-        const String apiKey = "ca9c07e6b8364062a8c4f53674fd0f39";
-        const String username = "lmmapi";
-        const String password = "lmm@2024!";
-        dio.options.headers = {
-          'Authorization': "Basic bG1tYXBpOmxtbUAyMDI0IQ==",
-          'lmmkey': apiKey,
-          'Content-Type': 'application/json'
-        };
-      }
-
       if (key == 'redeem') {
         dio.options.headers
             .addAll({'Authorization': 'Basic bG1tYXBpOmxtbXhAMjAyNCE='});
-      }
-      if (key == 'transfer') {
-        dio.options.headers
-            .addAll({'Authorization': 'Basic ${MyKey.keyTransferX}'});
-      }
-      if (key == 'buy-lottery-backup') {
-        dio.options.headers.addAll({
-          "Authorization": 'Bearer $bearer',
-          "msisdn": msisdn,
-          "token": token,
-          "Content-Type": "application/json",
-        });
-      }
-      if (key == 'openkey') {
-        dio.options.headers.addAll({"openkey": token});
       }
       if (key == 'appkey') {
         dio.options.headers.addAll({"appkey": appkey});
@@ -326,21 +302,18 @@ class DioClient {
       if (key == 'lmmkey') {
         dio.options.headers.addAll({"lmmkey": MyKey.lmmkeyApp});
       }
-      if (key == 'lmm-key') {
-        dio.options.headers.addAll({"lmm-key": MyKey.lmmkeyPro});
-      }
       if (key == 'backup') {
-        if (bearer != '') {
-          dio.options.headers.addAll({
-            "Authorization": 'Bearer $bearer',
-            "Content-Type": "application/json"
-          });
-        } else {
-          dio.options.headers.addAll({"lmmkey": MyKey.keyBackup});
-        }
+        dio.options.headers.addAll({"lmmkey": MyKey.keyBackup});
+      }
+      if (key == 'notify') {
+        dio.options.headers.addAll({"authorization": MyKey.keyNotify});
       }
       if (key == 'visa') {
         dio.options.headers.addAll({"lmmkey": MyKey.keyVisa});
+      }
+      if (key == 'mservices') {
+        dio.options.headers
+            .addAll({"authorization": "Bearer ${MyKey.mservicesKey}"});
       }
       if (key == 'lmmkeyPro') {
         dio.options.headers.addAll({"lmmkey": MyKey.lmmkeyPro});
@@ -354,38 +327,45 @@ class DioClient {
         });
       }
 
-      // logger.d('dioClient req POST === $url');
-      // logger.d('dioClient req POST === $body');
-
+      // logger.d('dioClient req GET === $url');
       var response = await dio.post(url, data: body);
-
-      // logger.d('dioClient res POST === $url');
-      // logger.d('dioClient res POST === ${response.data}');
-
-      Loading.hide();
+      // logger.d('dioClient res GET === ${response.data}');
+      if (loading) Loading.hide();
       if (response.statusCode == 200) {
         return response.data;
       } else if (response.statusCode == 401) {
         print('home');
       } else if (response.statusCode == 299) {
-        // DialogHelper.showErrorDialog(description: response.data);
-        DialogHelper.showErrorWithFunctionDialog(
-            description: response.data,
-            onClose: () {
-              Get.close(userController.pageclose.value + 1);
-            });
+        DialogHelper.showErrorDialogNew(description: response.data);
       } else {
-        // DialogHelper.showErrorDialog(description: response.statusMessage!);
-        DialogHelper.showErrorWithFunctionDialog(
-            description: response.statusMessage!,
-            onClose: () {
-              Get.close(userController.pageclose.value + 1);
-            });
+        DialogHelper.showErrorDialogNew(description: response.statusMessage!);
       }
     } catch (e) {
+      if (loading) Loading.hide();
+      HandleApiError.dioError(e);
+    }
+  }
+
+  static Future<dynamic> delete(String url, dynamic body,
+      {String key = 'lite'}) async {
+    try {
+      Loading.show();
+      if (key == 'mservices') {
+        dio.options.headers
+            .addAll({"authorization": "Bearer ${MyKey.mservicesKey}"});
+      }
+      var response = await dio.delete(url, data: body);
+      Loading.hide();
+      if (response.statusCode == 200) {
+        return response.data;
+      } else if (response.statusCode == 401) {
+        Get.offAllNamed('/Home');
+      } else {
+        DialogHelper.showErrorDialogNew(description: response.statusMessage!);
+      }
+    } on DioException catch (e) {
       Loading.hide();
       HandleApiError.dioError(e);
-      // DialogHelper.showErrorDialog(description: e.message);
     }
   }
 }

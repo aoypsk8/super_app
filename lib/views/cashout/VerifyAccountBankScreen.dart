@@ -46,7 +46,7 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen>
   @override
   void initState() {
     userController.increasepage();
-    cashOutController.fetchRecentBank();
+    // cashOutController.fetchRecentBank();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       setState(() {});
@@ -150,7 +150,7 @@ class _VerifyAccountBankScreenState extends State<VerifyAccountBankScreen>
               label: 'account_number',
               name: 'accountNumber',
               hintText: 'XXXXXXXX',
-              max: 16,
+              max: 20,
               fillcolor: color_f4f4,
               bordercolor: color_f4f4,
             ),

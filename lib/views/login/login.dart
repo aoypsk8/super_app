@@ -354,33 +354,85 @@ class LoginUsernamePassword extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: Column(
                 children: [
-                  Row(
-                    textBaseline: TextBaseline.alphabetic,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFont(
-                        text: 'Login ',
-                        color: color_primary_light,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      TextFont(
-                        text: 'to MmoneyX',
-                        maxLines: 2,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      TextFont(
-                        text: 'Super App',
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                        maxLines: 2,
-                      ),
-                    ],
+                  // Row(
+                  //   textBaseline: TextBaseline.alphabetic,
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     TextFont(
+                  //       text: 'Login ',
+                  //       color: color_primary_light,
+                  //       fontSize: 24,
+                  //       fontWeight: FontWeight.w500,
+                  //     ),
+                  //     TextFont(
+                  //       text: 'to MmoneyX',
+                  //       maxLines: 2,
+                  //       fontSize: 24,
+                  //       fontWeight: FontWeight.w500,
+                  //     ),
+                  //   ],
+                  // ),
+                  // Row(
+                  //   children: [
+                  //     TextFont(
+                  //       text: 'Super App',
+                  //       fontSize: 24,
+                  //       fontWeight: FontWeight.w500,
+                  //       maxLines: 2,
+                  //     ),
+                  //   ],
+                  // ),
+                  SizedBox(height: 10.sp),
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          flex: 1, // Adjust width if necessary
+                          child: SizedBox.expand(
+                            child: SvgPicture.asset(
+                              'assets/icons/ic_mmoneyx.svg',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: VerticalDivider(
+                            color: color_777,
+                            thickness: 1,
+                            width: 1,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextFont(
+                                text: 'Login ',
+                                color: color_primary_light,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              TextFont(
+                                text: 'to M moneyX',
+                                maxLines: 2,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              TextFont(
+                                text: 'SuperApp',
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                maxLines: 2,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 20.sp),
                   FormBuilder(

@@ -237,29 +237,28 @@ class _PaymentFinanceScreenState extends State<PaymentFinanceScreen> {
                       _paymentAmount.text.replaceAll(RegExp(r'[^\w\s]+'), '');
                   Get.to(
                     ListsPaymentScreen(
-                      description: homeController.menudetail.value.groupNameEN
-                          .toString(),
+                      description: homeController.menudetail.value.appid!,
                       stepBuild: '4/5',
                       title: homeController.getMenuTitle(),
                       onSelectedPayment: (paymentType, cardIndex, uuid) async {
                         if (paymentType == "Other") {
-                          homeController.RxamountUSD.value =
-                              await homeController.convertRate(int.parse(
-                                  financeController.rxPaymentAmount.value));
-                          financeController.rxTransID.value =
-                              "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
-                          Get.to(PaymentVisaMasterCard(
-                            function: () {
-                              financeController
-                                  .paymentProcessVisaWithoutstoredCardUniqueID(
-                                homeController.menudetail.value,
-                              );
-                            },
-                            trainID: financeController.rxTransID.value,
-                            description: financeController.rxNote.value,
-                            amount: int.parse(
-                                financeController.rxPaymentAmount.value),
-                          ));
+                          // homeController.RxamountUSD.value =
+                          //     await homeController.convertRate(int.parse(
+                          //         financeController.rxPaymentAmount.value));
+                          // financeController.rxTransID.value =
+                          //     "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                          // Get.to(PaymentVisaMasterCard(
+                          //   function: () {
+                          //     financeController
+                          //         .paymentProcessVisaWithoutstoredCardUniqueID(
+                          //       homeController.menudetail.value,
+                          //     );
+                          //   },
+                          //   trainID: financeController.rxTransID.value,
+                          //   description: financeController.rxNote.value,
+                          //   amount: int.parse(
+                          //       financeController.rxPaymentAmount.value),
+                          // ));
                         } else if (paymentType == 'MMONEY') {
                           navigateToConfirmScreen(paymentType);
                         } else {

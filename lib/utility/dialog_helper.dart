@@ -564,9 +564,9 @@ class DialogHelper {
           child: GestureDetector(
             onTap: () {
               if (onClose != null) {
-                onClose();
                 Get.back();
                 hide();
+                onClose();
               } else {
                 Get.until((route) => route.isFirst);
                 Get.back();
@@ -594,6 +594,7 @@ class DialogHelper {
                         text: title,
                         fontWeight: FontWeight.w400,
                         color: cr_2929,
+                        maxLines: 5,
                         fontSize: 12,
                       ),
                       const SizedBox(height: 20),

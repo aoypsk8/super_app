@@ -74,6 +74,13 @@
 	<string>tel</string>
 	</array>
 
+	<!-- Roate -->
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+
+
 
 
 	

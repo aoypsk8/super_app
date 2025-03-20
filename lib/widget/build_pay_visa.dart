@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:super_app/controllers/esim_controller.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/views/webview/webview_screen.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildExpiryDateField.dart';
@@ -35,10 +37,12 @@ class _PaymentVisaMasterCardState extends State<PaymentVisaMasterCard> {
   final _formKey = GlobalKey<FormState>();
   final HomeController homeController = Get.find();
   String cardType = 'MASTERCARD';
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
   final TextEditingController _expiryController = TextEditingController();
   final TextEditingController _cvvController = TextEditingController();
+  final esimController = Get.put(ESIMController());
   bool isChecked = false;
   // Function to detect card type
   String detectCardType(String cardNumber) {
@@ -82,18 +86,31 @@ class _PaymentVisaMasterCardState extends State<PaymentVisaMasterCard> {
             });
             _formKey.currentState!.save();
             if (_formKey.currentState!.validate()) {
-              if (await paymentController.paymentCardWithoutstoredCardUniqueID(
-                widget.trainID,
-                _numberController.text,
-                _expiryController.text.replaceAll('/', ''),
-                _cvvController.text,
-                _nameController.text,
-                cardType,
-                widget.description,
-                widget.amount,
-                isChecked,
-              )) {
-                widget.function();
+              esimController.RxMail.value = _emailController.text;
+              if (isChecked) {
+                if (await paymentController
+                    .paymentCardWithoutstoredCardUniqueID(
+                  widget.trainID,
+                  _numberController.text,
+                  _expiryController.text.replaceAll('/', ''),
+                  _cvvController.text,
+                  _nameController.text,
+                  cardType,
+                  widget.description,
+                  widget.amount,
+                  false,
+                )) {
+                  widget.function();
+                }
+              } else {
+                DialogHelper.showErrorWithFunctionDialog(
+                  closeTitle: "close",
+                  title: "Please Check",
+                  description: "Please check box first",
+                  onClose: () {
+                    Get.back();
+                  },
+                );
               }
             }
           },
@@ -158,6 +175,17 @@ class _PaymentVisaMasterCardState extends State<PaymentVisaMasterCard> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 20),
+                      buildEmailValidateV2(
+                        controller: _emailController,
+                        fillcolor: color_f4f4,
+                        bordercolor: color_f4f4,
+                        isEmail: true,
+                        label: 'email',
+                        name: 'email',
+                        hintText: '@gmail.com',
+                        textType: TextInputType.emailAddress,
+                      ),
+                      const SizedBox(height: 20),
                       buildNumberFiledValidate(
                         controller: _nameController,
                         label: 'Cardholder Name',
@@ -205,6 +233,7 @@ class _PaymentVisaMasterCardState extends State<PaymentVisaMasterCard> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 10),
                 InkWell(
                   onTap: () {
                     setState(() {
@@ -216,6 +245,7 @@ class _PaymentVisaMasterCardState extends State<PaymentVisaMasterCard> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        const SizedBox(height: 5),
                         Transform.scale(
                           scale: 1.2,
                           child: Checkbox(
@@ -239,10 +269,25 @@ class _PaymentVisaMasterCardState extends State<PaymentVisaMasterCard> {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               TextFont(
-                                text: 'Remeber Card',
+                                text: 'I agree to the ',
                                 color: color_1a1,
                                 fontSize: 10,
-                              )
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  homeController.urlwebview.value =
+                                      'https://gateway.ltcdev.la/AppImage/en/consumer/policy/index.html';
+                                  Get.to(() => WebviewScreen());
+                                },
+                                child: TextFont(
+                                  text: 'Terms & Policy',
+                                  underline: true,
+                                  underlineColor: cr_7070,
+                                  color: cr_7070,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -250,6 +295,7 @@ class _PaymentVisaMasterCardState extends State<PaymentVisaMasterCard> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 50),
                 const SizedBox(height: 50),
               ],
             ),

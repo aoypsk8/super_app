@@ -81,7 +81,7 @@ class PaymentTempBScreen extends StatelessWidget {
                   controller.enableBottom.value = true;
                   Get.to(
                     () => ListsPaymentScreen(
-                      description: 'select_payment',
+                      description: homeController.menudetail.value.appid!,
                       stepBuild: '4/5',
                       title: homeController.getMenuTitle(),
                       onSelectedPayment: (paymentType, cardIndex, uuid) async {
@@ -98,23 +98,23 @@ class PaymentTempBScreen extends StatelessWidget {
                           (value) async {
                             if (value) {
                               if (paymentType == "Other") {
-                                homeController.RxamountUSD.value =
-                                    await homeController.convertRate(int.parse(
-                                        controller.rxPaymentAmount.value));
-                                controller.rxTransID.value =
-                                    "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
-                                //! Confirm CashOut
-                                Get.to(PaymentVisaMasterCard(
-                                  function: () {
-                                    controller
-                                        .paymentProcessVisaWithoutstoredCardUniqueID(
-                                            homeController.menudetail.value);
-                                  },
-                                  trainID: controller.rxTransID.value,
-                                  description: controller.rxNote.value,
-                                  amount: int.parse(
-                                      controller.rxPaymentAmount.value),
-                                ));
+                                // homeController.RxamountUSD.value =
+                                //     await homeController.convertRate(int.parse(
+                                //         controller.rxPaymentAmount.value));
+                                // controller.rxTransID.value =
+                                //     "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
+                                // //! Confirm CashOut
+                                // Get.to(PaymentVisaMasterCard(
+                                //   function: () {
+                                //     controller
+                                //         .paymentProcessVisaWithoutstoredCardUniqueID(
+                                //             homeController.menudetail.value);
+                                //   },
+                                //   trainID: controller.rxTransID.value,
+                                //   description: controller.rxNote.value,
+                                //   amount: int.parse(
+                                //       controller.rxPaymentAmount.value),
+                                // ));
                               } else if (paymentType == 'MMONEY') {
                                 navigateToConfirmScreen(paymentType);
                               } else {

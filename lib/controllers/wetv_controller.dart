@@ -275,64 +275,64 @@ class WeTVController extends GetxController {
   //!
   //! VISA - MASTER CARD WE TV
   //!------------------------------------------------------------------------------
-  wetvpaymentVisaWithoutstoredCardUniqueID(amout, Menulists menudetail) async {
-    userController.fetchBalance();
-    var data;
-    List<String> urlSplit =
-        homeController.menudetail.value.url.toString().split(";");
-    data = {
-      "TranID": rxTransID.value,
-      "weid": wetvdetail.value.weid,
-      "amount": wetvdetail.value.price,
-      "PhoneUser": storage.read('msisdn'),
-    };
-    var response = await DioClient.postEncrypt(urlSplit[1], data);
-    //! save log
-    logPaymentReq = data;
-    logPaymentRes = response;
-    logController.insertAllLog(
-      homeController.menudetail.value.groupNameEN.toString(),
-      rxTransID.value,
-      '',
-      homeController.menudetail.value.groupNameEN.toString(),
-      '',
-      '',
-      amout.toString(),
-      0,
-      '0',
-      '',
-      null,
-      logPaymentReq,
-      logPaymentRes,
-    );
-    if (response['ResultCode'] == '200') {
-      wetvCode.value = response["Code"];
-      rxPayDatetime.value =
-          DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
-      enableBottom.value = true;
-      Get.to(ReusableResultWithCode(
-        isUSD: true,
-        fromAccountImage: userController.userProfilemodel.value.profileImg ??
-            MyConstant.profile_default,
-        fromAccountName: userController.profileName.value,
-        fromAccountNumber: userController.rxMsisdn.value,
-        toAccountImage: wetvdetail.value.logo ?? MyConstant.profile_default,
-        toAccountName: title.value,
-        toAccountNumber: title.value,
-        amount: wetvdetail.value.price.toString(),
-        fee: rxFee.toString(),
-        transactionId: rxTransID.value,
-        timestamp: rxPayDatetime.value,
-        code: wetvCode.value,
-        fromHistory: false,
-      ));
-    } else {
-      enableBottom.value = true;
-      DialogHelper.showErrorWithFunctionDialog(
-          description: response['ResultDesc'],
-          onClose: () {
-            Get.close(userController.pageclose.value);
-          });
-    }
-  }
+  // wetvpaymentVisaWithoutstoredCardUniqueID(amout, Menulists menudetail) async {
+  //   userController.fetchBalance();
+  //   var data;
+  //   List<String> urlSplit =
+  //       homeController.menudetail.value.url.toString().split(";");
+  //   data = {
+  //     "TranID": rxTransID.value,
+  //     "weid": wetvdetail.value.weid,
+  //     "amount": wetvdetail.value.price,
+  //     "PhoneUser": storage.read('msisdn'),
+  //   };
+  //   var response = await DioClient.postEncrypt(urlSplit[1], data);
+  //   //! save log
+  //   logPaymentReq = data;
+  //   logPaymentRes = response;
+  //   logController.insertAllLog(
+  //     homeController.menudetail.value.groupNameEN.toString(),
+  //     rxTransID.value,
+  //     '',
+  //     homeController.menudetail.value.groupNameEN.toString(),
+  //     '',
+  //     '',
+  //     amout.toString(),
+  //     0,
+  //     '0',
+  //     '',
+  //     null,
+  //     logPaymentReq,
+  //     logPaymentRes,
+  //   );
+  //   if (response['ResultCode'] == '200') {
+  //     wetvCode.value = response["Code"];
+  //     rxPayDatetime.value =
+  //         DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
+  //     enableBottom.value = true;
+  //     Get.to(ReusableResultWithCode(
+  //       isUSD: true,
+  //       fromAccountImage: userController.userProfilemodel.value.profileImg ??
+  //           MyConstant.profile_default,
+  //       fromAccountName: userController.profileName.value,
+  //       fromAccountNumber: userController.rxMsisdn.value,
+  //       toAccountImage: wetvdetail.value.logo ?? MyConstant.profile_default,
+  //       toAccountName: title.value,
+  //       toAccountNumber: title.value,
+  //       amount: wetvdetail.value.price.toString(),
+  //       fee: rxFee.toString(),
+  //       transactionId: rxTransID.value,
+  //       timestamp: rxPayDatetime.value,
+  //       code: wetvCode.value,
+  //       fromHistory: false,
+  //     ));
+  //   } else {
+  //     enableBottom.value = true;
+  //     DialogHelper.showErrorWithFunctionDialog(
+  //         description: response['ResultDesc'],
+  //         onClose: () {
+  //           Get.close(userController.pageclose.value);
+  //         });
+  //   }
+  // }
 }

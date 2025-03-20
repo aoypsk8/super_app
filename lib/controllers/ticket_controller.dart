@@ -257,67 +257,67 @@ class TicketController extends GetxController {
     }
   }
 
-  paymentProcessVisaWithoutstoredCardUniqueID(Menulists menudetail) async {
-    userController.fetchBalance();
-    var data;
-    rxFee.value = '0';
-    // //? Insert DB
-    List<String> urlSplit =
-        homeController.menudetail.value.url.toString().split(";");
-    data = {
-      "TranID": rxTransID.value,
-      "weid": ticketDetail.value.tickid,
-      "amount": ticketDetail.value.price,
-      "PhoneUser": storage.read('msisdn'),
-    };
-    var response = await DioClient.postEncrypt(urlSplit[1], data);
-    //! save log
-    logPaymentReq = data;
-    logPaymentRes = response;
-    logController.insertAllLog(
-      homeController.menudetail.value.groupNameEN.toString(),
-      rxTransID.value,
-      '',
-      homeController.menudetail.value.groupNameEN.toString(),
-      '',
-      '',
-      ticketDetail.value.price.toString(),
-      0,
-      '0',
-      ticketDetail.value.title,
-      null,
-      logPaymentReq,
-      logPaymentRes,
-    );
-    if (response['ResultCode'] == '200') {
-      rxticketCode.value = response["Code"].toString();
-      rxPaymentAmount.value = response['Price'].toString();
-      rxTimeStamp.value =
-          DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
-      enableBottom.value = true;
-      Get.to(ReusableResultWithCode(
-        isUSD: true,
-        fromAccountImage: userController.userProfilemodel.value.profileImg ??
-            MyConstant.profile_default,
-        fromAccountName: userController.profileName.value,
-        fromAccountNumber: userController.rxMsisdn.value,
-        toAccountImage: ticketDetail.value.logo ?? MyConstant.profile_default,
-        toAccountName: ticketDetail.value.title!,
-        toAccountNumber: ticketDetail.value.title!,
-        amount: ticketDetail.value.price.toString(),
-        fee: rxFee.toString(),
-        transactionId: rxTransID.value,
-        timestamp: rxTimeStamp.value,
-        code: rxticketCode.value,
-        fromHistory: false,
-      ));
-    } else {
-      enableBottom.value = true;
-      DialogHelper.showErrorWithFunctionDialog(
-          description: response['ResultDesc'],
-          onClose: () {
-            Get.close(userController.pageclose.value);
-          });
-    }
-  }
+  // paymentProcessVisaWithoutstoredCardUniqueID(Menulists menudetail) async {
+  //   userController.fetchBalance();
+  //   var data;
+  //   rxFee.value = '0';
+  //   // //? Insert DB
+  //   List<String> urlSplit =
+  //       homeController.menudetail.value.url.toString().split(";");
+  //   data = {
+  //     "TranID": rxTransID.value,
+  //     "weid": ticketDetail.value.tickid,
+  //     "amount": ticketDetail.value.price,
+  //     "PhoneUser": storage.read('msisdn'),
+  //   };
+  //   var response = await DioClient.postEncrypt(urlSplit[1], data);
+  //   //! save log
+  //   logPaymentReq = data;
+  //   logPaymentRes = response;
+  //   logController.insertAllLog(
+  //     homeController.menudetail.value.groupNameEN.toString(),
+  //     rxTransID.value,
+  //     '',
+  //     homeController.menudetail.value.groupNameEN.toString(),
+  //     '',
+  //     '',
+  //     ticketDetail.value.price.toString(),
+  //     0,
+  //     '0',
+  //     ticketDetail.value.title,
+  //     null,
+  //     logPaymentReq,
+  //     logPaymentRes,
+  //   );
+  //   if (response['ResultCode'] == '200') {
+  //     rxticketCode.value = response["Code"].toString();
+  //     rxPaymentAmount.value = response['Price'].toString();
+  //     rxTimeStamp.value =
+  //         DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
+  //     enableBottom.value = true;
+  //     Get.to(ReusableResultWithCode(
+  //       isUSD: true,
+  //       fromAccountImage: userController.userProfilemodel.value.profileImg ??
+  //           MyConstant.profile_default,
+  //       fromAccountName: userController.profileName.value,
+  //       fromAccountNumber: userController.rxMsisdn.value,
+  //       toAccountImage: ticketDetail.value.logo ?? MyConstant.profile_default,
+  //       toAccountName: ticketDetail.value.title!,
+  //       toAccountNumber: ticketDetail.value.title!,
+  //       amount: ticketDetail.value.price.toString(),
+  //       fee: rxFee.toString(),
+  //       transactionId: rxTransID.value,
+  //       timestamp: rxTimeStamp.value,
+  //       code: rxticketCode.value,
+  //       fromHistory: false,
+  //     ));
+  //   } else {
+  //     enableBottom.value = true;
+  //     DialogHelper.showErrorWithFunctionDialog(
+  //         description: response['ResultDesc'],
+  //         onClose: () {
+  //           Get.close(userController.pageclose.value);
+  //         });
+  //   }
+  // }
 }

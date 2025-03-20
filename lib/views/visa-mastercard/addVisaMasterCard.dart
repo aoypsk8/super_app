@@ -40,6 +40,8 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
         RegExp(r'^222[1-9]|^22[3-9][0-9]|^2[3-6][0-9]{2}|^27[0-1][0-9]|^2720')
             .hasMatch(cardNumber)) {
       return 'MasterCard';
+    } else if (RegExp(r'^62').hasMatch(cardNumber)) {
+      return 'UNIONPAY';
     }
     return 'Unknown';
   }
@@ -57,7 +59,7 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_fff,
-      appBar: BuildAppBar(title: "Add Visa/MasterCard"),
+      appBar: BuildAppBar(title: "add_credit/debit_card"),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
@@ -85,8 +87,8 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
             } else {
               DialogHelper.showErrorWithFunctionDialog(
                 closeTitle: "close",
-                title: "Please Check",
-                description: "Please check box first",
+                title: "please_check",
+                description: "please_check_the_box_first",
                 onClose: () {
                   Get.back();
                 },
@@ -212,6 +214,7 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        const SizedBox(height: 5),
                         Transform.scale(
                           scale: 1.2,
                           child: Checkbox(
@@ -235,7 +238,7 @@ class _AddVisaMasterCardState extends State<AddVisaMasterCard> {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               TextFont(
-                                text: 'I agree to the ',
+                                text: 'I agree to the',
                                 color: color_1a1,
                                 fontSize: 10,
                               ),

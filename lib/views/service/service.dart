@@ -13,6 +13,7 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/web/openWebView.dart';
+import 'package:super_app/views/webview/webapp_webview.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/pull_refresh.dart';
 import 'package:super_app/widget/textfont.dart';
@@ -123,11 +124,18 @@ class _ServicePageState extends State<ServicePage> {
                                           result.groupNameEN!;
                                       homeController.menudetail.value = result;
                                       if (result.template == "webview") {
+                                        // Get.to(
+                                        //   OpenWebView(
+                                        //       url: homeController
+                                        //           .menudetail.value.url
+                                        //           .toString()),
+                                        // );
                                         Get.to(
-                                          OpenWebView(
-                                              url: homeController
-                                                  .menudetail.value.url
-                                                  .toString()),
+                                          WebappWebviewScreen(
+                                            urlWidget: homeController
+                                                .menudetail.value.url
+                                                .toString(),
+                                          ),
                                         );
                                       } else {
                                         Get.toNamed('/${result.template}');

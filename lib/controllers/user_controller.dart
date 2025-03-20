@@ -31,6 +31,7 @@ import 'package:super_app/views/register/register_form.dart';
 import 'package:super_app/views/reusable_template/reusable_otp.dart';
 import 'package:super_app/views/reusable_template/reusable_result.dart';
 import 'package:super_app/widget/reusableResultWithCode.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class UserController extends GetxController with WidgetsBindingObserver {
   final storage = GetStorage();
@@ -47,7 +48,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
 
   // history
   RxList<HistoryModel> historylists = <HistoryModel>[].obs;
-  RxMap<String, List<HistoryModel>> groupedHistory = <String, List<HistoryModel>>{}.obs;
+  RxMap<String, List<HistoryModel>> groupedHistory =
+      <String, List<HistoryModel>>{}.obs;
   Rx<HistoryDetailModel> historyDetailModel = HistoryDetailModel().obs;
 
   // balance
@@ -103,8 +105,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
 
   Future<void> loginpincode(String msisdn, String pincode) async {
     try {
-      final response =
-          await DioClient.postEncrypt('${MyConstant.urlGateway}/login', {"msisdn": msisdn, "pin": pincode});
+      final response = await DioClient.postEncrypt(
+          '${MyConstant.urlGateway}/login', {"msisdn": msisdn, "pin": pincode});
       if (response != null && response["resultCode"] == 0) {
         final token = response['token'];
         if (token != null) {
@@ -114,7 +116,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
           print('Token: $token');
         }
       } else {
-        print('Error: Login failed with resultCode ${response?["resultCode"] ?? "unknown"}');
+        print(
+            'Error: Login failed with resultCode ${response?["resultCode"] ?? "unknown"}');
       }
     } catch (e) {
       print('Error during login: $e');
@@ -133,7 +136,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
       var url = '${MyConstant.urlConsumerInfo}/UserProfile';
       var data = {"msisdn": msisdn};
 
-      var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm-key');
+      var response = await DioClient.postEncrypt(
+          loading: false, url, data, key: 'lmm-key');
 
       if (response["resultCode"] == 0) {
         balanceModel.value = BalanceModel.fromJson(response);
@@ -148,7 +152,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
           // profileName.value = '${result.firstname ?? ''} ${result.lastname ?? ''}'.trim();
         }
       } else {
-        print('Error: ${response["resultMessage"] ?? "Unknown error occurred"}');
+        print(
+            'Error: ${response["resultMessage"] ?? "Unknown error occurred"}');
       }
     } catch (e) {
       print('Error in fetchBalance: $e');
@@ -161,10 +166,12 @@ class UserController extends GetxController with WidgetsBindingObserver {
       //   var msisdn = await storage.read('msisdn');
       var url = '${MyConstant.urlUser}/query';
       var data = {"msisdn": rxMsisdn.value};
-      var response = await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
+      var response =
+          await DioClient.postEncrypt(loading: false, url, data, key: 'lmm');
       if (response != null) {
         userProfilemodel.value = UserProfileModel.fromJson(response);
-        profileName.value = '${userProfilemodel.value.name} ${userProfilemodel.value.surname}';
+        profileName.value =
+            '${userProfilemodel.value.name} ${userProfilemodel.value.surname}';
         return true;
       } else {
         print('Error: Response is null');
@@ -191,7 +198,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
   }
 
   resendotp() async {
-    var response = await DioClient.postEncrypt('${MyConstant.urlGateway}/OTP', {'msisdn': rxMsisdn.value});
+    var response = await DioClient.postEncrypt(
+        '${MyConstant.urlGateway}/OTP', {'msisdn': rxMsisdn.value});
     print(response);
     if (response["resultCode"] == 0) {
       refcode.value = response["data"]["ref"].toString();
@@ -202,7 +210,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
 
   resendotpforemail() async {
     var response = await DioClient.postEncrypt(
-        '${MyConstant.urlLoginByEmail}/GetMsisdn', {'email': rxEmail.value, 'birthday': rxBirthday.value});
+        '${MyConstant.urlLoginByEmail}/GetMsisdn',
+        {'email': rxEmail.value, 'birthday': rxBirthday.value});
     print(response);
     if (response["resultCode"] == 0) {
       refcode.value = response["data"]["ref"].toString();
@@ -221,7 +230,9 @@ class UserController extends GetxController with WidgetsBindingObserver {
       ),
     });
 
-    var responseUpload = await DioClient.postEncrypt('${MyConstant.urlProfileUpload}/upload', formData, image: true);
+    var responseUpload = await DioClient.postEncrypt(
+        '${MyConstant.urlProfileUpload}/upload', formData,
+        image: true);
     var dataUpdate = {
       "msisdn": userProfilemodel.value.msisdn,
       "gender": userProfilemodel.value.gender,
@@ -253,7 +264,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
     String fileName = imgFile.path.split('/').last;
     var formData = dio.FormData.fromMap({
       "id": userProfilemodel.value.msisdn,
-      'image': await dio.MultipartFile.fromFile('.${imgFile.path}', filename: fileName),
+      'image': await dio.MultipartFile.fromFile('.${imgFile.path}',
+          filename: fileName),
     });
     var responseUpload = await DioClient.postEncrypt(
       '${MyConstant.urlProfileUpload}/upload',
@@ -291,7 +303,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
     String fileName = imgFile.path.split('/').last;
     var formData = dio.FormData.fromMap({
       "id": userProfilemodel.value.msisdn,
-      'image': await dio.MultipartFile.fromFile('.${imgFile.path}', filename: fileName),
+      'image': await dio.MultipartFile.fromFile('.${imgFile.path}',
+          filename: fileName),
     });
     var responseUpload = await DioClient.postEncrypt(
       '${MyConstant.urlProfileUpload}/upload',
@@ -325,7 +338,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
     queryUserProfile();
   }
 
-  verificationRegister(gender, name, surname, bd, provincecode, province, dist, village, identify) async {
+  verificationRegister(gender, name, surname, bd, provincecode, province, dist,
+      village, identify) async {
     var dataUpdate = {
       "msisdn": userProfilemodel.value.msisdn,
       "gender": gender,
@@ -358,12 +372,18 @@ class UserController extends GetxController with WidgetsBindingObserver {
     var token = await storage.read('token');
     if (token != null && msisdn != null) {
       var url = '${MyConstant.urlHistory}/history';
-      var data = {"wallet_id": walletid.value, "msisdn": await storage.read('msisdn')};
+      var data = {
+        "wallet_id": walletid.value,
+        "msisdn": await storage.read('msisdn')
+      };
       var res = await DioClient.postEncrypt(url, loading: false, data);
-      List<HistoryModel> historyList = res.map<HistoryModel>((json) => HistoryModel.fromJson(json)).toList();
+      List<HistoryModel> historyList =
+          res.map<HistoryModel>((json) => HistoryModel.fromJson(json)).toList();
       groupedHistory.clear();
       for (var item in historyList) {
-        String key = item.created != null ? item.created!.substring(0, 7) : 'Unknown'; // Format: YYYY-MM
+        String key = item.created != null
+            ? item.created!.substring(0, 7)
+            : 'Unknown'; // Format: YYYY-MM
         if (!groupedHistory.containsKey(key)) {
           groupedHistory[key] = [];
         }
@@ -392,7 +412,9 @@ class UserController extends GetxController with WidgetsBindingObserver {
             toAccountNumber: historyDetailModel.value.toAcc!,
             toTitleProvider: historyDetailModel.value.provider!,
             amount: historyDetailModel.value.amount!,
-            fee: historyDetailModel.value.fee == "" ? "0" : historyDetailModel.value.fee!,
+            fee: historyDetailModel.value.fee == ""
+                ? "0"
+                : historyDetailModel.value.fee!,
             transactionId: historyDetailModel.value.transid!,
             note: historyDetailModel.value.ramark!,
             timestamp: historyDetailModel.value.timestamp!,
@@ -418,12 +440,15 @@ class UserController extends GetxController with WidgetsBindingObserver {
       device_model.value = androidInfo.model;
       device_id.value = androidInfo.id;
       device_name.value = androidInfo.name;
-      os_version.value = '${androidInfo.version.release}|SDK${androidInfo.version.sdkInt}|${androidInfo.board}';
+      os_version.value =
+          '${androidInfo.version.release}|SDK${androidInfo.version.sdkInt}|${androidInfo.board}';
     } else if (Platform.isIOS) {
       try {
         IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-        final Map<dynamic, dynamic> result = await platform.invokeMethod("getDeviceDetails");
-        device_model.value = '${result["hardwareModel"]} | ${iosInfo.modelName}';
+        final Map<dynamic, dynamic> result =
+            await platform.invokeMethod("getDeviceDetails");
+        device_model.value =
+            '${result["hardwareModel"]} | ${iosInfo.modelName}';
         device_id.value = result["deviceID"];
         device_name.value = result["deviceName"];
         os_version.value = result["systemVersion"];
@@ -524,7 +549,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
         profileMmoneyModel.value = ProfileMmoneyModel.fromJson(res);
         return true;
       } else {
-        DialogHelper.showErrorDialogNew(description: 'You don\'t have profile.\nPlease Register first.');
+        DialogHelper.showErrorDialogNew(
+            description: 'You don\'t have profile.\nPlease Register first.');
         return false;
       }
     }
@@ -593,6 +619,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
       if (res['status']) {
         storage.write('msisdn', msisdn);
         storage.write('token', res['token']);
+        rxToken.value = res['token'];
+        print(rxToken.value);
         if (reqOTPprocess) {
           requestOTP(msisdn, 'login');
         } else {
@@ -604,6 +632,26 @@ class UserController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  Future<bool> loginRefreshTokenWebview(msisdn, password) async {
+    bool status = false;
+    var url = '${MyConstant.urlSuperAppLogin}/LoginToSuperApp';
+    var data = {"msisdn": msisdn, "password": 'LMM!$password'};
+
+    var res = await DioClient.postEncrypt(url, data);
+    if (res != null) {
+      if (res['status']) {
+        storage.write('msisdn', msisdn);
+        storage.write('token', res['token']);
+        rxToken.value = res['token']; // ✅ Update token globally
+        status = true;
+      } else {
+        DialogHelper.showErrorDialogNew(description: res["resultDesc"]);
+      }
+    }
+    return status; // ✅ Return success or failure
+  }
+
+  RxBool isWebview = false.obs;
   Future<bool> checktokenSuperApp() async {
     try {
       getCurrentLocation();
@@ -620,7 +668,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
       }
 
       if (token == null) {
-        Get.to(() => LoginHaveAccount(user: user.toJson()), transition: Transition.downToUp);
+        Get.to(() => LoginHaveAccount(user: user.toJson()),
+            transition: Transition.downToUp);
         return false;
       }
 
@@ -634,18 +683,20 @@ class UserController extends GetxController with WidgetsBindingObserver {
         rxToken.value = token;
         return true;
       } else {
-        Get.to(() => LoginHaveAccount(user: user.toJson()), transition: Transition.downToUp);
+        Get.to(() => LoginHaveAccount(user: user.toJson()),
+            transition: Transition.downToUp);
         return false;
       }
     } catch (e) {
-      DialogHelper.showErrorDialogNew(description: "Authentication failed. Please try again.");
+      DialogHelper.showErrorDialogNew(
+          description: "Authentication failed. Please try again.");
       rxToken.value = '';
       Get.offAll(SplashScreen());
       return false;
     }
   }
 
-  loginProcess(msisdn) async {
+  loginProcess(msisdn, {bool isWebview = false}) async {
     rxMsisdn.value = msisdn;
     await storage.write('msisdn', msisdn);
     await insertLoginLog();
@@ -654,7 +705,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
     // await queryProfileMmoney(msisdn); //new
     homController.fetchServicesmMenu(msisdn);
 
-    saveTempUserLogin(msisdn, profileName.value, userProfilemodel.value.profileImg ?? '');
+    saveTempUserLogin(
+        msisdn, profileName.value, userProfilemodel.value.profileImg ?? '');
     if (isRenewToken.value) {
       Get.back();
     } else {
@@ -664,7 +716,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
 
   Future<void> requestOTP(String msisdn, String type) async {
     try {
-      var response = await DioClient.postEncrypt('${MyConstant.urlGateway}/OTP', {'msisdn': msisdn});
+      var response = await DioClient.postEncrypt(
+          '${MyConstant.urlGateway}/OTP', {'msisdn': msisdn});
       if (response["resultCode"] != 0) {
         DialogHelper.showErrorDialogNew(description: "Unable to send OTP");
         return;
@@ -677,16 +730,21 @@ class UserController extends GetxController with WidgetsBindingObserver {
             desc2: 'desc2',
             phoneNumber: msisdn,
             buttonText: 'buttonText',
-            onOtpCompleted: (otp) => confirmOTP(msisdn: msisdn, otpCode: otp, type: type),
+            onOtpCompleted: (otp) =>
+                confirmOTP(msisdn: msisdn, otpCode: otp, type: type),
             onResendPressed: () => requestOTP(msisdn, type),
           ));
     } catch (e) {
-      DialogHelper.showErrorDialogNew(description: 'An unexpected error occurred.');
+      DialogHelper.showErrorDialogNew(
+          description: 'An unexpected error occurred.');
       print("Error in requestOTP: $e");
     }
   }
 
-  Future<void> confirmOTP({required String msisdn, required String otpCode, required String type}) async {
+  Future<void> confirmOTP(
+      {required String msisdn,
+      required String otpCode,
+      required String type}) async {
     try {
       rxMsisdn.value = msisdn;
       if (msisdn == "2059395777X") {
@@ -694,15 +752,18 @@ class UserController extends GetxController with WidgetsBindingObserver {
         Get.toNamed('/loginpincode');
         return;
       }
-      var response =
-          await DioClient.postEncrypt('${MyConstant.urlGateway}/confirmOTP', {"otp": otpCode, "ref": refcode.value});
+      var response = await DioClient.postEncrypt(
+          '${MyConstant.urlGateway}/confirmOTP',
+          {"otp": otpCode, "ref": refcode.value});
       if (response['resultCode'] != 0) {
-        DialogHelper.showErrorDialogNew(description: "OTP verification failed.");
+        DialogHelper.showErrorDialogNew(
+            description: "OTP verification failed.");
         return;
       }
       await handleOTPProcessSuccess(msisdn, type);
     } catch (e) {
-      DialogHelper.showErrorDialogNew(description: 'An unexpected error occurred during OTP confirmation.');
+      DialogHelper.showErrorDialogNew(
+          description: 'An unexpected error occurred during OTP confirmation.');
       print("Error in confirmOTP: $e");
     }
   }
@@ -710,6 +771,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
   Future<void> handleOTPProcessSuccess(String msisdn, String type) async {
     switch (type) {
       case "login":
+        storage.remove('biometric');
+        storage.remove('biometric_password');
         loginProcess(msisdn);
         break;
 
@@ -722,7 +785,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
         storage.remove('biometric_password');
         Get.to(() => hasMmoneyProfile
             ? CreatePasswordScreen()
-            : RegisterFormScreen(regType: hasWalletBO ? 'Approved' : 'UnApproved'));
+            : RegisterFormScreen(
+                regType: hasWalletBO ? 'Approved' : 'UnApproved'));
         break;
 
       case "register":
@@ -774,27 +838,34 @@ class UserController extends GetxController with WidgetsBindingObserver {
       }
     } else {
       await queryKYC_5_7(msisdn);
-      Get.to(() => RegisterFormScreen(regType: hasWalletBO ? 'Approved' : 'UnApproved'));
+      Get.to(() =>
+          RegisterFormScreen(regType: hasWalletBO ? 'Approved' : 'UnApproved'));
     }
   }
 
-  saveTempUserLogin(String username, String fullname, String imageProfile) async {
+  saveTempUserLogin(
+      String username, String fullname, String imageProfile) async {
     final userStorage = TempUserProfileStorage();
     final now = DateTime.now();
     List<TempUserProfile> users = userStorage.getTempUserProfiles();
-    TempUserProfile? existingUser = users.firstWhereOrNull((user) => user.username == username);
+    TempUserProfile? existingUser =
+        users.firstWhereOrNull((user) => user.username == username);
     if (existingUser == null) {
-      final newUser =
-          TempUserProfile(username: username, fullname: fullname, imageProfile: imageProfile, lastLogin: now);
+      final newUser = TempUserProfile(
+          username: username,
+          fullname: fullname,
+          imageProfile: imageProfile,
+          lastLogin: now);
       userStorage.addOrUpdateTempUserProfile(newUser);
     } else {
-      userStorage.updateLastLogin(username);
+      userStorage.updateLastLogin(username, imageProfile);
     }
   }
 
   Future<bool> checkHaveWalletBO() async {
-    var response =
-        await DioClient.postEncrypt('${MyConstant.urlUser}/checkLMM', {'msisdn': rxMsisdn.value}, key: 'lmm');
+    var response = await DioClient.postEncrypt(
+        '${MyConstant.urlUser}/checkLMM', {'msisdn': rxMsisdn.value},
+        key: 'lmm');
     if (response['resultCode'] == '0001') {
       return true;
     } else {
@@ -802,7 +873,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  register(regType, gender, fname, lname, birthdate, proid, district, village) async {
+  register(regType, gender, fname, lname, birthdate, proid, district,
+      village) async {
     String verify, type = '';
     if (regType == 'Approved') {
       verify = 'Approved';

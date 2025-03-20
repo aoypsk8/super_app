@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -48,46 +49,46 @@ class _TelecomServicesState extends State<TelecomServices> {
     await telecomsrv.getNetworktype();
     await telecomsrv.queryTelPackage(await storage.read('msisdn'));
     await telecomsrv.phoneList();
+    // await telecomsrv.fetchMainMenu();
+    await homeController.fetchServicesmMenu();
     refreshController.refreshCompleted();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => SlidingUpPanel(
-          renderPanelSheet: false,
-          panel: floatingPanel(),
-          controller: telecomsrv.panelController,
-          maxHeight: Get.height / 2,
-          minHeight: 0.0,
-          backdropEnabled: true,
-          body: Scaffold(
-            body: PullRefresh(
-              refreshController: refreshController,
-              onRefresh: () => refresh(),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+    return Obx(() => Stack(
+          children: [
+            Scaffold(
+              body: PullRefresh(
+                refreshController: refreshController,
+                onRefresh: () => refresh(),
+                child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       dashboard(),
                       SizedBox(height: 8),
                       menu(),
-                      menu(),
-                      menu(),
-                      menu(),
-                      menu(),
-                      menu(),
-                      menu(),
-                      menu(),
-                      const SizedBox(height: 20),
+                      // SizedBox(height: 8),
+                      // menuVas()
                     ],
                   ),
                 ),
               ),
             ),
-          ),
+            slideUpPhone()
+          ],
         ));
+  }
+
+  Widget slideUpPhone() {
+    return SlidingUpPanel(
+        renderPanelSheet: false,
+        panel: floatingPanel(),
+        controller: telecomsrv.panelController,
+        maxHeight: Get.height / 2,
+        minHeight: 0.0,
+        backdropEnabled: true);
   }
 
   Widget menu() {
@@ -120,6 +121,51 @@ class _TelecomServicesState extends State<TelecomServices> {
                   ),
                   SizedBox(height: 20),
                   menuIcon()
+                ],
+              ),
+            )
+          : Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Lottie.asset(
+                  MyIcon.animation_load,
+                  repeat: true,
+                ),
+              ),
+            ),
+    );
+  }
+
+  Widget menuVas() {
+    return Container(
+      color: color_fff,
+      child: telecomsrv.mainMenuInfo.isNotEmpty
+          ? Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFont(
+                        text: 'ບໍລິການເສີມ',
+                        fontWeight: FontWeight.w600,
+                      ),
+                      Container(
+                        width: 10.w,
+                        height: 3,
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFEF3328),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  menuVasIcon()
                 ],
               ),
             )
@@ -228,6 +274,58 @@ class _TelecomServicesState extends State<TelecomServices> {
               SizedBox(height: 10),
               TextFont(
                 text: getLocalizedGroupName(result),
+                fontSize: 9.5,
+                fontWeight: FontWeight.w400,
+                maxLines: 2,
+                color: cr_4139,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget menuVasIcon() {
+    return AlignedGridView.count(
+      itemCount: telecomsrv.mainMenuInfo.length,
+      crossAxisCount: 4,
+      mainAxisSpacing: 17,
+      crossAxisSpacing: 20,
+      shrinkWrap: true,
+      primary: false,
+      physics: NeverScrollableScrollPhysics(),
+      itemBuilder: (BuildContext context, int index) {
+        var data = telecomsrv.mainMenuInfo[index];
+
+        return InkWell(
+          onTap: () async {},
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SizedBox(height: 6),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: CachedNetworkImage(
+                      imageUrl: data.coverPage1x1!,
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => SvgPicture.asset(
+                        MyIcon.ic_logo_x,
+                        width: 60,
+                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      width: 64,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              TextFont(
+                text: data.mainMenuKey!,
                 fontSize: 9.5,
                 fontWeight: FontWeight.w400,
                 maxLines: 2,
@@ -370,7 +468,7 @@ class _TelecomServicesState extends State<TelecomServices> {
   Widget phoneList() {
     return ListView(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         ...telecomsrv.phoneListModel
             .skip(1)

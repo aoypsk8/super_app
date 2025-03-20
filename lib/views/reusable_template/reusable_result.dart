@@ -161,14 +161,14 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                 right: 0,
                 bottom: 0,
                 child: Opacity(
-                  opacity: 0.9, // Set the transparency
+                  opacity: 0.8,
                   child: _backgroundImage == null
                       ? Image.asset(
-                          MyIcon.bg_backgroundBill, // Use asset when null
+                          MyIcon.bg_backgroundBill,
                           fit: BoxFit.cover,
                         )
                       : Image.file(
-                          _backgroundImage!, // Use FileImage properly
+                          _backgroundImage!,
                           fit: BoxFit.cover,
                         ),
                 ),

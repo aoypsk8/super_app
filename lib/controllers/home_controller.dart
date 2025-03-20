@@ -104,7 +104,6 @@ class HomeController extends GetxController {
   checkAppUpdate() async {
     var url = '${MyConstant.urlLtcdev}/AppInfo/Info';
     var res = await DioClient.getNoLoading(url);
-    print(res);
     // bgimage
     // bgbill
     // banner

@@ -69,8 +69,6 @@ class _TelecomServicesState extends State<TelecomServices> {
                       dashboard(),
                       SizedBox(height: 8),
                       menu(),
-                      // SizedBox(height: 8),
-                      // menuVas()
                     ],
                   ),
                 ),
@@ -136,54 +134,9 @@ class _TelecomServicesState extends State<TelecomServices> {
     );
   }
 
-  Widget menuVas() {
-    return Container(
-      color: color_fff,
-      child: telecomsrv.mainMenuInfo.isNotEmpty
-          ? Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFont(
-                        text: 'ບໍລິການເສີມ',
-                        fontWeight: FontWeight.w600,
-                      ),
-                      Container(
-                        width: 10.w,
-                        height: 3,
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFEF3328),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  menuVasIcon()
-                ],
-              ),
-            )
-          : Center(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Lottie.asset(
-                  MyIcon.animation_load,
-                  repeat: true,
-                ),
-              ),
-            ),
-    );
-  }
-
   Widget menuIcon() {
     return AlignedGridView.count(
-      itemCount: homeController.menuModel.skip(1).first.menulists!.length,
+      itemCount: homeController.menuModel.last.menulists!.length,
       crossAxisCount: 4,
       mainAxisSpacing: 17,
       crossAxisSpacing: 20,
@@ -191,37 +144,6 @@ class _TelecomServicesState extends State<TelecomServices> {
       primary: false,
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
-        if (index == homeController.menuModel.first.menulists!.length) {
-          return InkWell(
-            onTap: () async {},
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                SizedBox(height: 6),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                  ),
-                  child: SvgPicture.asset(
-                    MyIcon.ic_more,
-                    width: 5.5.w,
-                    height: 8.5.w,
-                  ),
-                ),
-                SizedBox(height: 10),
-                TextFont(
-                  text: 'more',
-                  fontSize: 9.5,
-                  fontWeight: FontWeight.w400,
-                  maxLines: 2,
-                  color: cr_4139,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          );
-        }
-
         var result = homeController.menuModel.first.menulists![index];
         String? url = result.logo;
         String? updatedUrl = url!.replaceFirst(
@@ -274,58 +196,6 @@ class _TelecomServicesState extends State<TelecomServices> {
               SizedBox(height: 10),
               TextFont(
                 text: getLocalizedGroupName(result),
-                fontSize: 9.5,
-                fontWeight: FontWeight.w400,
-                maxLines: 2,
-                color: cr_4139,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget menuVasIcon() {
-    return AlignedGridView.count(
-      itemCount: telecomsrv.mainMenuInfo.length,
-      crossAxisCount: 4,
-      mainAxisSpacing: 17,
-      crossAxisSpacing: 20,
-      shrinkWrap: true,
-      primary: false,
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (BuildContext context, int index) {
-        var data = telecomsrv.mainMenuInfo[index];
-
-        return InkWell(
-          onTap: () async {},
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(height: 6),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: CachedNetworkImage(
-                      imageUrl: data.coverPage1x1!,
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) => SvgPicture.asset(
-                        MyIcon.ic_logo_x,
-                        width: 60,
-                      ),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      width: 64,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              TextFont(
-                text: data.mainMenuKey!,
                 fontSize: 9.5,
                 fontWeight: FontWeight.w400,
                 maxLines: 2,
@@ -839,35 +709,37 @@ class _TelecomServicesState extends State<TelecomServices> {
           children: [
             SvgPicture.asset(MyIcon.ic_internet_round),
             SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFont(
-                  text: telecomsrv.inusePackageModel.value.packageName ??
-                      'available',
-                  poppin: true,
-                  fontWeight: FontWeight.w400,
-                  color: color_fff,
-                  fontSize: 10,
-                ),
-                Row(
-                  children: [
-                    TextFont(
-                      text: 'ໄລຍະເວລາ',
-                      color: color_fff,
-                      fontSize: 9,
-                    ),
-                    SizedBox(width: 6),
-                    TextFont(
-                      text: telecomsrv.inusePackageModel.value.dateStamp ??
-                          'available',
-                      color: color_fff,
-                      fontSize: 9,
-                      poppin: true,
-                    )
-                  ],
-                )
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFont(
+                    text: telecomsrv.inusePackageModel.value.packageName ??
+                        'available',
+                    poppin: true,
+                    fontWeight: FontWeight.w400,
+                    color: color_fff,
+                    fontSize: 10,
+                  ),
+                  Row(
+                    children: [
+                      TextFont(
+                        text: 'ໄລຍະເວລາ',
+                        color: color_fff,
+                        fontSize: 9,
+                      ),
+                      SizedBox(width: 6),
+                      TextFont(
+                        text: telecomsrv.inusePackageModel.value.dateStamp ??
+                            'available',
+                        color: color_fff,
+                        fontSize: 9,
+                        poppin: true,
+                      )
+                    ],
+                  )
+                ],
+              ),
             )
           ],
         )

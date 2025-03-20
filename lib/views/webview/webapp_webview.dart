@@ -173,27 +173,23 @@ class _WebappWebviewScreenState extends State<WebappWebviewScreen> {
   /// ✅ Initializes the WebView with the correct URL
   void _initializeWebView() {
     String url = widget.urlWidget;
-    var param =
-        '?token=${userController.rxToken.value}&custPhone=${userController.rxMsisdn.value}';
-    url += param;
+    var param = '?token=${userController.rxToken.value}&custPhone=${userController.rxMsisdn.value}';
+    // url += param;
     debugPrint('WebView URL: $url');
 
     controller = WebViewController()
       ..loadRequest(Uri.parse(url))
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
-      ..addJavaScriptChannel('closeWebview',
-          onMessageReceived: (JavaScriptMessage message) async {
+      ..addJavaScriptChannel('closeWebview', onMessageReceived: (JavaScriptMessage message) async {
         debugPrint('Message: ${message.message}');
         Get.back();
       })
-      ..addJavaScriptChannel('refreshToken',
-          onMessageReceived: (JavaScriptMessage message) async {
+      ..addJavaScriptChannel('refreshToken', onMessageReceived: (JavaScriptMessage message) async {
         debugPrint('Received refreshToken request from WebView');
         _handleTokenRefresh();
       })
-      ..addJavaScriptChannel('downloadImage',
-          onMessageReceived: (JavaScriptMessage message) async {
+      ..addJavaScriptChannel('downloadImage', onMessageReceived: (JavaScriptMessage message) async {
         debugPrint('Message: ${message.message}');
       })
       ..setNavigationDelegate(
@@ -208,33 +204,32 @@ class _WebappWebviewScreenState extends State<WebappWebviewScreen> {
               loadingPercentage = 100;
             });
           },
+          // onNavigationRequest: (NavigationRequest request) {
+          //   return _handleNavigation(request);
+          // },
           onNavigationRequest: (NavigationRequest request) {
-            return _handleNavigation(request);
+            if (request.url.startsWith('http') || request.url.startsWith('https')) {
+              if (Platform.isIOS) {
+                return NavigationDecision.navigate;
+              }
+              if (Platform.isAndroid) {
+                final uri = Uri.parse(request.url);
+                _launchInBrowser(uri);
+                return NavigationDecision.prevent;
+              }
+              _launchURL(request.url);
+              return NavigationDecision.prevent;
+            } else if (request.url.startsWith('tel:') || request.url.startsWith('mailto:')) {
+              _launchURL(request.url);
+              return NavigationDecision.prevent;
+            } else {
+              final uri = Uri.parse(request.url);
+              _launchInBrowser(uri);
+              return NavigationDecision.prevent;
+            }
           },
         ),
       );
-  }
-
-  NavigationDecision _handleNavigation(NavigationRequest request) {
-    final String url = request.url;
-    if (url.startsWith('https://splus.app')) {
-      return NavigationDecision.navigate;
-    } else if (url.startsWith('http') || url.startsWith('https')) {
-      final uri = Uri.parse(url);
-      if (Platform.isAndroid) {
-        _launchInBrowser(uri);
-      } else {
-        return NavigationDecision.navigate;
-      }
-      return NavigationDecision.prevent;
-    } else if (url.startsWith('tel:') || url.startsWith('mailto:')) {
-      _launchURL(url);
-      return NavigationDecision.prevent;
-    } else {
-      final uri = Uri.parse(url);
-      _launchInBrowser(uri);
-      return NavigationDecision.prevent;
-    }
   }
 
   Future<void> _launchInBrowser(Uri url) async {
@@ -257,9 +252,8 @@ class _WebappWebviewScreenState extends State<WebappWebviewScreen> {
     TempUserProfileStorage boxUser = TempUserProfileStorage();
     TempUserProfile? lastUser = boxUser.getLastLoggedInUser();
 
-    bool? loginSuccess = await Get.to(
-        () => RefreshTokenWebview(user: lastUser!.toJson()),
-        transition: Transition.downToUp);
+    bool? loginSuccess =
+        await Get.to(() => RefreshTokenWebview(user: lastUser!.toJson()), transition: Transition.downToUp);
 
     if (loginSuccess == true) {
       debugPrint("✅ Login successful, sending new token to WebView");

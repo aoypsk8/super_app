@@ -150,8 +150,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebappWebviewScreen extends StatefulWidget {
-  const WebappWebviewScreen({super.key, required this.isMenu});
-  final bool isMenu;
+  const WebappWebviewScreen({super.key, required this.urlWidget});
+  final String urlWidget;
 
   @override
   State<WebappWebviewScreen> createState() => _WebappWebviewScreenState();
@@ -172,8 +172,9 @@ class _WebappWebviewScreenState extends State<WebappWebviewScreen> {
 
   /// ✅ Initializes the WebView with the correct URL
   void _initializeWebView() {
-    String url = 'https://qrs1n5sd-3000.asse.devtunnels.ms/ftth/';
-    var param = '?token=${userController.rxToken.value}&custPhone=${userController.rxMsisdn.value}';
+    String url = widget.urlWidget;
+    var param =
+        '?token=${userController.rxToken.value}&custPhone=${userController.rxMsisdn.value}';
     url += param;
     debugPrint('WebView URL: $url');
 
@@ -181,15 +182,18 @@ class _WebappWebviewScreenState extends State<WebappWebviewScreen> {
       ..loadRequest(Uri.parse(url))
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
-      ..addJavaScriptChannel('closeWebview', onMessageReceived: (JavaScriptMessage message) async {
+      ..addJavaScriptChannel('closeWebview',
+          onMessageReceived: (JavaScriptMessage message) async {
         debugPrint('Message: ${message.message}');
         Get.back();
       })
-      ..addJavaScriptChannel('refreshToken', onMessageReceived: (JavaScriptMessage message) async {
+      ..addJavaScriptChannel('refreshToken',
+          onMessageReceived: (JavaScriptMessage message) async {
         debugPrint('Received refreshToken request from WebView');
         _handleTokenRefresh();
       })
-      ..addJavaScriptChannel('downloadImage', onMessageReceived: (JavaScriptMessage message) async {
+      ..addJavaScriptChannel('downloadImage',
+          onMessageReceived: (JavaScriptMessage message) async {
         debugPrint('Message: ${message.message}');
       })
       ..setNavigationDelegate(
@@ -220,7 +224,7 @@ class _WebappWebviewScreenState extends State<WebappWebviewScreen> {
       if (Platform.isAndroid) {
         _launchInBrowser(uri);
       } else {
-        _launchURL(url);
+        return NavigationDecision.navigate;
       }
       return NavigationDecision.prevent;
     } else if (url.startsWith('tel:') || url.startsWith('mailto:')) {
@@ -253,8 +257,9 @@ class _WebappWebviewScreenState extends State<WebappWebviewScreen> {
     TempUserProfileStorage boxUser = TempUserProfileStorage();
     TempUserProfile? lastUser = boxUser.getLastLoggedInUser();
 
-    bool? loginSuccess =
-        await Get.to(() => RefreshTokenWebview(user: lastUser!.toJson()), transition: Transition.downToUp);
+    bool? loginSuccess = await Get.to(
+        () => RefreshTokenWebview(user: lastUser!.toJson()),
+        transition: Transition.downToUp);
 
     if (loginSuccess == true) {
       debugPrint("✅ Login successful, sending new token to WebView");

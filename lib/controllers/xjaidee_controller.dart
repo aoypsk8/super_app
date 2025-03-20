@@ -46,7 +46,7 @@ class XjaideeController extends GetxController {
   RxString rxDescription = ''.obs;
 
   fetchDetails() async {
-    var url = "http://192.168.100.226:4100/api/GetDataUsers";
+    var url = "http://localhost:4100/api/GetDataUsers";
     var data = {
       "msisdn": userController.rxMsisdn.value,
     };
@@ -67,7 +67,7 @@ class XjaideeController extends GetxController {
   //   ! Show Menu
   // !------------------------------------------------------------------------------
   ShowMenu() async {
-    var url = "http://192.168.100.226:4100/api/CheckApprove";
+    var url = "http://localhost:4100/api/CheckApprove";
     var data = {
       "msisdn": userController.rxMsisdn.value,
     };
@@ -82,7 +82,7 @@ class XjaideeController extends GetxController {
   //   ! Check credit
   // !------------------------------------------------------------------------------
   CheckCredit() async {
-    var url = "http://192.168.100.226:4100/api/CheckCredit";
+    var url = "http://localhost:4100/api/CheckCredit";
     var data = {
       "msisdn": userController.rxMsisdn.value,
     };
@@ -98,7 +98,7 @@ class XjaideeController extends GetxController {
   //   ! Check can or cant
   // !------------------------------------------------------------------------------
   CheckPayment() async {
-    var url = "http://192.168.100.226:4100/api/CheckPayment";
+    var url = "http://localhost:4100/api/CheckPayment";
     var data = {
       "msisdn": userController.rxMsisdn.value,
     };
@@ -124,7 +124,7 @@ class XjaideeController extends GetxController {
   //   ! Save Info
   // !------------------------------------------------------------------------------
   SaveInfo() async {
-    var url = "http://192.168.100.226:4100/api/Credit";
+    var url = "http://localhost:4100/api/Credit";
     var data = {
       "amount": paymentAmount.value,
       "month_to_repay": months.value,
@@ -153,7 +153,7 @@ class XjaideeController extends GetxController {
   //   ! Save Info
   // !------------------------------------------------------------------------------
   FetchHistory() async {
-    var url = "http://192.168.100.226:4100/api/HistoryCredit";
+    var url = "http://localhost:4100/api/HistoryCredit";
     var data = {
       "msisdn": userController.rxMsisdn.value,
     };
@@ -172,7 +172,7 @@ class XjaideeController extends GetxController {
       isLoading.value = true;
       await Future.delayed(
           Duration(milliseconds: 100)); // Delay to prevent UI rebuild issue
-      var url = "http://192.168.100.226:4100/api/ShowApproveCredit";
+      var url = "http://localhost:4100/api/ShowApproveCredit";
       var response = await DioClient.post(url, null);
 
       if (response['status'] == true) {
@@ -192,7 +192,7 @@ class XjaideeController extends GetxController {
   // !------------------------------------------------------------------------------
   Future<bool> Update(
       {required String creditId, required String status}) async {
-    var url = "http://192.168.100.226:4100/api/ApproveCredit";
+    var url = "http://localhost:4100/api/ApproveCredit";
     var data = {
       "credit_id": creditId,
       "status": status,

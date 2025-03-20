@@ -66,7 +66,9 @@ class _XjaideeApproveScreenState extends State<XjaideeApproveScreen> {
                     var loan = xjaidee.loanList[index];
                     return GestureDetector(
                       onTap: () {
-                        Get.to(() => LoanDetailScreen(loan: loan));
+                        if (loan['status'] != 2) {
+                          Get.to(() => LoanDetailScreen(loan: loan));
+                        }
                       },
                       child: LoanCard(
                         name: loan['name'],

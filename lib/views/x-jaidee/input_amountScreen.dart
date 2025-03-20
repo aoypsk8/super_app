@@ -47,10 +47,12 @@ class _InputAmountXJaideeScreenState extends State<InputAmountXJaideeScreen> {
 
     _max = (xjaidee.balance.value ?? 0) > _min ? xjaidee.balance.value : _min;
 
-    // If _max is not a multiple of _step, don't round up. Just use the exact balance.
-    if (_max % _step != 0) {
-      _max = (_max ~/ _step) *
-          _step; // Ensure _max is always a multiple of 500,000
+// Ensure _max is always a multiple of _step
+    _max = (_max ~/ _step) * _step;
+
+// If there's a remainder, round up instead of down
+    if (xjaidee.balance.value % _step != 0) {
+      _max -= _step;
     }
 
     _paymentAmount.text = fn.format(_currentValue);

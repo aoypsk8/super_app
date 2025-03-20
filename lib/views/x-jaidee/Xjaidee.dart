@@ -50,7 +50,7 @@ class _XJaideeState extends State<XJaidee> {
           // Background Gradient
           Positioned(
             child: Container(
-              height: 30.h,
+              height: 26.h,
               width: double.infinity,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -78,7 +78,7 @@ class _XJaideeState extends State<XJaidee> {
           // Main Content
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -89,14 +89,14 @@ class _XJaideeState extends State<XJaidee> {
                         icon: Icon(
                           Icons.arrow_back_ios,
                           color: color_fff,
-                          size: 15.sp,
+                          size: 16.sp,
                         ),
                         onPressed: () {
                           Get.back();
                         },
                       ),
                       TextFont(
-                        fontSize: 13.sp,
+                        fontSize: 12.sp,
                         text: 'ເອັກໃຈດີ',
                         color: color_fff,
                         noto: true,
@@ -142,10 +142,35 @@ class _XJaideeState extends State<XJaidee> {
                           buildButton(
                             icon: MyIcon.ic_load_cancel,
                             ontap: () {
-                              Get.to(() => XjaideePaymentscreen());
+                              if (controller.loanHistory.isNotEmpty) {
+                                var lastLoan = controller
+                                    .loanHistory.last; // Get last history entry
+
+                                Get.to(() => XjaideePaymentscreen(),
+                                    arguments: {
+                                      "creditID": lastLoan["credit_id"],
+                                      "creditAmount": lastLoan["credit_amount"],
+                                      "monthToRepay":
+                                          lastLoan["month_to_repay"],
+                                      "percentage": lastLoan["percentage"],
+                                      "monthlyPayment":
+                                          lastLoan["monthly_payment"],
+                                      "dateOfBorrow":
+                                          lastLoan["date_of_borrow"],
+                                      "status": lastLoan["status"],
+                                      "total":
+                                          lastLoan["total_transaction_amount"],
+                                      "debt": lastLoan["debt"],
+                                      "transactions":
+                                          lastLoan["transactions"] ?? [],
+                                    });
+                              } else {
+                                DialogHelper.showErrorDialogNew(
+                                    description: "ບໍ່ມີປະຫວັດສິນເຊື່ອ");
+                              }
                             },
                             title: 'ປິດສິນເຊື່ອ',
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -170,12 +195,16 @@ class _XJaideeState extends State<XJaidee> {
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 10),
                                   child: BuildHistoryLoad(
+                                    creditID: loan["credit_id"],
                                     creditAmount: loan["credit_amount"],
                                     monthToRepay: loan["month_to_repay"],
                                     percentage: loan["percentage"],
                                     monthlyPayment: loan["monthly_payment"],
                                     dateOfBorrow: loan["date_of_borrow"],
                                     status: loan["status"],
+                                    total: loan["total_transaction_amount"],
+                                    debt: loan["debt"],
+                                    transactions: loan["transactions"] ?? "",
                                   ),
                                 );
                               },
@@ -193,26 +222,34 @@ class _XJaideeState extends State<XJaidee> {
 }
 
 class BuildHistoryLoad extends StatelessWidget {
+  final int creditID;
   final int creditAmount;
   final String monthToRepay;
   final String percentage;
   final String monthlyPayment;
   final String dateOfBorrow;
   final String status;
+  final int total;
+  final int debt;
+  final List<dynamic> transactions; // Updated: Handle transactions list
 
   const BuildHistoryLoad({
     Key? key,
+    required this.creditID,
     required this.creditAmount,
     required this.monthToRepay,
     required this.percentage,
     required this.monthlyPayment,
     required this.dateOfBorrow,
     required this.status,
+    required this.total,
+    required this.debt,
+    required this.transactions,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Determine the status text and color
+    // Determine status text and color
     String statusText;
     Color statusColor;
 
@@ -226,7 +263,7 @@ class BuildHistoryLoad extends StatelessWidget {
         statusColor = cr_b692;
         break;
       case "3":
-        statusText = "ກຳລັງຊຳລະ"; // Approved
+        statusText = "ກຳລັງຊຳລະ"; // In Payment
         statusColor = cr_7070;
         break;
       case "4":
@@ -234,77 +271,92 @@ class BuildHistoryLoad extends StatelessWidget {
         statusColor = Colors.green;
         break;
       default:
-        statusText = "ບໍ່ຮູ້ສະຖານະ"; // Unknown status
+        statusText = "ບໍ່ຮູ້ສະຖານະ"; // Unknown
         statusColor = Colors.grey;
     }
 
-    return Container(
-      width: Get.width,
-      decoration: BoxDecoration(
-        color: color_fff,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: color_fff,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.4),
-                        spreadRadius: 1,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: SvgPicture.asset(
-                      MyIcon.ic_load_xjaidee,
-                      color: cr_7070,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        TextFont(
-                          text: NumberFormat("#,###").format(creditAmount),
-                          fontSize: 13,
-                        ),
-                        const SizedBox(width: 5),
-                        TextFont(
-                          text: 'kip',
-                          fontSize: 12,
+    return GestureDetector(
+      onTap: () {
+        // Navigate to XjaideePaymentscreen with all loan data
+        Get.to(() => XjaideePaymentscreen(), arguments: {
+          "creditID": creditID,
+          "creditAmount": creditAmount,
+          "monthToRepay": monthToRepay,
+          "percentage": percentage,
+          "monthlyPayment": monthlyPayment,
+          "dateOfBorrow": dateOfBorrow,
+          "status": status,
+          "total": total,
+          "debt": debt,
+          "transactions": transactions, // Pass transactions safely
+        });
+      },
+      child: Container(
+        width: Get.width,
+        decoration: BoxDecoration(
+          color: color_fff,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: color_fff,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.4),
+                          spreadRadius: 1,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
-                    TextFont(
-                      text: DateFormat('dd MMM, yyyy HH:mm').format(
-                        DateFormat("dd MMM yyyy hh:mm a").parse(dateOfBorrow),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: SvgPicture.asset(
+                        MyIcon.ic_load_xjaidee,
+                        color: cr_7070,
                       ),
-                      fontSize: 10,
                     ),
-                  ],
-                ),
-              ],
-            ),
-            TextFont(
-              text: statusText,
-              fontSize: 12,
-              color: statusColor,
-            ),
-          ],
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          TextFont(
+                            text: NumberFormat("#,###").format(creditAmount),
+                            fontSize: 13,
+                          ),
+                          const SizedBox(width: 5),
+                          TextFont(
+                            text: 'kip',
+                            fontSize: 12,
+                          ),
+                        ],
+                      ),
+                      TextFont(
+                        text: dateOfBorrow,
+                        fontSize: 10,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              TextFont(
+                text: statusText,
+                fontSize: 12,
+                color: statusColor,
+              ),
+            ],
+          ),
         ),
       ),
     );

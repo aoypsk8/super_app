@@ -460,14 +460,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
           ),
-          TextButton(
-              onPressed: () => Get.to(WebappWebviewScreen(
-                    urlWidget: 'https://mmoney.la',
-                  )),
-              child: TextFont(text: 'NewMenu')),
-          Obx(
-            () => TextFont(text: 'token : ${userController.rxToken.value}', color: color_1a1, maxLines: 3),
-          ),
+          // TextButton(
+          //     onPressed: () => Get.to(WebappWebviewScreen(
+          //           urlWidget: 'https://mmoney.la',
+          //         )),
+          //     child: TextFont(text: 'NewMenu')),
+          // Obx(
+          //   () => TextFont(text: 'token : ${userController.rxToken.value}', color: color_1a1, maxLines: 3),
+          // ),
           //! detail tabbar
           Expanded(
             child: TabBarView(

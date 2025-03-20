@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:super_app/controllers/user_controller.dart';
+import 'package:super_app/controllers/xjaidee_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/x-jaidee/input_amountScreen.dart';
+import 'package:super_app/views/x-jaidee/xjaidee_approve.dart';
+import 'package:super_app/views/x-jaidee/xjaidee_paymentScreen.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +21,27 @@ class XJaidee extends StatefulWidget {
 }
 
 class _XJaideeState extends State<XJaidee> {
+  final XjaideeController controller = Get.put(XjaideeController());
+  final UserController userController =
+      Get.find<UserController>(); // Get userController
+  bool isApproveVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkApprovalVisibility(); // Ensures it runs after the first frame is built
+      controller.FetchHistory();
+    });
+  }
+
+  Future<void> checkApprovalVisibility() async {
+    bool result = await controller.ShowMenu();
+    setState(() {
+      isApproveVisible = result;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +50,7 @@ class _XJaideeState extends State<XJaidee> {
           // Background Gradient
           Positioned(
             child: Container(
-              height: 30.h,
+              height: 26.h,
               width: double.infinity,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -53,7 +78,7 @@ class _XJaideeState extends State<XJaidee> {
           // Main Content
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -64,14 +89,14 @@ class _XJaideeState extends State<XJaidee> {
                         icon: Icon(
                           Icons.arrow_back_ios,
                           color: color_fff,
-                          size: 15.sp,
+                          size: 16.sp,
                         ),
                         onPressed: () {
                           Get.back();
                         },
                       ),
                       TextFont(
-                        fontSize: 13.sp,
+                        fontSize: 12.sp,
                         text: 'ເອັກໃຈດີ',
                         color: color_fff,
                         noto: true,
@@ -101,32 +126,51 @@ class _XJaideeState extends State<XJaidee> {
                         children: [
                           buildButton(
                             icon: MyIcon.ic_load_xjaidee,
-                            ontap: () {
-                              DialogHelper.showDialogPolicy(
-                                title: "Policy",
-                                description:
-                                    "1. Registration is required to register through the mobile phone number of the customer who registered in accordance with the rules to open an M-Money wallet account, which has to be active and reachable. Users can register to use:\n • Register and fill in the information, KYC manually according to the methods and procedures set by the company in this service.\n2. After the registration is completed, the user must set a secure personal password according to the company's instructions, which is a 6-digit number, then wait for confirmation from the system to start using the service.Using M-Money Wallet Services\n 1. Top Up Wallet\n Users of M-Money Wallet can top-up their wallet at: (1) the LTC Service Center, (2) the participating Banks, (3) the Agent Stores that the Company has periodically listed (4) Direct Sale staff. Minimum top up is 10,000 Kip (ten thousand kip).",
-                                onClose: () {
-                                  Get.to(() => InputAmountXJaideeScreen());
-                                },
-                              );
+                            ontap: () async {
+                              await controller.CheckPayment();
                             },
                             title: 'ຢືມສິນເຊື່ອ',
                           ),
-                          buildButton(
-                            icon: MyIcon.ic_load_approve,
-                            ontap: () {
-                              print("object");
-                            },
-                            title: 'ອານຸມັດສິນເຊື່ອ',
-                          ),
+                          if (isApproveVisible)
+                            buildButton(
+                              icon: MyIcon.ic_load_approve,
+                              title: 'ອານຸມັດສິນເຊື່ອ',
+                              ontap: () {
+                                Get.to(() => XjaideeApproveScreen());
+                              },
+                            ),
                           buildButton(
                             icon: MyIcon.ic_load_cancel,
                             ontap: () {
-                              print("object");
+                              if (controller.loanHistory.isNotEmpty) {
+                                var lastLoan = controller
+                                    .loanHistory.last; // Get last history entry
+
+                                Get.to(() => XjaideePaymentscreen(),
+                                    arguments: {
+                                      "creditID": lastLoan["credit_id"],
+                                      "creditAmount": lastLoan["credit_amount"],
+                                      "monthToRepay":
+                                          lastLoan["month_to_repay"],
+                                      "percentage": lastLoan["percentage"],
+                                      "monthlyPayment":
+                                          lastLoan["monthly_payment"],
+                                      "dateOfBorrow":
+                                          lastLoan["date_of_borrow"],
+                                      "status": lastLoan["status"],
+                                      "total":
+                                          lastLoan["total_transaction_amount"],
+                                      "debt": lastLoan["debt"],
+                                      "transactions":
+                                          lastLoan["transactions"] ?? [],
+                                    });
+                              } else {
+                                DialogHelper.showErrorDialogNew(
+                                    description: "ບໍ່ມີປະຫວັດສິນເຊື່ອ");
+                              }
                             },
                             title: 'ປິດສິນເຊື່ອ',
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -139,15 +183,33 @@ class _XJaideeState extends State<XJaidee> {
                   ),
                   const SizedBox(height: 15),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          child: buildHistoryLoad(),
-                        );
-                      },
-                    ),
+                    child: Obx(() {
+                      return controller.loanHistory.isEmpty
+                          ? Center(child: Text("No loan history found"))
+                          : ListView.builder(
+                              padding: const EdgeInsets.all(10),
+                              itemCount: controller.loanHistory.length,
+                              itemBuilder: (context, index) {
+                                var loan = controller.loanHistory.reversed
+                                    .toList()[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: BuildHistoryLoad(
+                                    creditID: loan["credit_id"],
+                                    creditAmount: loan["credit_amount"],
+                                    monthToRepay: loan["month_to_repay"],
+                                    percentage: loan["percentage"],
+                                    monthlyPayment: loan["monthly_payment"],
+                                    dateOfBorrow: loan["date_of_borrow"],
+                                    status: loan["status"],
+                                    total: loan["total_transaction_amount"],
+                                    debt: loan["debt"],
+                                    transactions: loan["transactions"] ?? "",
+                                  ),
+                                );
+                              },
+                            );
+                    }),
                   ),
                 ],
               ),
@@ -159,80 +221,142 @@ class _XJaideeState extends State<XJaidee> {
   }
 }
 
-class buildHistoryLoad extends StatelessWidget {
-  const buildHistoryLoad({
-    super.key,
-  });
+class BuildHistoryLoad extends StatelessWidget {
+  final int creditID;
+  final int creditAmount;
+  final String monthToRepay;
+  final String percentage;
+  final String monthlyPayment;
+  final String dateOfBorrow;
+  final String status;
+  final int total;
+  final int debt;
+  final List<dynamic> transactions; // Updated: Handle transactions list
+
+  const BuildHistoryLoad({
+    Key? key,
+    required this.creditID,
+    required this.creditAmount,
+    required this.monthToRepay,
+    required this.percentage,
+    required this.monthlyPayment,
+    required this.dateOfBorrow,
+    required this.status,
+    required this.total,
+    required this.debt,
+    required this.transactions,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: Get.width,
-      decoration: BoxDecoration(
-        color: color_fff,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: color_fff,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.4),
-                        spreadRadius: 1,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: SvgPicture.asset(
-                      MyIcon.ic_load_xjaidee,
-                      color: cr_7070,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        TextFont(
-                          text: '3.000.000',
-                          fontSize: 13,
-                        ),
-                        const SizedBox(width: 5),
-                        TextFont(
-                          text: 'kip',
-                          fontSize: 12,
+    // Determine status text and color
+    String statusText;
+    Color statusColor;
+
+    switch (status) {
+      case "1":
+        statusText = "ປະຕິເສດ"; // Rejected
+        statusColor = Colors.red;
+        break;
+      case "2":
+        statusText = "ລໍຖ້າອະນຸມັດ"; // Waiting for approval
+        statusColor = cr_b692;
+        break;
+      case "3":
+        statusText = "ກຳລັງຊຳລະ"; // In Payment
+        statusColor = cr_7070;
+        break;
+      case "4":
+        statusText = "ຊຳລະຄົບແລ້ວ"; // Completed
+        statusColor = Colors.green;
+        break;
+      default:
+        statusText = "ບໍ່ຮູ້ສະຖານະ"; // Unknown
+        statusColor = Colors.grey;
+    }
+
+    return GestureDetector(
+      onTap: () {
+        // Navigate to XjaideePaymentscreen with all loan data
+        Get.to(() => XjaideePaymentscreen(), arguments: {
+          "creditID": creditID,
+          "creditAmount": creditAmount,
+          "monthToRepay": monthToRepay,
+          "percentage": percentage,
+          "monthlyPayment": monthlyPayment,
+          "dateOfBorrow": dateOfBorrow,
+          "status": status,
+          "total": total,
+          "debt": debt,
+          "transactions": transactions, // Pass transactions safely
+        });
+      },
+      child: Container(
+        width: Get.width,
+        decoration: BoxDecoration(
+          color: color_fff,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: color_fff,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.4),
+                          spreadRadius: 1,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
-                    TextFont(
-                      text: DateFormat('dd MMM, yyyy HH:mm').format(
-                        DateTime.parse("2023-01-01 12:00:00"),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: SvgPicture.asset(
+                        MyIcon.ic_load_xjaidee,
+                        color: cr_7070,
                       ),
-                      fontSize: 10,
                     ),
-                  ],
-                ),
-              ],
-            ),
-            TextFont(
-              text: 'ຊຳລະຄົບແລ້ວ',
-              fontSize: 12,
-              color: color_3086,
-            ),
-          ],
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          TextFont(
+                            text: NumberFormat("#,###").format(creditAmount),
+                            fontSize: 13,
+                          ),
+                          const SizedBox(width: 5),
+                          TextFont(
+                            text: 'kip',
+                            fontSize: 12,
+                          ),
+                        ],
+                      ),
+                      TextFont(
+                        text: dateOfBorrow,
+                        fontSize: 10,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              TextFont(
+                text: statusText,
+                fontSize: 12,
+                color: statusColor,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -75,8 +75,8 @@ class CardWidgetBorrowing extends StatelessWidget {
                                     ? TextFont(
                                         color: color_fff,
                                         text: type == 'airtime'
-                                            ? "ຢືມມູນຄ່າໂທ"
-                                            : "ຢືມເນັດ",
+                                            ? "airtime_borrow"
+                                            : "data_borrow",
                                         fontSize: 13,
                                       )
                                     : const SizedBox(),

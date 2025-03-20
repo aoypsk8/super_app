@@ -73,41 +73,6 @@ class BorrowingController extends GetxController {
     }
   }
 
-  // borrowingProcess() async {
-  //   var body = {
-  //     "msisdn": userController.rxMsisdn.value,
-  //   };
-
-  //   var response = await DioClient.postEncrypt(
-  //     loading: false,
-  //     "${MyConstant.urlBorrow}${rxPathUrl.value}",
-  //     key: 'lmm',
-  //     body,
-  //   );
-
-  //   if (response["success"] == true) {
-  //     // Success - Show success dialog
-  //     DialogHelper.showSuccessWithMascot(title: "Borrowing successful!");
-  //   } else if (response["success"] == false &&
-  //       response["resultCode" == "405"]) {
-  //     // Show error dialog
-  //     DialogHelper.showErrorDialogNew(description: response['sms']);
-  //   } else if (response["success"] == false &&
-  //       response["resultCode" == "450"]) {
-  //     // Show error dialog
-  //     DialogHelper.showErrorDialogNew(description: response['sms']);
-  //   } else if (response["success"] == false &&
-  //       response["resultCode" == "401"]) {
-  //     // Show error dialog
-  //     DialogHelper.showErrorDialogNew(description: response['sms']);
-  //   } else {
-  //     // Show error dialog
-  //     DialogHelper.showErrorDialogNew(description: 'error');
-  //   }
-
-  //   // Clear the rxPathUrl after process completion
-  //   rxPathUrl.value = "";
-  // }
   borrowingProcess() async {
     var body = {
       "msisdn": userController.rxMsisdn.value,
@@ -132,7 +97,7 @@ class BorrowingController extends GetxController {
           response["sms"] ?? "An error occurred."; // Default message
 
       if (success) {
-        DialogHelper.showSuccessWithMascot(title: "ຢືມສຳເລັດ!");
+        DialogHelper.showSuccessWithMascot(title: "borrow_success".tr);
       } else {
         DialogHelper.showErrorDialogNew(description: message);
       }

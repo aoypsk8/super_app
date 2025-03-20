@@ -6,11 +6,130 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/views/x-jaidee/Xjaidee.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/myIcon.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class DialogHelper {
+  static void showErrorDialog({
+    String title = 'Ooops.',
+    String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.',
+    required VoidCallback onConfirm,
+  }) {
+    Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false,
+        child: Dialog(
+          surfaceTintColor: color_fff,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    ClipPath(
+                      clipper: CustomShape(), // Custom clipper class
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xffFCD9DB),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                          ),
+                        ),
+                        height: 120,
+                      ),
+                    ),
+                    SvgPicture.asset(
+                      MyIcon.dialog_warning_red,
+                      height: 75,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                TextFont(
+                  text: title,
+                  poppin: true,
+                  fontWeight: FontWeight.bold,
+                  color: color_436,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: TextFont(
+                          text: description,
+                          textAlign: TextAlign.center,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xff636E72),
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: color_c4c4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                              ),
+                              onPressed: () => Get.back(), // Close dialog
+                              child: TextFont(
+                                text: 'close',
+                                textAlign: TextAlign.center,
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: color_ed1,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                              ),
+                              onPressed: () {
+                                Get.back(); // Close dialog first
+                                onConfirm(); // Execute confirmation action
+                              },
+                              child: TextFont(
+                                text: 'confirm',
+                                textAlign: TextAlign.center,
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   static void showErrorDialogNew({
     String title = 'Umm, Sorry!!',
     String description = 'ການເຊື່ອມຕໍ່ລະບົບມີບັນຫາ, ກະລຸນາລອງໃຫມ່ອີກຄັ້ງ.',
@@ -86,6 +205,111 @@ class DialogHelper {
                   ),
                 ],
               ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static void showSuccessDialog(
+      {String title = 'Success.',
+      String description = 'ທ່ານໄດ້ກູ້ຢືມສິນເຊື່ອສຳເລັດ',
+      String description1 = ''}) {
+    Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false,
+        child: Dialog(
+          surfaceTintColor: color_fff,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Padding(
+            padding: const EdgeInsets.all(0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    ClipPath(
+                      clipper:
+                          CustomShapeOut(), // this is my own class which extendsCustomClipper
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Color(0xffFDF7EC),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10))),
+                        height: 130,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: SvgPicture.asset(
+                        MyIcon.dialog_success,
+                        height: 75,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 6),
+                TextFont(
+                  text: title,
+                  fontWeight: FontWeight.bold,
+                  color: color_436,
+                  poppin: true,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          children: [
+                            TextFont(
+                              text: description,
+                              textAlign: TextAlign.center,
+                              color: Color(0xff636E72),
+                            ),
+                            const SizedBox(
+                                height: 5), // Add spacing between texts
+                            TextFont(
+                              text: description1,
+                              textAlign: TextAlign.center,
+                              color: Color(0xff636E72),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: color_c4c4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(6), // <-- Radius
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 10)),
+                          onPressed: () {
+                            Get.back(); // Close the dialog
+                            Get.off(() =>
+                                XJaidee()); // Navigate back to XJaideeScreen
+                          },
+                          child: TextFont(
+                            text: 'close',
+                            textAlign: TextAlign.center,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -758,12 +982,7 @@ class __PolicyDialogContentState extends State<_PolicyDialogContent> {
                 if (isChecked) {
                   widget.onClose?.call();
                 } else {
-                  Get.snackbar(
-                    'Error',
-                    'Please accept the policy to proceed.',
-                    backgroundColor: cr_ef33,
-                    colorText: Colors.white,
-                  );
+                  null;
                 }
               },
             ),

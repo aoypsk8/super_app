@@ -269,6 +269,7 @@ class buildWeTvCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         weTVController.wetvdetail.value = e;
+        weTVController.rxTransID.value = '';
         Get.to(ListsPaymentScreen(
           description: homeController.menudetail.value.appid!,
           stepBuild: '2/3',

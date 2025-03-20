@@ -104,6 +104,7 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
               isEnabled: qrController.enableBottom.value,
               func: () async {
                 _formKey.currentState!.save();
+                qrController.rxTransID.value = '';
                 if (_formKey.currentState!.validate()) {
                   Get.to(
                     ListsPaymentScreen(
@@ -149,6 +150,7 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
                             );
                           }
                         } else {
+                          qrController.rxTransID.value = '';
                           qrController.rxTransID.value =
                               'XXL${qrController.rxTransID.value}';
                           qrController.rxPaymentAmount.value = int.parse(

@@ -399,14 +399,17 @@ class UserController extends GetxController with WidgetsBindingObserver {
     var data = {"transid": transID};
     // var res = await DioClient.postNoLoading(url, data);
     var res = await DioClient.postEncrypt(url, data);
+    print(res);
     if (res != null) {
       historyDetailModel.value = HistoryDetailModel.fromJson(res);
       Get.to(() => ReusableResultScreen(
-            fromAccountImage: userProfilemodel.value.profileImg!,
+            fromAccountImage: historyDetailModel.value.logo == ""
+                ? MyConstant.profile_default
+                : historyDetailModel.value.logo!,
             fromAccountName: historyDetailModel.value.fromAccName!,
             fromAccountNumber: historyDetailModel.value.fromAcc!,
             toAccountImage: historyDetailModel.value.logo == ""
-                ? "https://mmoney.la/AppLite/Users/mmoney.png"
+                ? MyConstant.profile_default
                 : historyDetailModel.value.logo!,
             toAccountName: historyDetailModel.value.toAccName!,
             toAccountNumber: historyDetailModel.value.toAcc!,

@@ -79,6 +79,7 @@ class PaymentTempBScreen extends StatelessWidget {
                       homeController.menudetail.value.description.toString() +
                           await randomNumber().fucRandomNumber();
                   controller.enableBottom.value = true;
+                  controller.rxTransID.value = '';
                   Get.to(
                     () => ListsPaymentScreen(
                       description: homeController.menudetail.value.appid!,

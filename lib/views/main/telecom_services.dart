@@ -61,6 +61,7 @@ class _TelecomServicesState extends State<TelecomServices> {
             Scaffold(
               body: PullRefresh(
                 refreshController: refreshController,
+                bg: color_fff,
                 onRefresh: () => refresh(),
                 child: SingleChildScrollView(
                   child: Column(

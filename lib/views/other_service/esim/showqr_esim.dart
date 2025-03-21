@@ -275,9 +275,11 @@ class _ShowQRESIMScreenState extends State<ShowQRESIMScreen> {
                     title: "are_you_sure_to_acctive_this_phon_number",
                     description:
                         "if_you_active_this_phone_number_this_phone_number_will_active_and_begin_the_internet_when_you_active_success",
-                    onOk: () {},
+                    onOk: () {
+                      Get.to(OpenWebView(url: "https://onegrab.laotel.com/"));
+                    },
                   );
-                  // Get.to(OpenWebView(url: "https://onegrab.laotel.com/"));
+                  //
                 },
                 child: TextFont(
                   text: "active_this_phone_number_here",

@@ -1,0 +1,2 @@
+/Users/m-money/Documents/GitHub/super_app/android/app/.cxx/RelWithDebInfo/5814436f/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/m-money/Documents/GitHub/super_app/android/app/.cxx/RelWithDebInfo/5814436f/armeabi-v7a/CMakeFiles/rebuild_cache.dir

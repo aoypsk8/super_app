@@ -266,12 +266,12 @@ class PaymentController extends GetxController {
       "remeberCard": remember
     };
     var response = await DioClient.postEncrypt(url, body);
-    logController.insertCashOutbyVisaMasterCardLog(
-      trainID,
-      userController.rxMsisdn.value,
-      homeController.menudetail.value.groupNameEN,
-      response,
-    );
+    // logController.insertCashOutbyVisaMasterCardLog(
+    //   trainID,
+    //   userController.rxMsisdn.value,
+    //   homeController.menudetail.value.groupNameEN,
+    //   response,
+    // );
     if (response['success'] == true) {
       return true;
     } else {

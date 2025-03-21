@@ -1,0 +1,2 @@
+/Users/m-money/Documents/GitHub/super_app/android/app/.cxx/RelWithDebInfo/5814436f/x86_64/CMakeFiles/edit_cache.dir
+/Users/m-money/Documents/GitHub/super_app/android/app/.cxx/RelWithDebInfo/5814436f/x86_64/CMakeFiles/rebuild_cache.dir

@@ -229,7 +229,6 @@ class TicketController extends GetxController {
             DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
         enableBottom.value = true;
         Get.to(ReusableResultWithCode(
-          isUSD: true,
           fromAccountImage: userController.userProfilemodel.value.profileImg ??
               MyConstant.profile_default,
           fromAccountName: userController.profileName.value,

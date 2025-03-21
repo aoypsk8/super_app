@@ -90,13 +90,6 @@ class CardWidgetESIM extends StatelessWidget {
                                       "${fn.format(double.parse(amount))} LAK",
                                 ),
                                 const SizedBox(width: 2),
-                                TextFont(
-                                  color: color_fff,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w700,
-                                  text:
-                                      " (${(double.parse((double.parse(amount) / homeController.RxrateUSDKIP.value).toStringAsFixed(2)))} USD)",
-                                ),
                               ],
                             ),
                             TextFont(

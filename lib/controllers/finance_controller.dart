@@ -294,7 +294,6 @@ class FinanceController extends GetxController {
         saveHistoryFinnace(rxAccNo.value, rxAccName.value);
         enableBottom.value = true;
         Get.to(ReusableResultScreen(
-          isUSD: true,
           fromAccountImage: userController.userProfilemodel.value.profileImg ??
               MyConstant.profile_default,
           fromAccountName: userController.profileName.value,

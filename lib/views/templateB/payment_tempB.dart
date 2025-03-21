@@ -118,9 +118,6 @@ class PaymentTempBScreen extends StatelessWidget {
                               } else if (paymentType == 'MMONEY') {
                                 navigateToConfirmScreen(paymentType);
                               } else {
-                                homeController.RxamountUSD.value =
-                                    await homeController.convertRate(int.parse(
-                                        controller.rxPaymentAmount.value));
                                 String? cvv =
                                     await showDynamicQRDialog(context, () {});
                                 if (cvv != null &&
@@ -251,7 +248,6 @@ class PaymentTempBScreen extends StatelessWidget {
   void navigateToConfirmScreen(String paymentType,
       [String cvv = '', String storedCardUniqueID = '']) {
     Get.to(() => ReusableConfirmScreen(
-          isUSD: paymentType != 'MMONEY',
           isEnabled: controller.enableBottom,
           appbarTitle: "confirm_payment",
           function: () {

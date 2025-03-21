@@ -242,7 +242,6 @@ class TempAController extends GetxController {
         rxPaymentAmount.value = amount;
         enableBottom.value = true;
         Get.to(() => ReusableResultScreen(
-            isUSD: true,
             fromAccountImage: userController.userProfilemodel.value.profileImg!,
             fromAccountName: userController.profileName.value,
             fromAccountNumber: userController.userProfilemodel.value.msisdn!,

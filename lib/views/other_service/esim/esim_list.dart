@@ -71,12 +71,6 @@ class _EsimCardScreenState extends State<EsimCardScreen> {
                       onTap: () async {
                         esimController.RxTransID.value =
                             'XX${await randomNumber().fucRandomNumber()}';
-                        esimController.RxUSD.value = double.parse((double.parse(
-                                    esimController.esimModel[index].price
-                                        .toString()) /
-                                homeController.RxrateUSDKIP.value)
-                            .toStringAsFixed(2));
-
                         Get.to(PaymentVisaMasterCard(
                           function: () {
                             esimController.esimProcess(

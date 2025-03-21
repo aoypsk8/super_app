@@ -493,7 +493,6 @@ class QrController extends GetxController {
         rxFee.value = int.parse(response['fee']);
         enableBottom.value = true;
         Get.to(ReusableResultScreen(
-          isUSD: true,
           fromAccountImage: userController.userProfilemodel.value.profileImg ??
               MyConstant.profile_default,
           fromAccountName: userController.profileName.value,

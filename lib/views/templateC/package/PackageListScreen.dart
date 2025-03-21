@@ -207,10 +207,6 @@ class _PackageListScreenState extends State<PackageListScreen>
                             } else if (paymentType == 'MMONEY') {
                               navigateToConfirmScreen(paymentType);
                             } else {
-                              homeController.RxamountUSD.value =
-                                  await homeController.convertRate(
-                                      tempCcontroler
-                                          .tempCpackagedetail.value.amount!);
                               String? cvv =
                                   await showDynamicQRDialog(context, () {});
                               if (cvv != null &&
@@ -332,10 +328,6 @@ class _PackageListScreenState extends State<PackageListScreen>
                               } else if (paymentType == 'MMONEY') {
                                 navigateToConfirmScreen(paymentType);
                               } else {
-                                homeController.RxamountUSD.value =
-                                    await homeController.convertRate(
-                                        tempCcontroler
-                                            .tempCpackagedetail.value.amount!);
                                 String? cvv =
                                     await showDynamicQRDialog(context, () {});
                                 if (cvv != null &&
@@ -384,7 +376,6 @@ class _PackageListScreenState extends State<PackageListScreen>
       [String cvv = '', String storedCardUniqueID = '']) {
     Get.to(
       () => ReusableConfirmScreen(
-        isUSD: paymentType != 'MMONEY',
         isEnabled: tempCcontroler.enableBottom,
         appbarTitle: "confirm_payment",
         function: () {

@@ -379,5 +379,6 @@
   "active_this_phone_number_here":"ເປີດນຳໃຊ້ທີ່ເວັບນີ້",
   "data_borrow":"ຢືມດາຕ້າ",
   "airtime_borrow":"ຢືມມູນຄ່າໂທ",
-  "all_lists": "ລາຍການທັງໝົດ"
+  "all_lists": "ລາຍການທັງໝົດ",
+  "please_check_cvv_code":"ກະລຸນາກວດສອບ CVV Codes"
 }

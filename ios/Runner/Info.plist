@@ -54,7 +54,6 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>We need access to save screenshots to your photo library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs photos access to get QR code from photo library</string>
 	<string>We need access to save screenshots to your photo library</string>
 	
 	<!-- camera  -->

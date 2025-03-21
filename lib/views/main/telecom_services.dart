@@ -200,6 +200,7 @@ class _TelecomServicesState extends State<TelecomServices> {
       shrinkWrap: true,
       primary: false,
       physics: NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.only(top: 0),
       itemBuilder: (BuildContext context, int index) {
         // var result = homeController.menuModel.skip(1).first.menulists![index];
         var result = homeController.menuModel.skip(1).first.menulists![index];
@@ -470,6 +471,7 @@ class _TelecomServicesState extends State<TelecomServices> {
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.only(top: 0),
       children: [
         ...telecomsrv.phoneListModel
             .skip(1)

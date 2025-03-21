@@ -37,13 +37,13 @@ class TelecomsrvController extends GetxController {
   getNetworktype() async {
     var url =
         '${MyConstant.mservicesUrl}/CheckNetworkType?msisdn=${await storage.read('msisdn')}';
-    var res = await DioClient.getNoLoading(url);
+    var res = await DioClient.getNoLoading(url, key: 'mservices');
     networktypeModel.value = NetworktypeModel.fromJson(res);
   }
 
   getAirtime(String msisdn) async {
     var url = '${MyConstant.mservicesUrl}/CheckBalance?msisdn=$msisdn';
-    var res = await DioClient.getNoLoading(url);
+    var res = await DioClient.getNoLoading(url, key: 'mservices');
     airtimeModel.value = AirtimeModel.fromJson(res);
     checkAirtimeType();
   }
@@ -80,7 +80,7 @@ class TelecomsrvController extends GetxController {
   queryTelPackage(String msisdn) async {
     var url =
         '${MyConstant.mservicesUrl}/QueryPackage?msisdn=$msisdn&language=en';
-    var res = await DioClient.getNoLoading(url);
+    var res = await DioClient.getNoLoading(url, key: 'mservices');
     telQueryPackage.value =
         (res as List).map((e) => TelQueryPackage.fromJson(e)).toList();
     if (telQueryPackage.isNotEmpty) {
@@ -171,10 +171,10 @@ class TelecomsrvController extends GetxController {
   }
 
   fetchMainMenu() async {
-    mainMenuInfo.value =
-        (await DioClient.getNoLoading('${MyConstant.mservicesUrl}/ListMainMenu')
-                as List)
-            .map((e) => MainMenuInfo.fromJson(e))
-            .toList();
+    mainMenuInfo.value = (await DioClient.getNoLoading(
+            '${MyConstant.mservicesUrl}/ListMainMenu',
+            key: 'mservices') as List)
+        .map((e) => MainMenuInfo.fromJson(e))
+        .toList();
   }
 }

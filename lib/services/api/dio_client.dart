@@ -213,7 +213,7 @@ class DioClient {
       'gUkXp2r5u8x/A?D(G+KbPeShVmYq3t6v9y\$B&E)H@McQfTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z\$C&F)H@McQfTjWnZr4u7x!A%D*G';
   static String appkey = 'i4hFTaScLmWKaIfuPgXHYDmjcbz5K5a';
   static Future<dynamic> getNoLoading(String url, {String key = 'lite'}) async {
-    // final storage = GetStorage();
+    final box = GetStorage();
     //dio.interceptors.add(PrettyDioLogger(request: true, requestHeader: true, requestBody: true, responseBody: true, error: true));
     dio.options.headers.clear();
     try {
@@ -243,8 +243,8 @@ class DioClient {
         dio.options.headers.addAll({"lmmkey": MyKey.keyVisa});
       }
       if (key == 'mservices') {
-        dio.options.headers
-            .addAll({"authorization": "Bearer ${MyKey.mservicesKey}"});
+        dio.options.headers.addAll({"token": await box.read('token')});
+        dio.options.headers.addAll({"msisdn": await box.read('msisdn')});
       }
       if (key == 'lmmkeyPro') {
         dio.options.headers.addAll({"lmmkey": MyKey.lmmkeyPro});
@@ -282,6 +282,7 @@ class DioClient {
     String key = 'lite',
     bool loading = false,
   }) async {
+    final box = GetStorage();
     // final storage = GetStorage();
     //dio.interceptors.add(PrettyDioLogger(request: true, requestHeader: true, requestBody: true, responseBody: true, error: true));
     dio.options.headers.clear();
@@ -313,8 +314,8 @@ class DioClient {
         dio.options.headers.addAll({"lmmkey": MyKey.keyVisa});
       }
       if (key == 'mservices') {
-        dio.options.headers
-            .addAll({"authorization": "Bearer ${MyKey.mservicesKey}"});
+        dio.options.headers.addAll({"token": await box.read('token')});
+        dio.options.headers.addAll({"msisdn": await box.read('msisdn')});
       }
       if (key == 'lmmkeyPro') {
         dio.options.headers.addAll({"lmmkey": MyKey.lmmkeyPro});
@@ -349,11 +350,12 @@ class DioClient {
 
   static Future<dynamic> delete(String url, dynamic body,
       {String key = 'lite'}) async {
+    final box = GetStorage();
     try {
       Loading.show();
       if (key == 'mservices') {
-        dio.options.headers
-            .addAll({"authorization": "Bearer ${MyKey.mservicesKey}"});
+        dio.options.headers.addAll({"token": await box.read('token')});
+        dio.options.headers.addAll({"msisdn": await box.read('msisdn')});
       }
       var response = await dio.delete(url, data: body);
       Loading.hide();

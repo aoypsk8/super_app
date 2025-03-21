@@ -1,4 +1,4 @@
-package com.example.super_app
+package com.lmm.consumer
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

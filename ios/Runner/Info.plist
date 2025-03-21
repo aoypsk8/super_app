@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -22,67 +24,52 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>sms</string>
+		<string>tel</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Many of our services require us to collect images and other information from your device's camera and photos. You won't be able to upload your ID photo for registration, take a photo for your profile picture, and scan QR Code to make a payment unless we can access your camera or photos.\nWe use this information to provide features of Our Service, to improve and customize Our Service. The information may be uploaded to the Company's servers or it may be simply stored on Your device.\nYou can enable or disable access to this information at any time, through Your Device settings.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Some of our services require to access your contacts to allow you to make a transaction with your friends who are already in your contact list (such as top-ups, applying internet packages, and transferring money).We use this information to provide features of our service, to improve and customize our service. We do not store your Contact List information on our server, but we store it on your device to facilitate you in your next transaction.You can enable or disable access to this information at any time, through your device settings.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Why is my app authenticating using face id?</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>When you use our services we may collect location information to provide you with location-based services (such as the location of our service branches, advertisements that are relevant to your geographic location, and conduct analytics to improve the Services). The type of location information we collect depends on your settings in the device you use to access the Services.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>When you use our services we may collect location information to provide you with location-based services (such as the location of our service branches, advertisements that are relevant to your geographic location, and conduct analytics to improve the Services). The type of location information we collect depends on your settings in the device you use to access the Services.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Older devices need location.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>When you use our services we may collect location information to provide you with location-based services (such as the location of our service branches, advertisements that are relevant to your geographic location, and conduct analytics to improve the Services). The type of location information we collect depends on your settings in the device you use to access the Services.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need access to save screenshots to your photo library</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Many of our services require us to collect images and other information from your device's camera and photos. You won't be able to upload your ID photo for registration, take a photo for your profile picture, and scan QR Code to make a payment unless we can access your camera or photos.\nWe use this information to provide features of Our Service, to improve and customize Our Service. The information may be uploaded to the Company's servers or it may be simply stored on Your device.\nYou can enable or disable access to this information at any time, through Your Device settings.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
-			<string>UIInterfaceOrientationPortrait</string>
-			<string>UIInterfaceOrientationLandscapeLeft</string>
-			<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
-			<string>UIInterfaceOrientationPortrait</string>
-			<string>UIInterfaceOrientationPortraitUpsideDown</string>
-			<string>UIInterfaceOrientationLandscapeLeft</string>
-			<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-
-
-	<!-- contact-sevice -->
-	<key>NSContactsUsageDescription</key>  
-	<string>This app requires contacts access to function properly.</string>
-	<!-- save to gallery  -->
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>We need access to save screenshots to your photo library</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs photos access to get QR code from photo library</string>
-	
-	<!-- camera  -->
-	<key>NSCameraUsageDescription</key>
-	<string>This app needs camera access to scan QR codes</string>
-
-	<!-- geolocator  -->
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
-
-	<key>NSFaceIDUsageDescription</key>
-	<string>We use Face ID to verify your identity</string>
-
-	<!-- url luncher -->
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-			<string>sms</string>
-			<string>tel</string>
-	</array>
-
-	<!-- Roate -->
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-			<string>UIInterfaceOrientationPortrait</string>
-	</array>
-
-
-
-
-	
 </dict>
 </plist>

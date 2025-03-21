@@ -262,9 +262,6 @@ class _PaymentFinanceScreenState extends State<PaymentFinanceScreen> {
                         } else if (paymentType == 'MMONEY') {
                           navigateToConfirmScreen(paymentType);
                         } else {
-                          homeController.RxamountUSD.value =
-                              await homeController.convertRate(int.parse(
-                                  financeController.rxPaymentAmount.value));
                           String? cvv =
                               await showDynamicQRDialog(context, () {});
                           if (cvv != null &&
@@ -297,7 +294,6 @@ class _PaymentFinanceScreenState extends State<PaymentFinanceScreen> {
       [String cvv = '', String storedCardUniqueID = '']) {
     Get.to(
       () => ReusableConfirmScreen(
-        isUSD: paymentType != 'MMONEY',
         isEnabled: financeController.enableBottom,
         appbarTitle: "confirm_payment",
         function: () {

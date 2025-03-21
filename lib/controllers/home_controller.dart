@@ -32,8 +32,8 @@ class HomeController extends GetxController {
   RxBool TPlus_theme = false.obs;
 
 // USD AMOUNT
-  RxDouble RxamountUSD = 0.0.obs;
-  RxInt RxrateUSDKIP = 0.obs;
+  // RxDouble RxamountUSD = 0.0.obs;
+  // RxInt RxrateUSDKIP = 0.obs;
   //version
   RxString appVersion = ''.obs;
 
@@ -220,15 +220,15 @@ class HomeController extends GetxController {
     print('appVersion: ${appVersion}');
   }
 
-  convertRate(int amountkip) async {
-    var response = await DioClient.postEncrypt(
-        '${MyConstant.urlVisa}/ConvertRate', {'amount': amountkip});
-    if (response['code'] == 0) {
-      print(response);
-      RxrateUSDKIP.value = response['rate'];
-      return response['usd'];
-    }
-  }
+  // convertRate(int amountkip) async {
+  //   var response = await DioClient.postEncrypt(
+  //       '${MyConstant.urlVisa}/ConvertRate', {'amount': amountkip});
+  //   if (response['code'] == 0) {
+  //     print(response);
+  //     RxrateUSDKIP.value = response['rate'];
+  //     return response['usd'];
+  //   }
+  // }
 
   fetchads() async {
     //! check cache exist

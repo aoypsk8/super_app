@@ -38,7 +38,6 @@ class ReusableResultWithCode extends StatefulWidget {
   final String timestamp;
   final bool fromHistory;
   final String code;
-  bool isUSD = false;
 
   ReusableResultWithCode({
     super.key,
@@ -54,7 +53,6 @@ class ReusableResultWithCode extends StatefulWidget {
     required this.timestamp,
     required this.fromHistory,
     required this.code,
-    this.isUSD = false,
   });
 
   @override
@@ -341,13 +339,6 @@ class _ReusableResultWithCodeState extends State<ReusableResultWithCode>
                                           TextFont(
                                             text: NumberFormat('#,###').format(
                                                 double.parse(widget.amount)),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 20,
-                                            color: cr_b326,
-                                          ),
-                                          TextFont(
-                                            text:
-                                                '.00 LAK ${widget.isUSD ? '(${homeController.RxamountUSD.value} USD)' : ''}',
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20,
                                             color: cr_b326,

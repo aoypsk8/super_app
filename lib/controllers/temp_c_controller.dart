@@ -527,7 +527,6 @@ class TempCController extends GetxController {
         saveHistoryMobile(rxAccNo.value, rxService.value);
         enableBottom.value = true;
         Get.to(ReusableResultScreen(
-          isUSD: true,
           fromAccountImage: userController.userProfilemodel.value.profileImg ??
               MyConstant.profile_default,
           fromAccountName: userController.profileName.value,
@@ -652,7 +651,6 @@ class TempCController extends GetxController {
         enableBottom.value = true;
 
         Get.off(ReusableResultScreen(
-          isUSD: true,
           fromAccountImage: userController.userProfilemodel.value.profileImg ??
               MyConstant.profile_default,
           fromAccountName: userController.profileName.value,
@@ -776,7 +774,6 @@ class TempCController extends GetxController {
         enableBottom.value = true;
         Get.to(
           ReusableResultScreen(
-            isUSD: true,
             fromAccountImage:
                 userController.userProfilemodel.value.profileImg ??
                     MyConstant.profile_default,

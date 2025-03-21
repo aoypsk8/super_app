@@ -200,9 +200,6 @@ class _TicketPaymentScreenState extends State<TicketPaymentScreen> {
                     } else if (paymentType == 'MMONEY') {
                       navigateToConfirmScreen(paymentType);
                     } else {
-                      homeController.RxamountUSD.value =
-                          await homeController.convertRate(
-                              ticketController.ticketDetail.value.price!);
                       String? cvv = await showDynamicQRDialog(context, () {});
                       if (cvv != null && cvv.isNotEmpty && cvv.length >= 3) {
                         navigateToConfirmScreen(
@@ -233,7 +230,6 @@ class _TicketPaymentScreenState extends State<TicketPaymentScreen> {
       [String cvv = '', String storedCardUniqueID = '']) {
     Get.to(
       () => ReusableConfirmScreen(
-        isUSD: paymentType != 'MMONEY',
         isEnabled: ticketController.enableBottom,
         appbarTitle: "confirm_payment",
         function: () {

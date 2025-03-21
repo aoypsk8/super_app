@@ -33,7 +33,6 @@ class ReusableConfirmScreen extends StatefulWidget {
   final String fee;
   final String note;
   final RxBool isEnabled;
-  bool isUSD = false;
 
   ReusableConfirmScreen({
     super.key,
@@ -51,7 +50,6 @@ class ReusableConfirmScreen extends StatefulWidget {
     required this.fee,
     required this.note,
     required this.isEnabled,
-    this.isUSD = false,
   });
 
   @override
@@ -202,13 +200,6 @@ class _ReusableConfirmScreenState extends State<ReusableConfirmScreen> {
                 children: [
                   TextFont(
                     text: fn.format(double.parse(widget.amount)),
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20,
-                    color: cr_b326,
-                  ),
-                  TextFont(
-                    text:
-                        '.00 LAK ${widget.isUSD ? '(${homeController.RxamountUSD.value} USD)' : ''}',
                     fontWeight: FontWeight.w500,
                     fontSize: 20,
                     color: cr_b326,

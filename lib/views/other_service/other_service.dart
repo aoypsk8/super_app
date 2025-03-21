@@ -34,9 +34,6 @@ class _OtherServiceState extends State<OtherService> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(microseconds: 500), () {
-      homeController.convertRate(1000);
-    });
   }
 
   @override

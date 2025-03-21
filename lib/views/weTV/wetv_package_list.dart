@@ -293,8 +293,6 @@ class buildWeTvCard extends StatelessWidget {
             } else if (paymentType == 'MMONEY') {
               navigateToConfirmScreen(paymentType);
             } else {
-              homeController.RxamountUSD.value = await homeController
-                  .convertRate(weTVController.wetvdetail.value.price!);
               String? cvv = await showDynamicQRDialog(context, () {});
               if (cvv != null && cvv.isNotEmpty && cvv.length >= 3) {
                 navigateToConfirmScreen(
@@ -353,7 +351,6 @@ class buildWeTvCard extends StatelessWidget {
   void navigateToConfirmScreen(String paymentType,
       [String cvv = '', String storedCardUniqueID = '']) {
     Get.to(() => ReusableConfirmScreen(
-          isUSD: paymentType != 'MMONEY',
           appbarTitle: "confirm_payment",
           isEnabled: weTVController.enableBottom,
           function: () {

@@ -42,7 +42,6 @@ class ReusableResultScreen extends StatefulWidget {
   final String note;
   final String timestamp;
   final bool fromHistory;
-  bool isUSD = false;
 
   ReusableResultScreen({
     super.key,
@@ -59,7 +58,6 @@ class ReusableResultScreen extends StatefulWidget {
     required this.note,
     required this.timestamp,
     this.fromHistory = false,
-    this.isUSD = false,
   });
 
   @override
@@ -270,14 +268,6 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                                           TextFont(
                                             text: fn.format(
                                                 int.parse(widget.amount)),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 20,
-                                            color: cr_b326,
-                                            poppin: true,
-                                          ),
-                                          TextFont(
-                                            text:
-                                                '.00 LAK ${widget.isUSD ? '(${homeController.RxamountUSD.value} USD)' : ''}',
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20,
                                             color: cr_b326,

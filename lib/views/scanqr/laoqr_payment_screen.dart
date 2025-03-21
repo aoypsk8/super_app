@@ -175,9 +175,6 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
                           )
                               .then((value) async {
                             if (value) {
-                              homeController.RxamountUSD.value =
-                                  await homeController.convertRate(
-                                      qrController.rxTotalAmount.value);
                               String? cvv =
                                   await showDynamicQRDialog(context, () {});
                               if (cvv != null && cvv.trim().length >= 3) {
@@ -496,7 +493,6 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
       [String cvv = '', String storedCardUniqueID = '']) {
     Get.to(
       () => ReusableConfirmScreen(
-        isUSD: paymentType != 'MMONEY',
         isEnabled: qrController.enableBottom,
         appbarTitle: "confirm_payment",
         function: () {

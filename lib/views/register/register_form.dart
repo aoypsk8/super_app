@@ -1,8 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/kyc_model.dart';
@@ -34,6 +38,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
   final _village = TextEditingController();
   final _cardID = TextEditingController();
   final _birthday = TextEditingController();
+  DateTime _dateTime = DateTime(2000, 1, 1);
   String? _gender;
   bool _genderMale = true;
 
@@ -52,14 +57,35 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
   }
 
   _loadData() async {
-    _fname.text = userControler.kycModel.value.data!.firstName ?? '';
-    _lname.text = userControler.kycModel.value.data!.lastName ?? '';
-    var bd = userControler.kycModel.value.data!.birthday.toString();
-    if (bd.contains('/')) {
-      List<String> dateComponents = bd.split('/');
-      _birthday.text = '${dateComponents[2]}-${dateComponents[1]}-${dateComponents[0]}';
+    _fname.text = userControler.kycModel.value.data?.firstName ?? '';
+    _lname.text = userControler.kycModel.value.data?.lastName ?? '';
+    var bd = userControler.kycModel.value.data?.birthday?.toString() ?? '';
+    if (bd != null && bd.isNotEmpty) {
+      try {
+        DateTime parsedDate;
+        if (bd.contains('/')) {
+          List<String> parts = bd.split('/');
+          parsedDate = DateTime(
+            int.parse(parts[2]),
+            int.parse(parts[1]),
+            int.parse(parts[0]),
+          );
+        } else {
+          parsedDate = DateTime.parse(bd);
+        }
+        _birthday.text = DateFormat('yyyy-MM-dd').format(parsedDate);
+        _dateTime = parsedDate; // also update _dateTime used in date picker
+      } catch (e) {
+        _birthday.text = '';
+      }
     }
-    var address = userControler.kycModel.value.data!.address.toString();
+
+    // if (bd.contains('/')) {
+    //   List<String> dateComponents = bd.split('/');
+    //   _birthday.text =
+    //       '${dateComponents[2]}-${dateComponents[1]}-${dateComponents[0]}';
+    // }
+    var address = userControler.kycModel.value.data?.address?.toString() ?? '';
     if (address.contains(',')) {
       List<String> dateComponents = address.split(',');
       _village.text = dateComponents[0].replaceAll('ບ້ານ', '').trim();
@@ -154,7 +180,12 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
 
   String _provinceCode = '';
   var dataProvice = [
-    {"proid": 1, "Name": "ນະຄອນຫຼວງວຽງຈັນ", "Code": "VTE", "Description": "NULL"},
+    {
+      "proid": 1,
+      "Name": "ນະຄອນຫຼວງວຽງຈັນ",
+      "Code": "VTE",
+      "Description": "NULL"
+    },
     {"proid": 2, "Name": "ວຽງຈັນ", "Code": "VTP", "Description": "NULL"},
     {"proid": 3, "Name": "ບໍລິຄຳໄຊ", "Code": "BKX", "Description": "NULL"},
     {"proid": 4, "Name": "ອຸດົມໄຊ", "Code": "UDX", "Description": "NULL"},
@@ -176,6 +207,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(_birthday.text);
     return Scaffold(
       backgroundColor: color_fff,
       appBar: BuildAppBar(title: 'register_form'),
@@ -204,10 +236,40 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                     Divider(color: color_ecec),
                     SizedBox(height: 15),
                     SizedBox(height: 8),
-                    buildTextField(controller: _fname, label: 'fname', name: 'fname', hintText: '', isEditable: true),
-                    buildTextField(controller: _lname, label: 'lname', name: 'lname', hintText: '', isEditable: true),
                     buildTextField(
-                        controller: _birthday, label: 'birthday', name: 'birthday', hintText: '', isEditable: false),
+                        controller: _fname,
+                        label: 'fname',
+                        name: 'fname',
+                        hintText: '',
+                        isEditable: true),
+                    buildTextField(
+                        controller: _lname,
+                        label: 'lname',
+                        name: 'lname',
+                        hintText: '',
+                        isEditable: true),
+                    // FormBuilderDateTimePicker(
+                    //   name: 'birthday',
+                    //   controller: _birthday,
+                    //   inputType: InputType.date,
+                    //   decoration: InputDecoration(
+                    //     labelText: 'Birthday',
+                    //     hintText: '',
+                    //     labelStyle: TextStyle(color: color_2929),
+                    //     hintStyle: TextStyle(color: color_2929),
+                    //   ),
+                    //   format: DateFormat('yyyy-MM-dd'),
+                    //   onChanged: (value) {
+                    //     _birthday.text = value != null
+                    //         ? DateFormat('yyyy-MM-dd').format(value)
+                    //         : '';
+                    //   },
+                    //   initialValue: _birthday.text.isNotEmpty
+                    //       ? DateTime.tryParse(_birthday.text)
+                    //       : DateTime(2003, 10, 31),
+                    //   enabled: true,
+                    // ),
+                    buildSelectDate(context),
                     buildSelectGender(),
                     Divider(color: color_ecec),
                     // SizedBox(height: 8),
@@ -229,31 +291,16 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                         _province.text = province[0];
                       },
                     ),
-                    buildTextField(controller: _district, label: 'district', name: 'district'),
-                    buildTextField(controller: _village, label: 'village', name: 'village'),
+                    buildTextField(
+                        controller: _district,
+                        label: 'district',
+                        name: 'district'),
+                    buildTextField(
+                        controller: _village,
+                        label: 'village',
+                        name: 'village'),
                     Divider(color: color_ecec),
                     SizedBox(height: 20),
-                    // TextFont(text: 'input_document', color: cr_b326),
-                    // SizedBox(height: 8),
-                    // buildTextField(controller: _cardID, label: 'document_id', name: 'document_id', hintText: ''),
-                    // SizedBox(height: 8),
-                    // buildImageForm(
-                    //   'document_image',
-                    //   'doc_img_description',
-                    //   'doc_img',
-                    //   () {
-                    //     // _imgFromCamera('doc_img');
-                    //   },
-                    // ),
-                    // SizedBox(height: 15),
-                    // buildImageForm(
-                    //   'verify_img',
-                    //   'ver_img_description',
-                    //   'verify_img',
-                    //   () {
-                    //     // _imgFromCamera('verify_img');
-                    //   },
-                    // ),
                   ],
                 ),
               ),
@@ -271,10 +318,101 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
 
           _formKey.currentState!.save();
           if (_formKey.currentState!.validate()) {
-            userControler.register(widget.regType, _gender, _fname.text, _lname.text, _birthday.text, _province.text,
-                _district.text, _village.text);
+            userControler.register(
+                widget.regType,
+                _gender,
+                _fname.text,
+                _lname.text,
+                _birthday.text,
+                _province.text,
+                _district.text,
+                _village.text);
           }
         },
+      ),
+    );
+  }
+
+  Container buildSelectDate(BuildContext context) {
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(
+        color: color_ddd,
+        width: 1.5,
+      ),
+    );
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFont(text: 'birthday'),
+          FormBuilderTextField(
+            name: 'birthday',
+            controller: _birthday,
+            style: TextStyle(
+              fontSize: 17,
+              color: Colors.black,
+              fontFamily: 'PoppinsRegular',
+            ),
+            decoration: InputDecoration(
+              fillColor: color_fafa,
+              filled: true,
+              enabledBorder: border,
+              focusedBorder: border,
+              errorStyle: GoogleFonts.notoSansLao(color: Colors.red),
+              focusedErrorBorder: border,
+              errorBorder: border,
+              suffixIcon: Icon(
+                Icons.calendar_today_outlined,
+                color: cr_red,
+              ),
+            ),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(),
+            ]),
+            readOnly: true,
+            onTap: () {
+              showCupertinoModalPopup(
+                context: context,
+                builder: (context) => CupertinoActionSheet(
+                  actions: [
+                    SizedBox(
+                      height: 300,
+                      child: CupertinoDatePicker(
+                        minimumYear: 1930,
+                        maximumYear: DateTime.now().year,
+                        initialDateTime: _birthday.text.isNotEmpty
+                            ? DateTime.tryParse(_birthday.text) ?? _dateTime
+                            : _dateTime,
+                        mode: CupertinoDatePickerMode.date,
+                        onDateTimeChanged: (dateTime) {
+                          setState(() {
+                            _dateTime = dateTime;
+                            _birthday.text =
+                                DateFormat('yyyy-MM-dd').format(dateTime);
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                  cancelButton: CupertinoActionSheetAction(
+                    child: TextFont(
+                      text: 'done',
+                      color: color_red_background,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -287,8 +425,10 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
           height: 50.sp,
           child: CircleAvatar(
             backgroundImage: CachedNetworkImageProvider(
-                userControler.userProfilemodel.value.profileImg ?? 'https://mmoney.la/AppLite/Users/mmoney.png'),
-            backgroundColor: Colors.transparent, // Optional: Set a background color
+                userControler.userProfilemodel.value.profileImg ??
+                    'https://mmoney.la/AppLite/Users/mmoney.png'),
+            backgroundColor:
+                Colors.transparent, // Optional: Set a background color
           ),
         ),
         SizedBox(width: 8), // Optional spacing between image and column
@@ -312,7 +452,8 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
               Row(
                 children: [
                   TextFont(
-                    text: userControler.kycModel.value.data!.phone ?? '20xxxxxx',
+                    text:
+                        userControler.kycModel.value.data?.phone ?? '20xxxxxx',
                     poppin: true,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -371,13 +512,21 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(radius),
                       border: Border.all(
-                          color: _genderMale ? color_primary_light : color_blackE72, width: _genderMale ? 1 : 0),
-                      color: _genderMale ? color_primary_light.withOpacity(0.1) : color_f4f4,
+                          color: _genderMale
+                              ? color_primary_light
+                              : color_blackE72,
+                          width: _genderMale ? 1 : 0),
+                      color: _genderMale
+                          ? color_primary_light.withOpacity(0.1)
+                          : color_f4f4,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 40, width: 40, child: Image.asset('assets/images/man.png')),
+                        SizedBox(
+                            height: 40,
+                            width: 40,
+                            child: Image.asset('assets/images/man.png')),
                         const SizedBox(width: 5),
                         TextFont(text: 'Male', color: color_blackE72),
                       ],
@@ -400,13 +549,20 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(radius),
                       border: Border.all(
-                          color: !_genderMale ? color_primary_light : color_f4f4, width: !_genderMale ? 1 : 0),
-                      color: !_genderMale ? color_primary_light.withOpacity(0.1) : color_f4f4,
+                          color:
+                              !_genderMale ? color_primary_light : color_f4f4,
+                          width: !_genderMale ? 1 : 0),
+                      color: !_genderMale
+                          ? color_primary_light.withOpacity(0.1)
+                          : color_f4f4,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 40, width: 40, child: Image.asset('assets/images/woman.png')),
+                        SizedBox(
+                            height: 40,
+                            width: 40,
+                            child: Image.asset('assets/images/woman.png')),
                         const SizedBox(width: 5),
                         TextFont(text: 'Female', color: color_blackE72)
                       ],
@@ -421,7 +577,8 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
     );
   }
 
-  Column buildImageForm(String title, String desc, String type, VoidCallback onTap) {
+  Column buildImageForm(
+      String title, String desc, String type, VoidCallback onTap) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -445,12 +602,16 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                   children: [
                     Container(
                       child: (type == 'doc_img'
-                              ? (!(userControler.kycModel.value.data!.docImg!.startsWith('http')))
-                              : (!(userControler.kycModel.value.data!.photo!.startsWith('http'))))
+                              ? (!(userControler.kycModel.value.data!.docImg!
+                                  .startsWith('http')))
+                              : (!(userControler.kycModel.value.data!.photo!
+                                  .startsWith('http'))))
                           ? SizedBox(
                               width: 30.w,
                               child: Image.asset(
-                                type == 'doc_img' ? 'assets/images/id_card.png' : 'assets/images/verify_account.png',
+                                type == 'doc_img'
+                                    ? 'assets/images/id_card.png'
+                                    : 'assets/images/verify_account.png',
                               ),
                             )
                           : SizedBox(
@@ -463,14 +624,20 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                       onTap: () {
                                         Get.to(() => ImagepreviewScreen(
                                             imageUrl: type == 'doc_img'
-                                                ? userControler.kycModel.value.data!.docImg!
-                                                : userControler.kycModel.value.data!.photo!,
-                                            title: type == 'doc_img' ? 'Document Image' : 'Verify Account Image'));
+                                                ? userControler.kycModel.value
+                                                    .data!.docImg!
+                                                : userControler.kycModel.value
+                                                    .data!.photo!,
+                                            title: type == 'doc_img'
+                                                ? 'Document Image'
+                                                : 'Verify Account Image'));
                                       },
                                       child: CachedNetworkImage(
                                         imageUrl: type == 'doc_img'
-                                            ? userControler.kycModel.value.data!.docImg!
-                                            : userControler.kycModel.value.data!.photo!,
+                                            ? userControler
+                                                .kycModel.value.data!.docImg!
+                                            : userControler
+                                                .kycModel.value.data!.photo!,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -480,10 +647,16 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                             ),
                     ),
                     (type == 'doc_img'
-                            ? (userControler.kycModel.value.data!.docImg?.isEmpty ?? true)
-                            : (userControler.kycModel.value.data!.photo?.isEmpty ?? true))
+                            ? (userControler
+                                    .kycModel.value.data!.docImg?.isEmpty ??
+                                true)
+                            : (userControler
+                                    .kycModel.value.data!.photo?.isEmpty ??
+                                true))
                         ? TextFont(
-                            text: type == 'doc_img' ? 'take_document_image' : 'take_verify_image',
+                            text: type == 'doc_img'
+                                ? 'take_document_image'
+                                : 'take_verify_image',
                             color: color_7070,
                           )
                         : SizedBox.shrink()

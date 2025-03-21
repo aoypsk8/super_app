@@ -180,9 +180,6 @@ class _VerifyAccountTempCNewScreenState
                                   } else if (paymentType == 'MMONEY') {
                                     navigateToConfirmScreen(paymentType);
                                   } else {
-                                    homeController.RxamountUSD.value =
-                                        await homeController.convertRate(
-                                            tempCcontroler.rxTotalAmount.value);
                                     String? cvv = await showDynamicQRDialog(
                                         context, () {});
                                     if (cvv != null &&
@@ -570,7 +567,6 @@ class _VerifyAccountTempCNewScreenState
       [String cvv = '', String storedCardUniqueID = '']) {
     Get.to(
       ReusableConfirmScreen(
-        isUSD: paymentType == 'MMONEY' ? false : true,
         isEnabled: tempCcontroler.enableBottom,
         appbarTitle: "confirm_payment",
         function: () {

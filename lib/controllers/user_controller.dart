@@ -752,7 +752,8 @@ class UserController extends GetxController with WidgetsBindingObserver {
         break;
 
       case "register":
-        await queryKYC_5_7(msisdn);
+        var data = await queryKYC_5_7(msisdn);
+        print(data);
         Get.to(() => RegisterFormScreen(regType: 'UnApproved'));
         break;
 

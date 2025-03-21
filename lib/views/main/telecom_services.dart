@@ -784,7 +784,9 @@ class _TelecomServicesState extends State<TelecomServices> {
       lineWidth: 7.0,
       animation: true,
       animationDuration: 300,
-      percent: telecomsrv.inusePackageModel.value.doublePercent ?? 0.0,
+      percent: telecomsrv.inusePackageModel.value.doublePercent != null
+          ? telecomsrv.inusePackageModel.value.doublePercent.toDouble()
+          : 0.0,
       center: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

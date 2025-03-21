@@ -122,6 +122,8 @@ dependencies:
   pin_code_fields: ^8.0.1
   flutter_keyboard_visibility: ^5.4.1
 
+  flutter_launcher_icons: ^0.14.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -141,6 +143,10 @@ flutter:
     - assets/images/
     - assets/history/
 
+flutter_icons:
+  image_path: "assets/icons/mmoneyx.png"
+  android: true
+  ios: true
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

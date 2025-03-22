@@ -19,7 +19,9 @@ import 'package:super_app/utility/myIcon.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/login/login_have_acc.dart';
 import 'package:super_app/views/login/temp/temp_userprofile_model.dart';
+import 'package:super_app/views/settings/about_us.dart';
 import 'package:super_app/views/settings/account_profile.dart';
+import 'package:super_app/views/settings/change_password.dart';
 import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
@@ -68,11 +70,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
                 child: Container(
                   width: 50.w,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  decoration: BoxDecoration(
-                      color: color_f4f4,
-                      borderRadius: BorderRadius.circular(20)),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  decoration: BoxDecoration(color: color_f4f4, borderRadius: BorderRadius.circular(20)),
                   child: TextFont(text: 'logout', textAlign: TextAlign.center),
                 ),
               ),
@@ -98,8 +97,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     height: 50.sp,
                     child: CircleAvatar(
                       backgroundImage: CachedNetworkImageProvider(
-                        userController.userProfilemodel.value.profileImg ??
-                            MyConstant.profile_default,
+                        userController.userProfilemodel.value.profileImg ?? MyConstant.profile_default,
                       ),
                       backgroundColor: Colors.transparent,
                     ),
@@ -121,11 +119,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           children: [
                             TextFont(
                               text: isHidden
-                                  ? maskMsisdn(userController
-                                          .userProfilemodel.value.msisdn ??
-                                      '2055555555')
-                                  : userController
-                                      .userProfilemodel.value.msisdn!,
+                                  ? maskMsisdn(userController.userProfilemodel.value.msisdn ?? '2055555555')
+                                  : userController.userProfilemodel.value.msisdn!,
                               poppin: true,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -146,33 +141,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ],
                         ),
                         Container(
-                          decoration: BoxDecoration(
-                              color: color_f4f4,
-                              borderRadius: BorderRadius.circular(10)),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(color: color_f4f4, borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              userController.userProfilemodel.value.verify ==
-                                      "Approved"
+                              userController.userProfilemodel.value.verify == "Approved"
                                   ? SvgPicture.asset(MyIconOld.ic_check_circle)
                                   : SvgPicture.asset(
                                       MyIconOld.ic_info,
-                                      color: userController.userProfilemodel
-                                                  .value.verify ==
-                                              "UnApproved"
+                                      color: userController.userProfilemodel.value.verify == "UnApproved"
                                           ? color_primary_light
                                           : Colors.grey,
                                     ),
                               SizedBox(width: 5),
                               TextFont(
-                                text: userController
-                                            .userProfilemodel.value.verify ==
-                                        'Pending'
+                                text: userController.userProfilemodel.value.verify == 'Pending'
                                     ? '...Watting'
-                                    : userController
-                                        .userProfilemodel.value.verify!,
+                                    : userController.userProfilemodel.value.verify!,
                                 fontSize: 10,
                                 poppin: true,
                               ),
@@ -186,11 +172,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ],
               ),
               Container(
-                decoration: BoxDecoration(
-                    color: color_primary_light,
-                    borderRadius: BorderRadius.circular(10)),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                decoration: BoxDecoration(color: color_primary_light, borderRadius: BorderRadius.circular(10)),
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                 child: Row(
                   children: [
                     Expanded(
@@ -219,10 +202,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
-                  BoxShadow(
-                      color: color_2929.withOpacity(0.1),
-                      blurRadius: 10,
-                      spreadRadius: 5),
+                  BoxShadow(color: color_2929.withOpacity(0.1), blurRadius: 10, spreadRadius: 5),
                 ],
               ),
               child: Column(
@@ -230,11 +210,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   Image.asset('assets/images/cart_gift.png', width: 25.w),
                   Container(
-                    decoration: BoxDecoration(
-                        color: color_fff,
-                        borderRadius: BorderRadius.circular(50)),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(color: color_fff, borderRadius: BorderRadius.circular(50)),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: TextFont(
                       text: 'ກົດຊວນໝູ່&ຮັບລາງວັນ',
                       fontSize: 10,
@@ -255,14 +232,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       margin: const EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-          color: color_f4f4, borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(color: color_f4f4, borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Get.to(AboutUs());
+              },
               child: Row(
                 children: [
                   TextFont(text: "about_us"),
@@ -272,20 +250,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
           ),
-          Divider(color: color_ecec),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: InkWell(
-              onTap: () {},
-              child: Row(
-                children: [
-                  TextFont(text: "policy_and_term"),
-                  Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: color_7070, size: 15.sp),
-                ],
-              ),
-            ),
-          ),
+          // Divider(color: color_ecec),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 10),
+          //   child: InkWell(
+          //     onTap: () {},
+          //     child: Row(
+          //       children: [
+          //         TextFont(text: "policy_and_term"),
+          //         Spacer(),
+          //         Icon(Icons.arrow_forward_ios, color: color_7070, size: 15.sp),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           Divider(color: color_ecec),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -309,15 +287,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: InkWell(
                 onTap: () {
                   themeService.toggleTheme();
-                  homeController
-                      .fetchServicesmMenu(userController.rxMsisdn.value);
+                  homeController.fetchServicesmMenu(userController.rxMsisdn.value);
                 },
                 child: Row(
                   children: [
                     TextFont(text: "change_theme"),
                     Spacer(),
-                    Icon(Icons.arrow_forward_ios,
-                        color: color_7070, size: 15.sp),
+                    Icon(Icons.arrow_forward_ios, color: color_7070, size: 15.sp),
                   ],
                 ),
               ),
@@ -332,8 +308,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       margin: const EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-          color: color_f4f4, borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(color: color_f4f4, borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
           Padding(
@@ -355,7 +330,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Get.to(ChangePasswordScreen());
+              },
               child: Row(
                 children: [
                   TextFont(text: "change_password"),
@@ -381,8 +358,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           children: [
                             TextFont(text: "verify_account"),
                             Spacer(),
-                            Icon(Icons.arrow_forward_ios,
-                                color: color_7070, size: 15.sp),
+                            Icon(Icons.arrow_forward_ios, color: color_7070, size: 15.sp),
                           ],
                         ),
                       ),
@@ -398,8 +374,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 value: box.read('biometric') ?? false,
                 onChanged: (value) async {
                   if (value) {
-                    bool isAuthenticated =
-                        await _showPasswordConfirmationDialog(context);
+                    bool isAuthenticated = await _showPasswordConfirmationDialog(context);
                     if (isAuthenticated) {
                       setState(() {
                         box.write('biometric', value);
@@ -429,8 +404,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   });
                 },
               ),
-              TextFont(
-                  text: box.read('save_screenshot') ?? false ? "on" : "off"),
+              TextFont(text: box.read('save_screenshot') ?? false ? "on" : "off"),
             ],
           ),
         ],
@@ -464,9 +438,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Container(
                     width: Get.width / 7,
                     height: 5,
-                    decoration: BoxDecoration(
-                        color: cr_ecec,
-                        borderRadius: BorderRadius.circular(20)),
+                    decoration: BoxDecoration(color: cr_ecec, borderRadius: BorderRadius.circular(20)),
                   ),
                 ],
               ),
@@ -493,8 +465,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               _buildLanguageOption(context, 'English', 'en', languageService),
               _buildLanguageOption(context, 'ລາວ', 'lo', languageService),
               _buildLanguageOption(context, 'Chinese', 'zh', languageService),
-              _buildLanguageOption(
-                  context, 'Vietnamese', 'vi', languageService),
+              _buildLanguageOption(context, 'Vietnamese', 'vi', languageService),
               SizedBox(height: 20),
               SizedBox(
                 width: Get.width,
@@ -514,8 +485,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildLanguageOption(BuildContext context, String languageName,
-      String languageCode, LanguageService languageService) {
+  Widget _buildLanguageOption(
+      BuildContext context, String languageName, String languageCode, LanguageService languageService) {
     bool isSelected = languageService.locale.languageCode == languageCode;
 
     return GestureDetector(
@@ -528,9 +499,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 14),
         decoration: BoxDecoration(
           color: color_f4f4,
-          border: isSelected
-              ? Border.all(color: cr_ef33)
-              : Border.all(color: Colors.transparent),
+          border: isSelected ? Border.all(color: cr_ef33) : Border.all(color: Colors.transparent),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -591,8 +560,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
           behavior: HitTestBehavior.opaque,
           child: Dialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             backgroundColor: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -616,9 +584,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             height: 30.w,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: color_primary_light.withOpacity(0.2),
-                                  width: 5),
+                              border: Border.all(color: color_primary_light.withOpacity(0.2), width: 5),
                             ),
                             child: CircleAvatar(
                               radius: 80.sp,
@@ -630,22 +596,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       ),
-                      TextFont(
-                          text: user.fullname,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          noto: true),
+                      TextFont(text: user.fullname, fontSize: 14, fontWeight: FontWeight.w500, noto: true),
                       SizedBox(height: 10),
-                      TextFont(
-                          text: user.username,
-                          fontSize: 14,
-                          color: color_777,
-                          poppin: true),
+                      TextFont(text: user.username, fontSize: 14, color: color_777, poppin: true),
                       SizedBox(height: 10),
                       buildPasswordField(
-                          controller: _passwordController,
-                          label: 'confirm_password',
-                          name: 'confirm_password'),
+                        controller: _passwordController,
+                        label: 'confirm_password',
+                        name: 'confirm_password',
+                        isMinLengthRequired: true,
+                      ),
                       SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -659,16 +619,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           TextButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                isAuthenticated =
-                                    await userController.chkPasswordSetBiometic(
-                                        user.username,
-                                        _passwordController.text);
+                                isAuthenticated = await userController.chkPasswordSetBiometic(
+                                    user.username, _passwordController.text);
                                 if (isAuthenticated) {
                                   Navigator.of(dialogContext).pop(true);
                                 } else {
                                   ScaffoldMessenger.of(dialogContext)
-                                      .showSnackBar(SnackBar(
-                                          content: Text('Incorrect password')));
+                                      .showSnackBar(SnackBar(content: Text('Incorrect password')));
                                 }
                               }
                             },

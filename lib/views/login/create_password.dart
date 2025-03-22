@@ -44,8 +44,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                     child: SizedBox(
                       height: 60.w,
                       width: 60.w,
-                      child: Image.asset('assets/images/otp.png',
-                          fit: BoxFit.cover),
+                      child: Image.asset('assets/images/otp.png', fit: BoxFit.cover),
                     ),
                   ),
                   TextFont(
@@ -65,12 +64,14 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                     label: '',
                     name: 'password',
                     hintText: 'enter_new_password',
+                    isMinLengthRequired: true,
                   ),
                   buildPasswordField(
                     controller: _confirmPassword,
                     label: '',
                     name: 'password',
                     hintText: 'confirm_new_password',
+                    isMinLengthRequired: true,
                   ),
                   SizedBox(height: 30),
                   buildBottomAppbar(
@@ -78,11 +79,9 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                         _formKey.currentState!.save();
                         if (_formKey.currentState!.validate()) {
                           if (_password.text == _confirmPassword.text) {
-                            userController.createPassword(
-                                userController.rxMsisdn.value, _password.text);
+                            userController.createPassword(userController.rxMsisdn.value, _password.text);
                           } else {
-                            DialogHelper.showErrorDialogNew(
-                                description: 'Password not match.');
+                            DialogHelper.showErrorDialogNew(description: 'Password not match.');
                           }
                         }
                       },

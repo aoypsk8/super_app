@@ -64,8 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   loadData() async {
-    await calendarController.fetchCalendarMonthList(
-        now.year.toString(), now.month.toString());
+    await calendarController.fetchCalendarMonthList(now.year.toString(), now.month.toString());
   }
 
   void showSignInWith(BuildContext context) {
@@ -100,15 +99,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 Stack(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                       child: Column(
                         children: [
                           SizedBox(
                             width: 50.w, // Full width
                             height: 50.w,
-                            child: Image.asset('assets/images/from.png',
-                                fit: BoxFit.cover),
+                            child: Image.asset('assets/images/from.png', fit: BoxFit.cover),
                           ),
                           Row(
                             children: [
@@ -125,8 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: ListView.builder(
                               itemCount: fromApps.length,
                               shrinkWrap: true,
-                              physics:
-                                  NeverScrollableScrollPhysics(), // Disable scroll inside dialog
+                              physics: NeverScrollableScrollPhysics(), // Disable scroll inside dialog
                               itemBuilder: (context, index) {
                                 final data = fromApps[index];
                                 return GestureDetector(
@@ -138,16 +134,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   child: Container(
                                     margin: EdgeInsets.symmetric(vertical: 10),
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 10),
+                                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                                     decoration: BoxDecoration(
                                       color: color_f4f4,
                                       borderRadius: BorderRadius.circular(8),
                                       boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.black12,
-                                            blurRadius: 4,
-                                            offset: Offset(0, 2))
+                                        BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))
                                       ],
                                     ),
                                     child: Row(
@@ -157,19 +149,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                           height: 60,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            border: Border.all(
-                                                color: cr_eae7, width: 2.0),
-                                            image: DecorationImage(
-                                                image:
-                                                    AssetImage(data['logo']!),
-                                                fit: BoxFit.cover),
+                                            border: Border.all(color: cr_eae7, width: 2.0),
+                                            image: DecorationImage(image: AssetImage(data['logo']!), fit: BoxFit.cover),
                                           ),
                                         ),
                                         SizedBox(width: 12),
                                         Expanded(
                                           child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               TextFont(
                                                 text: data['title']!,
@@ -177,8 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 fontWeight: FontWeight.w600,
                                               ),
                                               TextFont(
-                                                text:
-                                                    'Continues as ${data['title']} User.',
+                                                text: 'Continues as ${data['title']} User.',
                                                 color: cr_7070,
                                                 fontSize: 10,
                                                 poppin: true,
@@ -241,11 +227,9 @@ class _LoginScreenState extends State<LoginScreen> {
         case 'default':
           return LoginUsernamePassword();
         case 'M-Services':
-          return LoginTplusMservice(
-              onMethodSelected: updateSignInMethod, title: 'M-Services');
+          return LoginTplusMservice(onMethodSelected: updateSignInMethod, title: 'M-Services');
         case 'My T-Plus':
-          return LoginTplusMservice(
-              onMethodSelected: updateSignInMethod, title: 'My T-Plus');
+          return LoginTplusMservice(onMethodSelected: updateSignInMethod, title: 'My T-Plus');
         case 'M moneyX':
           return LoginMmoney(onMethodSelected: updateSignInMethod);
         default:
@@ -271,8 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
       ),
-      bottomNavigationBar:
-          BottomDateBar(calendarController: calendarController, now: now),
+      bottomNavigationBar: BottomDateBar(calendarController: calendarController, now: now),
     );
   }
 
@@ -306,8 +289,7 @@ class _LoginScreenState extends State<LoginScreen> {
               _buildLanguageOption(context, 'English', 'en', languageService),
               _buildLanguageOption(context, 'Lao', 'lo', languageService),
               _buildLanguageOption(context, 'Chinese', 'zh', languageService),
-              _buildLanguageOption(
-                  context, 'Vietnamese', 'vi', languageService),
+              _buildLanguageOption(context, 'Vietnamese', 'vi', languageService),
             ],
           ),
         );
@@ -315,8 +297,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLanguageOption(BuildContext context, String languageName,
-      String languageCode, LanguageService languageService) {
+  Widget _buildLanguageOption(
+      BuildContext context, String languageName, String languageCode, LanguageService languageService) {
     return ListTile(
       title: TextFont(
         text: languageName,
@@ -450,6 +432,7 @@ class LoginUsernamePassword extends StatelessWidget {
                           label: 'password',
                           name: 'password',
                           hintText: 'enter_your_password',
+                          isMinLengthRequired: true,
                         ),
                         forgot_password(),
                         SizedBox(height: 20.sp),
@@ -457,8 +440,7 @@ class LoginUsernamePassword extends StatelessWidget {
                             func: () {
                               _formKey.currentState!.save();
                               if (_formKey.currentState!.validate()) {
-                                userController.loginSuperApp(
-                                    _username.text, _password.text);
+                                userController.loginSuperApp(_username.text, _password.text);
                               }
                             },
                             title: 'login'),

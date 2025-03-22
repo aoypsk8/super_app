@@ -184,8 +184,8 @@ class _PackageListScreenState extends State<PackageListScreen>
                           description: homeController.menudetail.value.appid!,
                           stepBuild: '5/6',
                           title: homeController.getMenuTitle(),
-                          onSelectedPayment:
-                              (paymentType, cardIndex, uuid) async {
+                          onSelectedPayment: (paymentType, cardIndex, uuid,
+                              logo, accName, cardNumber) async {
                             if (paymentType == "Other") {
                               // homeController.RxamountUSD.value =
                               //     await homeController.convertRate(
@@ -212,11 +212,8 @@ class _PackageListScreenState extends State<PackageListScreen>
                               if (cvv != null &&
                                   cvv.isNotEmpty &&
                                   cvv.length >= 3) {
-                                navigateToConfirmScreen(
-                                  paymentType,
-                                  cvv,
-                                  uuid,
-                                );
+                                navigateToConfirmScreen(paymentType, cvv, uuid,
+                                    logo, accName, cardNumber);
                               } else {
                                 DialogHelper.showErrorDialogNew(
                                   description: "please_input_cvv",
@@ -305,8 +302,8 @@ class _PackageListScreenState extends State<PackageListScreen>
                             description: homeController.menudetail.value.appid!,
                             stepBuild: '5/6',
                             title: homeController.getMenuTitle(),
-                            onSelectedPayment:
-                                (paymentType, cardIndex, uuid) async {
+                            onSelectedPayment: (paymentType, cardIndex, uuid,
+                                logo, accName, cardNumber) async {
                               if (paymentType == "Other") {
                                 // homeController.RxamountUSD.value =
                                 //     await homeController.convertRate(
@@ -333,11 +330,8 @@ class _PackageListScreenState extends State<PackageListScreen>
                                 if (cvv != null &&
                                     cvv.isNotEmpty &&
                                     cvv.length >= 3) {
-                                  navigateToConfirmScreen(
-                                    paymentType,
-                                    cvv,
-                                    uuid,
-                                  );
+                                  navigateToConfirmScreen(paymentType, cvv,
+                                      uuid, logo, accName, cardNumber);
                                 } else {
                                   DialogHelper.showErrorDialogNew(
                                     description: "please_input_cvv",
@@ -372,8 +366,15 @@ class _PackageListScreenState extends State<PackageListScreen>
     }
   }
 
-  void navigateToConfirmScreen(String paymentType,
-      [String cvv = '', String storedCardUniqueID = '']) {
+  void navigateToConfirmScreen(
+    String paymentType, [
+    String cvv = '',
+    String storedCardUniqueID = '',
+    String? logo,
+    String accName = '',
+    String cardNumber = '',
+  ]) {
+    logo ??= MyConstant.profile_default;
     Get.to(
       () => ReusableConfirmScreen(
         isEnabled: tempCcontroler.enableBottom,
@@ -392,12 +393,16 @@ class _PackageListScreenState extends State<PackageListScreen>
         },
         stepProcess: "6/6",
         stepTitle: "check_detail",
-        fromAccountImage: userController.userProfilemodel.value.profileImg ??
-            MyConstant.profile_default,
-        fromAccountName:
-            '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-        fromAccountNumber:
-            userController.userProfilemodel.value.msisdn.toString(),
+        fromAccountImage: paymentType == 'MMONEY'
+            ? (userController.userProfilemodel.value.profileImg ??
+                MyConstant.profile_default)
+            : (logo ?? MyConstant.profile_default),
+        fromAccountName: paymentType == 'MMONEY'
+            ? '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}'
+            : accName,
+        fromAccountNumber: paymentType == 'MMONEY'
+            ? userController.userProfilemodel.value.msisdn.toString()
+            : cardNumber,
         toAccountImage: MyConstant.profile_default,
         toAccountName: tempCcontroler.tempCpackagedetail.value.packageName!,
         toAccountNumber:

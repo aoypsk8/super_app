@@ -11,8 +11,14 @@ import 'package:super_app/widget/build_step_process.dart';
 import 'package:super_app/widget/textfont.dart';
 
 class ListsPaymentScreen extends StatefulWidget {
-  final void Function(String paymentType, String cardDetail, String uuid)
-      onSelectedPayment;
+  final void Function(
+    String paymentType,
+    String cardDetail,
+    String uuid,
+    String logo,
+    String accName,
+    String cardNumber,
+  ) onSelectedPayment;
   final String stepBuild;
   final int description;
   final String title;
@@ -216,7 +222,14 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
                         .toString();
                     final uuid =
                         paymentController.paymentMethods[selectedIndex!].uuid;
-                    widget.onSelectedPayment(paymentType, cardIndex, uuid);
+                    final logo =
+                        paymentController.paymentMethods[selectedIndex!].logo;
+                    final accName = paymentController
+                        .paymentMethods[selectedIndex!].accname;
+                    final cardNumber = paymentController
+                        .paymentMethods[selectedIndex!].description;
+                    widget.onSelectedPayment(paymentType, cardIndex, uuid, logo,
+                        accName, cardNumber);
                   }
                 : () {},
           ),

@@ -129,7 +129,14 @@ class TransferController extends GetxController {
             description: homeController.menudetail.value.appid!,
             stepBuild: '2/3',
             title: homeController.getMenuTitle(),
-            onSelectedPayment: (paymentType, cardIndex, uuid) {
+            onSelectedPayment: (
+              paymentType,
+              cardIndex,
+              uuid,
+              logo,
+              accName,
+              cardNumber,
+            ) {
               Get.to(
                 () => ReusableConfirmScreen(
                   appbarTitle: homeController.getMenuTitle(),
@@ -140,13 +147,16 @@ class TransferController extends GetxController {
                   isEnabled: enableBottom,
                   stepProcess: "3/3",
                   stepTitle: "check_detail",
-                  fromAccountImage:
-                      userController.userProfilemodel.value.profileImg ??
-                          MyConstant.profile_default,
-                  fromAccountName:
-                      '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-                  fromAccountNumber:
-                      userController.userProfilemodel.value.msisdn.toString(),
+                  fromAccountImage: paymentType == 'MMONEY'
+                      ? userController.userProfilemodel.value.profileImg ??
+                          MyConstant.profile_default
+                      : logo,
+                  fromAccountName: paymentType == 'MMONEY'
+                      ? '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}'
+                      : accName,
+                  fromAccountNumber: paymentType == 'MMONEY'
+                      ? userController.userProfilemodel.value.msisdn.toString()
+                      : cardNumber,
                   toAccountImage: desTranferKyc.value.profileImg ??
                       MyConstant.profile_default,
                   toAccountName: destinationname.value,

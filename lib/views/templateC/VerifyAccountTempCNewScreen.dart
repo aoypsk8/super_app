@@ -157,8 +157,8 @@ class _VerifyAccountTempCNewScreenState
                                     homeController.menudetail.value.appid!,
                                 stepBuild: '5/6',
                                 title: homeController.getMenuTitle(),
-                                onSelectedPayment:
-                                    (paymentType, cardIndex, uuid) async {
+                                onSelectedPayment: (paymentType, cardIndex,
+                                    uuid, logo, accName, cardNumber) async {
                                   if (paymentType == "Other") {
                                     // homeController.RxamountUSD.value =
                                     //     await homeController.convertRate(
@@ -185,11 +185,8 @@ class _VerifyAccountTempCNewScreenState
                                     if (cvv != null &&
                                         cvv.isNotEmpty &&
                                         cvv.length >= 3) {
-                                      navigateToConfirmScreen(
-                                        paymentType,
-                                        cvv,
-                                        uuid,
-                                      );
+                                      navigateToConfirmScreen(paymentType, cvv,
+                                          uuid, logo, accName, cardNumber);
                                     } else {
                                       DialogHelper.showErrorDialogNew(
                                         description: "please_input_cvv",
@@ -563,8 +560,15 @@ class _VerifyAccountTempCNewScreenState
     );
   }
 
-  void navigateToConfirmScreen(String paymentType,
-      [String cvv = '', String storedCardUniqueID = '']) {
+  void navigateToConfirmScreen(
+    String paymentType, [
+    String cvv = '',
+    String storedCardUniqueID = '',
+    String? logo,
+    String accName = '',
+    String cardNumber = '',
+  ]) {
+    logo ??= MyConstant.profile_default;
     Get.to(
       ReusableConfirmScreen(
         isEnabled: tempCcontroler.enableBottom,
@@ -583,12 +587,16 @@ class _VerifyAccountTempCNewScreenState
         },
         stepProcess: "6/6",
         stepTitle: "check_detail",
-        fromAccountImage: userController.userProfilemodel.value.profileImg ??
-            MyConstant.profile_default,
-        fromAccountName:
-            '${userController.userProfilemodel.value.name.toString()} ${userController.userProfilemodel.value.surname.toString()}',
-        fromAccountNumber:
-            userController.userProfilemodel.value.msisdn.toString(),
+        fromAccountImage: paymentType == 'MMONEY'
+            ? userController.userProfilemodel.value.profileImg ??
+                MyConstant.profile_default
+            : logo,
+        fromAccountName: paymentType == 'MMONEY'
+            ? '${userController.userProfilemodel.value.name.toString()} ${userController.userProfilemodel.value.surname.toString()}'
+            : accName,
+        fromAccountNumber: paymentType == 'MMONEY'
+            ? userController.userProfilemodel.value.msisdn.toString()
+            : cardNumber,
         toAccountImage: MyConstant.profile_default,
         toAccountName:
             tempCcontroler.tempCservicedetail.value.description.toString(),

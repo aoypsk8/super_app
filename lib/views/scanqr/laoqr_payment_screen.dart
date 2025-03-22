@@ -110,7 +110,8 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
                       description: 0,
                       stepBuild: '2/3',
                       title: homeController.getMenuTitle(),
-                      onSelectedPayment: (paymentType, cardIndex, uuid) async {
+                      onSelectedPayment: (paymentType, cardIndex, uuid, logo,
+                          accName, cardNumber) async {
                         if (paymentType == 'MMONEY') {
                           qrController.rxTransID.value =
                               'L${qrController.rxTransID.value}';
@@ -178,11 +179,8 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
                               String? cvv =
                                   await showDynamicQRDialog(context, () {});
                               if (cvv != null && cvv.trim().length >= 3) {
-                                navigateToConfirmScreen(
-                                  paymentType,
-                                  cvv,
-                                  uuid,
-                                );
+                                navigateToConfirmScreen(paymentType, cvv, uuid,
+                                    logo, accName, cardNumber);
                               } else {
                                 qrController.enableBottom.value = true;
                                 DialogHelper.showErrorDialogNew(
@@ -489,8 +487,15 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
     );
   }
 
-  void navigateToConfirmScreen(String paymentType,
-      [String cvv = '', String storedCardUniqueID = '']) {
+  void navigateToConfirmScreen(
+    String paymentType, [
+    String cvv = '',
+    String storedCardUniqueID = '',
+    String? logo,
+    String accName = '',
+    String cardNumber = '',
+  ]) {
+    logo ??= MyConstant.profile_default;
     Get.to(
       () => ReusableConfirmScreen(
         isEnabled: qrController.enableBottom,
@@ -513,12 +518,16 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
         },
         stepProcess: "3/3",
         stepTitle: "detail",
-        fromAccountImage: userController.userProfilemodel.value.profileImg ??
-            MyConstant.profile_default,
-        fromAccountName:
-            '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-        fromAccountNumber:
-            userController.userProfilemodel.value.msisdn.toString(),
+        fromAccountImage: paymentType == 'MMONEY'
+            ? (userController.userProfilemodel.value.profileImg ??
+                MyConstant.profile_default)
+            : (logo ?? MyConstant.profile_default),
+        fromAccountName: paymentType == 'MMONEY'
+            ? '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}'
+            : accName,
+        fromAccountNumber: paymentType == 'MMONEY'
+            ? userController.userProfilemodel.value.msisdn.toString()
+            : cardNumber,
         toAccountImage:
             qrController.qrModel.value.logoUrl ?? MyConstant.profile_default,
         toAccountName: qrController.qrModel.value.shopName.toString(),

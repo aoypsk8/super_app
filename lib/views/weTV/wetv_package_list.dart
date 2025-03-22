@@ -273,7 +273,8 @@ class buildWeTvCard extends StatelessWidget {
           description: homeController.menudetail.value.appid!,
           stepBuild: '2/3',
           title: homeController.getMenuTitle(),
-          onSelectedPayment: (paymentType, cardIndex, uuid) async {
+          onSelectedPayment:
+              (paymentType, cardIndex, uuid, logo, accName, cardNumber) async {
             if (paymentType == "Other") {
               // homeController.RxamountUSD.value = await homeController
               //     .convertRate(weTVController.wetvdetail.value.price!);
@@ -296,10 +297,7 @@ class buildWeTvCard extends StatelessWidget {
               String? cvv = await showDynamicQRDialog(context, () {});
               if (cvv != null && cvv.isNotEmpty && cvv.length >= 3) {
                 navigateToConfirmScreen(
-                  paymentType,
-                  cvv,
-                  uuid,
-                );
+                    paymentType, cvv, uuid, logo, accName, cardNumber);
               } else {
                 DialogHelper.showErrorDialogNew(
                   description: "please_input_cvv",
@@ -348,8 +346,15 @@ class buildWeTvCard extends StatelessWidget {
     );
   }
 
-  void navigateToConfirmScreen(String paymentType,
-      [String cvv = '', String storedCardUniqueID = '']) {
+  void navigateToConfirmScreen(
+    String paymentType, [
+    String cvv = '',
+    String storedCardUniqueID = '',
+    String? logo,
+    String accName = '',
+    String cardNumber = '',
+  ]) {
+    logo ??= MyConstant.profile_default;
     Get.to(() => ReusableConfirmScreen(
           appbarTitle: "confirm_payment",
           isEnabled: weTVController.enableBottom,
@@ -374,12 +379,16 @@ class buildWeTvCard extends StatelessWidget {
           },
           stepProcess: "3/3",
           stepTitle: "check_detail",
-          fromAccountImage: userController.userProfilemodel.value.profileImg ??
-              MyConstant.profile_default,
-          fromAccountName:
-              '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}',
-          fromAccountNumber:
-              userController.userProfilemodel.value.msisdn.toString(),
+          fromAccountImage: paymentType == 'MMONEY'
+              ? (userController.userProfilemodel.value.profileImg ??
+                  MyConstant.profile_default)
+              : (logo ?? MyConstant.profile_default),
+          fromAccountName: paymentType == 'MMONEY'
+              ? '${userController.userProfilemodel.value.name} ${userController.userProfilemodel.value.surname}'
+              : accName,
+          fromAccountNumber: paymentType == 'MMONEY'
+              ? userController.userProfilemodel.value.msisdn.toString()
+              : cardNumber,
           toAccountImage: weTVController.wetvdetail.value.logo ?? '',
           toAccountName: weTVController.title.value, // Fixed swapped values
           toAccountNumber:

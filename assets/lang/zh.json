@@ -164,6 +164,7 @@
   "bill_paying": "缴费",
   "payment_success": "支付成功",
   "input_bill_no": "输入帐单号码",
+  "input_acc_no": "输入帐号",
   "logout?": "您想退出吗？",
   "notverified": "未经审核的",
   "version": "版本",
@@ -362,12 +363,12 @@
   "loading_complete": "加载完成",
   "Select Language": "选择语言",
   "save": "保存",
-  "are_you_sure_to_acctive_this_phon_number":"您确定要激活此电话号码吗？",
-  "if_you_active_this_phone_number_this_phone_number_will_active_and_begin_the_internet_when_you_active_success":"如果您激活此电话号码，它将从您成功激活的那一刻开始使用互联网！",
-  "you_need_to_active_this_phone_number_before_suing":"您需要在使用之前激活此电话号码",
-  "active_this_phone_number_here":"在这里激活此电话号码",
-  "data_borrow":"Data Borrow",
-  "airtime_borrow":"Airtime Borrow",
+  "are_you_sure_to_acctive_this_phon_number": "您确定要激活此电话号码吗？",
+  "if_you_active_this_phone_number_this_phone_number_will_active_and_begin_the_internet_when_you_active_success": "如果您激活此电话号码，它将从您成功激活的那一刻开始使用互联网！",
+  "you_need_to_active_this_phone_number_before_suing": "您需要在使用之前激活此电话号码",
+  "active_this_phone_number_here": "在这里激活此电话号码",
+  "data_borrow": "Data Borrow",
+  "airtime_borrow": "Airtime Borrow",
   "all_lists": "All lists",
-  "please_check_cvv_code":"Please check CVV Code"
+  "please_check_cvv_code": "Please check CVV Code"
 }

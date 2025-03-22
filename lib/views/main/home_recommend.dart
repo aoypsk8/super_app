@@ -18,6 +18,7 @@ import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/color.dart';
 import 'package:super_app/utility/dialog_helper.dart';
 import 'package:super_app/views/scanqr/qr_scanner.dart';
+import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/views/web/openWebView.dart';
 import 'package:super_app/views/webview/webapp_webview.dart';
 import 'package:super_app/widget/myIcon.dart';
@@ -111,6 +112,7 @@ class _HomeRecommendScreenState extends State<HomeRecommendScreen> {
           refreshController: refreshController,
           onRefresh: () {
             homeController.fetchServicesmMenu(userController.rxMsisdn.value);
+            userController.fetchBalance();
             refreshController.refreshCompleted();
           },
           child: SingleChildScrollView(
@@ -751,7 +753,8 @@ class _AnimatedBalanceWidgetState extends State<AnimatedBalanceWidget> {
     super.dispose();
   }
 
-  void toggleBalance() {
+  void toggleBalance(UserController userController) {
+    userController.fetchBalance();
     setState(() {
       showAmount = !showAmount;
       if (showAmount) {
@@ -813,7 +816,7 @@ class _AnimatedBalanceWidgetState extends State<AnimatedBalanceWidget> {
 
         // ✅ Toggle Button for Show/Hide Balance
         GestureDetector(
-          onTap: toggleBalance, // Call toggle function
+          onTap: () => toggleBalance(userController), // Call toggle function
           child: Icon(
             showAmount ? Iconsax.eye : Iconsax.eye_slash,
             color: Colors.white,

@@ -236,20 +236,20 @@ class _ConfirmCashInScreenState extends State<ConfirmCashInScreen>
               ),
               const SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   TextFont(
                     text: fn.format(
                         int.tryParse(cashInController.txnAmount.value) ?? 0),
                     fontWeight: FontWeight.w600,
                     fontSize: 20.sp,
-                    color: cr_ef33,
+                    color: cr_b326,
                   ),
                   TextFont(
                     text: '.00 LAK',
                     fontWeight: FontWeight.w600,
                     fontSize: 20.sp,
-                    color: cr_ef33,
+                    color: cr_b326,
                   ),
                 ],
               ),

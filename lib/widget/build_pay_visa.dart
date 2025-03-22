@@ -105,8 +105,8 @@ class _PaymentVisaMasterCardState extends State<PaymentVisaMasterCard> {
               } else {
                 DialogHelper.showErrorWithFunctionDialog(
                   closeTitle: "close",
-                  title: "Please Check",
-                  description: "Please check box first",
+                  title: "please_check",
+                  description: "please_check_the_box_first",
                   onClose: () {
                     Get.back();
                   },

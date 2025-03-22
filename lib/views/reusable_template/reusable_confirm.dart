@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/utility/dialog_helper.dart';
@@ -196,11 +197,18 @@ class _ReusableConfirmScreenState extends State<ReusableConfirmScreen> {
                 fontSize: 11,
                 color: cr_7070,
               ),
-              Wrap(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   TextFont(
                     text: fn.format(double.parse(widget.amount)),
                     fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    color: cr_b326,
+                  ),
+                  TextFont(
+                    text: '.00 LAK',
+                    fontWeight: FontWeight.w600,
                     fontSize: 20,
                     color: cr_b326,
                   ),

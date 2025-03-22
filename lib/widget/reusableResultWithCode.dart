@@ -16,6 +16,7 @@ import 'package:sizer/sizer.dart';
 import 'package:super_app/controllers/home_controller.dart';
 import 'package:super_app/controllers/wetv_controller.dart';
 import 'package:super_app/utility/color.dart';
+import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
 import 'package:super_app/widget/buildTextDetail.dart';
 import 'package:super_app/widget/buildUserDetail.dart';
@@ -335,11 +336,19 @@ class _ReusableResultWithCodeState extends State<ReusableResultWithCode>
                                         color: cr_7070,
                                       ),
                                       Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           TextFont(
-                                            text: NumberFormat('#,###').format(
+                                            text: fn.format(
                                                 double.parse(widget.amount)),
                                             fontWeight: FontWeight.w500,
+                                            fontSize: 20,
+                                            color: cr_b326,
+                                          ),
+                                          TextFont(
+                                            text: '.00 LAK',
+                                            fontWeight: FontWeight.w600,
                                             fontSize: 20,
                                             color: cr_b326,
                                           ),

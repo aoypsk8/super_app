@@ -264,14 +264,21 @@ class _ReusableResultScreenState extends State<ReusableResultScreen> {
                                         color: cr_7070,
                                       ),
                                       Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           TextFont(
                                             text: fn.format(
-                                                int.parse(widget.amount)),
+                                                double.parse(widget.amount)),
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20,
                                             color: cr_b326,
-                                            poppin: true,
+                                          ),
+                                          TextFont(
+                                            text: '.00 LAK',
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20,
+                                            color: cr_b326,
                                           ),
                                         ],
                                       ),

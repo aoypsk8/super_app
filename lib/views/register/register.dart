@@ -74,9 +74,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       children: [
                         buildTextField(
                           controller: _username,
-                          label: 'username',
+                          label: 'input_phone_number',
                           name: 'username',
-                          hintText: 'enter_your_username',
+                          hintText: '20XXXXXXXX',
+                          textType: TextInputType.number,
                         ),
                         SizedBox(height: 20.sp),
                         buildBottomAppbar(
@@ -85,9 +86,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               if (_formKey.currentState!.validate()) {
                                 userController.rxMsisdn.value = _username.text;
                                 if (await userController.checkHaveWalletBO()) {
-                                  DialogHelper.showErrorDialogNew(description: 'You already have an account.');
+                                  DialogHelper.showErrorDialogNew(
+                                      description:
+                                          'You already have an account.');
                                 } else {
-                                  userController.requestOTP(_username.text, "register");
+                                  userController.requestOTP(
+                                      _username.text, "register");
                                 }
                               }
                             },

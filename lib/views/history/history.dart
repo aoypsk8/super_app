@@ -162,11 +162,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Row buildDetail(HistoryModel data) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 35.sp,
-          width: 35.sp,
-          child: getIcon(data),
+        Column(
+          children: [
+            SizedBox(height: 5),
+            SizedBox(
+              height: 25.sp,
+              width: 25.sp,
+              child: getIcon(data),
+            ),
+          ],
         ),
         SizedBox(width: 10),
         Expanded(
@@ -207,34 +213,33 @@ class _HistoryScreenState extends State<HistoryScreen> {
       case 'MOBILE':
         return SvgPicture.asset(MyIcon.ic_telecom);
       case 'TRANSFER':
-        return SvgPicture.asset(
-            data.type == "OUT" ? MyIcon.ic_cashout : MyIcon.ic_cashout);
+        return SvgPicture.asset(MyIcon.ic_transfer);
       case 'QR':
-        return SvgPicture.asset(MyIcon.ic_cashout);
+        return SvgPicture.asset("assets/history/his_myqr.svg");
       case 'LEASING':
-        return SvgPicture.asset(MyIcon.ic_leasing);
+        return SvgPicture.asset("assets/history/his_leasing.svg");
       case 'WATER':
-        return SvgPicture.asset(MyIcon.ic_water);
+        return SvgPicture.asset("assets/history/his_water.svg");
       case 'ELECTRIC':
-        return SvgPicture.asset(MyIcon.ic_electric);
+        return SvgPicture.asset("assets/history/his_eletric.svg");
       case 'BANK':
-        return SvgPicture.asset(MyIcon.ic_bank);
+        return SvgPicture.asset("assets/history/his_bank.svg");
       case 'CASHBACK':
-        return SvgPicture.asset(MyIcon.ic_cashout);
+        return SvgPicture.asset(MyIcon.ic_more);
       case 'PROMOTION':
-        return SvgPicture.asset(MyIcon.ic_cashout);
+        return SvgPicture.asset(MyIcon.ic_more);
       case 'SCNLOTTO':
-        return SvgPicture.asset(MyIcon.ic_cashout);
+        return SvgPicture.asset(MyIcon.ic_more);
       case 'FEECHARGE':
-        return SvgPicture.asset(MyIcon.ic_cashout);
+        return SvgPicture.asset(MyIcon.ic_more);
       case 'LABNET':
-        return SvgPicture.asset(MyIcon.ic_cashout);
+        return SvgPicture.asset("assets/history/his_myqr.svg");
       case 'CASH-IN':
-        return SvgPicture.asset(MyIcon.ic_cashout);
+        return SvgPicture.asset(MyIcon.ic_more);
       case 'PAYROLL':
-        return SvgPicture.asset(MyIcon.ic_cashout);
+        return SvgPicture.asset(MyIcon.ic_more);
       case 'WETV':
-        return SvgPicture.asset(MyIcon.ic_cashout);
+        return SvgPicture.asset("assets/history/his_wetv.svg");
       default:
         return SvgPicture.asset(MyIcon.ic_more);
     }

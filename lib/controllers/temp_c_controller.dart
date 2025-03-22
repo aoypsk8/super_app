@@ -142,7 +142,7 @@ class TempCController extends GetxController {
     };
     var response = await DioClient.postEncrypt(url, data, key: 'lmm');
     // await creditcardController.checkVisaPayment();
-    if (response['ResultCode'] == "200") {
+    if (response != null && response['ResultCode'] == "200") {
       if (rxService.value == "PREPAID") {
         rxAccName.value = "";
         rxPrepaidShow.value = true;

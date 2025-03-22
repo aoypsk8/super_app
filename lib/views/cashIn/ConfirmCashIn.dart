@@ -236,7 +236,7 @@ class _ConfirmCashInScreenState extends State<ConfirmCashInScreen>
               ),
               const SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFont(
                     text: fn.format(

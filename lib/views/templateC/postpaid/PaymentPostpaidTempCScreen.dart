@@ -49,6 +49,16 @@ class _PaymentPostpaidTempCScreenState
   @override
   void initState() {
     userController.increasepage();
+    // Add listener to update total amount in real-time
+    _paymentAmount.addListener(() {
+      final cleaned = _paymentAmount.text.replaceAll(RegExp(r'[^\d]'), '');
+      if (cleaned.isNotEmpty) {
+        tempCcontroler.rxTotalAmount.value = int.tryParse(cleaned) ?? 0;
+      } else {
+        tempCcontroler.rxTotalAmount.value = 0;
+      }
+    });
+
     super.initState();
   }
 

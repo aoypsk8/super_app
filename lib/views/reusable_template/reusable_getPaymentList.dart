@@ -73,7 +73,7 @@ class _ListsPaymentScreenState extends State<ListsPaymentScreen> {
     return Obx(
       () => Scaffold(
         backgroundColor: color_fff,
-        appBar: BuildAppBar(title: widget.title),
+        appBar: BuildAppBar(title: 'select_payment'),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Column(

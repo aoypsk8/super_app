@@ -448,6 +448,10 @@ class _VerifyAccountTempCNewScreenState
                   max: 10,
                   fillcolor: color_f4f4,
                   bordercolor: color_f4f4,
+                  textType:
+                      tempCcontroler.tempCservicedetail.value.name == "INTERNET"
+                          ? TextInputType.text
+                          : TextInputType.number,
                   suffixIcon: Container(
                     padding: const EdgeInsets.all(10),
                     child: SvgPicture.asset(

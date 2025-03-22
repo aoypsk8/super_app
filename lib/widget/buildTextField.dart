@@ -352,6 +352,7 @@ class buildTextField extends StatelessWidget {
     this.suffixIconColor = Colors.black,
     this.isRequire = true,
     this.isEditable = true, // New parameter
+    this.textType = TextInputType.text,
   });
 
   final TextEditingController controller;
@@ -369,6 +370,7 @@ class buildTextField extends StatelessWidget {
   final FontWeight labelWeight;
   final bool isRequire;
   final bool isEditable; // New parameter to enable/disable editing
+  final TextInputType? textType;
 
   @override
   Widget build(BuildContext context) {
@@ -410,6 +412,7 @@ class buildTextField extends StatelessWidget {
             name: name,
             controller: controller,
             maxLength: max,
+            keyboardType: textType,
             style:
                 GoogleFonts.notoSansLao(fontSize: 13.sp, color: Colors.black),
             enabled: isEditable, // Control editing here

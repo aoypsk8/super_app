@@ -62,8 +62,7 @@ class buildTextFiledValidate extends StatelessWidget {
               fontFamily: 'PoppinsRegular',
             ),
             decoration: InputDecoration(
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: hintText.tr,
               fillColor: color_fff,
               filled: true,
@@ -118,8 +117,7 @@ class buildEmailValidate extends StatelessWidget {
             decoration: InputDecoration(
               hintText: hintText.tr,
               hintStyle: textCustom.textBlack_p5,
-              prefixIcon:
-                  icons != null ? Icon(icons, color: Colors.black) : null,
+              prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black),
                 borderRadius: BorderRadius.circular(30),
@@ -295,8 +293,7 @@ class buildEmailValidateV2 extends StatelessWidget {
               fontSize: 12.5.sp,
             ),
             decoration: InputDecoration(
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: hintText.tr,
               hintStyle: GoogleFonts.poppins(
                 color: cr_7070.withOpacity(0.8),
@@ -351,8 +348,9 @@ class buildTextField extends StatelessWidget {
     this.labelWeight = FontWeight.normal,
     this.suffixIconColor = Colors.black,
     this.isRequire = true,
-    this.isEditable = true, // New parameter
+    this.isEditable = true,
     this.textType = TextInputType.text,
+    this.isRegex = false,
   });
 
   final TextEditingController controller;
@@ -369,33 +367,27 @@ class buildTextField extends StatelessWidget {
   final Color errorBorderColor;
   final FontWeight labelWeight;
   final bool isRequire;
-  final bool isEditable; // New parameter to enable/disable editing
+  final bool isEditable;
   final TextInputType? textType;
+  final bool isRegex;
 
   @override
   Widget build(BuildContext context) {
     String languageCode = Get.locale?.languageCode ?? 'lo';
+
     final defaultBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.0),
-      borderSide: BorderSide(
-        color: bordercolor,
-        width: 1.5,
-      ),
+      borderSide: BorderSide(color: bordercolor, width: 1.5),
     );
+
     final disabledBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.0),
-      borderSide: BorderSide(
-        color: bordercolor,
-        width: 1.5,
-      ),
+      borderSide: BorderSide(color: bordercolor, width: 1.5),
     );
 
     final errorBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.0),
-      borderSide: BorderSide(
-        color: errorBorderColor,
-        width: 1.5,
-      ),
+      borderSide: BorderSide(color: errorBorderColor, width: 1.5),
     );
 
     return Container(
@@ -413,22 +405,17 @@ class buildTextField extends StatelessWidget {
             controller: controller,
             maxLength: max,
             keyboardType: textType,
-            style:
-                GoogleFonts.notoSansLao(fontSize: 13.sp, color: Colors.black),
-            enabled: isEditable, // Control editing here
+            style: GoogleFonts.notoSansLao(fontSize: 13.sp, color: Colors.black),
+            enabled: isEditable,
             decoration: InputDecoration(
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: hintText.tr,
               hintStyle: languageCode == 'lo'
-                  ? GoogleFonts.notoSansLao(
-                      color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp)
-                  : GoogleFonts.poppins(
-                      color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp),
+                  ? GoogleFonts.notoSansLao(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp)
+                  : GoogleFonts.poppins(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp),
               fillColor: fillcolor,
               filled: true,
-              prefixIcon:
-                  icons != null ? Icon(icons, color: Colors.black) : null,
+              prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
               suffixIcon: suffixonTapFuc != null
                   ? GestureDetector(
                       onTap: suffixonTapFuc,
@@ -442,11 +429,14 @@ class buildTextField extends StatelessWidget {
               focusedErrorBorder: errorBorder,
               errorStyle: const TextStyle(height: 0),
             ),
-            validator: isRequire
-                ? FormBuilderValidators.compose([
-                    FormBuilderValidators.required(),
-                  ])
-                : null,
+            validator: FormBuilderValidators.compose([
+              if (isRequire) FormBuilderValidators.required(errorText: 'This field is required'),
+              if (isRegex)
+                FormBuilderValidators.match(
+                  RegExp(r'^[\u0E00-\u0E7F\u0E80-\u0EFF\u4E00-\u9FFFa-zA-ZÀ-ỹ\s]+$'),
+                  errorText: 'Only alphabet characters are allowed',
+                ),
+            ]),
           ),
         ],
       ),
@@ -467,6 +457,8 @@ class buildPasswordField extends StatefulWidget {
     this.labelWeight = FontWeight.normal,
     this.isRequire = true,
     this.isEditable = true,
+    this.isMinLengthRequired = false,
+    this.minLength = 8,
   });
 
   final TextEditingController controller;
@@ -479,6 +471,8 @@ class buildPasswordField extends StatefulWidget {
   final FontWeight labelWeight;
   final bool isRequire;
   final bool isEditable;
+  final bool isMinLengthRequired;
+  final int minLength;
 
   @override
   _buildPasswordFieldState createState() => _buildPasswordFieldState();
@@ -490,19 +484,15 @@ class _buildPasswordFieldState extends State<buildPasswordField> {
   @override
   Widget build(BuildContext context) {
     String languageCode = Get.locale?.languageCode ?? 'lo';
+
     final defaultBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.0),
-      borderSide: BorderSide(
-        color: widget.bordercolor,
-        width: 1.5,
-      ),
+      borderSide: BorderSide(color: widget.bordercolor, width: 1.5),
     );
+
     final errorBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.0),
-      borderSide: BorderSide(
-        color: widget.errorBorderColor,
-        width: 1.5,
-      ),
+      borderSide: BorderSide(color: widget.errorBorderColor, width: 1.5),
     );
 
     return Container(
@@ -511,7 +501,7 @@ class _buildPasswordFieldState extends State<buildPasswordField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           widget.label == ''
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : TextFont(
                   text: widget.label,
                   fontWeight: widget.labelWeight,
@@ -520,19 +510,15 @@ class _buildPasswordFieldState extends State<buildPasswordField> {
           FormBuilderTextField(
             name: widget.name,
             controller: widget.controller,
-            style:
-                GoogleFonts.notoSansLao(fontSize: 13.sp, color: Colors.black),
-            obscureText: _obscureText, // Password hidden by default
+            style: GoogleFonts.notoSansLao(fontSize: 13.sp, color: Colors.black),
+            obscureText: _obscureText,
             enabled: widget.isEditable,
             decoration: InputDecoration(
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: widget.hintText.tr,
               hintStyle: languageCode == 'lo'
-                  ? GoogleFonts.notoSansLao(
-                      color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp)
-                  : GoogleFonts.poppins(
-                      color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp),
+                  ? GoogleFonts.notoSansLao(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp)
+                  : GoogleFonts.poppins(color: cr_7070.withOpacity(0.8), fontSize: 12.5.sp),
               fillColor: widget.fillcolor,
               filled: true,
               suffixIcon: IconButton(
@@ -542,7 +528,7 @@ class _buildPasswordFieldState extends State<buildPasswordField> {
                 ),
                 onPressed: () {
                   setState(() {
-                    _obscureText = !_obscureText; // Toggle password visibility
+                    _obscureText = !_obscureText;
                   });
                 },
               ),
@@ -553,11 +539,14 @@ class _buildPasswordFieldState extends State<buildPasswordField> {
               focusedErrorBorder: errorBorder,
               errorStyle: const TextStyle(height: 0),
             ),
-            validator: widget.isRequire
-                ? FormBuilderValidators.compose([
-                    FormBuilderValidators.required(),
-                  ])
-                : null,
+            validator: FormBuilderValidators.compose([
+              if (widget.isRequire) FormBuilderValidators.required(errorText: 'Password is required'),
+              if (widget.isMinLengthRequired)
+                FormBuilderValidators.minLength(
+                  widget.minLength,
+                  errorText: 'Password must be at least ${widget.minLength} characters',
+                ),
+            ]),
           ),
         ],
       ),
@@ -599,8 +588,7 @@ class buildLongTextFiled extends StatelessWidget {
             maxLines: 4,
             decoration: InputDecoration(
               hintText: hintText.tr,
-              prefixIcon:
-                  icons != null ? Icon(icons, color: Colors.black) : null,
+              prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
               // suffixIcon: Icon(Icons.phone, color: Colors.black),
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black),
@@ -689,8 +677,7 @@ class buildNumberFiledValidate extends StatelessWidget {
                     fontSize: 12.5.sp,
                   ),
             decoration: InputDecoration(
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: hintText.tr,
               hintStyle: languageCode == 'lo'
                   ? GoogleFonts.notoSansLao(
@@ -703,8 +690,7 @@ class buildNumberFiledValidate extends StatelessWidget {
                     ),
               fillColor: fillcolor,
               filled: true,
-              prefixIcon:
-                  icons != null ? Icon(icons, color: Colors.black) : null,
+              prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
               suffixIcon: suffixonTapFuc != null
                   ? Container(
                       margin: EdgeInsets.only(right: 5),
@@ -800,8 +786,7 @@ class buildAccountingFiledVaidate extends StatelessWidget {
             decoration: InputDecoration(
               disabledBorder: border,
 
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: hintText.tr,
               fillColor: fillcolor,
               hintStyle: languageCode == 'lo'
@@ -814,14 +799,12 @@ class buildAccountingFiledVaidate extends StatelessWidget {
                       fontSize: 12.5.sp,
                     ),
               filled: true,
-              prefixIcon:
-                  icons != null ? Icon(icons, color: Colors.black) : null,
+              prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
               suffixIcon: suffixonTapFuc != null
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (suffixWidget == true && suffixWidgetData != null)
-                          suffixWidgetData!,
+                        if (suffixWidget == true && suffixWidgetData != null) suffixWidgetData!,
                         if (suffixIcon != null)
                           GestureDetector(
                             onTap: suffixonTapFuc,
@@ -920,8 +903,7 @@ class buildLoanFiledValidate extends StatelessWidget {
             decoration: InputDecoration(
               disabledBorder: border,
 
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               hintText: hintText.tr,
               fillColor: fillcolor,
               hintStyle: languageCode == 'lo'
@@ -934,14 +916,12 @@ class buildLoanFiledValidate extends StatelessWidget {
                       fontSize: 12.5.sp,
                     ),
               filled: true,
-              prefixIcon:
-                  icons != null ? Icon(icons, color: Colors.black) : null,
+              prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
               suffixIcon: suffixonTapFuc != null
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (suffixWidget == true && suffixWidgetData != null)
-                          suffixWidgetData!,
+                        if (suffixWidget == true && suffixWidgetData != null) suffixWidgetData!,
                         if (suffixIcon != null)
                           GestureDetector(
                             onTap: suffixonTapFuc,
@@ -1010,8 +990,7 @@ class buildDropDownValidate extends StatelessWidget {
             name: name,
             decoration: InputDecoration(
               // hintText: tr(hintText),
-              prefixIcon:
-                  icons != null ? Icon(icons, color: Colors.black) : null,
+              prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
               // suffixIcon: Icon(Icons.phone, color: Colors.black),
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black),
@@ -1037,8 +1016,7 @@ class buildDropDownValidate extends StatelessWidget {
             items: dataObject.map((dataProvice) {
               return DropdownMenuItem(
                 value: dataProvice[colName].toString(),
-                child: Text(dataProvice[colName].toString(),
-                    style: textCustom.textBlack_p5),
+                child: Text(dataProvice[colName].toString(), style: textCustom.textBlack_p5),
               );
             }).toList(),
             onChanged: onChanged,
@@ -1109,8 +1087,7 @@ class buildDropDown_return_Value_Name_Validate extends StatelessWidget {
               filled: true,
               fillColor: fillcolor,
               hintText: hintText.tr,
-              prefixIcon:
-                  icons != null ? Icon(icons, color: Colors.black) : null,
+              prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
               enabledBorder: border,
               focusedBorder: border,
               focusedErrorBorder: border,
@@ -1124,8 +1101,7 @@ class buildDropDown_return_Value_Name_Validate extends StatelessWidget {
 
               String displayText = "$months ເດືອນ";
               return DropdownMenuItem(
-                value:
-                    '${data[valName].toString()}-${data[colName].toString()}',
+                value: '${data[valName].toString()}-${data[colName].toString()}',
                 child: TextFont(
                   text: displayText,
                 ),
@@ -1173,8 +1149,7 @@ class buildPasswordFiledValidate extends StatelessWidget {
             decoration: InputDecoration(
               hintText: hintText.tr,
               hintStyle: textCustom.textBlack_p5,
-              prefixIcon:
-                  icons != null ? Icon(icons, color: Colors.black) : null,
+              prefixIcon: icons != null ? Icon(icons, color: Colors.black) : null,
               // suffixIcon: Icon(Icons.phone, color: Colors.black),
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.black),

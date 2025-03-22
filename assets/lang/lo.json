@@ -381,5 +381,6 @@
   "data_borrow": "ຢືມດາຕ້າ",
   "airtime_borrow": "ຢືມມູນຄ່າໂທ",
   "all_lists": "ລາຍການທັງໝົດ",
-  "please_check_cvv_code": "ກະລຸນາກວດສອບ CVV Codes"
+  "please_check_cvv_code": "ກະລຸນາກວດສອບ CVV Codes",
+  "enter_wallet_id": "Enter Wallet ID"
 }

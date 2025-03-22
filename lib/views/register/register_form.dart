@@ -180,12 +180,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
 
   String _provinceCode = '';
   var dataProvice = [
-    {
-      "proid": 1,
-      "Name": "ນະຄອນຫຼວງວຽງຈັນ",
-      "Code": "VTE",
-      "Description": "NULL"
-    },
+    {"proid": 1, "Name": "ນະຄອນຫຼວງວຽງຈັນ", "Code": "VTE", "Description": "NULL"},
     {"proid": 2, "Name": "ວຽງຈັນ", "Code": "VTP", "Description": "NULL"},
     {"proid": 3, "Name": "ບໍລິຄຳໄຊ", "Code": "BKX", "Description": "NULL"},
     {"proid": 4, "Name": "ອຸດົມໄຊ", "Code": "UDX", "Description": "NULL"},
@@ -237,17 +232,21 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                     SizedBox(height: 15),
                     SizedBox(height: 8),
                     buildTextField(
-                        controller: _fname,
-                        label: 'fname',
-                        name: 'fname',
-                        hintText: '',
-                        isEditable: true),
+                      controller: _fname,
+                      label: 'fname',
+                      name: 'fname',
+                      hintText: '',
+                      isEditable: true,
+                      isRegex: true,
+                    ),
                     buildTextField(
-                        controller: _lname,
-                        label: 'lname',
-                        name: 'lname',
-                        hintText: '',
-                        isEditable: true),
+                      controller: _lname,
+                      label: 'lname',
+                      name: 'lname',
+                      hintText: '',
+                      isEditable: true,
+                      isRegex: true,
+                    ),
                     // FormBuilderDateTimePicker(
                     //   name: 'birthday',
                     //   controller: _birthday,
@@ -292,13 +291,17 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                       },
                     ),
                     buildTextField(
-                        controller: _district,
-                        label: 'district',
-                        name: 'district'),
+                      controller: _district,
+                      label: 'district',
+                      name: 'district',
+                      isRegex: true,
+                    ),
                     buildTextField(
-                        controller: _village,
-                        label: 'village',
-                        name: 'village'),
+                      controller: _village,
+                      label: 'village',
+                      name: 'village',
+                      isRegex: true,
+                    ),
                     Divider(color: color_ecec),
                     SizedBox(height: 20),
                   ],
@@ -318,15 +321,8 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
 
           _formKey.currentState!.save();
           if (_formKey.currentState!.validate()) {
-            userControler.register(
-                widget.regType,
-                _gender,
-                _fname.text,
-                _lname.text,
-                _birthday.text,
-                _province.text,
-                _district.text,
-                _village.text);
+            userControler.register(widget.regType, _gender, _fname.text, _lname.text, _birthday.text, _province.text,
+                _district.text, _village.text);
           }
         },
       ),
@@ -383,15 +379,13 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                       child: CupertinoDatePicker(
                         minimumYear: 1930,
                         maximumYear: DateTime.now().year,
-                        initialDateTime: _birthday.text.isNotEmpty
-                            ? DateTime.tryParse(_birthday.text) ?? _dateTime
-                            : _dateTime,
+                        initialDateTime:
+                            _birthday.text.isNotEmpty ? DateTime.tryParse(_birthday.text) ?? _dateTime : _dateTime,
                         mode: CupertinoDatePickerMode.date,
                         onDateTimeChanged: (dateTime) {
                           setState(() {
                             _dateTime = dateTime;
-                            _birthday.text =
-                                DateFormat('yyyy-MM-dd').format(dateTime);
+                            _birthday.text = DateFormat('yyyy-MM-dd').format(dateTime);
                           });
                         },
                       ),
@@ -425,10 +419,8 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
           height: 50.sp,
           child: CircleAvatar(
             backgroundImage: CachedNetworkImageProvider(
-                userControler.userProfilemodel.value.profileImg ??
-                    'https://mmoney.la/AppLite/Users/mmoney.png'),
-            backgroundColor:
-                Colors.transparent, // Optional: Set a background color
+                userControler.userProfilemodel.value.profileImg ?? 'https://mmoney.la/AppLite/Users/mmoney.png'),
+            backgroundColor: Colors.transparent, // Optional: Set a background color
           ),
         ),
         SizedBox(width: 8), // Optional spacing between image and column
@@ -452,8 +444,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
               Row(
                 children: [
                   TextFont(
-                    text:
-                        userControler.kycModel.value.data?.phone ?? '20xxxxxx',
+                    text: userControler.kycModel.value.data?.phone ?? '20xxxxxx',
                     poppin: true,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -512,21 +503,13 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(radius),
                       border: Border.all(
-                          color: _genderMale
-                              ? color_primary_light
-                              : color_blackE72,
-                          width: _genderMale ? 1 : 0),
-                      color: _genderMale
-                          ? color_primary_light.withOpacity(0.1)
-                          : color_f4f4,
+                          color: _genderMale ? color_primary_light : color_blackE72, width: _genderMale ? 1 : 0),
+                      color: _genderMale ? color_primary_light.withOpacity(0.1) : color_f4f4,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                            height: 40,
-                            width: 40,
-                            child: Image.asset('assets/images/man.png')),
+                        SizedBox(height: 40, width: 40, child: Image.asset('assets/images/man.png')),
                         const SizedBox(width: 5),
                         TextFont(text: 'Male', color: color_blackE72),
                       ],
@@ -549,20 +532,13 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(radius),
                       border: Border.all(
-                          color:
-                              !_genderMale ? color_primary_light : color_f4f4,
-                          width: !_genderMale ? 1 : 0),
-                      color: !_genderMale
-                          ? color_primary_light.withOpacity(0.1)
-                          : color_f4f4,
+                          color: !_genderMale ? color_primary_light : color_f4f4, width: !_genderMale ? 1 : 0),
+                      color: !_genderMale ? color_primary_light.withOpacity(0.1) : color_f4f4,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                            height: 40,
-                            width: 40,
-                            child: Image.asset('assets/images/woman.png')),
+                        SizedBox(height: 40, width: 40, child: Image.asset('assets/images/woman.png')),
                         const SizedBox(width: 5),
                         TextFont(text: 'Female', color: color_blackE72)
                       ],
@@ -577,8 +553,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
     );
   }
 
-  Column buildImageForm(
-      String title, String desc, String type, VoidCallback onTap) {
+  Column buildImageForm(String title, String desc, String type, VoidCallback onTap) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -602,16 +577,12 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                   children: [
                     Container(
                       child: (type == 'doc_img'
-                              ? (!(userControler.kycModel.value.data!.docImg!
-                                  .startsWith('http')))
-                              : (!(userControler.kycModel.value.data!.photo!
-                                  .startsWith('http'))))
+                              ? (!(userControler.kycModel.value.data!.docImg!.startsWith('http')))
+                              : (!(userControler.kycModel.value.data!.photo!.startsWith('http'))))
                           ? SizedBox(
                               width: 30.w,
                               child: Image.asset(
-                                type == 'doc_img'
-                                    ? 'assets/images/id_card.png'
-                                    : 'assets/images/verify_account.png',
+                                type == 'doc_img' ? 'assets/images/id_card.png' : 'assets/images/verify_account.png',
                               ),
                             )
                           : SizedBox(
@@ -624,20 +595,14 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                       onTap: () {
                                         Get.to(() => ImagepreviewScreen(
                                             imageUrl: type == 'doc_img'
-                                                ? userControler.kycModel.value
-                                                    .data!.docImg!
-                                                : userControler.kycModel.value
-                                                    .data!.photo!,
-                                            title: type == 'doc_img'
-                                                ? 'Document Image'
-                                                : 'Verify Account Image'));
+                                                ? userControler.kycModel.value.data!.docImg!
+                                                : userControler.kycModel.value.data!.photo!,
+                                            title: type == 'doc_img' ? 'Document Image' : 'Verify Account Image'));
                                       },
                                       child: CachedNetworkImage(
                                         imageUrl: type == 'doc_img'
-                                            ? userControler
-                                                .kycModel.value.data!.docImg!
-                                            : userControler
-                                                .kycModel.value.data!.photo!,
+                                            ? userControler.kycModel.value.data!.docImg!
+                                            : userControler.kycModel.value.data!.photo!,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -647,16 +612,10 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                             ),
                     ),
                     (type == 'doc_img'
-                            ? (userControler
-                                    .kycModel.value.data!.docImg?.isEmpty ??
-                                true)
-                            : (userControler
-                                    .kycModel.value.data!.photo?.isEmpty ??
-                                true))
+                            ? (userControler.kycModel.value.data!.docImg?.isEmpty ?? true)
+                            : (userControler.kycModel.value.data!.photo?.isEmpty ?? true))
                         ? TextFont(
-                            text: type == 'doc_img'
-                                ? 'take_document_image'
-                                : 'take_verify_image',
+                            text: type == 'doc_img' ? 'take_document_image' : 'take_verify_image',
                             color: color_7070,
                           )
                         : SizedBox.shrink()

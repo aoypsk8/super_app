@@ -380,5 +380,6 @@
   "data_borrow": "Data Borrow",
   "airtime_borrow": "Airtime Borrow",
   "all_lists": "All lists",
-  "please_check_cvv_code": "Please check CVV Code"
+  "please_check_cvv_code": "Please check CVV Code",
+  "enter_wallet_id": "Enter Wallet ID"
 }

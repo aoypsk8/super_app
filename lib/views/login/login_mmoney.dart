@@ -66,7 +66,7 @@ class LoginMmoney extends StatelessWidget {
                           controller: _username,
                           label: 'username',
                           name: 'username',
-                          hintText: 'enter_wallet_id',
+                          hintText: '',
                         ),
                         // forgot_password(),
                         SizedBox(height: 20.sp),

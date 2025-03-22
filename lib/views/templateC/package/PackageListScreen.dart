@@ -388,6 +388,10 @@ class _PackageListScreenState extends State<PackageListScreen>
               homeController.menudetail.value,
               storedCardUniqueID,
               cvv,
+              paymentType,
+              logo!,
+              accName,
+              cardNumber,
             );
           }
         },

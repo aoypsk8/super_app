@@ -488,7 +488,14 @@ class TempCController extends GetxController {
   //! VISA - MASTER CARD PACKAGE
   //!------------------------------------------------------------------------------
   paymentPackageVisa(
-      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    Menulists menudetail,
+    String storedCardUniqueID,
+    String cvvCode,
+    String paymentType,
+    String logo,
+    String accName,
+    String cardNumber,
+  ) async {
     var data;
     var url;
     var response;
@@ -527,10 +534,16 @@ class TempCController extends GetxController {
         saveHistoryMobile(rxAccNo.value, rxService.value);
         enableBottom.value = true;
         Get.to(ReusableResultScreen(
-          fromAccountImage: userController.userProfilemodel.value.profileImg ??
-              MyConstant.profile_default,
-          fromAccountName: userController.profileName.value,
-          fromAccountNumber: userController.rxMsisdn.value,
+          fromAccountImage: paymentType == 'MMONEY'
+              ? (userController.userProfilemodel.value.profileImg ??
+                  MyConstant.profile_default)
+              : logo,
+          fromAccountName: paymentType == 'MMONEY'
+              ? userController.profileName.value
+              : accName,
+          fromAccountNumber: paymentType == 'MMONEY'
+              ? userController.rxMsisdn.value
+              : cardNumber,
           toAccountImage: MyConstant.profile_default,
           toAccountName: tempCpackagedetail.value.packageName!,
           toAccountNumber:
@@ -614,7 +627,14 @@ class TempCController extends GetxController {
   //! VISA - MASTER CARD PREPAID
   //!------------------------------------------------------------------------------
   paymentPrepaidVisa(
-      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    Menulists menudetail,
+    String storedCardUniqueID,
+    String cvvCode,
+    String paymentType,
+    String logo,
+    String accName,
+    String cardNumber,
+  ) async {
     var data;
     var url;
     var response;
@@ -651,10 +671,16 @@ class TempCController extends GetxController {
         enableBottom.value = true;
 
         Get.off(ReusableResultScreen(
-          fromAccountImage: userController.userProfilemodel.value.profileImg ??
-              MyConstant.profile_default,
-          fromAccountName: userController.profileName.value,
-          fromAccountNumber: userController.rxMsisdn.value,
+          fromAccountImage: paymentType == 'MMONEY'
+              ? (userController.userProfilemodel.value.profileImg ??
+                  MyConstant.profile_default)
+              : logo,
+          fromAccountName: paymentType == 'MMONEY'
+              ? userController.profileName.value
+              : accName,
+          fromAccountNumber: paymentType == 'MMONEY'
+              ? userController.rxMsisdn.value
+              : cardNumber,
           toAccountImage: MyConstant.profile_default,
           toAccountName: tempCservicedetail.value.description.toString(),
           toAccountNumber: rxAccNo.value,
@@ -735,7 +761,14 @@ class TempCController extends GetxController {
   //! POSTPAID
   //!------------------------------------------------------------------------------
   paymentPostpaidVisa(
-      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    Menulists menudetail,
+    String storedCardUniqueID,
+    String cvvCode,
+    String paymentType,
+    String logo,
+    String accName,
+    String cardNumber,
+  ) async {
     var data;
     var url;
     var response;
@@ -774,11 +807,16 @@ class TempCController extends GetxController {
         enableBottom.value = true;
         Get.to(
           ReusableResultScreen(
-            fromAccountImage:
-                userController.userProfilemodel.value.profileImg ??
-                    MyConstant.profile_default,
-            fromAccountName: userController.profileName.value,
-            fromAccountNumber: userController.rxMsisdn.value,
+            fromAccountImage: paymentType == 'MMONEY'
+                ? (userController.userProfilemodel.value.profileImg ??
+                    MyConstant.profile_default)
+                : logo,
+            fromAccountName: paymentType == 'MMONEY'
+                ? userController.profileName.value
+                : accName,
+            fromAccountNumber: paymentType == 'MMONEY'
+                ? userController.rxMsisdn.value
+                : cardNumber,
             toAccountImage: tempCdetail.value.groupLogo.toString(),
             toAccountName:
                 '${rxAccName.value} - ${tempCdetail.value.groupTelecom} - ${tempCservicedetail.value.name}',

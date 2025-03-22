@@ -198,8 +198,16 @@ class WeTVController extends GetxController {
 //!
   //! VISA - MASTER CARD WE TV
   //!------------------------------------------------------------------------------
-  wetvpaymentVisa(amout, Menulists menudetail, String storedCardUniqueID,
-      String cvvCode) async {
+  wetvpaymentVisa(
+    amout,
+    Menulists menudetail,
+    String storedCardUniqueID,
+    String cvvCode,
+    String paymentType,
+    String logo,
+    String accName,
+    String cardNumber,
+  ) async {
     userController.fetchBalance();
     rxTransID.value =
         "XX${homeController.menudetail.value.description! + await randomNumber().fucRandomNumber()}";
@@ -244,10 +252,16 @@ class WeTVController extends GetxController {
             DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
         enableBottom.value = true;
         Get.to(ReusableResultWithCode(
-          fromAccountImage: userController.userProfilemodel.value.profileImg ??
-              MyConstant.profile_default,
-          fromAccountName: userController.profileName.value,
-          fromAccountNumber: userController.rxMsisdn.value,
+          fromAccountImage: paymentType == 'MMONEY'
+              ? (userController.userProfilemodel.value.profileImg ??
+                  MyConstant.profile_default)
+              : logo,
+          fromAccountName: paymentType == 'MMONEY'
+              ? userController.profileName.value
+              : accName,
+          fromAccountNumber: paymentType == 'MMONEY'
+              ? userController.rxMsisdn.value
+              : cardNumber,
           toAccountImage: wetvdetail.value.logo ?? MyConstant.profile_default,
           toAccountName: title.value,
           toAccountNumber: title.value,

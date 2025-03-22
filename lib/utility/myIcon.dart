@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-
 class MyIconOld {
 //   // static String urlAddress = 'https://gateway.mmoney.la';
 //   // static String urlAddress = 'https://rank.mmoney.la';

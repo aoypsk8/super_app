@@ -19,7 +19,9 @@ import 'package:super_app/utility/myIcon.dart';
 import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/login/login_have_acc.dart';
 import 'package:super_app/views/login/temp/temp_userprofile_model.dart';
+import 'package:super_app/views/settings/about_us.dart';
 import 'package:super_app/views/settings/account_profile.dart';
+import 'package:super_app/views/settings/change_password.dart';
 import 'package:super_app/views/settings/verify_account.dart';
 import 'package:super_app/widget/buildAppBar.dart';
 import 'package:super_app/widget/buildBottomAppbar.dart';
@@ -236,7 +238,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Get.to(AboutUs());
+              },
               child: Row(
                 children: [
                   TextFont(text: "about_us"),
@@ -246,20 +250,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
           ),
-          Divider(color: color_ecec),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: InkWell(
-              onTap: () {},
-              child: Row(
-                children: [
-                  TextFont(text: "policy_and_term"),
-                  Spacer(),
-                  Icon(Icons.arrow_forward_ios, color: color_7070, size: 15.sp),
-                ],
-              ),
-            ),
-          ),
+          // Divider(color: color_ecec),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 10),
+          //   child: InkWell(
+          //     onTap: () {},
+          //     child: Row(
+          //       children: [
+          //         TextFont(text: "policy_and_term"),
+          //         Spacer(),
+          //         Icon(Icons.arrow_forward_ios, color: color_7070, size: 15.sp),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           Divider(color: color_ecec),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -326,7 +330,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Get.to(ChangePasswordScreen());
+              },
               child: Row(
                 children: [
                   TextFont(text: "change_password"),

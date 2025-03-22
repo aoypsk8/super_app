@@ -12,6 +12,7 @@ import 'package:super_app/models/provider_tempA_model.dart';
 import 'package:super_app/services/api/dio_client.dart';
 import 'package:super_app/services/helper/random.dart';
 import 'package:super_app/utility/dialog_helper.dart';
+import 'package:super_app/utility/myconstant.dart';
 import 'package:super_app/views/reusable_template/reusable_result.dart';
 import 'package:super_app/views/templateA/payment_tempA.dart';
 import 'package:super_app/views/templateA/result_tempA.dart';
@@ -203,8 +204,16 @@ class TempAController extends GetxController {
   //!
   //! VISA - MASTER CARD Template A
   //!------------------------------------------------------------------------------
-  paymentprocessVisa(String amount, Menulists menudetail,
-      String storedCardUniqueID, String cvvCode) async {
+  paymentprocessVisa(
+    String amount,
+    Menulists menudetail,
+    String storedCardUniqueID,
+    String cvvCode,
+    String paymentType,
+    String logo,
+    String accName,
+    String cardNumber,
+  ) async {
     var data;
     var url;
     var response;
@@ -242,9 +251,16 @@ class TempAController extends GetxController {
         rxPaymentAmount.value = amount;
         enableBottom.value = true;
         Get.to(() => ReusableResultScreen(
-            fromAccountImage: userController.userProfilemodel.value.profileImg!,
-            fromAccountName: userController.profileName.value,
-            fromAccountNumber: userController.userProfilemodel.value.msisdn!,
+            fromAccountImage: paymentType == 'MMONEY'
+                ? (userController.userProfilemodel.value.profileImg ??
+                    MyConstant.profile_default)
+                : logo,
+            fromAccountName: paymentType == 'MMONEY'
+                ? userController.profileName.value
+                : accName,
+            fromAccountNumber: paymentType == 'MMONEY'
+                ? userController.rxMsisdn.value
+                : cardNumber,
             toAccountImage: tempAdetail.value.logo!,
             toAccountName: rxaccname.value,
             toAccountNumber: rxaccnumber.value,

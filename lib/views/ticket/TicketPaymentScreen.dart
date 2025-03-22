@@ -246,6 +246,10 @@ class _TicketPaymentScreenState extends State<TicketPaymentScreen> {
               homeController.menudetail.value,
               storedCardUniqueID,
               cvv,
+              paymentType,
+              logo!,
+              accName,
+              cardNumber,
             );
           }
         },

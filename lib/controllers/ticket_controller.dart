@@ -178,7 +178,14 @@ class TicketController extends GetxController {
   }
 
   paymentProcessVisa(
-      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    Menulists menudetail,
+    String storedCardUniqueID,
+    String cvvCode,
+    String paymentType,
+    String logo,
+    String accName,
+    String cardNumber,
+  ) async {
     userController.fetchBalance();
     var data;
     var url;
@@ -229,10 +236,16 @@ class TicketController extends GetxController {
             DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
         enableBottom.value = true;
         Get.to(ReusableResultWithCode(
-          fromAccountImage: userController.userProfilemodel.value.profileImg ??
-              MyConstant.profile_default,
-          fromAccountName: userController.profileName.value,
-          fromAccountNumber: userController.rxMsisdn.value,
+          fromAccountImage: paymentType == 'MMONEY'
+              ? (userController.userProfilemodel.value.profileImg ??
+                  MyConstant.profile_default)
+              : logo,
+          fromAccountName: paymentType == 'MMONEY'
+              ? userController.profileName.value
+              : accName,
+          fromAccountNumber: paymentType == 'MMONEY'
+              ? userController.rxMsisdn.value
+              : cardNumber,
           toAccountImage: ticketDetail.value.logo ?? MyConstant.profile_default,
           toAccountName: ticketDetail.value.title!,
           toAccountNumber: ticketDetail.value.title!,

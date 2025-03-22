@@ -329,6 +329,7 @@ class _TransferScreenState extends State<TransferScreen>
             ),
             SizedBox(height: 4),
             BuildTextAreaValidate(
+              max: 150,
               label: 'note',
               controller: _note,
               name: 'note',

@@ -204,6 +204,7 @@ class _PaymentFinanceScreenState extends State<PaymentFinanceScreen> {
 
   Widget fieldNote() {
     return BuildTextAreaValidate(
+      max: 150,
       label: 'note',
       controller: _note,
       name: '_note',
@@ -310,6 +311,10 @@ class _PaymentFinanceScreenState extends State<PaymentFinanceScreen> {
               homeController.menudetail.value,
               storedCardUniqueID,
               cvv,
+              paymentType,
+              logo!,
+              accName,
+              cardNumber,
             );
           }
         },

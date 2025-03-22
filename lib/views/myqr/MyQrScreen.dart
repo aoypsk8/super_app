@@ -529,6 +529,7 @@ class _MyQrScreenState extends State<MyQrScreen> {
                       ),
                       SizedBox(height: 10),
                       BuildTextAreaValidate(
+                        max: 150,
                         label: 'message',
                         controller: _note,
                         name: 'note',

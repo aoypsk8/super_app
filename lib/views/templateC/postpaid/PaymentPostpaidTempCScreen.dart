@@ -277,6 +277,7 @@ class _PaymentPostpaidTempCScreenState
           ),
           const SizedBox(height: 14),
           BuildTextAreaValidate(
+            max: 150,
             label: 'note',
             controller: _note,
             name: 'note',

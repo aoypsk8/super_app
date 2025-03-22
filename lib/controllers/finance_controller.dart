@@ -239,7 +239,14 @@ class FinanceController extends GetxController {
   }
 
   void paymentProcessVisa(
-      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    Menulists menudetail,
+    String storedCardUniqueID,
+    String cvvCode,
+    String paymentType,
+    String logo,
+    String accName,
+    String cardNumber,
+  ) async {
     userController.fetchBalance();
     var url;
     var data;
@@ -293,11 +300,18 @@ class FinanceController extends GetxController {
         rxPaymentAmount.value = response['amount'].toString();
         saveHistoryFinnace(rxAccNo.value, rxAccName.value);
         enableBottom.value = true;
+
         Get.to(ReusableResultScreen(
-          fromAccountImage: userController.userProfilemodel.value.profileImg ??
-              MyConstant.profile_default,
-          fromAccountName: userController.profileName.value,
-          fromAccountNumber: userController.rxMsisdn.value,
+          fromAccountImage: paymentType == 'MMONEY'
+              ? (userController.userProfilemodel.value.profileImg ??
+                  MyConstant.profile_default)
+              : logo,
+          fromAccountName: paymentType == 'MMONEY'
+              ? userController.profileName.value
+              : accName,
+          fromAccountNumber: paymentType == 'MMONEY'
+              ? userController.rxMsisdn.value
+              : cardNumber,
           toAccountImage: MyConstant.profile_default,
           toAccountName: rxAccName.value,
           toAccountNumber: rxAccNo.value,

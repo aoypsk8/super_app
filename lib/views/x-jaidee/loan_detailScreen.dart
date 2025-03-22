@@ -222,6 +222,7 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
             ),
             const SizedBox(height: 10),
             BuildTextAreaValidate1(
+              max: 150,
               enable: false,
               controller: TextEditingController(
                   text: widget.loan['description'] ?? 'ບໍ່ມີ'),

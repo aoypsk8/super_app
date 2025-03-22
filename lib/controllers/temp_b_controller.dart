@@ -6,6 +6,8 @@ import 'package:super_app/controllers/log_controller.dart';
 import 'package:super_app/controllers/payment_controller.dart';
 import 'package:super_app/controllers/user_controller.dart';
 import 'package:super_app/models/providerTempBModel.dart';
+import 'package:super_app/utility/myconstant.dart';
+import 'package:super_app/views/reusable_template/reusable_result.dart';
 import 'package:super_app/views/templateB/Result_TempB.dart';
 import 'package:super_app/views/templateB/payment_tempB.dart';
 import '../services/helper/random.dart';
@@ -188,7 +190,23 @@ class TempBController extends GetxController {
           rxTimeStamp.value = response['CreateDate'];
           rxPaymentAmount.value = response['Amount'];
           enableBottom.value = true;
-          Get.to(() => const ResultTempBscreen());
+          // Get.to(() => const ResultTempBscreen());
+          Get.to(ReusableResultScreen(
+            fromAccountImage:
+                userController.userProfilemodel.value.profileImg ??
+                    MyConstant.profile_default,
+            fromAccountName: userController.profileName.value,
+            fromAccountNumber: userController.rxMsisdn.value,
+            toAccountImage: MyConstant.profile_default,
+            toAccountName: rxAccName.value,
+            toAccountNumber: rxAccNo.value,
+            toTitleProvider: '',
+            amount: rxPaymentAmount.toString(),
+            fee: fn.format(double.parse(rxFee.value)),
+            transactionId: rxTransID.value,
+            note: rxNote.value,
+            timestamp: rxTimeStamp.value,
+          ));
         } else {
           enableBottom.value = true;
           DialogHelper.showErrorWithFunctionDialog(
@@ -229,7 +247,14 @@ class TempBController extends GetxController {
   //! PAYMENT BY VISA MASTERCARD
   //!------------------------------------------------------------------------------
   paymentProcessVisa(
-      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    Menulists menudetail,
+    String storedCardUniqueID,
+    String cvvCode,
+    String paymentType,
+    String logo,
+    String accName,
+    String cardNumber,
+  ) async {
     var data;
     var url;
     var response;
@@ -267,7 +292,28 @@ class TempBController extends GetxController {
         rxTimeStamp.value = response['CreateDate'];
         rxPaymentAmount.value = response['Amount'];
         enableBottom.value = true;
-        Get.to(() => const ResultTempBscreen());
+        // Get.to(() => const ResultTempBscreen());
+        Get.to(ReusableResultScreen(
+          fromAccountImage: paymentType == 'MMONEY'
+              ? (userController.userProfilemodel.value.profileImg ??
+                  MyConstant.profile_default)
+              : logo,
+          fromAccountName: paymentType == 'MMONEY'
+              ? userController.profileName.value
+              : accName,
+          fromAccountNumber: paymentType == 'MMONEY'
+              ? userController.rxMsisdn.value
+              : cardNumber,
+          toAccountImage: MyConstant.profile_default,
+          toAccountName: rxAccName.value,
+          toAccountNumber: rxAccNo.value,
+          toTitleProvider: '',
+          amount: rxPaymentAmount.toString(),
+          fee: fn.format(double.parse(rxFee.value)),
+          transactionId: rxTransID.value,
+          note: rxNote.value,
+          timestamp: rxTimeStamp.value,
+        ));
       } else {
         enableBottom.value = true;
         DialogHelper.showErrorWithFunctionDialog(

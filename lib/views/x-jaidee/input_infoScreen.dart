@@ -268,6 +268,7 @@ class _InputInfoXJaideeScreenState extends State<InputInfoXJaideeScreen> {
                   ),
                   const SizedBox(height: 10),
                   BuildTextAreaValidate(
+                    max: 150,
                     controller: _description,
                     label: 'ຈຸດປະສົງການຂໍກູ້ຢືມເງີນ',
                     name: '',

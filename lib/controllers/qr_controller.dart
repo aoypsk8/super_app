@@ -447,7 +447,14 @@ class QrController extends GetxController {
   //! PAYMENT LAO-QR
   //!------------------------------------------------------------------------------
   paymentLaoQRVisa(
-      Menulists menudetail, String storedCardUniqueID, String cvvCode) async {
+    Menulists menudetail,
+    String storedCardUniqueID,
+    String cvvCode,
+    String paymentType,
+    String logo,
+    String accName,
+    String cardNumber,
+  ) async {
     var data;
     var url;
     var response;
@@ -493,10 +500,16 @@ class QrController extends GetxController {
         rxFee.value = int.parse(response['fee']);
         enableBottom.value = true;
         Get.to(ReusableResultScreen(
-          fromAccountImage: userController.userProfilemodel.value.profileImg ??
-              MyConstant.profile_default,
-          fromAccountName: userController.profileName.value,
-          fromAccountNumber: userController.rxMsisdn.value,
+          fromAccountImage: paymentType == 'MMONEY'
+              ? (userController.userProfilemodel.value.profileImg ??
+                  MyConstant.profile_default)
+              : logo,
+          fromAccountName: paymentType == 'MMONEY'
+              ? userController.profileName.value
+              : accName,
+          fromAccountNumber: paymentType == 'MMONEY'
+              ? userController.rxMsisdn.value
+              : cardNumber,
           toAccountImage: qrModel.value.logoUrl ?? MyConstant.profile_default,
           toAccountName: qrModel.value.shopName.toString(),
           toAccountNumber: qrModel.value.provider.toString(),

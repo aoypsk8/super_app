@@ -395,6 +395,7 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
             SizedBox(height: 4),
             const SizedBox(height: 14),
             BuildTextAreaValidate(
+              max: 150,
               label: 'note',
               controller: _note,
               name: 'note',
@@ -513,6 +514,10 @@ class _LaoQrPaymentScreenState extends State<LaoQrPaymentScreen> {
               homeController.menudetail.value,
               storedCardUniqueID,
               cvv,
+              paymentType,
+              logo!,
+              accName,
+              cardNumber,
             );
           }
         },

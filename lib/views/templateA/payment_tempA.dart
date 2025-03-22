@@ -286,6 +286,10 @@ class PaymentTempAScreen extends StatelessWidget {
                 homeController.menudetail.value,
                 storedCardUniqueID,
                 cvv,
+                paymentType,
+                logo!,
+                accName,
+                cardNumber,
               );
             }
           },
